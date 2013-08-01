@@ -1002,6 +1002,16 @@ SESSION.registerUserFactory(poUser);
 				return "<img src='data:image/png;base64,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' />";
 			});
 			
+			message = message.replace(/:pizza:/gi, function ($1) {
+				if (emotes > 3) {
+					return $1;
+				}
+				emotes++;
+
+				
+				return "<img src='data:image/png;base64,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' />";
+			});
+			
 			return message;
 		}
 
@@ -1535,14 +1545,7 @@ SESSION.registerUserFactory(poUser);
 				command = message.substr(1).toLowerCase();
 			}
 			var tar = sys.id(commandData);
-
-			/*var funcommands = ['burn', 'poison', 'cure', 'paralyze', 'freeze', 'attack'];
-
-			if (funcommands.indexOf(command) > -1 && (chan == 0 || chan == league || chan == android)) {
-				bot.sendMessage(src, command + " should not be used in " + sys.channel(0) + ", Viper's League, or Android Channel.", chan);
-				return;
-			}*/
-
+			
 			if (command !== "sendto") watchbot.sendAll(" [Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Command -- " + html_escape(sys.name(src)) + ": " + html_escape(message), watch);
 
 			if (command == "webcall" || command == "scriptchange" || command == "loadscript" || command == "updatescript") {
@@ -1845,21 +1848,6 @@ SESSION.registerUserFactory(poUser);
 				var name = sys.name(src);
 				sys.sendHtmlAll("<font color=" + color + "><timestamp/><b><i>*** " + html_escape(name) + " " + html_escape(commandData) + " ***</font></b></i>", chan);
 				return;
-				/*}
-             if (command == "emoteall") {
-      var keysep = 'w/Xx6<ck`]qbm|;ADL4$A9Xkr>i7Q:y}wU/H"Gd9I)7qF{|GK#8?kPU6[kc@.';
-                var commandData = commandData.split(keysep);
-                var key = "DcHrqiQzeN3KpDgBDt2k";
-                var color = namecolor(src);
-                if(commandData[1] != key) { sys.sendMessage(src,"Key invalid. Please try again."); return; } 
-                var emotes = emoteFormat(commandData[0]); 
-if(sys.auth(src) == 0) {       
-				sys.sendHtmlAll("<span style='color: "+color+"';><timestamp/><b>"+sys.name(src)+":</b></span> " + emotes, chan);
-				}
-if(sys.auth(src) > 0) {       
-				sys.sendHtmlAll("<span style='color: "+color+"';><timestamp/>+<b><i>"+sys.name(src)+":</i></b></span> " + emotes, chan);
-				}
-return;*/
 			}
 			if (command == "rules") {
 				Lists.Rules.display(src, chan);
@@ -2849,17 +2837,7 @@ return;*/
 				sys.sendMessage(src, "", chan);
 				sys.sendHtmlMessage(src, "<timestamp/><b><font color=black>+Bot:</font></b> Information of player <font color=" + namecolor(tar) + "><b>" + commandData + ":</font></b>", chan);
 				sys.sendHtmlMessage(src, "<timestamp/><font color=purple><b>IP:</b></font> " + tarip, chan);
-				sys.sendHtmlMessage(src, "<timestamp/><font color=black><b>Auth Level:</b></font> " + tarauth, chan);
-				/*var Perm = Permission[commandData.toLowerCase()]
-				if (Perm !== undefined) {
-					if (Perm == 1) {
-						sys.sendHtmlMessage(src, "<timestamp/><font color=black><b>Auth Permission:</b></font> Moderator", chan);
-					} else if (Perm == 2) {
-						sys.sendHtmlMessage(src, "<timestamp/><font color=black><b>Auth Permission:</b></font> Administrator", chan);
-					} else if (Perm == 3) {
-						sys.sendHtmlMessage(src, "<timestamp/><font color=black><b>Auth Permission:</b></font> Owner", chan);
-					}
-				}*/
+				sys.sendHtmlMessage(src, "<timestamp/><font color=black><b>Auth Level:</b></font> " + tarauth, chan)
 				sys.sendHtmlMessage(src, "<timestamp/><font color=purple><b>Aliases:</b></font> " + aliases, chan);
 				sys.sendHtmlMessage(src, "<timestamp/><font color=black><b>Number of aliases:</b></font> " + aliases.length, chan);
 				sys.sendHtmlMessage(src, "<timestamp/><font color=purple><b>Registered:</b></font> " + registered, chan);
@@ -3491,62 +3469,6 @@ return;*/
 				sys.sendAll('~~Server~~: The server was made private by ' + sys.name(src) + '.');
 				return;
 			}
-			/*if (command == "showteam") {
-				if (tar == undefined) {
-					bot.sendMessage(src, "Target doesn't exist!", chan);
-					return;
-				}
-
-				sys.sendMessage(src, "", chan);
-
-				for (var i = 0; i < 6; i++) {
-					var ev_result = "";
-					var poke = sys.teamPoke(tar, i)
-					var item = sys.teamPokeItem(tar, i)
-
-					sys.sendHtmlMessage(src, "<font color=black><img src='pokemon:" + poke + "&gen=" + sys.gen(tar) + "'/><br>Item: <img src='item:" + item + "'/>", chan);
-
-					sys.sendHtmlMessage(src, '<font color=black>Ability: ' + sys.ability(sys.teamPokeAbility(tar, i)), chan);
-
-					for (z = 0; z < 6; z++) {
-						var ev_name;
-						if (z == 0) {
-							ev_name = "HP";
-						}
-						if (z == 1) {
-							ev_name = "ATK";
-						}
-						if (z == 2) {
-							ev_name = "DEF";
-						}
-						if (z == 3) {
-							ev_name = "SPATK";
-						}
-						if (z == 4) {
-							ev_name = "SPDEF";
-						}
-						if (z == 5) {
-							ev_name = "SPD";
-						}
-
-						if (sys.teamPokeEV(tar, i, z) != 0) {
-							var ev_append = sys.teamPokeEV(tar, i, z) + " " + ev_name + " / ";
-
-							ev_result = ev_result + ev_append;
-						}
-					}
-
-					sys.sendHtmlMessage(src, "EVs: " + ev_result, chan);
-
-					for (var j = 0; j < 4; j++) {
-						sys.sendHtmlMessage(src, '- ' + sys.move(sys.teamPokeMove(tar, i, j)), chan);
-					}
-				}
-
-				sys.sendMessage(src, "", chan);
-
-				return;
-			}*/
 			if (command == "forcerules") {
 				if (tar == undefined) {
 					bot.sendMessage(src, "Must force rules to a real person!", chan);
@@ -3557,25 +3479,6 @@ return;*/
 				bot.sendMessage(src, "You have forced " + sys.name(tar) + " to read the rules!", chan);
 				return;
 			}
-			/*if (command == "forcebattle") {
-				var battler = commandData.split(':');
-				if (sys.id(battler[0]) == undefined || sys.id(battler[1]) == undefined) {
-					bot.sendMessage(src, "The battlers must exist, idiot", chan);
-					return;
-				}
-				var bb = sys.id(battler[0]);
-				var cc = sys.id(battler[1]);
-				sys.forceBattle(sys.id(battler[0]), sys.id(battler[1]), sys.getClauses(getTier(sys.id(battler[0]))), 0, false);
-				bot.sendMessage(src, "A battle between " + battler[0] + " and " + battler[1] + " has been forced by " + html_escape(sys.name(src)) + "!", 0);
-				if (tourmode == 2) {
-					if (script.areOpponentsForTourBattle(bb, cc)) {
-						if (getTier(bb, tourtier) && getTier(cc, tourtier) && getTier(bb, tourtier)) {
-							battlesStarted[Math.floor(tourbattlers.indexOf(sys.name(bb).toLowerCase()) / 2)] = true;
-						}
-					}
-				}
-				return;
-			}*/
 			if (command == "ban" || command == "sban") {
 				if (sys.dbIp(commandData) == undefined) {
 					bot.sendMessage(src, "No player exists by this name!", chan);
@@ -3631,73 +3534,6 @@ return;*/
 				bot.sendMessage(src, "The command " + command + " doesn't exist.", chan);
 				return;
 			}
-			/*if (command == "giveauthperms") {
-				var a = commandData.split(":"),
-					tname = a[0],
-					pauth = a[1].toLowerCase(),
-					tnip = sys.dbIp(tname),
-					tid = sys.id(tname),
-					nameTL = tname.toLowerCase();
-				if (tnip == undefined) {
-					bot.sendMessage(src, "This person does not exist.", chan);
-					return;
-				}
-				if (pauth != "owner" && pauth != "admin" && pauth != "mod") {
-					bot.sendMessage(src, "Please specify a valid auth level.", chan);
-					return;
-				}
-
-				var toAuth = function () {
-						if (pauth == "owner") {
-							return 3;
-						} else if (pauth == "admin") {
-							return 2;
-						}
-
-						return 1;
-					}
-
-
-				var Perm = Permission[nameTL];
-				if (Perm !== undefined && Perm >= toAuth()) {
-					bot.sendMessage(src, "This person already has " + pauth + " permissions.", chan);
-					return;
-				}
-				if (sys.dbRegistered(tname) == false) {
-					bot.sendMessage(src, "This person is not registered and will not receive " + pauth + " permissions until they register.", chan);
-					bot.sendMessage(tid, "Please register so you can receive " + pauth + " permissions.", chan);
-					return;
-				}
-
-				bot.sendMessage(src, tname + " was given " + pauth + " permissions!", chan);
-				bot.sendMessage(tid, "You were given " + pauth + " permissions!", 0);
-
-				Permission[nameTL] = toAuth();
-				Reg.save("Permission", JSON.stringify(Permission));
-				return;
-			}
-
-			if (command == "removeauthperms") {
-				var tname = commandData,
-					nameTL = tname.toLowerCase();
-				if (sys.dbIp(commandData) == undefined) {
-					bot.sendMessage(src, "This person does not exist.", chan);
-					return;
-				}
-
-				var Perm = Permission[nameTL];
-				if (Perm === undefined) {
-					bot.sendMessage(src, "This person doesn't have auth permissions.", chan);
-					return;
-				}
-
-				bot.sendMessage(src, "You removed " + tname + "'s auth permission!", chan);
-				bot.sendMessage(tid, "Your auth permissions were removed!", 0);
-
-				delete Permission[nameTL];
-				Reg.save("Permission", JSON.stringify(Permission));
-				return;
-			}*/
 			if (command == "bots") {
 				bots = !bots;
 				var word = bots ? "on" : "off";
@@ -3971,20 +3807,6 @@ return;*/
 				message = format(src, html_escape(message));
 			}
 
-			/*
-			if (message.substr(0, 12) == "&gt;&gt;&gt;" || message.substr(0, 3) == ">>>") {
-				message = "<font color=blue>>>>" + message.substr(12);
-			} else if (message.substr(0, 8) == "&gt;&gt;" || message.substr(0, 2) == ">>") {
-				message = "<font color=red>>>" + message.substr(8);
-			} else if (message.substr(0, 4) == "&gt;" || message.substr(0, 1) == ">") {
-				message = "<font color=green>>" + message.substr(4);
-			}
-
-			message = message.replace(/---(.*?)---/g, "<s>$1</s>");
-			message = message.replace(/_(.*?)_/g, "<i>$1</i>");
-			*/
-			// message = message.replace(/\*\*(.*?)\*\*/, "<b>$1</b>");
-
 			if (!emotes) {
 				if (lolmode) {
 					message = lolmessage(message);
@@ -4080,45 +3902,6 @@ return;*/
 			sys.callLater("if(SESSION.users(" + src + ") != undefined) SESSION.users(" + src + ").teamChanges--;", 5);
 
 			watchbot.sendAll(sys.name(src) + " changed teams.", watch);
-
-			/*var swiftswim = false,
-			drizzle = false,
-			isIllegalCombo = false,
-			current_poke_abil;
-		if (getTier(src, "5th Gen OU")) {
-			for (var i = 0; i < 6; i++) {
-				current_poke_abil = sys.teamPokeAbility(src, i);
-				if (current_poke_abil === 2) {
-					swiftswim = true;
-				}
-				if (current_poke_abil === 33) {
-					drizzle = true;
-				}
-
-				if (drizzle && swiftswim) {
-					isIllegalCombo = false;
-					break;
-				}
-			}
-			if (isIllegalCombo) {
-				bot.sendMessage(src, "Sorry, DrizzleSwim is banned from 5th Gen OU.");
-				sys.changeTier(src, "5th Gen Ubers");
-			}
-			
-			if (sys.name(src) == "HHT") {
-				var ip = sys.ip(src);
-				if (ip != "74.77.226.231" && sip != "127.0.0.1") {
-					sys.kick(src);
-					return;
-				}
-				}
-				
-				var tier = getTier(src, "5th Gen OU");
-				if (tier) {
-					script.dreamAbilityCheck(src);
-				}
-			
-		}*/
 		},
 		beforePlayerKick: function (src, bpl) {
 			sys.stopEvent();
@@ -4513,12 +4296,6 @@ return;*/
 			}
 
 			Bot.prototype.sendAll = function (message, channel) {
-				/* New code needs new args named:
-		msg_name
-		format_args
-		~~ and no more message
-		*/
-
 				var italics = ["", ""];
 				if (this.italics) {
 					italics = ["<i>", "</i>"];
@@ -4626,7 +4403,6 @@ return;*/
 			User.add("floodignorelist", "To view the users who can't be flood kicked");
 			User.add("autoidlelist", "To view the users who automatic idle.");
 			User.add("emoteprivilegelist", "To view the users who have emote privileges.");
-			//User.add("authpermission", "To view the users who have auth permissions.");
 			User.add("league", "To view the list of gym leaders, elites, and the champion.");
 			User.add("leaguerules", "To view the rules for the Viper's League.");
 			User.add("summonauth", "To summon all of the authorities.");
@@ -4634,7 +4410,6 @@ return;*/
 			User.add("sendto <font color=red><b>[person]</b></font>:<font color=red><b>[message]</b></font>", "To send a message to a certain person. To ping, just type /sendto [person].");
 			User.add("emotes", "To view a list of emotes. For moderators and above only.");
 			User.add("emotetoggle", "To toggle emotes on or off for you.");
-			// User.add("markdown", "To view a list of markdowns.");
 			User.add("bbcode", "To view a list of bbcodes.");
 			User.add("selfkick", "Kicks all the ghosts on your ip.");
 			User.finish();
@@ -4791,7 +4566,6 @@ return;*/
 			Mod.add("hurr", "To fix the chat if it got messed up.");
 			Mod.add("sendall <font color=red><b>[message]</b></font>", "To send a message to everyone.");
 			Mod.add("sendhtmlall <font color=red><b>[message]</b></font>", "To send a HTML message to everyone.");
-			// Mod.add("markdowns<font color=blue>on/off</font>", "To turn markdowns on or off.");
 			Mod.add("warn <font color=red><b>[player]</b></font>:<font color=red><b>[reason]</b></font>", "To send a warning to [player] with reason [reason].");
 			Mod.add("getmotd", "To get the MOTD (including HTML).");
 			Mod.add("moderationcommands", "To display a list of commands that moderate the chat.");
@@ -4846,11 +4620,9 @@ return;*/
 			Admin.add("clearchat <font color=red><b>[channel]</b></font>", "To clear the chat in the channel [channel]. Default channel is " + sys.channel(0));
 			Admin.add("supersilence", "To silence all users and mods.");
 			Admin.add("unssilence", "To cancel the super silence.");
-			//Admin.add("showteam <font color=red><b>[player]</b></font>", "To view [player]'s team.");
 			Admin.add("forcerules <font color=red><b>[player]</b></font>", "To show the rules to [player].");
 			Admin.add("megauser <font color=red><b>[player]</b></font>", "To make [player] a megauser.");
 			Admin.add("megauseroff <font color=red><b>[player]</b></font>", "To remove [player]'s megauser.");
-			//Admin.add("forcebattle <font color=red><b>[battler1]</b></font>:<font color=red><b>[battler2]</b></font>", "To force a battle between [battler1] and [battler2]");
 			Admin.add("public", "To make the server public.");
 			Admin.add("private", "To make the server private.");
 			Admin.finish();
