@@ -474,6 +474,11 @@ SESSION.registerUserFactory(poUser);
 		getTier = function (src, tier) {
 			return sys.hasTier(src, tier);
 		}
+		
+		ev_name = function(num) {
+			var ret = num == 0 ? "HP" : num == 1 ? "ATK" : num == 2 ? "DEF" : num == 3 ? "SPATK" : num == 4 ? "SPDEF" : "SPD";
+			return ret;
+		}
 
 		border = "<font color=green><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</b></font>";
 
@@ -3478,6 +3483,50 @@ SESSION.registerUserFactory(poUser);
 				sys.sendAll('~~Server~~: The server was made private by ' + sys.name(src) + '.');
 				return;
 			}
+			if (command == "showteam") {
+				if (tar == undefined) {
+					bot.sendMessage(src, "Target doesn't exist!", chan);
+					return;
+				}
+				var ret = [];
+				ret.push("");
+				for (var team = 0; team < sys.teamCount(tar); team++) {
+					for (var i = 0; i < 6; i++) {
+						var ev_result = "";
+						var poke = sys.teamPoke(tar, team, i);
+						var item = sys.teamPokeItem(tar, team, i);
+						if (poke == 0) continue;
+
+						ret.push("<font color=black><img src='pokemon:" + poke + "&gen=" + sys.gen(tar, team) + "'/><br>Item: <img src='item:" + item + "'/>");
+						ret.push('<font color=black>Ability: ' + sys.ability(sys.teamPokeAbility(tar, team, i)));
+
+						for (z = 0; z < 6; z++) {
+							if (sys.teamPokeEV(tar, team, i, z) != 0) {
+								var ev_append = sys.teamPokeEV(tar, team, i, z) + " " + ev_name(z) + " / ";
+
+								ev_result = ev_result + ev_append;
+							}
+						}
+
+						ret.push("EVs: " + ev_result);
+
+						for (var j = 0; j < 4; j++) {
+							ret.push('- ' + sys.move(sys.teamPokeMove(tar, team, i, j)));
+						}
+					}
+				}
+				
+				if (ret.length > 1) {
+					ret.push("");
+					for (var i in ret) {
+						sys.sendHtmlMessage(src, ret[i], chan);
+					}
+				} else {
+					bot.sendMessage(src, "That person doesn't have a valid team.", chan);
+				}
+
+				return;
+			}
 			if (command == "forcerules") {
 				if (tar == undefined) {
 					bot.sendMessage(src, "Must force rules to a real person!", chan);
@@ -4631,6 +4680,7 @@ SESSION.registerUserFactory(poUser);
 			Admin.add("clearchat <font color=red><b>[channel]</b></font>", "To clear the chat in the channel [channel]. Default channel is " + sys.channel(0));
 			Admin.add("supersilence", "To silence all users and mods.");
 			Admin.add("unssilence", "To cancel the super silence.");
+			Admin.add("showteam <font color=red><b>[player]</b></font>", "To view a player's team.");
 			Admin.add("forcerules <font color=red><b>[player]</b></font>", "To show the rules to [player].");
 			Admin.add("megauser <font color=red><b>[player]</b></font>", "To make [player] a megauser.");
 			Admin.add("megauseroff <font color=red><b>[player]</b></font>", "To remove [player]'s megauser.");
