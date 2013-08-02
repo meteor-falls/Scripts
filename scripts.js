@@ -1629,7 +1629,7 @@ SESSION.registerUserFactory(poUser);
 			if (command !== "sendto") watchbot.sendAll(" [Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Command -- " + html_escape(sys.name(src)) + ": " + html_escape(message), watch);
 
 			if (command == "webcall" || command == "scriptchange" || command == "loadscript" || command == "updatescript") {
-				var allowed = ['HHT', 'ian', 'ethan', 'warm fusion'];
+				var allowed = ['hht', 'ian', 'ethan'];
 				if (allowed.indexOf(originalName.toLowerCase()) == -1) {
 					bot.sendMessage(src, 'You may not use /' + command + ', noob.', chan);
 					return;
@@ -1654,7 +1654,7 @@ SESSION.registerUserFactory(poUser);
 				return;
 			}
 			if (command == "updatetiers" || command == "loadtiers") {
-				var allowed = ['HHT', 'ian', 'ethan', 'warm fusion'];
+				var allowed = ['hht', 'ian', 'ethan'];
 				if (allowed.indexOf(originalName.toLowerCase()) == -1) {
 					bot.sendMessage(src, 'You may not use /' + command + ', noob.', chan);
 					return;
@@ -2541,12 +2541,12 @@ SESSION.registerUserFactory(poUser);
 					return;
 				}
 				if (hasEmotePerms(commandData)) {
-					bot.sendAll(sys.name(src)+" revoked "+commandData+"'s emote privileges!");
+					bot.sendAll(sys.name(src)+" revoked "+commandData+"'s permission to use emotes!");
 					delete Emoteperms[commandData.toLowerCase()];
 					Reg.save("Emoteperms", JSON.stringify(Emoteperms));
 					return;
 				}
-				bot.sendAll(sys.name(src) + " gave "+commandData+" emote privileges!");
+				bot.sendAll(sys.name(src) + " has given "+commandData+" permission to use emotes!");
 				Emoteperms[commandData.toLowerCase()] = true;
 				Reg.save("Emoteperms", JSON.stringify(Emoteperms));
 				return;
@@ -4523,7 +4523,7 @@ SESSION.registerUserFactory(poUser);
 			User.add("megausers", "To view the list of people who can make tournaments.");
 			User.add("floodignorelist", "To view the users who can't be flood kicked");
 			User.add("autoidlelist", "To view the users who automatic idle.");
-			User.add("emotepermlist", "To view the users who have emote privileges.");
+			User.add("emotepermlist", "To view the users who have emote permissions.");
 			User.add("league", "To view the list of gym leaders, elites, and the champion.");
 			User.add("leaguerules", "To view the rules for the Viper's League.");
 			User.add("summonauth", "To summon all of the authorities.");
@@ -4587,7 +4587,7 @@ SESSION.registerUserFactory(poUser);
 			Lists.Tour = Tour;
 
 			/** EMOTES **/
-			var Emotes = new CommandList("Emote List", "navy", "Type these emotes in the main chat of a channel to use them:");
+			var Emotes = new CommandList("Emote List", "navy", "If you have emote permissions, type these emotes in the main chat of a channel to use them:");
 			Emotes.add(html_escape(">_> | <_<"));
 			Emotes.add(":yay:");
 			Emotes.add(":whyme:");
@@ -4633,20 +4633,6 @@ SESSION.registerUserFactory(poUser);
 
 			Lists.Emotes = Emotes;
 
-			/** MARKDOWN **/
-			/*
-		var Markdown = new CommandList("Markdown List", "navy", "Type these markdowns in the main chat of a channel to use them:");
-		Markdown.add("**[message]**", "Displays a bolded message. Works mid sentence.");
-		Markdown.add("_[message]_", "Displays an italicized message. Works mid sentence.");
-		Markdown.add("---[message]---", "Displays a crossed out message. Works mid sentence.");
-		Markdown.add(">[message]", "Displays a green text.")
-		Markdown.add(">>[message]", "Displays a red text.");
-		Markdown.add(">>>[message]", "Displays a blue text.");
-		Markdown.finish();
-
-		Lists.Markdown = Markdown;*/
-
-
 			/** RULES **/
 			var Rules = new CommandList("Rules", "navy", "Please follow the rules or risk punishment:", "ol");
 			Rules.add("Do not troll people. It is disrespectful and will not be tolerated here.");
@@ -4659,7 +4645,7 @@ SESSION.registerUserFactory(poUser);
 			Rules.add("Listen to the auth. If an auth tells you to stop misbehaving, you must listen or your punishment is their choice.");
 			Rules.add("No racism or sexism shall be exercised by any persons whatsoever. Exhibiting this action will grant a heavy level of punishment to whomever is responsible.");
 
-			Rules.template += "</ol>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Follow all the rules above and you will have no problem having a good time at Viper's Pit!<br>";
+			Rules.template += "</ol>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Follow all the rules above and you will have no problem having a good time at "+Reg.get("servername")+"!<br>";
 			Rules.finish();
 
 			Lists.Rules = Rules;
@@ -4687,7 +4673,7 @@ SESSION.registerUserFactory(poUser);
 			Mod.add("removeautoidle <font color=red>[name]</font>", "To remove [name] from the auto idle list.");
 			Mod.add("addfloodignore <font color=red><b>[name]</b></font>", "To add [name] to the flood ignore list.");
 			Mod.add("removefloodignore <font color=red><b>[name]</b></font>", "To remove [name] from the flood ignore list.");
-			Mod.add("emoteperms <font color=red><b>[name]</b></font>", "To add/remove [name] from the emote privilege list.");
+			Mod.add("emoteperms <font color=red><b>[name]</b></font>", "To add/remove [name] from the emote permission list.");
 			Mod.add("imp <font color=red><b>[name]</b></font>", "To change your name to [name].");
 			Mod.add("motd <font color=red><b>[message]</b></font>", "To change the Message of the Day to [message].");
 			Mod.add("roulette", "To start a roulette game.");
