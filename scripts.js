@@ -4568,6 +4568,7 @@ SESSION.registerUserFactory(poUser);
 			Emotes.add(":nb:");
 			Emotes.add("pface");
 			Emotes.add("feelsgd");
+			Emotes.add("nigig");
 			Emotes.finish();
 
 			Lists.Emotes = Emotes;
