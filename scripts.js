@@ -479,6 +479,14 @@ SESSION.registerUserFactory(poUser);
 			var ret = num == 0 ? "HP" : num == 1 ? "ATK" : num == 2 ? "DEF" : num == 3 ? "SPATK" : num == 4 ? "SPDEF" : "SPD";
 			return ret;
 		}
+		
+		isTier = function(tier) {
+			var found = false;
+			sys.getTierList().forEach(function(t) {
+				if (cmp(t,tier)) found = true;
+			});
+			return found;
+		}
 
 		border = "<font color=green><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</b></font>";
 
@@ -2353,15 +2361,8 @@ SESSION.registerUserFactory(poUser);
 					bot.sendMessage(src, "You must specify a tournament size of 3 or more.", chan);
 					return;
 				}
-				var tier = sys.getTierList();
-				var found = false;
-				for (var x in tier) {
-					if (cmp(tier[x], commandpart[0])) {
-						tourtier = tier[x];
-						found = true;
-						break;
-					}
-				}
+				var found = true;
+				if (!isTier(commandpart[0])) found = false;
 				if (!found) {
 					bot.sendMessage(src, "Sorry, the server does not recognise the " + commandpart[0] + " tier.", chan);
 					return;
@@ -3484,21 +3485,35 @@ SESSION.registerUserFactory(poUser);
 				return;
 			}
 			if (command == "showteam") {
+				var data = commandData.split(":");
+				if (data.length != 2) {
+					bot.sendMessage(src, "Usage of this command: name:tier", chan);
+					return;
+				}
+				var tar = sys.id(data[0]);
+				var tierName = data[1];
 				if (tar == undefined) {
 					bot.sendMessage(src, "Target doesn't exist!", chan);
+					return;
+				}
+				if (!isTier(tierName)) {
+					bot.sendMessage(src, "Tier doesn't exist!", chan);
 					return;
 				}
 				var ret = [];
 				ret.push("");
 				for (var team = 0; team < sys.teamCount(tar); team++) {
+					if (!sys.hasLegalTeamForTier(tar, team, tierName)) continue;
+					var toPush = "<table cellpadding=3 cellspacing=3 width='20%' border=1><tr><td><b> "+ sys.name(tar) + "'s " + tierName + " Team #"+(team+1)+"</b></td></tr>";
+					toPush += "<tr><td>";
 					for (var i = 0; i < 6; i++) {
 						var ev_result = "";
 						var poke = sys.teamPoke(tar, team, i);
 						var item = sys.teamPokeItem(tar, team, i);
 						if (poke == 0) continue;
 
-						ret.push("<font color=black><img src='pokemon:" + poke + "&gen=" + sys.gen(tar, team) + "'/><br>Item: <img src='item:" + item + "'/>");
-						ret.push('<font color=black>Ability: ' + sys.ability(sys.teamPokeAbility(tar, team, i)));
+						toPush += "<font color=black><img src='pokemon:" + poke + "&gen=" + sys.gen(tar, team) + "'/><br>Item: <img src='item:" + item + "'/><br>";
+						toPush += '<font color=black>Ability: ' + sys.ability(sys.teamPokeAbility(tar, team, i)) + "<br>";
 
 						for (z = 0; z < 6; z++) {
 							if (sys.teamPokeEV(tar, team, i, z) != 0) {
@@ -3508,16 +3523,20 @@ SESSION.registerUserFactory(poUser);
 							}
 						}
 
-						ret.push("EVs: " + ev_result);
+						toPush += ("EVs: " + ev_result + "<br>");
 
 						for (var j = 0; j < 4; j++) {
-							ret.push('- ' + sys.move(sys.teamPokeMove(tar, team, i, j)));
+							toPush += '- ' + sys.move(sys.teamPokeMove(tar, team, i, j)) + "<br>";
+						}
+						if (poke == sys.teamPoke(tar, team, 5)) {
+							toPush += "</td></tr>";
+							toPush += "</table>";
+							ret.push(toPush);
 						}
 					}
 				}
 				
 				if (ret.length > 1) {
-					ret.push("");
 					for (var i in ret) {
 						sys.sendHtmlMessage(src, ret[i], chan);
 					}
