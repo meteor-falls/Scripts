@@ -1216,13 +1216,6 @@ SESSION.registerUserFactory(poUser);
 			sys.stopEvent();
 			return;
 		}
-		if (channel !== android && sys.os(src) == "android") {
-			if (!newPlayer) {
-				guard.sendMessage(src, "Sorry, you cannot go to a channel other than Android Channel.", android);
-				watchbot.sendAll(sys.name(src) + "(IP: " + sys.ip(src) + ") tried to join " + sys.channel(channel) + " with an android phone!", watch);
-			}
-			sys.stopEvent();
-		}
 	},
 
 	beforeChannelDestroyed: function (channel) {
@@ -1318,13 +1311,7 @@ SESSION.registerUserFactory(poUser);
 			sys.putInChannel(src, watch);
 			sys.putInChannel(src, staffchannel);
 		}
-
-		if (sys.os(src) == "android") {
-			sys.kick(src, 0);
-			sys.putInChannel(src, android);
-			watchbot.sendAll("Android user, " + sys.name(src) + ", was kicked out of " + sys.channel(0) + " and placed in the Android Channel.", watch);
-		}
-
+		
 		sys.sendHtmlMessage(src, "<font color=Red><timestamp/><b>+ForumBot: </font></b> Join the Viper's Pit forums <a href='http://viperspit.freeforums.org'>here</a>.", 0);
 		sys.sendHtmlMessage(src, "<font color=Black><timestamp/><b>+CommandBot: </font></b>Type /commands to see the commands!", 0);
 		sys.sendHtmlMessage(src, "<font color=Blue><timestamp/><b>+RuleBot: </font></b>Type /rules to see the rules!", 0);
@@ -1335,7 +1322,7 @@ SESSION.registerUserFactory(poUser);
 			sys.sendHtmlMessage(src, "<font color=red><timestamp/><b>Message of the Day: </font></b>" + MOTD, 0);
 		}
 
-		if (sys.numPlayers() < 30 && sys.os(src) != "android" && Welmsgs[sys.name(src).toLowerCase()] == undefined) {
+		if (sys.numPlayers() < 30 && Welmsgs[sys.name(src).toLowerCase()] == undefined) {
 			vplogin(sys.name(src), namecolor(src));
 		}
 		if (Welmsgs[sys.name(src).toLowerCase()] != undefined) {
@@ -3484,27 +3471,15 @@ SESSION.registerUserFactory(poUser);
 				sys.sendAll('~~Server~~: The server was made private by ' + sys.name(src) + '.');
 				return;
 			}
-			if (command == "showteam") {
-				var data = commandData.split(":");
-				if (data.length != 2) {
-					bot.sendMessage(src, "Usage of this command: name:tier", chan);
-					return;
-				}
-				var tar = sys.id(data[0]);
-				var tierName = data[1];
+			if (command == "showteam" || command == "showteams") {
 				if (tar == undefined) {
 					bot.sendMessage(src, "Target doesn't exist!", chan);
-					return;
-				}
-				if (!isTier(tierName)) {
-					bot.sendMessage(src, "Tier doesn't exist!", chan);
 					return;
 				}
 				var ret = [];
 				ret.push("");
 				for (var team = 0; team < sys.teamCount(tar); team++) {
-					if (!sys.hasLegalTeamForTier(tar, team, tierName)) continue;
-					var toPush = "<table cellpadding=3 cellspacing=3 width='20%' border=1><tr><td><b> "+ sys.name(tar) + "'s " + tierName + " Team #"+(team+1)+"</b></td></tr>";
+					var toPush = "<table cellpadding=3 cellspacing=3 width='20%' border=1><tr><td><b>Team #"+(team+1)+"</b></td></tr>";
 					toPush += "<tr><td>";
 					for (var i = 0; i < 6; i++) {
 						var ev_result = "";
@@ -3518,7 +3493,6 @@ SESSION.registerUserFactory(poUser);
 						for (z = 0; z < 6; z++) {
 							if (sys.teamPokeEV(tar, team, i, z) != 0) {
 								var ev_append = sys.teamPokeEV(tar, team, i, z) + " " + ev_name(z) + " / ";
-
 								ev_result = ev_result + ev_append;
 							}
 						}
@@ -3535,7 +3509,6 @@ SESSION.registerUserFactory(poUser);
 						}
 					}
 				}
-				
 				if (ret.length > 1) {
 					for (var i in ret) {
 						sys.sendHtmlMessage(src, ret[i], chan);
@@ -3543,7 +3516,6 @@ SESSION.registerUserFactory(poUser);
 				} else {
 					bot.sendMessage(src, "That person doesn't have a valid team.", chan);
 				}
-
 				return;
 			}
 			if (command == "forcerules") {
@@ -3936,7 +3908,7 @@ SESSION.registerUserFactory(poUser);
 			var user = SESSION.users(src);
 			var shown = true;
 			if (lastToLogout.name === undefined || lastToLogout.color === undefined || typeof lastToLogout != 'object') shown = false;
-			if (sys.numPlayers() < 30 && shown && !user.autokick && sys.os(src) != "android") {
+			if (sys.numPlayers() < 30 && shown && !user.autokick) {
 				vplogout(html_escape(lastToLogout.name), lastToLogout.color);
 			}
 			/* Due to some glitch with v2, we send the message in afterLogOut (beforeLogOut has a problem...) */
