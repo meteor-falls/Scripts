@@ -2354,6 +2354,7 @@ SESSION.registerUserFactory(poUser);
 					bot.sendMessage(src, "Sorry, the server does not recognise the " + commandpart[0] + " tier.", chan);
 					return;
 				}
+				tourtier = commandpart[0];
 				tourmode = 1;
 				tourmembers = [];
 				tourbattlers = [];
