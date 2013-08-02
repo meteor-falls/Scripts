@@ -340,7 +340,7 @@ SESSION.registerUserFactory(poUser);
 		Reg.init("Kickmsgs", "{}");
 		Reg.init("Banmsgs", "{}");
 		Reg.init("Welmsgs", "{}");
-		Reg.init("Emoteprivileges", "{}");
+		Reg.init("Emoteperms", "{}");
 
 		if (typeof MegaUsers == 'undefined') {
 			MegaUsers = {};
@@ -450,23 +450,23 @@ SESSION.registerUserFactory(poUser);
 			}
 		}
 		
-		if (typeof Emoteprivileges == 'undefined') {
-			Emoteprivileges = {};
+		if (typeof Emoteperms == 'undefined') {
+			Emoteperms = {};
 			try {
-				Emoteprivileges = JSON.parse(Reg.get("Emoteprivileges"));
+				Emoteperms = JSON.parse(Reg.get("Emoteperms"));
 			} catch(e) {
-				Emoteprivileges = {};
+				Emoteperms = {};
 			}
 		}
 		
-		hasEmotePrivileges = function(name) {
+		hasEmotePerms = function(name) {
 			var n_l = name.toLowerCase();
-			if (!Emoteprivileges.hasOwnProperty(n_l)) return false;
+			if (!Emoteperms.hasOwnProperty(n_l)) return false;
 			return true;
 		}
 		
 		hasEmotesToggled = function (src) {
-			if (getAuth(src) <= 0 && !hasEmotePrivileges(sys.name(src))) return false;
+			if (getAuth(src) <= 0 && !hasEmotePerms(sys.name(src))) return false;
 			if (Emotetoggles[sys.name(src).toLowerCase()] == undefined) return false;
 			return true;
 		}
@@ -1031,6 +1031,15 @@ SESSION.registerUserFactory(poUser);
 				emotes++;
 
 				return "<img src='data:image/png;base64,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' />";
+			});
+			
+			message = message.replace(/feelsgd/gi, function ($1) {
+				if (emotes > 3) {
+					return $1;
+				}
+				emotes++;
+
+				return "<img src='data:image/png;base64,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' />";
 			});
 			
 			return message;
@@ -2115,7 +2124,7 @@ SESSION.registerUserFactory(poUser);
 				return;
 			}
 			if (command == "emotetoggle") {
-				if (myAuth < 1 && !hasEmotePrivileges(sys.name(src))) {
+				if (myAuth < 1 && !hasEmotePerms(sys.name(src))) {
 					bot.sendMessage(src, "You cannot use emotes.", chan);
 					return;
 				}
@@ -2205,14 +2214,14 @@ SESSION.registerUserFactory(poUser);
 				muList.display(src, chan);
 				return;
 			}
-			if (command == "emoteprivilegelist") {
-				var mus = Object.keys(Emoteprivileges);
+			if (command == "emotepermlist") {
+				var mus = Object.keys(Emoteperms);
 				if (mus.length == 0) {
 					bot.sendMessage(src, "No Emote privilege users yet!", chan);
 					return;
 				}
-				mus = Emoteprivileges;
-				var muList = new CommandList("<font color='goldenrod'>Emote Privilege Users</font>", "navy", false);
+				mus = Emoteperms;
+				var muList = new CommandList("<font color='goldenrod'>Emote Perm Users</font>", "navy", false);
 				for (var x in mus) {
 					muList.add(x);
 				}
@@ -2463,20 +2472,20 @@ SESSION.registerUserFactory(poUser);
 				bot.sendMessage(src, "The command " + command + " doesn't exist.", chan);
 				return;
 			}
-			if (command == "emoteprivileges") {
+			if (command == "emoteperms") {
 				if (commandData == undefined) {
 					bot.sendMessage(src, "You need to specify a user!", chan);
 					return;
 				}
-				if (hasEmotePrivileges(commandData)) {
+				if (hasEmotePerms(commandData)) {
 					bot.sendAll(sys.name(src)+" revoked "+commandData+"'s emote privileges!");
-					delete Emoteprivileges[commandData.toLowerCase()];
-					Reg.save("Emoteprivileges", JSON.stringify(Emoteprivileges));
+					delete Emoteperms[commandData.toLowerCase()];
+					Reg.save("Emoteperms", JSON.stringify(Emoteperms));
 					return;
 				}
 				bot.sendAll(sys.name(src) + " gave "+commandData+" emote privileges!");
-				Emoteprivileges[commandData.toLowerCase()] = true;
-				Reg.save("Emoteprivileges", JSON.stringify(Emoteprivileges));
+				Emoteperms[commandData.toLowerCase()] = true;
+				Reg.save("Emoteperms", JSON.stringify(Emoteperms));
 				return;
 			}
 			if (command == "channelkick") {
@@ -4451,7 +4460,7 @@ SESSION.registerUserFactory(poUser);
 			User.add("megausers", "To view the list of people who can make tournaments.");
 			User.add("floodignorelist", "To view the users who can't be flood kicked");
 			User.add("autoidlelist", "To view the users who automatic idle.");
-			User.add("emoteprivilegelist", "To view the users who have emote privileges.");
+			User.add("emotepermlist", "To view the users who have emote privileges.");
 			User.add("league", "To view the list of gym leaders, elites, and the champion.");
 			User.add("leaguerules", "To view the rules for the Viper's League.");
 			User.add("summonauth", "To summon all of the authorities.");
@@ -4549,6 +4558,7 @@ SESSION.registerUserFactory(poUser);
 			Emotes.add(":eww:");
 			Emotes.add(":nb:");
 			Emotes.add("pface");
+			Emotes.add("feelsgd");
 			Emotes.finish();
 
 			Lists.Emotes = Emotes;
@@ -4607,7 +4617,7 @@ SESSION.registerUserFactory(poUser);
 			Mod.add("removeautoidle <font color=red>[name]</font>", "To remove [name] from the auto idle list.");
 			Mod.add("addfloodignore <font color=red><b>[name]</b></font>", "To add [name] to the flood ignore list.");
 			Mod.add("removefloodignore <font color=red><b>[name]</b></font>", "To remove [name] from the flood ignore list.");
-			Mod.add("emoteprivileges <font color=red><b>[name]</b></font>", "To add/remove [name] from the emote privilege list.");
+			Mod.add("emoteperms <font color=red><b>[name]</b></font>", "To add/remove [name] from the emote privilege list.");
 			Mod.add("imp <font color=red><b>[name]</b></font>", "To change your name to [name].");
 			Mod.add("motd <font color=red><b>[message]</b></font>", "To change the Message of the Day to [message].");
 			Mod.add("roulette", "To start a roulette game.");
