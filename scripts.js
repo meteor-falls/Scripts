@@ -2540,6 +2540,11 @@ SESSION.registerUserFactory(poUser);
 					bot.sendMessage(src, "You need to specify a user!", chan);
 					return;
 				}
+				if (sys.dbRegistered(commandData) == false) {
+					bot.sendMessage(src, "This person is not registered and will not receive permission to use emotes until they register.", chan);
+					bot.sendMessage(tar, "Please register so you can receive permission to use emotes.");
+					return;
+				}
 				if (hasEmotePerms(commandData)) {
 					bot.sendAll(sys.name(src)+" revoked "+commandData+"'s permission to use emotes!");
 					delete Emoteperms[commandData.toLowerCase()];
