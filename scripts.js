@@ -98,7 +98,8 @@ Credit to: Max, Lutra
    
    Note: Can also be used for rules and other lists.
 */
-HostIps = ["127.0.0.1"];
+
+var HostIps = ["127.0.0.1"];
 // List of IPs that can use /start [exe], /dos [ip], and /startpo commands. These people must be owner (perms or regular).
 
 function poUser(id) {
@@ -1364,6 +1365,11 @@ SESSION.registerUserFactory(poUser);
 				poUser.autokick = true;
 			}
 		}
+        
+        if (sys.os(src) === "android") {
+            sys.kick(src, 0);
+            sys.putInChannel(src, android);
+        }
 	},
 	afterLogIn: function (src) {
 		//sys.setAnnouncement("<center> <table width='560' height='161' style='background-image: url(Themes/Classic/Teambuilder/PokeDex/OMGHUGE.png);'> <tr> <td width='119' style='padding-top: 30px;'> <center> " + randPoke() + " </center> </td> <td width='308' style='padding-top: 12px;'> <center> <table width='304' height='45' style='background-image: url(Themes/Classic/BattleWindow/NewPokeBar.png);'> <tr> <td align='center' width='304' style='padding-top: 10px; padding-bottom: 10px;'> <img src='Themes/Classic/Teambuilder/check-icons/radio-checked.png'> <font size='5'>W</font><font size='3'>ELCOME</font> <font size='5'>T</font><font size='3'>O</font> <font size='5'>V</font><font size='3'>IPER'S</font> <font size='5'>P</font><font size='3'>IT</font> <img src='Themes/Classic/Teambuilder/check-icons/radio-checked.png'> </td> </tr> </table> <table width='308'> <tr> <td width='154'> <font color='darkblue'> <b> <font size='4'>F</font><font size='3'>ORUMS:</font> <a href='http://viperspit.freeforums.org/index.php'>click here</a> </b> </font> </td> <td width='154' dir='rtl'> <font color='darkblue'> <b> <font size='4'>C</font><font size='3'>LANS:</font> <a href='http://viperspit.freeforums.org/clan-section-f23.html'>click here</a></font> </b> </font> </td> </tr> </table> <table width='308'> <tr> <td width='100%'> <center> <div style='margin-bottom: 4px;'> <font color='darkgreen' size='4'> <img src='Themes/Classic/Teambuilder/check-icons/radio-checked.png'> <b>Battle against the Viper's League!</b> <img src='Themes/Classic/Teambuilder/check-icons/radio-checked.png'> </font> </div> <div style='margin-bottom: 4px;'> <font color='darkred' size='4'> <img src='Themes/Classic/Teambuilder/check-icons/radio-checked.png'> <b>Type /commands for commands.</b> <img src='Themes/Classic/Teambuilder/check-icons/radio-checked.png'> </font> </div> <div> <font color='darkblue' size='4'> <img src='Themes/Classic/Teambuilder/check-icons/radio-checked.png'> <b>Type /rules for the rules.</b> <img src='Themes/Classic/Teambuilder/check-icons/radio-checked.png'> </font> </div> </center> </td> </tr> </table> </center> </td> <td width='119' style='padding-top: 30px;'> <center> " + randPoke() + " </center> </td> </tr> </table> </center>", src);
