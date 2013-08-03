@@ -1532,6 +1532,15 @@ SESSION.registerUserFactory(poUser);
 		}
 	},
 	
+	beforeChangeTeam: function(src) {
+		var drizzleSwim = hasDrizzleSwim(src);
+		if (drizzleSwim !== false) {
+			bot.sendMessage(src, "Sorry, DrizzleSwim is banned from 5th Gen OU.");
+			sys.changeTier(src, drizzleSwim, "5th Gen Ubers");
+			sys.stopEvent();
+		}
+	},
+	
 	beforeChatMessage: function (src, message, chan) {
 		if (getAuth(src) < 1 && message.length > 600) {
 			sys.stopEvent();
