@@ -488,6 +488,35 @@ SESSION.registerUserFactory(poUser);
 			});
 			return found;
 		}
+		
+		hasDrizzleSwim = function(src) {
+			var swiftswim = false, 
+				drizzle = false, 
+				isIllegalCombo = false, 
+				c_p_a, 
+				team_banned;
+			if (getTier(src, "5th Gen OU")) {
+				for (var team = 0; team < sys.teamCount(src); ++team) {
+					for (var i = 0; i < 6; i++) {
+						c_p_a = sys.teamPokeAbility(src, team, i);
+						if (c_p_a === 2)
+							swiftswim = true;
+						if (c_p_a === 33)
+							drizzle = true;
+						if (drizzle && swiftswim) {
+							isIllegalCombo = true;
+							team_banned = team;
+							break;
+						}
+					}
+				}
+			}
+			if (isIllegalCombo) {
+				return team_banned;
+			} else {
+				return false;
+			}
+		}
 
 		border = "<font color=green><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</b></font>";
 
@@ -1449,30 +1478,11 @@ SESSION.registerUserFactory(poUser);
 			poUser.muted = true;
 			bot.sendMessage(src, "You are muted for " + muteStr + ". By: " + myMute.by + ". Reason: " + myMute.reason, 0);
 		}
-
-		var swiftswim = false,
-			drizzle = false,
-			isIllegalCombo = false,
-			current_poke_abil;
-		if (getTier(src) == "5th Gen OU") {
-			for (var i = 0; i < 6; i++) {
-				current_poke_abil = sys.teamPokeAbility(src, i);
-				if (current_poke_abil === 2) {
-					swiftswim = true;
-				}
-				if (current_poke_abil === 33) {
-					drizzle = true;
-				}
-
-				if (drizzle && swiftswim) {
-					isIllegalCombo = false;
-					break;
-				}
-			}
-			if (isIllegalCombo) {
-				bot.sendMessage(src, "Sorry, DrizzleSwim is banned from 5th Gen OU.");
-				sys.changeTier(src, "5th Gen Ubers");
-			}
+		
+		var drizzleSwim = hasDrizzleSwim(src);
+		if (drizzleSwim !== false) {
+			bot.sendMessage(src, "Sorry, DrizzleSwim is banned from 5th Gen OU.");
+			sys.changeTier(src, drizzleSwim, "5th Gen Ubers");
 		}
 
 		script.megauserCheck(src);
@@ -1509,41 +1519,19 @@ SESSION.registerUserFactory(poUser);
 	},
 
 	beforeChangeTier: function (src, oldtier, newtier) {
-		var swiftswim = false,
-			drizzle = false,
-			isIllegalCombo = false,
-			current_poke_abil, teamNum;
-		if (newtier == "5th Gen OU") {
-			for (var i = 0; i < 6; i++) {
-				current_poke_abil = sys.teamPokeAbility(src, i, i);
-				if (current_poke_abil === 2) {
-					swiftswim = true;
-				}
-				if (current_poke_abil === 33) {
-					drizzle = true;
-				}
-
-				if (drizzle && swiftswim) {
-					isIllegalCombo = false;
-					teamNum = i;
-					break;
-				}
-			}
-			if (isIllegalCombo) {
-				bot.sendMessage(src, "Sorry, DrizzleSwim is banned from 5th Gen OU.");
-				sys.changeTier(src, teamNum, "5th Gen Ubers");
-				sys.stopEvent();
-			}
+		var drizzleSwim = hasDrizzleSwim(src);
+		if (drizzleSwim !== false) {
+			bot.sendMessage(src, "Sorry, DrizzleSwim is banned from 5th Gen OU.");
+			sys.changeTier(src, drizzleSwim, "5th Gen Ubers");
+			sys.stopEvent();
 		}
-	},
-	beforeChangeTier: function (src, oldtier, newtier) {
 		if (newtier == "5th Gen OU") {
 			if (script.dreamAbilityCheck(src)) {
 				sys.stopEvent();
 			}
 		}
 	},
-
+	
 	beforeChatMessage: function (src, message, chan) {
 		if (getAuth(src) < 1 && message.length > 600) {
 			sys.stopEvent();
