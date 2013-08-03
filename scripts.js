@@ -1503,7 +1503,10 @@ SESSION.registerUserFactory(poUser);
 		if (Welmsgs[sys.name(src).toLowerCase()] != undefined) {
 			var theirmessage = Welmsgs[sys.name(src).toLowerCase()];
 				var msg = (theirmessage !== undefined) ? theirmessage.message : vplogin(sys.name(src), namecolor(src));
-				if (theirmessage != undefined) msg = msg.replace(/{server}/gi, Reg.get("servername"));
+				if (theirmessage != undefined) { 
+					msg = msg.replace(/{server}/gi, Reg.get("servername"));
+					msg = emoteFormat(msg);
+				}
 				sys.sendHtmlAll(msg, 0);
 			}
 			
