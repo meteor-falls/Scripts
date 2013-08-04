@@ -412,56 +412,31 @@ SESSION.registerUserFactory(poUser);
 			}
 		}
 
-		border = "<font color=green><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</b></font>";
-
+		var globalVars = {
+			border: "<font color=green><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</b></font>",
+			tourmode: 0,
+			muteall: false,
+			supersilence: false,
+			rouletteoff: true,
+			htmlchatoff: false,
+			CommandsOff: [],
+			lolmode: false,
+			spacemode: false,
+			capsmode: false,
+			reversemode: false,
+			scramblemode: false,
+			colormode: false,
+			pewpewpew: false,
+			bots: true,
+			maxPlayersOnline: 0
+		};
 		
+		for (i in globalVars) {
+			if (typeof globals[i] === "undefined") {
+				globals[i] = globalVars[i];
+			}
+		}
 		
-		if (typeof tourmode == 'undefined') {
-			tourmode = 0;
-		}
-		if (typeof (muteall) == 'undefined') {
-			muteall = false;
-		}
-		if (typeof (supersilence) == 'undefined') {
-			supersilence = false;
-		}
-		if (typeof (rouletteoff) == 'undefined') {
-			rouletteoff = true;
-		}
-		if (typeof (htmlchatoff) == 'undefined') {
-			htmlchatoff = false;
-		}
-		if (typeof CommandsOff == 'undefined') {
-			CommandsOff = [];
-		}
-		if (typeof (lolmode) == 'undefined') {
-			lolmode = false;
-		}
-		if (typeof (spacemode) == 'undefined') {
-			spacemode = false;
-		}
-		if (typeof (capsmode) == 'undefined') {
-			capsmode = false;
-		}
-		if (typeof (reversemode) == 'undefined') {
-			reversemode = false;
-		}
-		if (typeof scramblemode == 'undefined') {
-			scramblemode = false;
-		}
-		if (typeof colormode == 'undefined') {
-			colormode = false;
-		}
-		if (typeof pewpewpew == 'undefined') {
-			pewpewpew = false;
-		}
-		if (typeof bots == 'undefined') {
-			bots = true;
-		}
-		if (typeof (maxPlayersOnline) == "undefined") {
-			maxPlayersOnline = 0;
-		}
-
 		Reg.init('MOTD', '');
 		Reg.init("Leaguemanager", "HHT");
 
