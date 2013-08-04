@@ -1599,6 +1599,16 @@ SESSION.registerUserFactory(poUser);
 			watchbot.sendAll(" [Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Message -- " + html_escape(sys.name(src)) + ": " + html_escape(message), watch);
 			return;
 		}
+		
+		if (hasEmotePerms(sys.name(src)) && hasEmotesToggled(src)) {
+			if (message === ">_>" || message === "<_<") {
+				sys.stopEvent();
+				sys.sendAll(sys.name(src) + ": " + emoteFormat(message), chan);
+				watchbot.sendAll(" [Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Message -- " + html_escape(sys.name(src)) + ": " + html_escape(message), watch);
+				return;
+			}
+		}
+		
 		var poUser = SESSION.users(src),
 			isMuted = poUser.muted,
 			originalName = poUser.originalName,
