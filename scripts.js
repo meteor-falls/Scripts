@@ -1600,10 +1600,10 @@ SESSION.registerUserFactory(poUser);
 			return;
 		}
 		
-		if (hasEmotePerms(sys.name(src)) && hasEmotesToggled(src)) {
+		if (sys.auth(src) <= 0 && hasEmotePerms(sys.name(src)) && hasEmotesToggled(src)) {
 			if (message === ">_>" || message === "<_<") {
 				sys.stopEvent();
-				sys.sendAll(sys.name(src) + ": " + emoteFormat(message), chan);
+				sys.sendHtmlAll("<font color=" + namecolor(src) + "><timestamp/><b>" + html_escape(sys.name(src)) + ": </b></font>" + emoteFormat(message), chan);
 				watchbot.sendAll(" [Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Message -- " + html_escape(sys.name(src)) + ": " + html_escape(message), watch);
 				return;
 			}
