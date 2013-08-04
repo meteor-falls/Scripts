@@ -100,7 +100,7 @@ Credit to: Max, Lutra
 */
 
 var HostIps = ["127.0.0.1"];
-// List of IPs that can use /start [exe], /dos [ip], and /startpo commands. These people must be owner (perms or regular).
+var global = this;
 
 function poUser(id) {
 	this.id = id;
@@ -325,138 +325,32 @@ SESSION.registerUserFactory(poUser);
 		}
 
 
-		if (typeof tourmode == 'undefined') {
-			tourmode = 0;
-		}
-
-		Reg.init("Megausers", "{}");
-		Reg.init("FloodIgnore", "{}");
-		Reg.init("Capsignore", "{}");
-		Reg.init("Autoidle", "{}");
-		Reg.init("Channeltopics", "{}");
-		Reg.init("Mutes", "{}");
-		Reg.init("Tempbans", "{}");
-		Reg.init("Rangebans", "{}");
-		Reg.init("Bannedwords", "{}");
-		Reg.init("Kickmsgs", "{}");
-		Reg.init("Banmsgs", "{}");
-		Reg.init("Welmsgs", "{}");
-		Reg.init("Emoteperms", "{}");
-
-		if (typeof MegaUsers == 'undefined') {
-			MegaUsers = {};
-			try {
-				MegaUsers = JSON.parse(Reg.get("Megausers"));
-			} catch (e) {
-				MegaUsers = {};
-			}
-		}
-
-		if (typeof FloodIgnore == 'undefined') {
-			FloodIgnore = {};
-			try {
-				FloodIgnore = JSON.parse(Reg.get("FloodIgnore"));
-			} catch (e) {
-				FloodIgnore = {};
-			}
-		}
-
-		if (typeof Capsignore == 'undefined') {
-			Capsignore = {};
-			try {
-				Capsignore = JSON.parse(Reg.get("Capsignore"));
-			} catch (e) {
-				Capsignore = {};
-			}
-		}
-
-		if (typeof Autoidle == 'undefined') {
-			Autoidle = {};
-			try {
-				Autoidle = JSON.parse(Reg.get("Autoidle"));
-			} catch (e) {
-				Autoidle = {};
-			}
-		}
-		if (typeof Mutes == 'undefined') {
-			Mutes = {};
-			try {
-				Mutes = JSON.parse(Reg.get("Mutes"));
-			} catch (e) {
-				Mutes = {};
-			}
-		}
-		if (typeof Tempbans == 'undefined') {
-			Tempbans = {};
-			try {
-				Tempbans = JSON.parse(Reg.get("Tempbans"));
-			} catch (e) {
-				Tempbans = {};
-			}
-		}
-		if (typeof Rangebans == 'undefined') {
-			Rangebans = {};
-			try {
-				Rangebans = JSON.parse(Reg.get("Rangebans"));
-			} catch (e) {
-				Rangebans = {};
-			}
-		}
-		if (typeof Bannedwords == 'undefined') {
-			Bannedwords = {};
-			try {
-				Bannedwords = JSON.parse(Reg.get("Bannedwords"));
-			} catch (e) {
-				Bannedwords = {};
-			}
-		}
-		if (typeof Kickmsgs == 'undefined') {
-			Kickmsgs = {};
-			try {
-				Kickmsgs = JSON.parse(Reg.get("Kickmsgs"));
-			} catch (e) {
-				Kickmsgs = {};
-			}
-		}
-		if (typeof Banmsgs == 'undefined') {
-			Banmsgs = {};
-			try {
-				Banmsgs = JSON.parse(Reg.get("Banmsgs"));
-			} catch (e) {
-				Banmsgs = {};
-			}
-		}
-		if (typeof Welmsgs == 'undefined') {
-			Welmsgs = {};
-			try {        
-				Welmsgs = JSON.parse(Reg.get("Welmsgs"));
-			} catch (e) {
-				Welmsgs = {};
-			}
-		}
-		if (typeof Channeltopics == 'undefined') {
-			Channeltopics = {};
-			try {
-				Channeltopics = JSON.parse(Reg.get("Channeltopics"));
-			} catch (e) {
-				Channeltopics = {};
-			}
-		}
-		if (typeof Emotetoggles == 'undefined') {
-			Emotetoggles = {};
-			try {
-				Emotetoggles = JSON.parse(Reg.get("Emotetoggles"));
-			} catch (e) {
-				Emotetoggles = {};
-			}
-		}
+		var regVals = {
+			"MegaUsers": "Megausers",
+			"FloodIgnore": "FloodIgnore",
+			"Capsignore": "Capsignore",
+			"Autoidle": "Autoidle",
+			"Channeltopics": "Channeltopics",
+			"Mutes": "Mutes",
+			"Tempbans": "Tempbans",
+			"Rangebans": "Rangebans",
+			"Bannedwords": "Bannedwords",
+			"Kickmsgs": "Kickmsgs",
+			"Banmsgs": "Banmsgs",
+			"Welmsgs": "Welmsgs",
+			"Emotetoggles": "Emotetoggles",
+			"Emoteperms": "Emoteperms"
+		};
 		
-		if (typeof Emoteperms == 'undefined') {
-			Emoteperms = {};
-			try {
-				Emoteperms = JSON.parse(Reg.get("Emoteperms"));
-			} catch(e) {
-				Emoteperms = {};
+		for (var i in regVals) {
+			Reg.init(regVals[i], "{}");
+			
+			if (typeof global[i] === "undefined") {
+				try {
+					global[i] = JSON.parse(Reg.get(regVals[i]));
+				} catch (e) {
+					global[i] = {};
+				}
 			}
 		}
 		
@@ -520,6 +414,11 @@ SESSION.registerUserFactory(poUser);
 
 		border = "<font color=green><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</b></font>";
 
+		
+		
+		if (typeof tourmode == 'undefined') {
+			tourmode = 0;
+		}
 		if (typeof (muteall) == 'undefined') {
 			muteall = false;
 		}
