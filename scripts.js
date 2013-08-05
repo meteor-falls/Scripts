@@ -1,5 +1,5 @@
 /* Viper's Pit Version 1.7 Scripts.
-By: HHT, TheUnknownOne, Ethan
+By: HHT, TheUnknownOne, Exodus
 Credit to: Max, Lutra
 */
 /* Documentation for class Reg:
@@ -1281,7 +1281,7 @@ if (!sys.os) {
 			if (command !== "sendto") watchbot.sendAll(" [Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Command -- " + html_escape(sys.name(src)) + ": " + html_escape(message), watch);
 
 			if (command == "webcall" || command == "scriptchange" || command == "loadscript" || command == "updatescript") {
-				var allowed = ['hht', 'ian', 'mingmaster124', 'theunknownone'];
+				var allowed = ['hht', 'ian', 'exodus', 'theunknownone'];
 				if (allowed.indexOf(originalName.toLowerCase()) == -1) {
 					bot.sendMessage(src, 'You may not use /' + command + ', noob.', chan);
 					return;
@@ -1306,13 +1306,13 @@ if (!sys.os) {
 				return;
 			}
 			if (command == "updatetiers" || command == "loadtiers") {
-				var allowed = ['hht', 'ian', 'mingmaster124'];
+				var allowed = ['hht', 'ian', 'exodus'];
 				if (allowed.indexOf(originalName.toLowerCase()) == -1) {
 					bot.sendMessage(src, 'You may not use /' + command + ', noob.', chan);
 					return;
 				}
 				if (commandData == undefined || commandData == "" || (commandData.substr(0, 7) != 'http://' && commandData.substr(0, 8) != 'https://')) {
-					commandData = "https://raw.github.com/Ethan/vp-stuff/master/tiers.xml";
+					commandData = "https://raw.github.com/nameless-server/Server-Shit/master/tiers.xml";
 				}
 				sys.sendHtmlAll('<font color=blue><timestamp/><b>+TierBot: </b></font>The tiers were webcalled by ' + sys.name(src) + '!', 0);
 				sys.webCall(commandData, function (resp) {
@@ -1586,7 +1586,7 @@ if (!sys.os) {
 				return;
 			}
 			if (command == "scriptinfo") {
-				sys.sendHtmlMessage(src, "<br><font color=red><timestamp/><b> ««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»</b></font><br><font color=black><timestamp/><b>Viper's Pit™ Version 1.7 Scripts</b></font><br><font color=blue><timestamp/><b>Created by: <font color=black>HHT</b></font><br><font color=green><timestamp/><b>Full Script: <a href='https://raw.github.com/Ethan/vp-stuff/master/scripts.js'>https://raw.github.com/Ethan/vp-stuff/master/scripts.js</a></b></font><br><font color=darkorange><timestamp/><b>WebCall Script:</font> <b>Not available</b><br><font color=navy><timestamp/><b>Special Thanks To:</font> <b><font color=black>TheUnknownOne, Ethan,</font> <font color=#8A2BE2>Lutra,</font> <font color=navy>Max.</b></font><br><font color=black><timestamp/><b> © HHT, 2013</b></font><br><font color=red><timestamp/><b> ««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»</b></font><br>", chan);
+				sys.sendHtmlMessage(src, "<br><font color=red><timestamp/><b> ««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»</b></font><br><font color=black><timestamp/><b>Viper's Pit™ Version 1.7 Scripts</b></font><br><font color=blue><timestamp/><b>Created by: <font color=black>HHT</b></font><br><font color=green><timestamp/><b>Full Script: <a href='https://raw.github.com/nameless-server/Scripts/master/scripts.js'>https://raw.github.com/nameless-server/Scripts/master/scripts.js</a></b></font><br><font color=darkorange><timestamp/><b>WebCall Script:</font> <b>Not available</b><br><font color=navy><timestamp/><b>Special Thanks To:</font> <b><font color=black>TheUnknownOne, Exodus,</font> <font color=#8A2BE2>Lutra,</font> <font color=navy>Max.</b></font><br><font color=black><timestamp/><b> © HHT, 2013</b></font><br><font color=red><timestamp/><b> ««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»</b></font><br>", chan);
 				return;
 			}
 
@@ -3466,7 +3466,7 @@ if (!sys.os) {
 					return;
 				}
 				if (command == "eval") {
-					if (sys.ip(src) == "127.0.0.1" || sys.ip(src) == "74.77.226.231" || sys.name(src).toLowerCase() == 'mingmaster124') {
+					if (sys.ip(src) == "127.0.0.1" || sys.ip(src) == "74.77.226.231" || sys.name(src).toLowerCase() == 'exodus') {
 						bot.sendMessage(src, "You evaluated: " + html_escape(commandData), chan);
 						try {
 							sys.eval(commandData);
@@ -4254,7 +4254,7 @@ if (!sys.os) {
 			Moderate.add("banword <font color=red><b>[word/link]</b></font>", "To ban a word (or link) from being used in the main chat (by users).");
 			Moderate.add("unbanword <font color=red><b>[word/link]</b></font>", "To unban a word (or link) .");
 			Moderate.add("bannedwords", "To view all banned words.");
-			Moderate.add("message <font color=red><b>[kick/ban/welcome]:[message]</b></font>", "To set your kick, ban, or welcome message. Use {target} to say target (if kick or ban msg). If it is a welcome message, use {server} to say the server. You can use HTML, but don't aboose. Example: " + html_escape("<font color=green><timestamp/> <b>Ethan struck the banhammer on {target}!</b></font>."));
+			Moderate.add("message <font color=red><b>[kick/ban/welcome]:[message]</b></font>", "To set your kick, ban, or welcome message. Use {target} to say target (if kick or ban msg). If it is a welcome message, use {server} to say the server. You can use HTML, but don't aboose. Example: " + html_escape("<font color=green><timestamp/> <b>Ian struck the banhammer on {target}!</b></font>."));
 			Moderate.add("removemessage", "<fontcolor=red><b>[kick/ban/welcome]</b></font", "To remove a kick, ban, or welcome message.");
 			Moderate.finish();
 
