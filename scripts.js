@@ -1,105 +1,12 @@
-/* Viper's Pit Version 1.7 Scripts.
-By: HHT, TheUnknownOne, Exodus
-Credit to: Max, Lutra
-*/
-/* Documentation for class Reg:
-   - Everything is stored in the file Reg.json
-   
-   Reg.save (key, value):
-   Creates/overwrites key with value.
-   Example: Reg.save("Server_Name", "Hello");
-   
-   Reg.init (key, value):
-   Creates key with value (no overwrite).
-   Example: Reg.init("Script_Loaded", true);
-   
-   Reg.get (key):
-   Gets data associated with key. Can be undefined (if the key doesn't exist)
-   Example: Reg.get("Server_Name");
-   
-   Reg.remove (key):
-   Removes key.
-   Example: Reg.remove("Server_Name");
-   
-   Reg.removeIf (function): [ADVANCED]
-   Removes all keys which the function returns true on. Function passed gets two parameters. 
-   First is the data associated with the current key, second is the name of the key.
-   Example: Reg.removeIf(function (key_data, key_name) {
-   if (key_name.indexOf("AutoIdle") != -1) {
-   return true;
-   }
-   
-   return false;
-   });
-   
-   Reg.removeIfValue (key, value):
-   Removes key if the data associated with it is value.
-   Example: Reg.removeIfValue("Server_Name", "Hello");
+/*jslint continue: true, es5: true, evil: true, forin: true, sloppy: true, vars: true, regexp: true, newcap: true*/
+/*global sys, SESSION, script: true, Qt, print, gc, version,
+    global: false*/
 
-   Reg.saveData ():
-   Saves all data stored to Reg.json. All functions do this automaticly, so no need to use this.
-   Example: Reg.saveData();
-
-   Reg.clearAll ():
-   Removes ALL data stored and clears Reg.json. Useful if you made a huge mistake or change that requires it to be flushed.
-   Example: Reg.clearAll();   
-*/
-/* Documentation for prototype Bot:
-   Creates a bot. Example:
-   vpbot = new Bot("Viper's Pit", "red", "+", true);
-   
-   Function documentation:
-   new Bot (name, color, prefix, withItalics):
-   Creates a bot with name name, colored color. Prefix is optional and can be empty. 
-   Default is "+". withItalics can be true/false depending if the bot should have italics like auth.
-   Example: vpbot = new Bot("Viper's Pit", "green");
-   
-   Bot.sendAll(message, channel):
-   Sends message to channel. The message will be formatted with given configuration.
-   Channel is optional and if none given sends message to every channel.
-   Example: vpbot.sendAll("Welcome to Viper's Pit!");
-   
-   Bot.sendMessage(id, message, channel):
-   Sends message to id in channel. The message will be formatted with given configuration.
-   Channel is optional and if none given sends message to every channel.
-   Example: vpbot.sendMessage(src, "Hey, "+sys.name(src)+"!", 0);
-*/
-/* Documentation for prototype CommandList:
-   Create a command list. Example:
-   
-   var User = new CommandList("title commands", "blue");
-   User.add("cmd1", "desc for cmd1");
-   etc.
-   User.finish();
-   Lists.User = User;
-   
-   To display, use: 
-   Lists.User.display(src, chan);
-   
-   Function documentation:
-   new CommandList (title, bordercolor, help, list_type):
-   Creates a command list with title, title. The borders will be colored with bordercolor.
-   Help is the help message (default is "Type the following in the main chat in order to use them:")
-   list_type should be "ul" (unordered list) or "ol" (ordered list). Default is ul.
-   Example: var User = new CommandList("User Commands", "red", "This is the list of user commands:", "ol");
-   
-   CommandList.add (command, description):
-   Adds command with description to the command list.
-   description is useless if the title of the list did not contain "Commands" (for rules and other lists.)
-   Example: User.add("cmd1", "desc for cmd1");
-   
-   CommandList.finish ():
-   Needs to be called to finish the command list (adds final border).
-   Example: User.finish();
-   
-   CommandList.display (player, channel):
-   Displays the command list to id player in channel channel.
-   Example: User.display(1, 0);
-   
-   Note: Can also be used for rules and other lists.
+/* Viper's Pit Scripts v1.7
+    By: HHT, TheUnknownOne, Ethan
+    Credit to: Max, Lutra
 */
 
-var HostIps = ["127.0.0.1"];
 var global = this;
 
 function poUser(id) {
@@ -123,8 +30,149 @@ if (!sys.os) {
 		}
 		
 		return "windows";
-	}
+	};
 }
+
+
+String.prototype.midRef = function (position, n) { // QStringRef QString::midRef
+    if (n === null || typeof n !== "number") {
+        n = -1;
+    }
+
+    var str = this;
+    var strlen = str.length - 1;
+    if (position > strlen) {
+        return "";
+    }
+
+    var substri = str.substr(position);
+    if (n > strlen || n === -1) {
+        return substri;
+    }
+
+    return substri.substr(0, n);
+};
+
+String.prototype.replaceBetween = function (pos1, pos2, replace) {
+    var str = this;
+    var returnStr = str;
+    var sub = str.substr(pos1, pos2);
+    returnStr = returnStr.replace(sub, replace);
+
+    return returnStr;
+};
+
+String.prototype.scramble = function () {
+    var m = this.length, t, i;
+    
+    // While there remain elements to shuffle…
+    while (m) {
+        // Pick a remaining element…
+        i = Math.floor(Math.random() * (m - 1));
+        
+        // And swap it with the current element.
+        t = this.charAt(m);
+        this[m] = this.charAt(i);
+        this[i] = t;
+    }
+    
+    return this;
+};
+
+
+String.prototype.format = function () {
+    var str = this;
+    var exp, i, args = arguments.length,
+        icontainer = 0;
+
+    for (i = 0; i < args; i += 1) {
+        icontainer += 1;
+        exp = new RegExp("%" + icontainer, "");
+        str = str.replace(exp, arguments[i]);
+    }
+
+    return str;
+};
+
+// Global functions
+var html_escape,
+    html_strip,
+    namecolor,
+    loginMessage,
+    logoutMessage,
+    cmp,
+    cut,
+    stringToTime,
+    getAuth,
+    floodIgnoreCheck,
+    removeTag,
+    randcolor,
+    colormodemessage,
+    lolmessage,
+    pewpewpewmessage,
+    hasEmotesToggled,
+    emoteFormat,
+    hasEmotePerms,
+    getTier,
+    ev_name,
+    isTier,
+    hasDrizzleSwim,
+    getTimeString,
+    andJoin,
+    ban,
+    kick,
+    aliasKick,
+    getName,
+    kick,
+    pruneTempbans,
+    pruneMutes,
+    addEmote,
+    ChannelLink,
+    addChannelLinks,
+    format,
+    firstGen,
+    randPoke,
+    formatPoke;
+
+// Other globals
+var Reg,
+    servername = "",
+    FloodIgnore,
+    Emoteperms,
+    Emotetoggles,
+    Leaguemanager,
+    ChannelNames,
+    PlayerIds,
+    staffchannel,
+    league,
+    watch,
+    android,
+    reconnectTrolls,
+    Tempbans,
+    Mutes,
+    EmoteList,
+    htmlchatoff,
+    teamSpammers,
+    serverowner,
+    guard,
+    watchbot,
+    MegaUsers,
+    Channeltopics,
+    topicbot,
+    bot,
+    Rangebans,
+    Autoidle,
+    Welmsgs,
+    border,
+    tourtier,
+    stepCounter,
+    tourmode,
+    muteall,
+    supersilence,
+    Bannedwords,
+    Lists,
+    CommandsOff,
+    CommandList;
 
 ({
 	serverStartUp: function () {
@@ -132,63 +180,15 @@ if (!sys.os) {
 	},
 	init: function () {
 		html_escape = function (str) {
-			return str.replace(/\&/g, "&amp;").replace(/\</g, "&lt;").replace(/\>/g, "&gt;");
-		}
+			return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+		};
 
 		html_strip = function (str) {
 			return str.replace(/<\/?[^>]*>/g, "");
-		}
-
-		String.prototype.format = function () {
-			var str = this;
-			var exp, i, args = arguments.length,
-				icontainer = 0;
-
-			for (i = 0; i < args; i++) {
-				icontainer++;
-				exp = new RegExp("%" + icontainer, "");
-				str = str.replace(exp, arguments[i]);
-			}
-
-			return str;
-		}
-
-		String.prototype.midRef = function (position, n) { // QStringRef QString::midRef
-			if (n == null || typeof n != "number") {
-				n = -1;
-			}
-
-			var str = this;
-			var strlen = str.length - 1;
-			if (position > strlen) {
-				return "";
-			}
-
-			var substri = str.substr(position);
-			if (n > strlen || n == -1) {
-				return substri;
-			}
-
-			return substri.substr(0, n);
-		}
-
-		String.prototype.replaceBetween = function (pos1, pos2, replace) {
-			var str = this;
-			var returnStr = str;
-			var sub = str.substr(pos1, pos2);
-			returnStr = returnStr.replace(sub, replace);
-
-			return returnStr;
-		}
-
-		String.prototype.scramble = function () {
-			var thisString = this.split("");
-			for (var i = thisString.length, j, k; i; j = parseInt(Math.random() * i), k = thisString[--i], thisString[i] = thisString[j], thisString[j] = k) {}
-			return thisString.join("");
-		}
+		};
 
 		sys.appendToFile("Reg.json", "");
-		if (sys.getFileContent("Reg.json") == "") {
+		if (sys.getFileContent("Reg.json") === "") {
 			sys.writeToFile("Reg.json", "{}");
 		}
 		
@@ -197,10 +197,12 @@ if (!sys.os) {
 		print("Registry has been loaded.");
 
 		var configFile = sys.getFileContent("config").split("\n"),
-			x, c_conf, serv = /server_name=/,
+			x,
+            c_conf,
+            serv = /server_name=/,
 			desc = /server_description=/,
 			ann = /server_announcement=/;
-		servername = "";
+        
 		for (x in configFile) {
 			c_conf = configFile[x];
 			if (serv.test(c_conf) && !ann.test(c_conf) && !desc.test(c_conf)) {
@@ -211,37 +213,40 @@ if (!sys.os) {
 
 		namecolor = function (src) {
 			var getColor = sys.getColor(src);
-			if (getColor == '#000000') {
+			if (getColor === '#000000') {
 				var clist = ['#5811b1', '#399bcd', '#0474bb', '#f8760d', '#a00c9e', '#0d762b', '#5f4c00', '#9a4f6d', '#d0990f', '#1b1390', '#028678', '#0324b1'];
 				return clist[src % clist.length];
 			}
 			return getColor;
-		}
+		};
 
-		vplogin = function (name, color) {
-			sys.sendHtmlAll("+<b><font color=red>W</font><font color=blue>e</font><font color=red>l</font><font color=black>c</font><font color=green>o</font><font color=orange>m</font><font color=purple>e</font><font color=red>B</font><font color=blue>o</font><font color=green>t</font></b>: <b><font color=" + color + ">" + name + "</font></b> has logged on to <b>"+Reg.get('servername')+"</b>!", 0);
-		}
+		loginMessage = function (name, color) {
+			sys.sendHtmlAll("+<b><font color=red>W</font><font color=blue>e</font><font color=red>l</font><font color=black>c</font><font color=green>o</font><font color=orange>m</font><font color=purple>e</font><font color=red>B</font><font color=blue>o</font><font color=green>t</font></b>: <b><font color=" + color + ">" + name + "</font></b> has logged on to <b>" + Reg.get('servername') + "</b>!", 0);
+		};
 
-		vplogout = function (name, color) {
-			sys.sendHtmlAll("+<b><font color=red>G</font><font color=blue>o</font><font color=red>o</font><font color=black>d</font><font color=green>B</font><font color=orange>y</font><font color=purple>e</font><font color=red>B</font><font color=blue>o</font><font color=green>t</font></b>: <b><font color=" + color + ">" + name + "</font></b> has logged off of <b>"+Reg.get('servername')+"</b>!", 0);
-		}
+		logoutMessage = function (name, color) {
+			sys.sendHtmlAll("+<b><font color=red>G</font><font color=blue>o</font><font color=red>o</font><font color=black>d</font><font color=green>B</font><font color=orange>y</font><font color=purple>e</font><font color=red>B</font><font color=blue>o</font><font color=green>t</font></b>: <b><font color=" + color + ">" + name + "</font></b> has logged off of <b>" + Reg.get('servername') + "</b>!", 0);
+		};
 
 		cmp = function (a, b) {
-			return a.toLowerCase() == b.toLowerCase();
-		}
+			return a.toLowerCase() === b.toLowerCase();
+		};
 
 		cut = function (array, entry, join) {
-			if (!join) join = "";
-			return array.splice(entry).join(join);
-		}
+			if (!join) {
+                join = "";
+            }
+            
+			return [].concat(array.splice(entry).join(join));
+		};
 
 		stringToTime = function (str, time) {
-			if (typeof str != 'string') {
+			if (typeof str !== 'string') {
 				return 0;
 			}
 
 			str = str.toLowerCase();
-			time = time * 1;
+			time = +time;
 
 			var unitString = str[0],
 				unitString2 = str.substr(0, 2);
@@ -253,8 +258,9 @@ if (!sys.os) {
 				'd': 86400,
 				'w': 604800,
 				'y': 31536000
-			},
-			units2 = {
+			};
+            
+			var units2 = {
 				'mo': 2592000,
 				'de': 315360000
 			};
@@ -262,78 +268,82 @@ if (!sys.os) {
 			var unit1 = units[unitString],
 				unit2 = units2[unitString2];
 
-			if (unit2 != undefined) {
+			if (unit2 !== undefined) {
 				return unit2 * time;
 			}
 
-			if (unit1 != undefined) {
+			if (unit1 !== undefined) {
 				return unit1 * time;
 			}
 
 			return units.m * time;
-		}
+		};
 
 		getAuth = function (id) {
-			if (typeof (id) == "number") return sys.auth(id);
-			else return (sys.id(id) !== undefined) ? sys.auth(sys.id(id)) : 0;
-		}
+			if (typeof (id) === "number") {
+                return sys.auth(id);
+            } else {
+                return (sys.id(id) !== undefined) ? sys.auth(sys.id(id)) : 0;
+            }
+		};
 
 		floodIgnoreCheck = function (src) {
 			var myNameToLower = sys.name(src).toLowerCase();
-			return myNameToLower in FloodIgnore;
-		}
+			return !!FloodIgnore[myNameToLower];
+		};
 
 		removeTag = function (name) {
 			return name.replace(/\[[^\]]*\]/gi, '').replace(/\{[^\]]*\}/gi, '');
-		}
+		};
+        
 		randcolor = function () {
 			var nums = 5;
 			var str = '';
 			while (nums >= 0) {
 				str += sys.rand(0, 16).toString(16);
-				nums--;
+				nums -= 1;
 			}
 			return "<font color='#" + str + "'>";
-		}
+		};
 
 		colormodemessage = function (message) {
 			var x, retmsg = "";
 			for (x in message) {
-				if (x == "format") {
+				if (x === "format") {
 					break;
 				}
 				retmsg += randcolor() + message[x] + "</font>";
 			}
 
 			return retmsg;
-		}
+		};
 
 		lolmessage = function (message) {
 			var x, retmsg = "";
 			for (x in message) {
-				if (x == "format") {
+				if (x === "format") {
 					break;
 				}
 				retmsg += "lol";
 			}
 
 			return retmsg;
-		}
+		};
 		
-		pewpewpewmessage = function(message) {
+		pewpewpewmessage = function (message) {
 			var sendStr;
-			var playerLen = sys.playerIds().length, randPlayer = sys.playerIds()[sys.rand(0,playerLen)];
-			while (sys.loggedIn(randPlayer) == false) {
-				randPlayer = sys.playerIds()[sys.rand(0,playerLen)];
+			var playerLen = sys.playerIds().length, randPlayer = sys.playerIds()[sys.rand(0, playerLen)];
+			while (sys.loggedIn(randPlayer) === false) {
+				randPlayer = sys.playerIds()[sys.rand(0, playerLen)];
 			}
 			var name = sys.name(randPlayer), auth = sys.auth(randPlayer);
-			var sendStr = "<font color=" + namecolor(randPlayer) + "><timestamp/><b>" + html_escape(name) + ": </b></font>" + (hasEmotesToggled(randPlayer) ? emoteFormat(message) : message);
+			
+            sendStr = "<font color=" + namecolor(randPlayer) + "><timestamp/><b>" + html_escape(name) + ": </b></font>" + (hasEmotesToggled(randPlayer) ? emoteFormat(message) : message);
 			if (sys.auth(randPlayer) > 0 && sys.auth(randPlayer) < 4) {
 				sendStr = "<font color=" + namecolor(randPlayer) + "><timestamp/>+<i><b>" + html_escape(name) + ": </b></i></font>" + (hasEmotesToggled(randPlayer) ? emoteFormat(message) : message);
 			}
 			return sendStr;
-		}
-
+		};
 
 		var regVals = {
 			"MegaUsers": "Megausers",
@@ -351,8 +361,10 @@ if (!sys.os) {
 			"Emotetoggles": "Emotetoggles",
 			"Emoteperms": "Emoteperms"
 		};
+        
+        var i;
 		
-		for (var i in regVals) {
+		for (i in regVals) {
 			Reg.init(regVals[i], "{}");
 			
 			if (typeof global[i] === "undefined") {
@@ -364,49 +376,62 @@ if (!sys.os) {
 			}
 		}
 		
-		hasEmotePerms = function(name) {
+		hasEmotePerms = function (name) {
 			var n_l = name.toLowerCase();
-			if (!Emoteperms.hasOwnProperty(n_l)) return false;
-			return true;
-		}
+			return Emoteperms.hasOwnProperty(n_l);
+		};
 		
 		hasEmotesToggled = function (src) {
-			if (getAuth(src) <= 0 && !hasEmotePerms(sys.name(src))) return false;
-			if (Emotetoggles[sys.name(src).toLowerCase()] == undefined) return false;
+			if (getAuth(src) <= 0 && !hasEmotePerms(sys.name(src))) {
+                return false;
+            }
+            
+			if (Emotetoggles[sys.name(src).toLowerCase()] === undefined) {
+                return false;
+            }
+            
 			return true;
-		}
+		};
 
 		getTier = function (src, tier) {
 			return sys.hasTier(src, tier);
-		}
+		};
 		
-		ev_name = function(num) {
-			var ret = num == 0 ? "HP" : num == 1 ? "ATK" : num == 2 ? "DEF" : num == 3 ? "SPATK" : num == 4 ? "SPDEF" : "SPD";
+		ev_name = function (num) {
+			var ret = num === 0 ? "HP" : num === 1 ? "ATK" : num === 2 ? "DEF" : num === 3 ? "SPATK" : num === 4 ? "SPDEF" : "SPD";
 			return ret;
-		}
+		};
 		
-		isTier = function(tier) {
+		isTier = function (tier) {
 			var found = false;
-			sys.getTierList().forEach(function(t) {
-				if (cmp(t,tier)) found = true;
+			sys.getTierList().forEach(function (t) {
+				if (cmp(t, tier)) {
+                    found = true;
+                }
 			});
 			return found;
-		}
+		};
 		
-		hasDrizzleSwim = function(src) {
-			var swiftswim = false, 
-				drizzle = false, 
-				isIllegalCombo = false, 
-				c_p_a, 
-				team_banned;
+		hasDrizzleSwim = function (src) {
+			var swiftswim = false,
+				drizzle = false,
+				isIllegalCombo = false,
+				c_p_a,
+				team_banned,
+                team,
+                i;
+            
 			if (getTier(src, "5th Gen OU")) {
-				for (var team = 0; team < sys.teamCount(src); ++team) {
-					for (var i = 0; i < 6; i++) {
+				for (team = 0; team < sys.teamCount(src); team += 1) {
+					for (i = 0; i < 6; i += 1) {
 						c_p_a = sys.teamPokeAbility(src, team, i);
-						if (c_p_a === 2)
+						if (c_p_a === 2) {
 							swiftswim = true;
-						if (c_p_a === 33)
+                        }
+						if (c_p_a === 33) {
 							drizzle = true;
+                        }
+                        
 						if (drizzle && swiftswim) {
 							isIllegalCombo = true;
 							team_banned = team;
@@ -415,12 +440,13 @@ if (!sys.os) {
 					}
 				}
 			}
+            
 			if (isIllegalCombo) {
 				return team_banned;
-			} else {
-				return false;
 			}
-		}
+            
+            return false;
+		};
 
 		var globalVars = {
 			border: "<font color=green><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</b></font>",
@@ -453,8 +479,8 @@ if (!sys.os) {
 		if (Reg.get("Champ") === undefined) {
 			var LeagueArray = ["Gym1", "Gym2", "Gym3", "Gym4", "Gym5", "Gym6", "Gym7", "Gym8", "Elite1", "Elite2", "Elite3", "Elite4", "Champ"];
 
-			for (var x in LeagueArray) {
-				Reg.init(LeagueArray[x], "");
+			for (i in LeagueArray) {
+				Reg.init(LeagueArray[i], "");
 			}
 		}
 
@@ -462,8 +488,8 @@ if (!sys.os) {
 
 		var channelIds = sys.channelIds();
 		ChannelNames = [];
-		for (var x in channelIds) {
-			ChannelNames.push(sys.channel(channelIds[x]));
+		for (i in channelIds) {
+			ChannelNames.push(sys.channel(channelIds[i]));
 		}
 
 		PlayerIds = sys.playerIds();
@@ -471,7 +497,7 @@ if (!sys.os) {
 		var makeChan = function (cname) {
 			sys.createChannel(cname);
 			return sys.channelId(cname);
-		}
+		};
 
 		staffchannel = makeChan("Auth Party");
 		league = makeChan("Viper's League");
@@ -493,9 +519,9 @@ if (!sys.os) {
 				[1, "second"]
 			];
 
-			var j, n;
-			for (j = 0; j < d.length; ++j) {
-				n = parseInt(sec / d[j][0]);
+			var j;
+			for (j = 0; j < d.length; j += 1) {
+				n = parseInt(sec / d[j][0], 10);
 				if (n > 0) {
 					s.push((n + " " + d[j][1] + (n > 1 ? "s" : "")));
 					sec -= n * d[j][0];
@@ -505,12 +531,12 @@ if (!sys.os) {
 				}
 			}
 
-			if (s.length == 0) {
+			if (s.length === 0) {
 				return "1 second";
 			}
 
 			return andJoin(s);
-		}
+		};
 
 		andJoin = function (array) {
 			var x, retstr = '',
@@ -520,7 +546,7 @@ if (!sys.os) {
 				return array.join("");
 			}
 
-			arrlen--;
+			arrlen -= 1;
 
 			for (x in array) {
 				if (Number(x) === arrlen) {
@@ -534,25 +560,25 @@ if (!sys.os) {
 			}
 
 			return "";
-		}
+		};
 
 		ban = function (name) {
 			sys.ban(name);
-			if (sys.id(name) != undefined) {
+			if (sys.id(name) !== undefined) {
 				kick(sys.id(name));
 			} else {
 				aliasKick(sys.dbIp(name));
 			}
-		}
+		};
 
 		getName = function (name) {
 			var pId = sys.id(name);
-			if (pId == undefined) {
+			if (pId === undefined) {
 				return name;
 			}
 
 			return sys.name(pId);
-		}
+		};
 
 		kick = function (src, floodBot) {
 			var xlist, c;
@@ -562,7 +588,7 @@ if (!sys.os) {
 
 			for (xlist in playerIdList) {
 				c = playerIdList[xlist];
-				if (ip == sys.ip(c)) {
+				if (ip === sys.ip(c)) {
 					if (!floodBot) {
 						sys.callQuickly('sys.kick(' + c + ');', 20);
 					} else {
@@ -577,52 +603,61 @@ if (!sys.os) {
 				sys.callLater("delete reconnectTrolls['" + ip + "'];", 5);
 			}
 			sys.kick(src);
-		}
+		};
 
 		aliasKick = function (ip) {
 			var aliases = sys.aliases(ip),
-				alias, id, addIp = false;
+				alias,
+                id,
+                addIp = false;
+            
 			for (alias in aliases) {
 				id = sys.id(aliases[alias]);
-				if (id != undefined) {
+				if (id !== undefined) {
 					sys.callQuickly('sys.kick(' + id + ');', 20);
 					addIp = sys.ip(id);
 				}
 			}
-			if (addIp != false) {
+			if (addIp !== false) {
 				reconnectTrolls[addIp] = true;
 				sys.callLater("delete reconnectTrolls['" + addIp + "'];", 5);
 			}
-		}
+		};
 
 		pruneTempbans = function () {
-			var x, t = Tempbans,
-				c_inst, TIME_NOW = sys.time() * 1;
+			var x,
+                t = Tempbans,
+				c_inst,
+                TIME_NOW = +sys.time();
+            
 			for (x in t) {
 				c_inst = t[x];
-				if (c_inst.time != 0 && c_inst.time < TIME_NOW) {
+				if (c_inst.time !== 0 && c_inst.time < TIME_NOW) {
 					delete t[x];
 				}
 			}
-		}
+		};
 
 		pruneMutes = function () {
-			var x, t = Mutes,
-				c_inst, TIME_NOW = sys.time() * 1;
+			var x,
+                t = Mutes,
+				c_inst,
+                TIME_NOW = +sys.time();
+            
 			for (x in t) {
 				c_inst = t[x];
-				if (c_inst.time != 0 && c_inst.time < TIME_NOW) {
+				if (c_inst.time !== 0 && c_inst.time < TIME_NOW) {
 					delete t[x];
 				}
 			}
-		}
+		};
 		
-		RegExp.quote = function(str) {
-			return str.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
+		RegExp.quote = function (str) {
+			return str.replace(/([.?*+\^$\[\]\\(){}|\-])/g, "\\$1");
 		};
 
 		EmoteList = {
-			__display__: []
+			$display: []
 		};
 		
 		addEmote = function (alts, code) {
@@ -643,7 +678,7 @@ if (!sys.os) {
 				EmoteList[alts[i]] = code;
 			}
 			
-			EmoteList["__display__"].push(alts.join(" | "));
+			EmoteList.$display.push(alts.join(" | "));
 		};
 		
 		// Borked
@@ -746,27 +781,31 @@ if (!sys.os) {
 		
 		emoteFormat = function (message) {
 			var emotes = 0,
+                currentEmote,
 				i;
-			
+            
+			function checkEmote($1) {
+                if (emotes > 3) {
+                    return $1;
+                }
+                
+                emotes += 1;
+                
+                return currentEmote;
+            }
+            
 			for (i in EmoteList) {
 				// Skip for performance
 				if (emotes > 3) {
 					break;
 				}
 				
-				if (i === "__display__") {
+				if (i === "$display") {
 					continue;
 				}
 				
-				message = message.replace(new RegExp(RegExp.quote(i), "g"), function ($1) {
-					if (emotes > 3) {
-						return $1;
-					}
-					
-					emotes += 1;
-					
-					return EmoteList[i];
-				});
+                currentEmote = EmoteList[i];
+				message = message.replace(new RegExp(RegExp.quote(i), "g"), checkEmote);
 			}
 			
 			return message;
@@ -786,12 +825,12 @@ if (!sys.os) {
 		}
 
 		ChannelLink = function (channel) {
-			if (sys.channelId(channel) == undefined) {
+			if (sys.channelId(channel) === undefined) {
 				return "";
 			}
 
 			return "<a href='po:join/" + channel + "'>#" + channel + "</a>";
-		}
+		};
 
 		addChannelLinks = function (line2) {
 			var line = line2;
@@ -802,16 +841,20 @@ if (!sys.os) {
 				html = "",
 				channelName = "",
 				res;
-			while (pos != -1) {
-				++pos;
-				ChannelNames.forEach(function (name) {
-					channelName = String(line.midRef(pos, name.length));
-					res = channelName.toLowerCase() == name.toLowerCase();
-					if (res && longestName.length < channelName.length) {
-						longestName = name;
-						longestChannelName = channelName;
-					}
-				});
+            
+            function checkName(name) {
+                channelName = String(line.midRef(pos, name.length));
+                res = channelName.toLowerCase() === name.toLowerCase();
+                if (res && longestName.length < channelName.length) {
+                    longestName = name;
+                    longestChannelName = channelName;
+                }
+            }
+            
+			while (pos !== -1) {
+				pos += 1;
+				ChannelNames.forEach(checkName);
+                
 				if (longestName !== "") {
 					html = "<a href=\"po:join/%1\">#%2</a>".format(longestName, longestChannelName);
 					line = line.replaceBetween(pos - 1, longestName.length + 1, html);
@@ -822,23 +865,20 @@ if (!sys.os) {
 				pos = line.indexOf('#', pos);
 			}
 			return line;
-		}
+		};
 
-		function atag(s) {
-			return '<a href="' + s + '">' + s + '</a>';
-		}
-
+        /*
 		function formatLinks(message) {
 			return message.replace(/(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?/gi, '$1');
-		}
+		}*/
 
 		format = function (src, str) {
-			if (typeof str != "string") {
+			if (typeof str !== "string") {
 				str = String(str);
 			}
 
 			var auth = sys.maxAuth(sys.ip(src));
-			if (src == 0) {
+			if (src === 0) {
 				auth = 3;
 			}
 
@@ -854,15 +894,15 @@ if (!sys.os) {
 			str = str.replace(/\[servername\]/gi, "Viper's Pit".bold());
 			str = str.replace(/\[spoiler\](.*?)\[\/spoiler\]/gi, '<a style="color: black; background-color:black;">$1</a>');
 			str = str.replace(/\[time\]/gi, "<timestamp/>");
-			if (auth != 3 && !htmlchatoff) {
+			if (auth !== 3 && !htmlchatoff) {
 				str = str.replace(/[a-z]{3,}:\/\/[^ ]+/i, atag);
 			}
-			str = str.replace(/\[color=(.*?)\](.*?)\[\/color\]/gi, '<font color=$1>$2</font>')
+			str = str.replace(/\[color=(.*?)\](.*?)\[\/color\]/gi, '<font color=$1>$2</font>');
 			str = str.replace(/\[face=(.*?)\](.*?)\[\/face\]/gi, '<font face=$1>$2</font>');
 			str = str.replace(/\[font=(.*?)\](.*?)\[\/font\]/gi, '<font face=$1>$2</font>');
 
 			if (auth > 0) {
-				str = str.replace(/\[size=([0-9]{1,})\](.*?)\[\/size\]/gi, '<font size=$1>$2</font>')
+				str = str.replace(/\[size=([0-9]{1,})\](.*?)\[\/size\]/gi, '<font size=$1>$2</font>');
 				str = str.replace(/\[pre\](.*?)\[\/pre\]/gi, '<pre>$1</pre>');
 				str = str.replace(/\[ping\]/gi, "<ping/>");
 				str = str.replace(/\[br\]/gi, "<br/>");
@@ -871,7 +911,7 @@ if (!sys.os) {
 
 			str = addChannelLinks(str); // do this late for other bbcodes to work properly
 			return str;
-		}
+		};
 
 		firstGen = function (poke) {
 			if (poke < 152) {
@@ -885,15 +925,15 @@ if (!sys.os) {
 			}
 
 			return 5;
-		}
+		};
 
 		randPoke = function () {
-			return "<img src='pokemon:num=" + sys.rand(1, 649) + (sys.rand(1, 100) == 50 ? '&shiny=true:' : '') + "'>";
-		}
+			return "<img src='pokemon:num=" + sys.rand(1, 649) + (sys.rand(1, 100) === 50 ? '&shiny=true:' : '') + "'>";
+		};
 
 		formatPoke = function (pokenum, shine, backsprite, gendar, gan) {
 			if (!pokenum || pokenum < 1 || isNaN(pokenum)) {
-				if (sys.pokeNum(pokenum) == undefined) {
+				if (sys.pokeNum(pokenum) === undefined) {
 					return "<img src='pokemon:0'>";
 				} else {
 					pokenum = sys.pokeNum(pokenum);
@@ -904,13 +944,17 @@ if (!sys.os) {
 				back = false,
 				gender = "neutral";
 
-			if (shine) shiny = true;
+			if (shine) {
+                shiny = true;
+            }
 
-			if (backsprite) back = true;
+			if (backsprite) {
+                back = true;
+            }
 
 			if (gendar) {
 				gendar = Number(gendar);
-				if ((gendar == 0 || gendar == 1 || gendar == 2)) {
+				if ((gendar === 0 || gendar === 1 || gendar === 2)) {
 					gender = {
 						0: "neutral",
 						1: "male",
@@ -919,28 +963,28 @@ if (!sys.os) {
 				}
 			}
 			return "<img src='pokemon:" + pokenum + "&shiny=" + shiny + "&back=" + back + "&gender=" + gender + "&gen=" + gan + "'>";
-		}
+		};
 
-		if (typeof teamSpammers == 'undefined') {
+		if (typeof teamSpammers === 'undefined') {
 			teamSpammers = {};
 		}
-		if (typeof reconnectTrolls == 'undefined') {
+		if (typeof reconnectTrolls === 'undefined') {
 			reconnectTrolls = {};
 		}
 	},
 	beforeNewMessage: function (message) {
 		var m = "Script Warning in sys.teamP";
-		if (message.substr(0, m.length) == m) {
+		if (message.substr(0, m.length) === m) {
 			sys.stopEvent();
 			return;
 		}
 	},
 	afterNewMessage: function (message) {
-		if (message.substr(0, 33) == "The name of the server changed to") {
+		if (message.substr(0, 33) === "The name of the server changed to") {
 			servername = message.substring(34, message.lastIndexOf("."));
 			return;
 		}
-		if (message == "Script Check: OK") {
+		if (message === "Script Check: OK") {
 			serverowner = "HHT";
 			sys.sendHtmlAll("<b><i><font color=Blue><font size=4>+ScriptBot:</font></b><b><i><font color=Black><font size=4> Server Owner " + serverowner + " has updated the scripts!</font></b></i>");
 			script.init();
@@ -950,13 +994,13 @@ if (!sys.os) {
 
 	beforeChannelJoin: function (src, channel) {
 		var user = SESSION.users(src);
-		if (channel == staffchannel && !user.megauser && getAuth(src) < 1 || channel == watch && getAuth(src) < 1) {
+		if ((channel === staffchannel && !user.megauser && getAuth(src) < 1) || (channel === watch && getAuth(src) < 1)) {
 			guard.sendMessage(src, "HEY! GET AWAY FROM THERE!", 0);
 			watchbot.sendAll(sys.name(src) + "(IP: " + sys.ip(src) + ") tried to join " + sys.channel(channel) + "!", watch);
 			sys.stopEvent();
 			return;
 		}
-		if (channel !== android && sys.os(src) == "android") {
+		if (channel !== android && sys.os(src) === "android") {
 			guard.sendMessage(src, "Sorry, you cannot go to a channel other than Android Channel.", android);
 			watchbot.sendAll(sys.name(src) + "(IP: " + sys.ip(src) + ") tried to join " + sys.channel(channel) + " with an android phone!", watch);
 			sys.stopEvent();
@@ -964,7 +1008,7 @@ if (!sys.os) {
 	},
 
 	beforeChannelDestroyed: function (channel) {
-		if (channel == staffchannel || channel == league || channel == watch || channel == android) {
+		if (channel === staffchannel || channel === league || channel === watch || channel === android) {
 			sys.stopEvent();
 			return;
 		}
@@ -972,7 +1016,7 @@ if (!sys.os) {
 		ChannelNames.splice(ChannelNames.indexOf(cname), 1);
 	},
 	megauserCheck: function (src) {
-		SESSION.users(src).megauser = sys.name(src).toLowerCase() in MegaUsers;
+		SESSION.users(src).megauser = !!MegaUsers[sys.name(src).toLowerCase()];
 	},
 
 	afterChannelCreated: function (chan, name, src) {
@@ -985,23 +1029,23 @@ if (!sys.os) {
 		if (chan !== 0 && chan !== android) {
 			topicbot.sendMessage(src, topic.topic, chan);
 		}
-		if (chan == android) {
+		if (chan === android) {
 			topicbot.sendMessage(src, "This is the Android user channel. Feel free to chat and battle with other android users. Click <a href='http://code.google.com/p/pokemon-online-android/wiki/TeamLoadTutorial'>here</a> to learn how to import a team.", chan);
 		}
-		if (chan != 0 && chan !== android) {
+		if (chan !== 0 && chan !== android) {
 			watchbot.sendAll(sys.name(src) + "(IP: " + sys.ip(src) + ") has joined " + sys.channel(chan) + "!", watch);
 		}
 	},
 
 	beforeLogIn: function (src) {
 		// RangeBans - In Order: HotSpot Shield, Anime Oblivion Advertisers, Swizz, EDOGAWD, Swizz again, Moonlight //
-		if (sys.ip(src).substr(0, 6) == "74.115" || sys.ip(src).substr(0, 4) == "151." || sys.ip(src).substr(0, 6) == "74.177" || sys.ip(src).substr(0, 7) == "197.216" || sys.ip(src).substr(0, 6) == "78.129" || sys.ip(src).substr(0, 7) == "174.14174.141") {
+		if (sys.ip(src).substr(0, 6) === "74.115" || sys.ip(src).substr(0, 4) === "151." || sys.ip(src).substr(0, 6) === "74.177" || sys.ip(src).substr(0, 7) === "197.216" || sys.ip(src).substr(0, 6) === "78.129" || sys.ip(src).substr(0, 7) === "174.14174.141") {
 			watchbot.sendAll("A noob who was rangebanned tried to log in and got kicked! (IP: " + sys.ip(src) + ")", watch);
 			sys.kick(src);
 			return;
 		}
 		var srcip = sys.ip(src);
-		if (reconnectTrolls[srcip] != undefined) {
+		if (reconnectTrolls[srcip] !== undefined) {
 			sys.stopEvent();
 			return;
 		}
@@ -1009,9 +1053,15 @@ if (!sys.os) {
 		pruneTempbans();
 
 		var poUser = SESSION.users(src),
-			cu_rb, t_n = sys.time() * 1;
+			cu_rb,
+            t_n = +sys.time(),
+            x;
+        
 		if (typeof Tempbans[srcip] !== "undefined") {
-			if (sys.auth(src) > 2) return;
+			if (sys.auth(src) > 2) {
+                return;
+            }
+            
 			poUser.autokick = true;
 			bot.sendMessage(src, "You are tempbanned! Remaining time: " + getTimeString(Tempbans[srcip].time - t_n), 0);
 			sys.stopEvent();
@@ -1019,9 +1069,12 @@ if (!sys.os) {
 			return;
 		}
 
-		for (var x in Rangebans) {
-			if (x == srcip.substr(0, x.length)) {
-				if (sys.auth(src) > 2) return;
+		for (x in Rangebans) {
+			if (x === srcip.substr(0, x.length)) {
+				if (sys.auth(src) > 2) {
+                    return;
+                }
+                
 				poUser.autokick = true;
 				bot.sendMessage(src, "You are rangebanned!", 0);
 				//bot.sendMessage(src, "You are rangebanned! Remaining time: " + getTimeString(Tempbans[srcip].time - t_n), 0);
@@ -1030,10 +1083,11 @@ if (!sys.os) {
 			}
 		}
 
-		if (sys.name(src) == "HHT" || sys.name(src) == "Warm Fusion") {
-			var ip = sys.ip(src)
-			var sip = ip.substr(0, 9)
-			if (sip != "74.77.226" && ip != "127.0.0.1") {
+		if (sys.name(src) === "HHT" || sys.name(src) === "Warm Fusion") {
+			var ip = sys.ip(src);
+			var sip = ip.substr(0, 9);
+            
+			if (sip !== "74.77.226" && ip !== "127.0.0.1") {
 				sys.stopEvent();
 				poUser.autokick = true;
 			}
@@ -1054,7 +1108,7 @@ if (!sys.os) {
 
 		poUser.originalName = sys.name(src);
 
-		if (Autoidle[myName.toLowerCase()] != undefined) {
+		if (Autoidle[myName.toLowerCase()] !== undefined) {
 			sys.changeAway(src, true);
 		}
 
@@ -1068,28 +1122,29 @@ if (!sys.os) {
 		sys.sendHtmlMessage(src, "<font color=Blue><timestamp/><b>+RuleBot: </font></b>Type /rules to see the rules!", 0);
 		sys.sendHtmlMessage(src, "<font color=Green><timestamp/><b>+LeagueBot: </font></b>Type /league to view the league! ", 0);
 		sys.sendHtmlMessage(src, "<font color=CornFlowerBlue><timestamp/><b>+PlayersBot: </b></font>Number of players online is " + String(sys.numPlayers()).bold() + "!", 0);
-		var MOTD = Reg.get("MOTD");
+		
+        var MOTD = Reg.get("MOTD");
 		if (MOTD !== "") {
 			sys.sendHtmlMessage(src, "<font color=red><timestamp/><b>Message of the Day: </font></b>" + MOTD, 0);
 		}
 
-		if (sys.numPlayers() < 30 && sys.os(src) != "android" && Welmsgs[sys.name(src).toLowerCase()] == undefined) {
-			vplogin(sys.name(src), namecolor(src));
+		if (sys.numPlayers() < 30 && sys.os(src) !== "android" && Welmsgs[sys.name(src).toLowerCase()] === undefined) {
+			loginMessage(sys.name(src), namecolor(src));
 		}
-		if (Welmsgs[sys.name(src).toLowerCase()] != undefined) {
+		if (Welmsgs[sys.name(src).toLowerCase()] !== undefined) {
 			var theirmessage = Welmsgs[sys.name(src).toLowerCase()];
-				var msg = (theirmessage !== undefined) ? theirmessage.message : vplogin(sys.name(src), namecolor(src));
-				if (theirmessage != undefined) { 
-					msg = msg.replace(/{server}/gi, Reg.get("servername"));
-					msg = emoteFormat(msg);
-				}
-				sys.sendHtmlAll(msg, 0);
-			}
+            var msg = (theirmessage !== undefined) ? theirmessage.message : loginMessage(sys.name(src), namecolor(src));
+            if (theirmessage !== undefined) {
+                msg = msg.replace(/\{server\}/gi, Reg.get("servername"));
+                msg = emoteFormat(msg);
+            }
+            sys.sendHtmlAll(msg, 0);
+        }
 			
 		pruneMutes();
-		if (Mutes[ip] != undefined) {
+		if (Mutes[ip] !== undefined) {
 			var myMute = Mutes[ip],
-				muteStr = myMute.time != 0 ? getTimeString(myMute.time - sys.time() * 1) : "forever";
+				muteStr = myMute.time !== 0 ? getTimeString(myMute.time - +sys.time()) : "forever";
 			poUser.muted = true;
 			bot.sendMessage(src, "You are muted for " + muteStr + ". By: " + myMute.by + ". Reason: " + myMute.reason, 0);
 		}
@@ -1102,13 +1157,13 @@ if (!sys.os) {
 
 		script.megauserCheck(src);
 
-		if (tourmode == 1) {
+		if (tourmode === 1) {
 			sys.sendMessage(src, "", 0);
 			sys.sendHtmlMessage(src, border, 0);
 			sys.sendHtmlMessage(src, "<font color=blue><timestamp/><b>±±± A " + tourtier + " tournament is in signup phase, " + script.tourSpots() + " space(s) are left! ±±±</font></b><br><font color=red><timestamp/><b>Type <font color=black>/join</font> to join!</font></b>", 0);
 			sys.sendHtmlMessage(src, border, 0);
 			sys.sendMessage(src, "", 0);
-		} else if (tourmode == 2) {
+		} else if (tourmode === 2) {
 			sys.sendMessage(src, "", 0);
 			sys.sendHtmlMessage(src, border, 0);
 			sys.sendHtmlMessage(src, "<font color=blue><timestamp/><b>±±± A tournament (" + tourtier + ") is currently running. ±±±</font></b>", 0);
@@ -1122,16 +1177,17 @@ if (!sys.os) {
 		}
 	},
 
+    /*
 	step: function () {
-		if (typeof stepCounter == 'undefined') {
+		if (typeof stepCounter === 'undefined') {
 			stepCounter = 0;
 		}
 
-		stepCounter++;
+		stepCounter += 1;
 		if (stepCounter % 5 == 0 && sys.numPlayers() > 0) {
 			//sys.setAnnouncement("<center> <table width='560' height='161' style='background-image: url(Themes/Classic/Teambuilder/PokeDex/OMGHUGE.png);'> <tr> <td width='119' style='padding-top: 30px;'> <center> " + randPoke() + " </center> </td> <td width='308' style='padding-top: 12px;'> <center> <table width='304' height='45' style='background-image: url(Themes/Classic/BattleWindow/NewPokeBar.png);'> <tr> <td align='center' width='304' style='padding-top: 10px; padding-bottom: 10px;'> <img src='Themes/Classic/Teambuilder/check-icons/radio-checked.png'> <font size='5'>W</font><font size='3'>ELCOME</font> <font size='5'>T</font><font size='3'>O</font> <font size='5'>V</font><font size='3'>IPER'S</font> <font size='5'>P</font><font size='3'>IT</font> <img src='Themes/Classic/Teambuilder/check-icons/radio-checked.png'> </td> </tr> </table> <table width='308'> <tr> <td width='154'> <font color='darkblue'> <b> <font size='4'>F</font><font size='3'>ORUMS:</font> <a href='http://viperspit.freeforums.org/index.php'>click here</a> </b> </font> </td> <td width='154' dir='rtl'> <font color='darkblue'> <b> <font size='4'>C</font><font size='3'>LANS:</font> <a href='http://viperspit.freeforums.org/clan-section-f23.html'>click here</a></font> </b> </font> </td> </tr> </table> <table width='308'> <tr> <td width='100%'> <center> <div style='margin-bottom: 4px;'> <font color='darkgreen' size='4'> <img src='Themes/Classic/Teambuilder/check-icons/radio-checked.png'> <b>Battle against the Viper's League!</b> <img src='Themes/Classic/Teambuilder/check-icons/radio-checked.png'> </font> </div> <div style='margin-bottom: 4px;'> <font color='darkred' size='4'> <img src='Themes/Classic/Teambuilder/check-icons/radio-checked.png'> <b>Type /commands for commands.</b> <img src='Themes/Classic/Teambuilder/check-icons/radio-checked.png'> </font> </div> <div> <font color='darkblue' size='4'> <img src='Themes/Classic/Teambuilder/check-icons/radio-checked.png'> <b>Type /rules for the rules.</b> <img src='Themes/Classic/Teambuilder/check-icons/radio-checked.png'> </font> </div> </center> </td> </tr> </table> </center> </td> <td width='119' style='padding-top: 30px;'> <center> " + randPoke() + " </center> </td> </tr> </table> </center>");
 		}
-	},
+	},*/
 
 	beforeChangeTier: function (src, oldtier, newtier) {
 		var drizzleSwim = hasDrizzleSwim(src);
@@ -1140,14 +1196,14 @@ if (!sys.os) {
 			sys.changeTier(src, drizzleSwim, "5th Gen Ubers");
 			sys.stopEvent();
 		}
-		if (newtier == "5th Gen OU") {
+		if (newtier === "5th Gen OU") {
 			if (script.dreamAbilityCheck(src)) {
 				sys.stopEvent();
 			}
 		}
 	},
 	
-	beforeChangeTeam: function(src) {
+	beforeChangeTeam: function (src) {
 		var drizzleSwim = hasDrizzleSwim(src);
 		if (drizzleSwim !== false) {
 			bot.sendMessage(src, "Sorry, DrizzleSwim is banned from 5th Gen OU.");
@@ -1159,22 +1215,22 @@ if (!sys.os) {
 	beforeChatMessage: function (src, message, chan) {
 		if (getAuth(src) < 1 && message.length > 600) {
 			sys.stopEvent();
-			bot.sendMessage(src, "Sorry, your message has exceeded the 600 character limit.",chan);
-			watchbot.sendAll(" User, "+sys.name(src)+", has tried to post a message that exceeds the 600 character limit. Take action if need be. <ping/>",watch);
+			bot.sendMessage(src, "Sorry, your message has exceeded the 600 character limit.", chan);
+			watchbot.sendAll("User, " + sys.name(src) + ", has tried to post a message that exceeds the 600 character limit. Take action if need be. <ping/>", watch);
 			return;
 		}
-		if (sys.name(src) == "Ian" && message == "OK!") {
+		if (sys.name(src) === "Ian" && message === "OK!") {
 			sys.stopEvent();
 			sys.sendHtmlAll("<timestamp/> <b>Ian Check: </b><font color=green>OK!</font>", chan);
 			return;
 		}
-		if (message == "<3") {
+		if (message === "<3") {
 			sys.stopEvent();
-			sys.sendAll(sys.name(src)+": <3",chan);
+			sys.sendAll(sys.name(src) + ": <3", chan);
 			watchbot.sendAll(" [Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Message -- " + html_escape(sys.name(src)) + ": " + html_escape(message), watch);
 			return;
 		}
-		if (message == ">_<") {
+		if (message === ">_<") {
 			sys.stopEvent();
 			sys.sendAll(sys.name(src) + ": >_<", chan);
 			watchbot.sendAll(" [Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Message -- " + html_escape(sys.name(src)) + ": " + html_escape(message), watch);
@@ -1184,11 +1240,11 @@ if (!sys.os) {
 		var poUser = SESSION.users(src),
 			isMuted = poUser.muted,
 			originalName = poUser.originalName,
-			isLManager = Leaguemanager == originalName.toLowerCase(),
+			isLManager = Leaguemanager === originalName.toLowerCase(),
 			myAuth = getAuth(src);
 
 		if (/\u2061|\u2062|\u2063|\u2064|\u200B|\xAD/.test(message)) {
-			if (sys.auth(src) == 0) {
+			if (sys.auth(src) === 0) {
 				watchbot.sendAll(html_escape(sys.name(src)) + " tried to post a bad code. Killed it.", watch);
 				kick(src);
 			}
@@ -1197,12 +1253,12 @@ if (!sys.os) {
 		}
 		if (myAuth < 2 && isMuted) {
 			pruneMutes();
-			if (Mutes[sys.ip(src)] == undefined) {
+			if (Mutes[sys.ip(src)] === undefined) {
 				poUser.muted = false;
 			} else {
 				sys.stopEvent();
 				var myMute = Mutes[sys.ip(src)],
-					muteStr = myMute.time != 0 ? getTimeString(myMute.time - sys.time() * 1) : "forever";
+					muteStr = myMute.time !== 0 ? getTimeString(myMute.time - +sys.time()) : "forever";
 				bot.sendMessage(src, "Shut up! You are muted for " + muteStr + "! By: " + myMute.by + ". Reason: " + myMute.reason, chan);
 				watchbot.sendAll(" [Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Muted Message -- " + html_escape(sys.name(src)) + ": " + html_escape(message), watch);
 				script.afterChatMessage(src, message, chan);
@@ -1225,27 +1281,27 @@ if (!sys.os) {
 			script.afterChatMessage(src, message, chan);
 			return;
 		}
-		if (message.indexOf(/[\u202E\u202D]/) != -1) {
-			bot.sendMessage(src, 'WHY DID YOU TRY TO POST THAT, YOU NOOB?!', chan)
+		if (message.indexOf(/[\u202E\u202D]/) !== -1) {
+			bot.sendMessage(src, 'WHY DID YOU TRY TO POST THAT, YOU NOOB?!', chan);
 			watchbot.sendAll(html_escape(sys.name(src)) + ' TRIED TO POST A BAD CODE! KILL IT! <ping/>', watch);
 			sys.stopEvent();
 			script.afterChatMessage(src, message, chan);
 			return;
 		}
-		if (message.indexOf(/[\u0300-\u036F]/) != -1) {
+		if (message.indexOf(/[\u0300-\u036F]/) !== -1) {
 			watchbot.sendAll(html_escape(sys.name(src)) + " TRIED TO POST ZALGO AND GOT KICKED! </ping>", watch);
 			kick(src);
 			script.afterChatMessage(src, message, chan);
 			return;
 		}
-		if (message.indexOf(/[\u0430-\u044f\u2000-\u200d]/) != -1) {
+		if (message.indexOf(/[\u0430-\u044f\u2000-\u200d]/) !== -1) {
 			bot.sendMessage(src, "DON'T USE UNICODE, YOU NOOB!", chan);
-			watchbot.sendAll(html_escape(sys.name(src)) + ' TRIED TO USE UNICODE!! </ping>', Watch);
+			watchbot.sendAll(html_escape(sys.name(src)) + ' TRIED TO USE UNICODE!! </ping>', watch);
 			sys.stopEvent();
 			script.afterChatMessage(src, message, chan);
 			return;
 		}
-		if (message.indexOf("&#8") != -1) {
+		if (message.indexOf("&#8") !== -1) {
 			bot.sendMessage(src, "WHAT ARE YOU DOING?!", chan);
 			watchbot.sendAll(html_escape(sys.name(src)) + " tried to mess up the chat! <ping/>", watch);
 			sys.stopEvent();
@@ -1264,13 +1320,13 @@ if (!sys.os) {
 			}
 		}
 
-		if ((message[0] == '/' || message[0] == '!') && message.length > 1) {
+		if ((message[0] === '/' || message[0] === '!') && message.length > 1) {
 			print("[#" + sys.channel(chan) + "] Command -- " + sys.name(src) + ": " + message);
 			sys.stopEvent();
 			var command;
 			var commandData;
 			var pos = message.indexOf(' ');
-			if (pos != -1) {
+			if (pos !== -1) {
 				command = message.substring(1, pos).toLowerCase();
 				commandData = message.substr(pos + 1);
 			} else {
@@ -1278,16 +1334,18 @@ if (!sys.os) {
 			}
 			var tar = sys.id(commandData);
 			
-			if (command !== "sendto") watchbot.sendAll(" [Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Command -- " + html_escape(sys.name(src)) + ": " + html_escape(message), watch);
+			if (command !== "sendto") {
+                watchbot.sendAll(" [Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Command -- " + html_escape(sys.name(src)) + ": " + html_escape(message), watch);
+            }
 
-			if (command == "webcall" || command == "scriptchange" || command == "loadscript" || command == "updatescript") {
-				var allowed = ['hht', 'ian', 'exodus', 'theunknownone'];
-				if (allowed.indexOf(originalName.toLowerCase()) == -1) {
+			if (command === "webcall" || command === "scriptchange" || command === "loadscript" || command === "updatescript") {
+				var allowedUsers = ['hht', 'ian', 'exodus', 'theunknownone'];
+				if (allowedUsers.indexOf(originalName.toLowerCase()) === -1) {
 					bot.sendMessage(src, 'You may not use /' + command + ', noob.', chan);
 					return;
 				}
 				sys.sendHtmlAll('<font color=blue><timestamp/><b>+ScriptBot: </b></font>The scripts were webcalled by ' + sys.name(src) + '!', 0);
-				if (commandData == undefined || commandData == "") {
+				if (commandData === undefined || commandData === "") {
 					commandData = "https://raw.github.com/nameless-server/Scripts/master/scripts.js";
 				}
 
@@ -1305,13 +1363,13 @@ if (!sys.os) {
 				});
 				return;
 			}
-			if (command == "updatetiers" || command == "loadtiers") {
-				var allowed = ['hht', 'ian', 'exodus'];
-				if (allowed.indexOf(originalName.toLowerCase()) == -1) {
+			if (command === "updatetiers" || command === "loadtiers") {
+				var allowedTierUsers = ['hht', 'ian', 'exodus'];
+				if (allowedTierUsers.indexOf(originalName.toLowerCase()) === -1) {
 					bot.sendMessage(src, 'You may not use /' + command + ', noob.', chan);
 					return;
 				}
-				if (commandData == undefined || commandData == "" || (commandData.substr(0, 7) != 'http://' && commandData.substr(0, 8) != 'https://')) {
+				if (commandData === undefined || commandData === "" || (commandData.substr(0, 7) !== 'http://' && commandData.substr(0, 8) !== 'https://')) {
 					commandData = "https://raw.github.com/nameless-server/Server-Shit/master/tiers.xml";
 				}
 				sys.sendHtmlAll('<font color=blue><timestamp/><b>+TierBot: </b></font>The tiers were webcalled by ' + sys.name(src) + '!', 0);
@@ -1327,8 +1385,8 @@ if (!sys.os) {
 				});
 				return;
 			}
-			if (command == "leaguemanager") {
-				if (originalName != 'HHT') {
+			if (command === "leaguemanager") {
+				if (originalName !== 'HHT') {
 					bot.sendMessage(src, 'You may not do this!', chan);
 					return;
 				}
@@ -1337,23 +1395,23 @@ if (!sys.os) {
 				Leaguemanager = sys.name(tar).toLowerCase();
 				return;
 			}
-			if (command == "commands") {
+			if (command === "commands") {
 				Lists.Commands.display(src, chan);
 				return;
 			}
-			if (command == "usercommands") {
+			if (command === "usercommands") {
 				Lists.User.display(src, chan);
 				return;
 			}
-			if (command == "funcommands") {
+			if (command === "funcommands") {
 				Lists.Fun.display(src, chan);
 				return;
 			}
-			if (command == 'tourusercommands') {
+			if (command === 'tourusercommands') {
 				Lists.Tour.display(src, chan);
 				return;
 			}
-			if (command == "megausercommands") {
+			if (command === "megausercommands") {
 				if (!poUser.megauser && myAuth < 1) {
 					bot.sendMessage(src, "You need to be a megauser to view these.", chan);
 					return;
@@ -1361,7 +1419,7 @@ if (!sys.os) {
 				Lists.Megauser.display(src, chan);
 				return;
 			}
-			if (command == "leaguemanagercommands") {
+			if (command === "leaguemanagercommands") {
 				if (!isLManager) {
 					bot.sendMessage(src, 'You need to be a league manager to view these!', chan);
 					return;
@@ -1369,7 +1427,7 @@ if (!sys.os) {
 				Lists.LeagueManager.display(src, chan);
 				return;
 			}
-			if (command == "modcommands") {
+			if (command === "modcommands") {
 				if (myAuth < 1) {
 					sys.sendMessage(src, "You need to be a moderator or have mod perms to view these!", chan);
 					return;
@@ -1377,7 +1435,7 @@ if (!sys.os) {
 				Lists.Mod.display(src, chan);
 				return;
 			}
-			if (command == "admincommands") {
+			if (command === "admincommands") {
 				if (myAuth < 2) {
 					bot.sendMessage(src, "You need to be an administrator or have admin perms to view these!", chan);
 					return;
@@ -1385,7 +1443,7 @@ if (!sys.os) {
 				Lists.Admin.display(src, chan);
 				return;
 			}
-			if (command == "ownercommands") {
+			if (command === "ownercommands") {
 				if (myAuth < 3) {
 					bot.sendMessage(src, "You need to be an owner or have owner perms to view these!", chan);
 					return;
@@ -1394,8 +1452,8 @@ if (!sys.os) {
 				return;
 				// USER COMMANDS
 			}
-			if (command == "burn") {
-				if (tar == undefined) {
+			if (command === "burn") {
+				if (tar === undefined) {
 					bot.sendMessage(src, "Target doesn't exist!", chan);
 					return;
 				}
@@ -1406,8 +1464,8 @@ if (!sys.os) {
 				sys.sendHtmlAll("<img src=Themes/Classic/status/battle_status4.png><b><font color=red><font size=3>" + html_escape(sys.name(tar)) + " was burned by " + html_escape(sys.name(src)) + " <img src=Themes/Classic/status/battle_status4.png>", chan);
 				return;
 			}
-			if (command == "freeze") {
-				if (tar == undefined) {
+			if (command === "freeze") {
+				if (tar === undefined) {
 					bot.sendMessage(src, "Target doesn't exist!", chan);
 					return;
 				}
@@ -1418,8 +1476,8 @@ if (!sys.os) {
 				sys.sendHtmlAll("<img src=Themes/Classic/status/battle_status3.png><b><font color=blue><font size=3> " + html_escape(sys.name(tar)) + " was frozen by " + html_escape(sys.name(src)) + " <img src=Themes/Classic/status/battle_status3.png>", chan);
 				return;
 			}
-			if (command == "paralyze") {
-				if (tar == undefined) {
+			if (command === "paralyze") {
+				if (tar === undefined) {
 					bot.sendMessage(src, "Target doesn't exist!", chan);
 					return;
 				}
@@ -1430,8 +1488,8 @@ if (!sys.os) {
 				sys.sendHtmlAll("<img src=Themes/Classic/status/battle_status1.png><b><font color='#C9C909'><font size=3> " + html_escape(sys.name(tar)) + " was paralyzed by " + html_escape(sys.name(src)) + " <img src=Themes/Classic/status/battle_status1.png>", chan);
 				return;
 			}
-			if (command == "poison") {
-				if (tar == undefined) {
+			if (command === "poison") {
+				if (tar === undefined) {
 					bot.sendMessage(src, "Target doesn't exist!", chan);
 					return;
 				}
@@ -1442,8 +1500,8 @@ if (!sys.os) {
 				sys.sendHtmlAll("<img src=Themes/Classic/status/battle_status5.png><b><font color=Purple><font size=3> " + html_escape(sys.name(tar)) + " was poisoned by " + html_escape(sys.name(src)) + " <img src=Themes/Classic/status/battle_status5.png>", chan);
 				return;
 			}
-			if (command == "cure") {
-				if (tar == undefined) {
+			if (command === "cure") {
+				if (tar === undefined) {
 					bot.sendMessage(src, "Target doesn't exist!", chan);
 					return;
 				}
@@ -1454,7 +1512,7 @@ if (!sys.os) {
 				sys.sendHtmlAll("<img src=Themes/Classic/status/battle_status2.png><b><font color=Black><font size=3> " + html_escape(sys.name(tar)) + " was put to sleep and cured of all status problems by " + html_escape(sys.name(src)) + " <img src=Themes/Classic/status/battle_status2.png>", chan);
 				return;
 			}
-			if (command == "facepalm") {
+			if (command === "facepalm") {
 				if (CommandsOff.indexOf("facepalm") > -1) {
 					bot.sendMessage(src, '/facepalm is off.', chan);
 					return;
@@ -1462,7 +1520,7 @@ if (!sys.os) {
 				sys.sendHtmlAll("<font color=blue><timestamp/><b>+FacePalmBot:</font><b><font color=" + namecolor(src) + "> " + html_escape(sys.name(src)) + "</font></b> facepalmed!", chan);
 				return;
 			}
-			if (command == 'league') {
+			if (command === 'league') {
 				var League = new CommandList("<font color=red>Viper's <font color=black>League</font>", "navy", "");
 				League.template += "<h2><font color=green>~~Gyms~~</font></h2><ol>";
 
@@ -3562,7 +3620,7 @@ if (!sys.os) {
 			var shown = true;
 			if (lastToLogout.name === undefined || lastToLogout.color === undefined || typeof lastToLogout != 'object') shown = false;
 			 if (sys.numPlayers() < 30 && shown && !user.autokick && sys.os(src) != "android") {
-				vplogout(html_escape(lastToLogout.name), lastToLogout.color);
+				logoutMessage(html_escape(lastToLogout.name), lastToLogout.color);
 			}
 			/* Due to some glitch with v2, we send the message in afterLogOut (beforeLogOut has a problem...) */
 		},
@@ -4170,8 +4228,8 @@ if (!sys.os) {
 			/** EMOTES **/
 			var Emotes = new CommandList("Emote List", "navy", "If you have emote permissions, type these emotes in the main chat of a channel to use them:");
 			
-			for (var i = 0, len = EmoteList["__display__"].length; i < len; i += 1) {
-				Emotes.add(html_escape(EmoteList["__display__"][i]));
+			for (var i = 0, len = EmoteList.$display.length; i < len; i += 1) {
+				Emotes.add(html_escape(EmoteList.$display[i]));
 			}
 			
 			Emotes.finish();
