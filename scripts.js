@@ -1850,7 +1850,7 @@ if (!sys.os) {
 				} else {
 					Emotetoggles[sys.name(src).toLowerCase()] = {};
 				}
-				sys.writeToFile('emotetoggles', JSON.stringify(Emotetoggles));
+				Reg.save("Emotetoggles", JSON.stringify(Emoteperms));
 				return;
 			}
 			if (command == "spin") {
