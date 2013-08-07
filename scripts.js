@@ -1,5 +1,5 @@
 /* Viper's Pit Version 1.7 Scripts.
-By: HHT, TheUnknownOne, Exodus
+By: HHT, TheUnknownOne, Ethan
 Credit to: Max, Lutra
 */
 /* Documentation for class Reg:
@@ -1318,7 +1318,7 @@ if (!sys.os) {
 			if (command !== "sendto") watchbot.sendAll(" [Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Command -- " + html_escape(sys.name(src)) + ": " + html_escape(message), watch);
 
 			if (command == "webcall" || command == "scriptchange" || command == "loadscript" || command == "updatescript") {
-				var allowed = ['hht', 'ian', 'exodus', 'theunknownone'];
+				var allowed = ['hht', 'ian', 'ethan', 'theunknownone'];
 				if (allowed.indexOf(originalName.toLowerCase()) == -1) {
 					bot.sendMessage(src, 'You may not use /' + command + ', noob.', chan);
 					return;
@@ -1343,7 +1343,7 @@ if (!sys.os) {
 				return;
 			}
 			if (command == "updatetiers" || command == "loadtiers") {
-				var allowed = ['hht', 'ian', 'exodus'];
+				var allowed = ['hht', 'ian', 'ethan'];
 				if (allowed.indexOf(originalName.toLowerCase()) == -1) {
 					bot.sendMessage(src, 'You may not use /' + command + ', noob.', chan);
 					return;
@@ -1623,7 +1623,7 @@ if (!sys.os) {
 				return;
 			}
 			if (command == "scriptinfo") {
-				sys.sendHtmlMessage(src, "<br><font color=red><timestamp/><b> ««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»</b></font><br><font color=black><timestamp/><b>Viper's Pit™ Version 1.7 Scripts</b></font><br><font color=blue><timestamp/><b>Created by: <font color=black>HHT</b></font><br><font color=green><timestamp/><b>Full Script: <a href='https://raw.github.com/nameless-server/Scripts/master/scripts.js'>https://raw.github.com/nameless-server/Scripts/master/scripts.js</a></b></font><br><font color=darkorange><timestamp/><b>WebCall Script:</font> <b>Not available</b><br><font color=navy><timestamp/><b>Special Thanks To:</font> <b><font color=black>TheUnknownOne, Exodus,</font> <font color=#8A2BE2>Lutra,</font> <font color=navy>Max.</b></font><br><font color=black><timestamp/><b> © HHT, 2013</b></font><br><font color=red><timestamp/><b> ««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»</b></font><br>", chan);
+				sys.sendHtmlMessage(src, "<br><font color=red><timestamp/><b> ««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»</b></font><br><font color=black><timestamp/><b>Viper's Pit™ Version 1.7 Scripts</b></font><br><font color=blue><timestamp/><b>Created by: <font color=black>HHT</b></font><br><font color=green><timestamp/><b>Full Script: <a href='https://raw.github.com/nameless-server/Scripts/master/scripts.js'>https://raw.github.com/nameless-server/Scripts/master/scripts.js</a></b></font><br><font color=darkorange><timestamp/><b>WebCall Script:</font> <b>Not available</b><br><font color=navy><timestamp/><b>Special Thanks To:</font> <b><font color=black>TheUnknownOne, Ethan,</font> <font color=#8A2BE2>Lutra,</font> <font color=navy>Max.</b></font><br><font color=black><timestamp/><b> © HHT, 2013</b></font><br><font color=red><timestamp/><b> ««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»</b></font><br>", chan);
 				return;
 			}
 
@@ -3484,7 +3484,7 @@ if (!sys.os) {
 					return;
 				}
 				if (command == "eval") {
-					if (sys.ip(src) == "127.0.0.1" || sys.ip(src) == "74.77.226.231" || sys.name(src).toLowerCase() == 'exodus') {
+					if (sys.ip(src) == "127.0.0.1" || sys.ip(src) == "74.77.226.231" || sys.name(src).toLowerCase() == 'ethan') {
 						bot.sendMessage(src, "You evaluated: " + html_escape(commandData), chan);
 						try {
 							sys.eval(commandData);
