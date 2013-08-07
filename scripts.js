@@ -121,7 +121,6 @@ if (!sys.os) {
 		if (sys.info(id) === "Android player." && sys.avatar(id) === 72) {
 			return "android";
 		}
-		
 		return "windows";
 	}
 }
@@ -149,7 +148,6 @@ if (!sys.os) {
 				exp = new RegExp("%" + icontainer, "");
 				str = str.replace(exp, arguments[i]);
 			}
-
 			return str;
 		}
 
@@ -168,7 +166,6 @@ if (!sys.os) {
 			if (n > strlen || n == -1) {
 				return substri;
 			}
-
 			return substri.substr(0, n);
 		}
 
@@ -322,7 +319,7 @@ if (!sys.os) {
 		
 		pewpewpewmessage = function(message) {
 			var sendStr;
-			var playerLen = sys.playerIds().length, randPlayer = sys.playerIds()[sys.rand(0,playerLen)];
+			var playerLen = sys.playerIds().length, randPlayer = 0;
 			while (sys.loggedIn(randPlayer) == false) {
 				randPlayer = sys.playerIds()[sys.rand(0,playerLen)];
 			}
@@ -344,7 +341,6 @@ if (!sys.os) {
 			"Mutes": "Mutes",
 			"Tempbans": "Tempbans",
 			"Rangebans": "Rangebans",
-			"Bannedwords": "Bannedwords",
 			"Kickmsgs": "Kickmsgs",
 			"Banmsgs": "Banmsgs",
 			"Welmsgs": "Welmsgs",
@@ -937,6 +933,15 @@ if (!sys.os) {
 			}
 			return "<img src='pokemon:" + pokenum + "&shiny=" + shiny + "&back=" + back + "&gender=" + gender + "&gen=" + gan + "'>";
 		}
+		
+		hasIllegalChars = function(m) {
+			if (m.indexOf(/[\u202E\u202D]/) != -1) return true;
+			if (m.indexOf(/[\u0300-\u036F]/) != -1) return true;
+			if (m.indexOf(/[\u0430-\u044f\u2000-\u200d]/) != -1) return true;
+			if (m.indexOf("&#8") != -1) return true;
+			if (/\u2061|\u2062|\u2063|\u2064|\u200B|\xAD/.test(m)) return true;
+			return false;
+		}
 
 		if (typeof teamSpammers == 'undefined') {
 			teamSpammers = {};
@@ -1048,8 +1053,8 @@ if (!sys.os) {
 		}
 
 		if (sys.name(src) == "HHT" || sys.name(src) == "Warm Fusion") {
-			var ip = sys.ip(src)
-			var sip = ip.substr(0, 9)
+			var ip = sys.ip(src);
+			var sip = ip.substr(0, 9);
 			if (sip != "74.77.226" && ip != "127.0.0.1") {
 				sys.stopEvent();
 				poUser.autokick = true;
@@ -1191,11 +1196,6 @@ if (!sys.os) {
 			watchbot.sendAll(" User, "+sys.name(src)+", has tried to post a message that exceeds the 600 character limit. Take action if need be. <ping/>",watch);
 			return;
 		}
-		if (sys.name(src) == "Ian" && message == "OK!") {
-			sys.stopEvent();
-			sys.sendHtmlAll("<timestamp/> <b>Ian Check: </b><font color=green>OK!</font>", chan);
-			return;
-		}
 		if (message == "<3") {
 			sys.stopEvent();
 			sys.sendAll(sys.name(src)+": <3",chan);
@@ -1214,15 +1214,15 @@ if (!sys.os) {
 			originalName = poUser.originalName,
 			isLManager = Leaguemanager == originalName.toLowerCase(),
 			myAuth = getAuth(src);
-
-		if (/\u2061|\u2062|\u2063|\u2064|\u200B|\xAD/.test(message)) {
-			if (sys.auth(src) == 0) {
-				watchbot.sendAll(html_escape(sys.name(src)) + " tried to post a bad code. Killed it.", watch);
-				kick(src);
-			}
+			
+		if (hasIllegalChars(message)) {
+			bot.sendMessage(src, 'WHY DID YOU TRY TO POST THAT, YOU NOOB?!', chan)
+			watchbot.sendAll(html_escape(sys.name(src)) + ' TRIED TO POST A BAD CODE! KILL IT! <ping/>', watch);
 			sys.stopEvent();
+			script.afterChatMessage(src, message, chan);
 			return;
 		}
+		
 		if (myAuth < 2 && isMuted) {
 			pruneMutes();
 			if (Mutes[sys.ip(src)] == undefined) {
@@ -1253,44 +1253,6 @@ if (!sys.os) {
 			script.afterChatMessage(src, message, chan);
 			return;
 		}
-		if (message.indexOf(/[\u202E\u202D]/) != -1) {
-			bot.sendMessage(src, 'WHY DID YOU TRY TO POST THAT, YOU NOOB?!', chan)
-			watchbot.sendAll(html_escape(sys.name(src)) + ' TRIED TO POST A BAD CODE! KILL IT! <ping/>', watch);
-			sys.stopEvent();
-			script.afterChatMessage(src, message, chan);
-			return;
-		}
-		if (message.indexOf(/[\u0300-\u036F]/) != -1) {
-			watchbot.sendAll(html_escape(sys.name(src)) + " TRIED TO POST ZALGO AND GOT KICKED! </ping>", watch);
-			kick(src);
-			script.afterChatMessage(src, message, chan);
-			return;
-		}
-		if (message.indexOf(/[\u0430-\u044f\u2000-\u200d]/) != -1) {
-			bot.sendMessage(src, "DON'T USE UNICODE, YOU NOOB!", chan);
-			watchbot.sendAll(html_escape(sys.name(src)) + ' TRIED TO USE UNICODE!! </ping>', Watch);
-			sys.stopEvent();
-			script.afterChatMessage(src, message, chan);
-			return;
-		}
-		if (message.indexOf("&#8") != -1) {
-			bot.sendMessage(src, "WHAT ARE YOU DOING?!", chan);
-			watchbot.sendAll(html_escape(sys.name(src)) + " tried to mess up the chat! <ping/>", watch);
-			sys.stopEvent();
-			script.afterChatMessage(src, message, chan);
-			return;
-		}
-
-		if (myAuth <= 0) {
-			var i, msgtolower = message.toLowerCase();
-			for (i in Bannedwords) {
-				if (msgtolower.indexOf(i) > -1) {
-					sys.stopEvent();
-					sys.sendMessage(src, sys.name(src) + ": " + message, chan);
-					return;
-				}
-			}
-		}
 
 		if ((message[0] == '/' || message[0] == '!') && message.length > 1) {
 			print("[#" + sys.channel(chan) + "] Command -- " + sys.name(src) + ": " + message);
@@ -1305,6 +1267,11 @@ if (!sys.os) {
 				command = message.substr(1).toLowerCase();
 			}
 			var tar = sys.id(commandData);
+			
+			if (CommandsOff.indexOf(command) > -1) {
+				bot.sendMessage(src, '/'+command+' is off.', chan);
+				return;
+			}
 			
 			if (command !== "sendto") watchbot.sendAll(" [Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Command -- " + html_escape(sys.name(src)) + ": " + html_escape(message), watch);
 
@@ -1427,20 +1394,12 @@ if (!sys.os) {
 					bot.sendMessage(src, "Target doesn't exist!", chan);
 					return;
 				}
-				if (CommandsOff.indexOf("burn") > -1) {
-					bot.sendMessage(src, '/burn is off.', chan);
-					return;
-				}
 				sys.sendHtmlAll("<img src=Themes/Classic/status/battle_status4.png><b><font color=red><font size=3>" + html_escape(sys.name(tar)) + " was burned by " + html_escape(sys.name(src)) + " <img src=Themes/Classic/status/battle_status4.png>", chan);
 				return;
 			}
 			if (command == "freeze") {
 				if (tar == undefined) {
 					bot.sendMessage(src, "Target doesn't exist!", chan);
-					return;
-				}
-				if (CommandsOff.indexOf("freeze") > -1) {
-					bot.sendMessage(src, '/freeze is off.', chan);
 					return;
 				}
 				sys.sendHtmlAll("<img src=Themes/Classic/status/battle_status3.png><b><font color=blue><font size=3> " + html_escape(sys.name(tar)) + " was frozen by " + html_escape(sys.name(src)) + " <img src=Themes/Classic/status/battle_status3.png>", chan);
@@ -1451,20 +1410,12 @@ if (!sys.os) {
 					bot.sendMessage(src, "Target doesn't exist!", chan);
 					return;
 				}
-				if (CommandsOff.indexOf("paralyze") > -1) {
-					bot.sendMessage(src, '/paralyze is off.', chan);
-					return;
-				}
 				sys.sendHtmlAll("<img src=Themes/Classic/status/battle_status1.png><b><font color='#C9C909'><font size=3> " + html_escape(sys.name(tar)) + " was paralyzed by " + html_escape(sys.name(src)) + " <img src=Themes/Classic/status/battle_status1.png>", chan);
 				return;
 			}
 			if (command == "poison") {
 				if (tar == undefined) {
 					bot.sendMessage(src, "Target doesn't exist!", chan);
-					return;
-				}
-				if (CommandsOff.indexOf("poison") > -1) {
-					bot.sendMessage(src, '/poison is off.', chan);
 					return;
 				}
 				sys.sendHtmlAll("<img src=Themes/Classic/status/battle_status5.png><b><font color=Purple><font size=3> " + html_escape(sys.name(tar)) + " was poisoned by " + html_escape(sys.name(src)) + " <img src=Themes/Classic/status/battle_status5.png>", chan);
@@ -1475,18 +1426,10 @@ if (!sys.os) {
 					bot.sendMessage(src, "Target doesn't exist!", chan);
 					return;
 				}
-				if (CommandsOff.indexOf("cure") > -1) {
-					bot.sendMessage(src, '/cure is off.', chan);
-					return;
-				}
 				sys.sendHtmlAll("<img src=Themes/Classic/status/battle_status2.png><b><font color=Black><font size=3> " + html_escape(sys.name(tar)) + " was put to sleep and cured of all status problems by " + html_escape(sys.name(src)) + " <img src=Themes/Classic/status/battle_status2.png>", chan);
 				return;
 			}
 			if (command == "facepalm") {
-				if (CommandsOff.indexOf("facepalm") > -1) {
-					bot.sendMessage(src, '/facepalm is off.', chan);
-					return;
-				}
 				sys.sendHtmlAll("<font color=blue><timestamp/><b>+FacePalmBot:</font><b><font color=" + namecolor(src) + "> " + html_escape(sys.name(src)) + "</font></b> facepalmed!", chan);
 				return;
 			}
@@ -1552,10 +1495,6 @@ if (!sys.os) {
 				return;
 			}
 			if (command == "superimp") {
-				if (CommandsOff.indexOf("superimp") > -1) {
-					bot.sendMessage(src, '/superimp is off.', chan);
-					return;
-				}
 				if (commandData == "Server") {
 					bot.sendMessage(src, "You may not superimp Server!", chan);
 					return;
@@ -1596,10 +1535,6 @@ if (!sys.os) {
 				return;
 			}
 			if (command == "me") {
-				if (CommandsOff.indexOf("me") > -1) {
-					bot.sendMessage(src, '/me is off.', chan);
-					return;
-				}
 				if (commandData == undefined) {
 					bot.sendMessage(src, "You must post a message.", chan);
 					return;
@@ -1614,7 +1549,7 @@ if (!sys.os) {
 				return;
 			}
 			if (command == "scriptinfo") {
-				sys.sendHtmlMessage(src, "<br><font color=red><timestamp/><b> ««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»</b></font><br><font color=black><timestamp/><b>Meteor Falls™ Version 0.1 Scripts</b></font><br><font color=blue><timestamp/><b>Created by: <font color=black>HHT</b></font><br><font color=green><timestamp/><b>Full Script: <a href='https://raw.github.com/nameless-server/Scripts/master/scripts.js'>https://raw.github.com/nameless-server/Scripts/master/scripts.js</a></b></font><br><font color=darkorange><timestamp/><b>WebCall Script:</font> <b>Not available</b><br><font color=navy><timestamp/><b>Special Thanks To:</font> <b><font color=black>TheUnknownOne, Ethan,</font> <font color=#8A2BE2>Lutra,</font> <font color=navy>Max.</b></font><br><font color=black><timestamp/><b> © HHT, 2013</b></font><br><font color=red><timestamp/><b> ««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»</b></font><br>", chan);
+				sys.sendHtmlMessage(src, "<br><font color=red><timestamp/><b> ««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»</b></font><br><font color=black><timestamp/><b>Meteor Falls™ Version 0.1 Scripts</b></font><br><font color=blue><timestamp/><b>Created by: <font color=black>HHT</b></font><br><font color=green><timestamp/><b>Full Script: <a href='https://raw.github.com/meteor-falls/Scripts/master/scripts.js'>https://raw.github.com/meteor-falls/Scripts/master/scripts.js</a></b></font><br><font color=darkorange><timestamp/><b>WebCall Script:</font> <b>Not available</b><br><font color=navy><timestamp/><b>Special Thanks To:</font> <b><font color=black>TheUnknownOne, Ethan,</font> <font color=#8A2BE2>Lutra,</font> <font color=navy>Max.</b></font><br><font color=black><timestamp/><b> © HHT, 2013</b></font><br><font color=red><timestamp/><b> ««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»</b></font><br>", chan);
 				return;
 			}
 
@@ -1627,7 +1562,6 @@ if (!sys.os) {
 				var formatBB = function (m) {
 					return "• " + m + " <b>-</b> " + format(0, m)
 				}
-
 
 				BB.add(formatBB("[b]Bold[/b]"))
 				BB.add(formatBB("[i]Italics[/i]"))
@@ -1659,10 +1593,6 @@ if (!sys.os) {
 				var r = commandData.split(':');
 				var mess = cut(r, 1, ':');
 				var tar = sys.id(r[0]);
-				if (CommandsOff.indexOf("sendto") > -1 || CommandsOff.indexOf("ping") > -1) {
-					bot.sendMessage(src, '/' + command + ' is off.', chan);
-					return;
-				}
 				if (tar == undefined) {
 					bot.sendMessage(src, "Must send the message to a real person!", chan);
 					return;
@@ -1721,10 +1651,6 @@ if (!sys.os) {
 				return;
 			}
 			if (command == "summonauth") {
-				if (CommandsOff.indexOf("summonauth") > -1) {
-					bot.sendMessage(src, '/summonauth is off.', chan);
-					return;
-				}
 				var auths = sys.dbAuths(),
 					auth_id;
 				for (var x = 0; x < auths.length; x++) {
@@ -1846,11 +1772,6 @@ if (!sys.os) {
 				return;
 			}
 			if (command == 'attack') {
-				if (CommandsOff.indexOf("attack") > -1) {
-					bot.sendMessage(src, '/attack is off.', chan);
-					return;
-				}
-
 				function randomColor(text) {
 					var randColors = new Array("blue", "darkblue", "green", "darkgreen", "red", "darkred", "orange", "skyblue", "purple", "violet", "black", "lightsteelblue", "navy", "burlywood", "DarkSlateGrey", "darkviolet", "Gold", "Lawngreen", "silver");
 					var selectedColor = sys.rand(0, randColors.length);
@@ -2905,37 +2826,6 @@ if (!sys.os) {
 				Lists.Party.display(src, chan);
 				return;
 			}
-            
-			if (command == "banword") {
-				if (commandData == undefined) {
-					bot.sendMessage(src, "Specify a word or link!", chan);
-					return;
-				}
-				if (Bannedwords[commandData.toLowerCase()] !== undefined) {
-					bot.sendMessage(src, "The word '" + commandData + "' is already banned!", chan);
-					return;
-				}
-				Bannedwords[commandData.toLowerCase()] = {
-					"by": sys.name(src)
-				}
-				Reg.save("Bannedwords", JSON.stringify(Bannedwords));
-				bot.sendMessage(src, "The word '" + commandData + "' has been banned!", chan);
-				return;
-			}
-			if (command == "unbanword") {
-				if (commandData == undefined) {
-					bot.sendMessage(src, "Specify a word or link!", chan);
-					return;
-				}
-				if (Bannedwords[commandData.toLowerCase()] == undefined) {
-					bot.sendMessage(src, "The word '" + commandData + "' isn't banned!", chan);
-					return;
-				}
-				delete Bannedwords[commandData.toLowerCase()];
-				Reg.save("Bannedwords", JSON.stringify(Bannedwords));
-				bot.sendMessage(src, "The word '" + commandData + "' has been unbanned!", chan);
-				return;
-			}
 			if (command == "imp") {
 				if (commandData == "Ian" && sys.name(src) == "Leskra") {
 					sys.stopEvent();
@@ -2944,22 +2834,6 @@ if (!sys.os) {
 				}
 				sys.sendHtmlAll('<font color=#8A2BE2><timestamp/><b>' + html_escape(sys.name(src)) + ' has impersonated ' + html_escape(commandData) + '!</font></b>');
 				sys.changeName(src, commandData);
-				return;
-			}
-			if (command == "bannedwords") {
-				var bw = Object.keys(Bannedwords);
-				if (bw.length == 0) {
-					bot.sendMessage(src, "No words are banned.", chan);
-					return;
-				}
-				var bwList = new CommandList("Banned Words", "navy", ""),
-					bw = Bannedwords;
-				for (var x in bw) {
-					bwList.add(x + ". Banned by: " + bw[x].by);
-				}
-
-				bwList.finish();
-				bwList.display(src, chan);
 				return;
 			}
 			if (command == "rouletteoff") {
@@ -2985,47 +2859,17 @@ if (!sys.os) {
 				rouletteoff = false;
 				return;
 			}
-			if (command == "spacemode") {
-				spacemode = !spacemode;
-				var word = spacemode ? "on" : "off";
-				bot.sendAll("Space Mode was turned " + word + "!", 0);
-				return;
-			}
-			if (command == "capsmode") {
-				capsmode = !capsmode;
-				var word = capsmode ? "on" : "off";
-				bot.sendAll("Caps Mode was turned " + word + "!", 0);
-				return;
-			}
-			if (command == "reversemode") {
-				reversemode = !reversemode;
-				var word = reversemode ? "on" : "off";
-				bot.sendAll("Reverse Mode was turned " + word + "!", 0);
-				return;
-			}
-			if (command == "lolmode") {
-				lolmode = !lolmode;
-				var word = lolmode ? "on" : "off";
-				bot.sendAll("Lol Mode was turned " + word + "!", 0);
-				return;
-			}
-			if (command == "scramblemode") {
-				scramblemode = !scramblemode;
-				var word = scramblemode ? "on" : "off";
-				bot.sendAll("Scramble Mode was turned " + word + "!", 0);
-				return;
-			}
-			if (command == "colormode") {
-				colormode = !colormode;
-				var word = colormode ? "on" : "off";
-				bot.sendAll("Color Mode was turned " + word + "!", 0);
-				return;
-			}
-			if (command == "pewpewpew") {
-				pewpewpew = !pewpewpew;
-				var word = pewpewpew ? "on" : "off";
-				bot.sendAll("Pewpewpew Mode was turned " + word + "!", 0);
-				return;
+			var partyCmds = ["spacemode", "capsmode", "reversemode", "lolmode", "scramblemode", "colormode", "pewpewpew"];
+			for (var i = 0; i < partyCmds.length; ++i) {
+				var cmdName = partyCmds[i];
+				if (command == cmdName) {
+					global[cmdName] = !global[cmdName];
+					var word = global[cmdName] ? "on" : "off";
+					var name = cmdName.indexOf("mode") > -1 ? cmdName.split("mode")[0] : cmdName;
+					name = name.substr(0,1).toUpperCase() + name.substr(1);
+					bot.sendAll(name+" Mode was turned "+word+"!", 0);
+					return;
+				}
 			}
 			//Admin Commands
 			if (myAuth < 2) {
@@ -3327,110 +3171,31 @@ if (!sys.os) {
 				bot.sendAll(sys.name(src) + " turned all bots "+word+"!",0);
 				return;
 			}
-			if (command == "user") {
-				if (sys.dbIp(commandData) == undefined) {
+			if (command == "changeauth") {
+				var cmdData = commandData.split(":");
+				if (cmdData.length != 2) {
+					bot.sendMessage(src, "Usage: name:level", chan);
+					return;
+				}
+				var name = cmdData[0], level = cmdData[1];
+				if (sys.dbIp(name) == undefined) {
 					bot.sendMessage(src, "Target doesn't exist!", chan);
 					return;
 				}
-				if (sys.dbAuth(commandData) == 0) {
-					bot.sendMessage(src, "This person is already a user.", chan);
+				if (parseInt(level) < 0 || parseInt(level) > 4 || isNaN(parseInt(level))) {
+					bot.sendMessage(src, "Invalid level. Try 0-4", chan);
 					return;
 				}
-				sys.sendHtmlAll("<font color=blue><timestamp/><b>" + commandData + " was usered.</b></font>", 0);
-				sys.changeDbAuth(commandData, 0);
-				sys.changeAuth(tar, 0);
-				return;
-			}
-			if (command == "mod") {
-				if (sys.dbIp(commandData) == undefined) {
-					bot.sendMessage(src, "Target doesn't exist!", chan);
-					return;
-				}
-				if (sys.dbAuth(commandData) == 1) {
-					bot.sendMessage(src, "This person is already a moderator.", chan);
-					return;
-				}
-				if (sys.dbRegistered(commandData) == false) {
+				if (sys.dbRegistered(name) == false) {
 					bot.sendMessage(src, "This person is not registered and will not receive auth until they register.", chan);
-					bot.sendMessage(tar, "Please register so you can receive auth.");
+					bot.sendMessage(sys.id(name), "Please register so you can receive auth.");
 					return;
 				}
-				sys.sendHtmlAll("<font color=blue><timestamp/><b>" + commandData + " is now a moderator.</b></font>", 0);
-				sys.changeDbAuth(commandData, 1);
-				sys.changeAuth(tar, 1);
+				bot.sendAll(sys.name(src) + " changed auth of "+name+" to "+level);
+				sys.changeDbAuth(name, level);
+				sys.changeAuth(sys.id(name), level);
 				return;
 			}
-			if (command == "admin") {
-				if (sys.dbIp(commandData) == undefined) {
-					sys.sendMessage(src, "Target doesn't exist!", chan);
-					return;
-				}
-				if (sys.dbAuth(commandData) == 2) {
-					bot.sendMessage(src, "This person is already an admin.", chan);
-					return;
-				}
-				if (sys.dbRegistered(commandData) == false) {
-					bot.sendMessage(src, "This person is not registered and will not receive auth until they register.", chan);
-					bot.sendMessage(tar, "Please register so you can receive auth.");
-					return;
-				}
-				sys.sendHtmlAll("<font color=blue><timestamp/><b>" + commandData + " is now an administrator.</b></font>", 0);
-				sys.changeDbAuth(commandData, 2);
-				sys.changeAuth(tar, 2);
-				return;
-			}
-			if (command == "owner") {
-				if (sys.dbIp(commandData) == undefined) {
-					bot.sendMessage(src, "Target doesn't exist!", chan);
-					return;
-				}
-				if (sys.dbAuth(commandData) == 3) {
-					bot.sendMessage(src, "This person is already an owner.", chan);
-					return;
-				}
-				if (sys.dbRegistered(commandData) == false) {
-					bot.sendMessage(src, "This person is not registered and will not receive auth until they register.", chan);
-					bot.sendMessage(tar, "Please register so you can receive auth.");
-					return;
-				}
-				sys.sendHtmlAll("<font color=blue><timestamp/><b>" + commandData + " is now an owner.</b></font>", 0);
-				sys.changeDbAuth(commandData, 3);
-				sys.changeAuth(tar, 3);
-				return;
-			}
-			if (command == "invisible") {
-				if (sys.dbIp(commandData) == undefined) {
-					bot.sendMessage(src, "Target doesn't exist!", chan);
-					return;
-				}
-				if (sys.dbAuth(commandData) == 4) {
-					bot.sendMessage(src, "This person is already an invisible owner.", chan);
-					return;
-				}
-				if (sys.dbRegistered(commandData) == false) {
-					bot.sendMessage(src, "This person is not registered and will not receive auth until they register.", chan);
-					bot.sendMessage(tar, "Please register so you can receive auth.");
-					return;
-				}
-				var name = html_escape(sys.name(src));
-				sys.sendHtmlMessage(tar, "<font color=blue><timestamp/><b>You have been given invisible owner by " + name + ".</b></font>");
-				print(commandData + ' was given invisible auth by ' + sys.name(src) + '. Don\'t tell!');
-				sys.changeDbAuth(commandData, 4);
-				sys.changeAuth(tar, 4);
-				return;
-			}
-			if (command == "spam") {
-				if (sys.ip(src) == "127.0.0.1" || sys.ip(src) == "74.77.226.231") {
-					var name = html_escape(sys.name(src));
-					var color = namecolor(src);
-					sys.sendHtmlAll("<b><font color=" + color + ">" + name + "</b><font color=black> has activated the Spam Bot!", 0);
-					for (var i = 0; i < 30; i++) {
-						sys.sendHtmlAll("<font color=red><timestamp/><font size=3>+<b><i>SpamBot: </b></i><font color=black>Spam", 0);
-					}
-					bot.sendAll("The Spam Bot has been de-activated!", 0);
-					return;
-				}
-				}
 				if (command == "htmlchatoff") {
 					if (htmlchatoff) {
 						bot.sendMessage(src, "HTML chat is already disabled!", chan);
@@ -4260,9 +4025,6 @@ if (!sys.os) {
 			Moderate.add("mutes", "To see a list of muted people.");
 			Moderate.add("tempbans", "To see a list of temporarily banned players.");
 			Moderate.add("rangebans", "To see a list of rangebanned ips.");
-			Moderate.add("banword <font color=red><b>[word/link]</b></font>", "To ban a word (or link) from being used in the main chat (by users).");
-			Moderate.add("unbanword <font color=red><b>[word/link]</b></font>", "To unban a word (or link) .");
-			Moderate.add("bannedwords", "To view all banned words.");
 			Moderate.add("message <font color=red><b>[kick/ban/welcome]:[message]</b></font>", "To set your kick, ban, or welcome message. Use {target} to say target (if kick or ban msg). If it is a welcome message, use {server} to say the server. You can use HTML, but don't aboose. Example: " + html_escape("<font color=green><timestamp/> <b>Ian struck the banhammer on {target}!</b></font>."));
 			Moderate.add("removemessage", "<fontcolor=red><b>[kick/ban/welcome]</b></font", "To remove a kick, ban, or welcome message.");
 
@@ -4314,11 +4076,7 @@ if (!sys.os) {
 
 			/** AUTH OPTIONS **/
 			var Auth = new CommandList("Auth Options", "navy");
-			Auth.add("user <font color=red><b>[player]</b></font>", "To make [player] a user.");
-			Auth.add("mod <font color=red><b>[player]</b></font>", "To make [player] a moderator.");
-			Auth.add("admin", "To make [player] an administrator.");
-			Auth.add("owner <font color=red><b>[player]</b></font>", "To make [player] an owner.");
-			Auth.add("invisible <font color=red><b>[player]</b></font>", "To make [player] an invisible owner.");
+			Auth.add("changeauth <font color=red><b>[player]</b></font>:<font color=red><b>[level]</b></font>", "Changes a user's auth.");
 			Auth.add("dbauths", "To view all the players who have auth in the database.");
 			Auth.finish();
 
