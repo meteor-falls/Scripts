@@ -137,16 +137,6 @@ PluginHandler.prototype.load = function(plugin_name, webcall) {
 	this.plugins[plugin_name] = module.exports;
 	return module.exports;
 }
-PluginHandler.prototype.run = function(plugin_name) {
-	var fileContent = sys.getFileContent(this.dir+plugin_name);
-	if (fileContent == undefined) return false;
-	try {
-		eval(fileContent);
-	} catch(e) {
-		sys.sendAll("Error running plugin "+plugin_name+": "+e+" on line "+e.lineNumber);
-		return false;
-	}
-}
 PluginHandler.prototype.unload = function(plugin_name) {
 	if (!this.plugins.hasOwnProperty(plugin_name)) return false;
 	delete this.plugins[plugin_name];
@@ -233,6 +223,7 @@ SESSION.registerUserFactory(poUser);
 		var cname = sys.channel(channel);
 		ChannelNames.splice(ChannelNames.indexOf(cname), 1);
 	},
+	
 	megauserCheck: function (src) {
 		SESSION.users(src).megauser = sys.name(src).toLowerCase() in MegaUsers;
 	},
