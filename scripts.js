@@ -532,7 +532,7 @@ SESSION.registerUserFactory(poUser);
 				}
 			}
 			
-			Plugins('commands.js').handle(src, message, command, commandData, tar);
+			Plugins('commands.js').handle(src, message, command, commandData, tar, chan);
 			return;
 		}
 

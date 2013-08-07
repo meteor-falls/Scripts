@@ -1,4 +1,4 @@
-function handleCommand(src, message, command, commandData, tar) {
+function handleCommand(src, message, command, commandData, tar, chan) {
 	var poUser = SESSION.users(src),
 		isMuted = poUser.muted,
 		originalName = poUser.originalName,
