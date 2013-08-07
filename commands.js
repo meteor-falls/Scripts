@@ -1,6 +1,9 @@
-function handleCommand(data) {
-	for (var i in data) global[i] = data[i]; // Set variables needed for the commands
-	if (message == undefined) message = data['message'];
+function handleCommand(src, message, command, commandData, tar) {
+	var poUser = SESSION.users(src),
+		isMuted = poUser.muted,
+		originalName = poUser.originalName,
+		isLManager = Leaguemanager == originalName.toLowerCase(),
+		myAuth = getAuth(src);
 	
 	if (CommandsOff.indexOf(command) > -1) {
 		bot.sendMessage(src, '/'+command+' is off.', chan);

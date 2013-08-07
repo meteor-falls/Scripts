@@ -475,7 +475,6 @@ SESSION.registerUserFactory(poUser);
 			}
 		}
 
-
 		if (myAuth < 1 && muteall) {
 			sys.stopEvent();
 			bot.sendMessage(src, "Shut up! Silence is on!", chan);
@@ -533,13 +532,7 @@ SESSION.registerUserFactory(poUser);
 				}
 			}
 			
-			var data = {'src': src, 'command': command, 'commandData' : commandData,
-						'tar': tar, 'isMuted': poUser.muted, 
-						'originalName': originalName, 'isLManager': isLManager, 
-						'myAuth': getAuth(src), 'message': message, 'chan': chan
-			};
-			
-			Plugins('commands.js').handle(data);
+			Plugins('commands.js').handle(src, message, command, commandData, tar);
 			return;
 		}
 
