@@ -954,7 +954,7 @@ SESSION.registerUserFactory(poUser);
 	},
 
 	loadBots: function () { /* Do not touch this section if you don't know what you are doing! */
-		var Bot = Plugins('bot.js').Bot;
+		var Bot = Plugins('bot.js')['Bot'];
 	
 		/* END */
 
