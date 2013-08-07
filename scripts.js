@@ -113,7 +113,7 @@ function poUser(id) {
 	this.megauser = false;
 }
 
-SESSION.identifyScriptAs("VP Script 1.7 Beta");
+SESSION.identifyScriptAs("MF Script 0.1 Beta");
 SESSION.registerUserFactory(poUser);
 
 if (!sys.os) {
