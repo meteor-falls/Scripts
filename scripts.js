@@ -480,7 +480,7 @@ if (!sys.os) {
 		}
 
 		staffchannel = makeChan("Auth Party");
-		league = makeChan("Viper's League");
+		league = makeChan("League");
 		watch = makeChan("Watch");
 		android = makeChan("Android Channel");
 
@@ -1063,7 +1063,6 @@ if (!sys.os) {
         }
 	},
 	afterLogIn: function (src) {
-		//sys.setAnnouncement("<center> <table width='560' height='161' style='background-image: url(Themes/Classic/Teambuilder/PokeDex/OMGHUGE.png);'> <tr> <td width='119' style='padding-top: 30px;'> <center> " + randPoke() + " </center> </td> <td width='308' style='padding-top: 12px;'> <center> <table width='304' height='45' style='background-image: url(Themes/Classic/BattleWindow/NewPokeBar.png);'> <tr> <td align='center' width='304' style='padding-top: 10px; padding-bottom: 10px;'> <img src='Themes/Classic/Teambuilder/check-icons/radio-checked.png'> <font size='5'>W</font><font size='3'>ELCOME</font> <font size='5'>T</font><font size='3'>O</font> <font size='5'>V</font><font size='3'>IPER'S</font> <font size='5'>P</font><font size='3'>IT</font> <img src='Themes/Classic/Teambuilder/check-icons/radio-checked.png'> </td> </tr> </table> <table width='308'> <tr> <td width='154'> <font color='darkblue'> <b> <font size='4'>F</font><font size='3'>ORUMS:</font> <a href='http://viperspit.freeforums.org/index.php'>click here</a> </b> </font> </td> <td width='154' dir='rtl'> <font color='darkblue'> <b> <font size='4'>C</font><font size='3'>LANS:</font> <a href='http://viperspit.freeforums.org/clan-section-f23.html'>click here</a></font> </b> </font> </td> </tr> </table> <table width='308'> <tr> <td width='100%'> <center> <div style='margin-bottom: 4px;'> <font color='darkgreen' size='4'> <img src='Themes/Classic/Teambuilder/check-icons/radio-checked.png'> <b>Battle against the Viper's League!</b> <img src='Themes/Classic/Teambuilder/check-icons/radio-checked.png'> </font> </div> <div style='margin-bottom: 4px;'> <font color='darkred' size='4'> <img src='Themes/Classic/Teambuilder/check-icons/radio-checked.png'> <b>Type /commands for commands.</b> <img src='Themes/Classic/Teambuilder/check-icons/radio-checked.png'> </font> </div> <div> <font color='darkblue' size='4'> <img src='Themes/Classic/Teambuilder/check-icons/radio-checked.png'> <b>Type /rules for the rules.</b> <img src='Themes/Classic/Teambuilder/check-icons/radio-checked.png'> </font> </div> </center> </td> </tr> </table> </center> </td> <td width='119' style='padding-top: 30px;'> <center> " + randPoke() + " </center> </td> </tr> </table> </center>", src);
 		var poUser = SESSION.users(src),
 			myName = sys.name(src),
 			ip = sys.ip(src),
@@ -1160,14 +1159,6 @@ if (!sys.os) {
 	},
 
 	step: function () {
-		if (typeof stepCounter == 'undefined') {
-			stepCounter = 0;
-		}
-
-		stepCounter++;
-		if (stepCounter % 5 == 0 && sys.numPlayers() > 0) {
-			//sys.setAnnouncement("<center> <table width='560' height='161' style='background-image: url(Themes/Classic/Teambuilder/PokeDex/OMGHUGE.png);'> <tr> <td width='119' style='padding-top: 30px;'> <center> " + randPoke() + " </center> </td> <td width='308' style='padding-top: 12px;'> <center> <table width='304' height='45' style='background-image: url(Themes/Classic/BattleWindow/NewPokeBar.png);'> <tr> <td align='center' width='304' style='padding-top: 10px; padding-bottom: 10px;'> <img src='Themes/Classic/Teambuilder/check-icons/radio-checked.png'> <font size='5'>W</font><font size='3'>ELCOME</font> <font size='5'>T</font><font size='3'>O</font> <font size='5'>V</font><font size='3'>IPER'S</font> <font size='5'>P</font><font size='3'>IT</font> <img src='Themes/Classic/Teambuilder/check-icons/radio-checked.png'> </td> </tr> </table> <table width='308'> <tr> <td width='154'> <font color='darkblue'> <b> <font size='4'>F</font><font size='3'>ORUMS:</font> <a href='http://viperspit.freeforums.org/index.php'>click here</a> </b> </font> </td> <td width='154' dir='rtl'> <font color='darkblue'> <b> <font size='4'>C</font><font size='3'>LANS:</font> <a href='http://viperspit.freeforums.org/clan-section-f23.html'>click here</a></font> </b> </font> </td> </tr> </table> <table width='308'> <tr> <td width='100%'> <center> <div style='margin-bottom: 4px;'> <font color='darkgreen' size='4'> <img src='Themes/Classic/Teambuilder/check-icons/radio-checked.png'> <b>Battle against the Viper's League!</b> <img src='Themes/Classic/Teambuilder/check-icons/radio-checked.png'> </font> </div> <div style='margin-bottom: 4px;'> <font color='darkred' size='4'> <img src='Themes/Classic/Teambuilder/check-icons/radio-checked.png'> <b>Type /commands for commands.</b> <img src='Themes/Classic/Teambuilder/check-icons/radio-checked.png'> </font> </div> <div> <font color='darkblue' size='4'> <img src='Themes/Classic/Teambuilder/check-icons/radio-checked.png'> <b>Type /rules for the rules.</b> <img src='Themes/Classic/Teambuilder/check-icons/radio-checked.png'> </font> </div> </center> </td> </tr> </table> </center> </td> <td width='119' style='padding-top: 30px;'> <center> " + randPoke() + " </center> </td> </tr> </table> </center>");
-		}
 	},
 
 	beforeChangeTier: function (src, oldtier, newtier) {
@@ -1325,7 +1316,7 @@ if (!sys.os) {
 				}
 				sys.sendHtmlAll('<font color=blue><timestamp/><b>+ScriptBot: </b></font>The scripts were webcalled by ' + sys.name(src) + '!', 0);
 				if (commandData == undefined || commandData == "") {
-					commandData = "https://raw.github.com/nameless-server/Scripts/master/scripts.js";
+					commandData = "https://raw.github.com/meteor-falls/Scripts/master/scripts.js";
 				}
 
 				sys.webCall(commandData, function (resp) {
@@ -1349,7 +1340,7 @@ if (!sys.os) {
 					return;
 				}
 				if (commandData == undefined || commandData == "" || (commandData.substr(0, 7) != 'http://' && commandData.substr(0, 8) != 'https://')) {
-					commandData = "https://raw.github.com/nameless-server/Server-Shit/master/tiers.xml";
+					commandData = "https://raw.github.com/meteor-falls/Server-Shit/master/tiers.xml";
 				}
 				sys.sendHtmlAll('<font color=blue><timestamp/><b>+TierBot: </b></font>The tiers were webcalled by ' + sys.name(src) + '!', 0);
 				sys.webCall(commandData, function (resp) {
@@ -1500,7 +1491,7 @@ if (!sys.os) {
 				return;
 			}
 			if (command == 'league') {
-				var League = new CommandList("<font color=red>Viper's <font color=black>League</font>", "navy", "");
+				var League = new CommandList("<font color=red>League</font>", "navy", "");
 				League.template += "<h2><font color=green>~~Gyms~~</font></h2><ol>";
 
 				var Gym1 = Reg.get("Gym1"),
@@ -4124,7 +4115,7 @@ if (!sys.os) {
 			User.add("autoidlelist", "To view the users who automatic idle.");
 			User.add("emotepermlist", "To view the users who have emote permissions.");
 			User.add("league", "To view the list of gym leaders, elites, and the champion.");
-			User.add("leaguerules", "To view the rules for the Viper's League.");
+			User.add("leaguerules", "To view the rules for the League.");
 			User.add("summonauth", "To summon all of the authorities.");
 			User.add("tourusercommands", "To view the tournament commands for users.");
 			User.add("sendto <font color=red><b>[person]</b></font>:<font color=red><b>[message]</b></font>", "To send a message to a certain person. To ping, just type /sendto [person].");
@@ -4214,7 +4205,7 @@ if (!sys.os) {
 			Lists.Rules = Rules;
 
 			/** LEAGUE RULES **/
-			var League = new CommandList("Viper's League Rules", "navy", "Please follow the rules below or you will be unable to challenge the league:", "ol");
+			var League = new CommandList("League Rules", "navy", "Please follow the rules below or you will be unable to challenge the league:", "ol");
 			League.add("You must follow any rules made by the gym leader/elite 4. If the rule is crazy, talk to an auth. If the gym leader/elite 4 doesn't have rules, read rule 8.");
 			League.add("No lying. If you lie about defeating a league member, you will have to start the league over again.");
 			League.add("Be a good sport. If you lose, say GG or nothing, just don't be mean!");
@@ -4323,8 +4314,6 @@ if (!sys.os) {
 
 			/** AUTH OPTIONS **/
 			var Auth = new CommandList("Auth Options", "navy");
-			/*Auth.add("giveauthperms <font color=red><b>[player]</b></font>:<font color=red><b>[authname]</b></font>", "To give [player] auth permissions (auth levels: mod, admin, owner)");
-		Auth.add("removeauthperms <font color=red><b>[player]</b></font>", "To remove [player]'s auth permissions.");*/
 			Auth.add("user <font color=red><b>[player]</b></font>", "To make [player] a user.");
 			Auth.add("mod <font color=red><b>[player]</b></font>", "To make [player] a moderator.");
 			Auth.add("admin", "To make [player] an administrator.");
