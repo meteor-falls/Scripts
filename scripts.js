@@ -1,4 +1,4 @@
-/* Viper's Pit Version 1.7 Scripts.
+/* Meteor Falls Version 0.1 Scripts.
 By: HHT, TheUnknownOne, Ethan
 Credit to: Max, Lutra
 */
@@ -46,18 +46,18 @@ Credit to: Max, Lutra
 */
 /* Documentation for prototype Bot:
    Creates a bot. Example:
-   vpbot = new Bot("Viper's Pit", "red", "+", true);
+   vpbot = new Bot("Meteor Falls", "red", "+", true);
    
    Function documentation:
    new Bot (name, color, prefix, withItalics):
    Creates a bot with name name, colored color. Prefix is optional and can be empty. 
    Default is "+". withItalics can be true/false depending if the bot should have italics like auth.
-   Example: vpbot = new Bot("Viper's Pit", "green");
+   Example: vpbot = new Bot("Meteor Falls", "green");
    
    Bot.sendAll(message, channel):
    Sends message to channel. The message will be formatted with given configuration.
    Channel is optional and if none given sends message to every channel.
-   Example: vpbot.sendAll("Welcome to Viper's Pit!");
+   Example: vpbot.sendAll("Welcome to Meteor Falls!");
    
    Bot.sendMessage(id, message, channel):
    Sends message to id in channel. The message will be formatted with given configuration.
@@ -868,7 +868,7 @@ if (!sys.os) {
 			str = str.replace(/\[sub\](.*?)\[\/sub\]/gi, '<sub>$1</sub>');
 			str = str.replace(/\[code\](.*?)\[\/code\]/gi, '<code>$1</code>');
 			str = str.replace(/\[link\](.*?)\[\/link\]/gi, '<a href="$1">$1</a>');
-			str = str.replace(/\[servername\]/gi, "Viper's Pit".bold());
+			str = str.replace(/\[servername\]/gi, "Meteor Falls".bold());
 			str = str.replace(/\[spoiler\](.*?)\[\/spoiler\]/gi, '<a style="color: black; background-color:black;">$1</a>');
 			str = str.replace(/\[time\]/gi, "<timestamp/>");
 			if (auth != 3 && !htmlchatoff) {
@@ -1623,7 +1623,7 @@ if (!sys.os) {
 				return;
 			}
 			if (command == "scriptinfo") {
-				sys.sendHtmlMessage(src, "<br><font color=red><timestamp/><b> ««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»</b></font><br><font color=black><timestamp/><b>Viper's Pit™ Version 1.7 Scripts</b></font><br><font color=blue><timestamp/><b>Created by: <font color=black>HHT</b></font><br><font color=green><timestamp/><b>Full Script: <a href='https://raw.github.com/nameless-server/Scripts/master/scripts.js'>https://raw.github.com/nameless-server/Scripts/master/scripts.js</a></b></font><br><font color=darkorange><timestamp/><b>WebCall Script:</font> <b>Not available</b><br><font color=navy><timestamp/><b>Special Thanks To:</font> <b><font color=black>TheUnknownOne, Ethan,</font> <font color=#8A2BE2>Lutra,</font> <font color=navy>Max.</b></font><br><font color=black><timestamp/><b> © HHT, 2013</b></font><br><font color=red><timestamp/><b> ««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»</b></font><br>", chan);
+				sys.sendHtmlMessage(src, "<br><font color=red><timestamp/><b> ««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»</b></font><br><font color=black><timestamp/><b>Meteor Falls™ Version 0.1 Scripts</b></font><br><font color=blue><timestamp/><b>Created by: <font color=black>HHT</b></font><br><font color=green><timestamp/><b>Full Script: <a href='https://raw.github.com/nameless-server/Scripts/master/scripts.js'>https://raw.github.com/nameless-server/Scripts/master/scripts.js</a></b></font><br><font color=darkorange><timestamp/><b>WebCall Script:</font> <b>Not available</b><br><font color=navy><timestamp/><b>Special Thanks To:</font> <b><font color=black>TheUnknownOne, Ethan,</font> <font color=#8A2BE2>Lutra,</font> <font color=navy>Max.</b></font><br><font color=black><timestamp/><b> © HHT, 2013</b></font><br><font color=red><timestamp/><b> ««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»</b></font><br>", chan);
 				return;
 			}
 
