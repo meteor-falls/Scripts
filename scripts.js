@@ -217,13 +217,13 @@ if (!sys.os) {
 			}
 			return getColor;
 		}
-
-		vplogin = function (name, color) {
-			sys.sendHtmlAll("+<b><font color=red>W</font><font color=blue>e</font><font color=red>l</font><font color=black>c</font><font color=green>o</font><font color=orange>m</font><font color=purple>e</font><font color=red>B</font><font color=blue>o</font><font color=green>t</font></b>: <b><font color=" + color + ">" + name + "</font></b> has logged on to <b>"+Reg.get('servername')+"</b>!", 0);
+        
+		loginMessage = function (name, color) {
+			sys.sendHtmlAll("<font color='#0c5959'><timestamp/>±<b>WelcomeBot:</b></font> <b><font color=" + color + ">" + name + "</font></b> joined <b>"+Reg.get('servername')+"</b>!", 0);
 		}
 
-		vplogout = function (name, color) {
-			sys.sendHtmlAll("+<b><font color=red>G</font><font color=blue>o</font><font color=red>o</font><font color=black>d</font><font color=green>B</font><font color=orange>y</font><font color=purple>e</font><font color=red>B</font><font color=blue>o</font><font color=green>t</font></b>: <b><font color=" + color + ">" + name + "</font></b> has logged off of <b>"+Reg.get('servername')+"</b>!", 0);
+		logoutMessage = function (name, color) {
+			sys.sendHtmlAll("<font color='#0c5959'><timestamp/>±<b>GoodbyeBot:</b></font> <b><font color=" + color + ">" + name + "</font></b> left <b>"+Reg.get('servername')+"</b>!", 0);
 		}
 
 		cmp = function (a, b) {
@@ -438,7 +438,11 @@ if (!sys.os) {
 			colormode: false,
 			pewpewpew: false,
 			bots: true,
-			maxPlayersOnline: 0
+            uniqueVisitors: {
+                ips: {},
+                count: 0,
+                total: 0
+            }
 		};
 		
 		for (i in globalVars) {
@@ -448,6 +452,8 @@ if (!sys.os) {
 		}
 		
 		Reg.init('MOTD', '');
+        Reg.init('maxPlayersOnline', 0);
+        Reg.init('servername', "Meteor Falls");
 		Reg.init("Leaguemanager", "HHT");
 
 		if (Reg.get("Champ") === undefined) {
@@ -771,12 +777,23 @@ if (!sys.os) {
 			
 			return message;
 		};
-		
+        
 		print("Emotes loaded into memory.");
 		
 		script.loadCommandLists();
 		print("Command lists loaded into memory.");
-
+		
+        nthNumber = function (num) {
+            var nthNum = {
+                0: "th",
+                1: "st",
+                2: "nd",
+                3: "rd"
+            };
+            
+            return (num + '') + (nthNum[num] || "th");
+        }
+        
 		function atag(s) {
 			return '<a href="' + s + '">' + s + '</a>';
 		}
@@ -1050,7 +1067,9 @@ if (!sys.os) {
 		var poUser = SESSION.users(src),
 			myName = sys.name(src),
 			ip = sys.ip(src),
-			myAuth = getAuth(src);
+			myAuth = getAuth(src),
+            numPlayers = sys.numPlayers(),
+            newRecord = false;
 
 		poUser.originalName = sys.name(src);
 
@@ -1063,28 +1082,46 @@ if (!sys.os) {
 			sys.putInChannel(src, staffchannel);
 		}
 		
-		sys.sendHtmlMessage(src, "<font color=Red><timestamp/><b>+ForumBot: </font></b> Join the Viper's Pit forums <a href='http://viperspit.freeforums.org'>here</a>.", 0);
-		sys.sendHtmlMessage(src, "<font color=Black><timestamp/><b>+CommandBot: </font></b>Type /commands to see the commands!", 0);
-		sys.sendHtmlMessage(src, "<font color=Blue><timestamp/><b>+RuleBot: </font></b>Type /rules to see the rules!", 0);
-		sys.sendHtmlMessage(src, "<font color=Green><timestamp/><b>+LeagueBot: </font></b>Type /league to view the league! ", 0);
-		sys.sendHtmlMessage(src, "<font color=CornFlowerBlue><timestamp/><b>+PlayersBot: </b></font>Number of players online is " + String(sys.numPlayers()).bold() + "!", 0);
+        //if (!uniqueVisitors.ips[ip]) {
+            //uniqueVisitors.count += 1;
+            //uniqueVisitors.ips[ip] = uniqueVisitors.count;
+        //}
+        
+        //uniqueVisitors.total += 1;
+    
+        if (numPlayers > Reg.get("maxPlayersOnline")) {
+            Reg.save("maxPlayersOnline", numPlayers);
+            newRecord = true;
+        }
+        
+        function displayBot(name, message, color) {
+            sys.sendHtmlMessage(src, "<font color='" + color + "'><timestamp/> ±<b>" + name + ":</b></font> " + message, 0);
+        }
+        
+        displayBot("ServerBot", "Hey, <b><font color='" + namecolor(src) + "'>" + sys.name(src) + "</font></b>!", "purple");
+        displayBot("CommandBot", "Type <b>/commands</b> for a list of commands, <b>/rules</b> for a list of rules, and <b>/league</b> for the league.", "green");
+        displayBot("ForumBot", "Get in touch with the community by joining the <b><a href='http://meteorfalls.icyboards.net/'>Meteor Falls Forums</a></b>!", "blue");
+        displayBot("StatsBot", "There are <b>" + numPlayers + "</b> players online. You are the <b>" + nthNumber(src) + "</b> player to join. At most, there were <b>" + Reg.get("maxPlayersOnline") + "</b> players online" + (newRecord ? " (new record!)" : "") + ".", "goldenrod");
+        
 		var MOTD = Reg.get("MOTD");
 		if (MOTD !== "") {
-			sys.sendHtmlMessage(src, "<font color=red><timestamp/><b>Message of the Day: </font></b>" + MOTD, 0);
+            displayBot("Message of the Day", MOTD, "red");
 		}
 
+        sys.sendMessage(src, '');
 		if (sys.numPlayers() < 30 && sys.os(src) != "android" && Welmsgs[sys.name(src).toLowerCase()] == undefined) {
-			vplogin(sys.name(src), namecolor(src));
+			loginMessage(sys.name(src), namecolor(src));
 		}
+        
 		if (Welmsgs[sys.name(src).toLowerCase()] != undefined) {
 			var theirmessage = Welmsgs[sys.name(src).toLowerCase()];
-				var msg = (theirmessage !== undefined) ? theirmessage.message : vplogin(sys.name(src), namecolor(src));
-				if (theirmessage != undefined) { 
-					msg = msg.replace(/{server}/gi, Reg.get("servername"));
-					msg = emoteFormat(msg);
-				}
-				sys.sendHtmlAll(msg, 0);
-			}
+            var msg = (theirmessage !== undefined) ? theirmessage.message : loginMessage(sys.name(src), namecolor(src));
+            if (theirmessage != undefined) { 
+                msg = msg.replace(/{server}/gi, Reg.get("servername"));
+                msg = emoteFormat(msg);
+            }
+            sys.sendHtmlAll(msg, 0);
+        }
 			
 		pruneMutes();
 		if (Mutes[ip] != undefined) {
@@ -2877,26 +2914,7 @@ if (!sys.os) {
 				Lists.Party.display(src, chan);
 				return;
 			}
-
-			if (command == "pbscripts") {
-				sys.sendAll("Possible lag incoming!");
-
-				var scripts = sys.getFileContent("scripts.js");
-
-				var name = "VP Script pasted by " + sys.name(src) + ".";
-				post['api_option'] = 'paste'; //  paste, duh
-				post['api_dev_key'] = '390180c9c1aea41435eae8b256868aa9'; //  Dev key
-				post['api_paste_private'] = 1; //  private
-				post['api_paste_name'] = name; //  name
-				post['api_paste_code'] = scripts; //  text itself
-				post['api_paste_expire_date'] = '1M'; //  expires in 1 month
-				sys.webCall('http://pastebin.com/api/api_post.php', function (resp) {
-					if (/^http:\/\//.test(resp)) sys.sendMessage(src, "Scripts can found found at: " + resp); // success
-				}, post);
-				return;
-
-			}
-
+            
 			if (command == "banword") {
 				if (commandData == undefined) {
 					bot.sendMessage(src, "Specify a word or link!", chan);
@@ -3562,7 +3580,7 @@ if (!sys.os) {
 			var shown = true;
 			if (lastToLogout.name === undefined || lastToLogout.color === undefined || typeof lastToLogout != 'object') shown = false;
 			 if (sys.numPlayers() < 30 && shown && !user.autokick && sys.os(src) != "android") {
-				vplogout(html_escape(lastToLogout.name), lastToLogout.color);
+				logoutMessage(html_escape(lastToLogout.name), lastToLogout.color);
 			}
 			/* Due to some glitch with v2, we send the message in afterLogOut (beforeLogOut has a problem...) */
 		},
@@ -3981,14 +3999,14 @@ if (!sys.os) {
 
 		loadBots: function () { /* Do not touch this section if you don't know what you are doing! */
 			Bot = function (name, color, prefix, italics) {
+				if (!italics) {
+					italics = false;
+				}
 				if (prefix == undefined) {
-					prefix = "+";
+					prefix = italics ? "+" : "±";
 				}
 				if (!color) {
 					color = "red";
-				}
-				if (!italics) {
-					italics = false;
 				}
 
 				this.name = name;
@@ -4234,7 +4252,7 @@ if (!sys.os) {
 			Mod.add("partycommands", "To display a list of party commands.");
 			Mod.add("silence", "To silence all users.");
 			Mod.add("unsilence", "To cancel the silence.");
-			Mod.add("pbscripts", "Add the scripts to pastebin, without the need of serverwindow.");
+            Mod.add("public", "To make the server public.");
 			Mod.finish();
 
 			Lists.Mod = Mod;
@@ -4256,6 +4274,7 @@ if (!sys.os) {
 			Moderate.add("bannedwords", "To view all banned words.");
 			Moderate.add("message <font color=red><b>[kick/ban/welcome]:[message]</b></font>", "To set your kick, ban, or welcome message. Use {target} to say target (if kick or ban msg). If it is a welcome message, use {server} to say the server. You can use HTML, but don't aboose. Example: " + html_escape("<font color=green><timestamp/> <b>Ian struck the banhammer on {target}!</b></font>."));
 			Moderate.add("removemessage", "<fontcolor=red><b>[kick/ban/welcome]</b></font", "To remove a kick, ban, or welcome message.");
+
 			Moderate.finish();
 
 			Lists.Moderate = Moderate;
@@ -4286,7 +4305,6 @@ if (!sys.os) {
 			Admin.add("forcerules <font color=red><b>[player]</b></font>", "To show the rules to [player].");
 			Admin.add("megauser <font color=red><b>[player]</b></font>", "To make [player] a megauser.");
 			Admin.add("megauseroff <font color=red><b>[player]</b></font>", "To remove [player]'s megauser.");
-			Admin.add("public", "To make the server public.");
 			Admin.add("private", "To make the server private.");
 			Admin.finish();
 
