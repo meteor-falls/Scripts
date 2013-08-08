@@ -123,9 +123,8 @@ PluginHandler.prototype.load = function(plugin_name, webcall) {
 		var resp = sys.synchronousWebCall(Config.repourl+plugin_name);
 		fileContent = resp;
 		sys.writeToFile(this.dir+plugin_name, fileContent);
-	} else {
-		fileContent = sys.getFileContent(this.dir+plugin_name);
 	}
+	fileContent = sys.getFileContent(this.dir+plugin_name);
 	if (fileContent == undefined) return false;
 	var module = {exports:{}};
 	try {
