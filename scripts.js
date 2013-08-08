@@ -741,30 +741,25 @@ SESSION.registerUserFactory(poUser);
 			var chans = [0];
 			for (x in chans) {
 				var tchan = chans[x];
-				sys.sendAll("", 0);
+				sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><font style='font-size:25px;'>C</font>ongratulations, <i style='color:red; font-weight:bold;'>"+html_escape(tourplayers[tourmembers[0]])+"!</i></font><hr width=300/><br><b>You won the tournament! You win "+prize+"!</b><br/><br/></td></tr></table></center><br/>");
+				/*sys.sendAll("", 0);
 				sys.sendHtmlAll("<font color=blue><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»", 0);
 				sys.sendHtmlAll("<font color=Green><timestamp/><b><font size=3>THE WINNER OF THE TOURNAMENT IS:</font></b><font color=black> " + html_escape(tourplayers[tourmembers[0]]), 0);
 				sys.sendAll("", 0);
 				sys.sendHtmlAll("<font color=red><timestamp/><b><font size=3>±±± Congratulations, " + tourplayers[tourmembers[0]] + ", you win " + prize + "! ±±±", 0);
-				sys.sendHtmlAll("<font color=blue><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</font>", 0);
+				sys.sendHtmlAll("<font color=blue><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</font>", 0);*/
 			}
 			tourmode = 0;
 			isFinals = false;
 			return;
 		}
+		var str;
 		var finals = tourmembers.length == 2;
 		if (!finals) {
-			sys.sendAll("", 0);
-			sys.sendHtmlAll("<font color=red><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»", 0);
-			sys.sendHtmlAll("<font color=Green><timestamp/><b><font size=3>±±± Round " + roundnumber + " of " + tourtier + " tournament ±±±", 0);
-			sys.sendHtmlAll("<font color=red><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</font>", 0);
-			isFinals = false;
+			str = "<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Round <i>1</i> of <i style='color:red; font-weight:bold;'>5th Gen OU</i> tournament!</font><hr width=300/><i>Current Matchups</i><br/><b>";
 		} else {
-			sys.sendAll("", 0);
-			sys.sendHtmlAll("<font color=green><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»", 0);
-			sys.sendHtmlAll("<font color=Blue><timestamp/><b><font size=3>±±± FINALS OF " + tourtier.toUpperCase() + " TOURNAMENT ±±±", 0);
-			sys.sendHtmlAll("<font color=green><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</font>", 0);
 			isFinals = true;
+			str = "<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><font style='font-size:25px;'>F</font>inals of <i style='color:red; font-weight:bold;'>5th Gen OU</i> tournament!</font><hr width=300/><i>Matchup</i><br/><b>";
 		}
 		var i = 0;
 		while (tourmembers.length >= 2) {
@@ -778,17 +773,19 @@ SESSION.registerUserFactory(poUser);
 			var name2 = tourplayers[tourmembers[x1]];
 			tourmembers.splice(x1, 1);
 			battlesStarted.push(false);
-			if (!finals) sys.sendHtmlAll("<font color=black><timestamp/><b><font size=3> " + html_escape(script.padd(name1)) + " VS " + html_escape(name2), 0);
+			str += html_escape(script.padd(name1))+" vs "+html_escape(script.padd(name2))+"<br/>";
+			/*if (!finals) sys.sendHtmlAll("<font color=black><timestamp/><b><font size=3> " + html_escape(script.padd(name1)) + " VS " + html_escape(name2), 0);
 			else {
 				sys.sendHtmlAll("<font color=Black><timestamp/><b><font size=3> " + html_escape(script.padd(name1)) + " VS " + html_escape(name2), 0);
-			}
+			}*/
 		}
 		if (tourmembers.length > 0) {
-			sys.sendAll("", 0);
-			sys.sendHtmlAll("<font color=Blue><timestamp/><b><font size=3>±±± " + html_escape(tourplayers[tourmembers[0]]) + " is randomly selected to go to next round! ±±±", 0);
+			//sys.sendAll("", 0);
+			str += "</b><br/><i>"+html_escape(tourplayers[tourmembers[0]])+" is randomly selected to go next round!<br/>";
+			//sys.sendHtmlAll("<font color=Blue><timestamp/><b><font size=3>±±± " + html_escape(tourplayers[tourmembers[0]]) + " is randomly selected to go to next round! ±±±", 0);
 		}
-		sys.sendHtmlAll("<font color=green><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</font>", 0);
-		sys.sendAll("", 0);
+		str += "<br/></td></tr></table></center><br/>";
+		sys.sendHtmlAll(str, 0);
 		if (finals) {}
 	},
 	padd: function (name) {
@@ -924,6 +921,9 @@ SESSION.registerUserFactory(poUser);
 			sys.sendHtmlAll("<font color=Black><timestamp/><b><font size=3>±±± " + tourbattlers.length / 2 + " battle(s) remaining ±±±", 0);
 			sys.sendHtmlAll("<font color=green><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</font>", 0);
 			return;
+		} else {
+			sys.sendHtmlAll("<font color=green><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</font>", 0);
+			sys.sendAll("", 0);
 		}
 		script.roundPairing();
 	},

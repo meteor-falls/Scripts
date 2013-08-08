@@ -430,54 +430,69 @@ function handleCommand(src, message, command, commandData, tar, chan) {
 			bot.sendMessage(src, "Sorry, you are unable to view the round because a tournament is not currently running or is in signing up phase.", chan);
 			return;
 		}
-		sys.sendMessage(src, "", chan);
-		sys.sendHtmlMessage(src, border, chan);
+		var myStr;
+		//sys.sendMessage(src, "", chan);
+		//sys.sendHtmlMessage(src, border, chan);
 		var finals = isFinals;
 		if (finals) {
-			sys.sendHtmlMessage(src, "<br><font color=black><timestamp/><b><u> FINALS OF THE " + tourtier.toUpperCase() + " TOURNAMENT:</b></u></font>", chan);
+			myStr = "<center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Finals of <i style='color:red; font-weight:bold;'>"+tourtier+"</i> tournament:</font><hr width=300/>";
+			//<i>Matchups</i><br/><b>"++" vs "++"</b><br/><s>Loser</s> vs Winner<br/><br/></td></tr></table></center><br/>
+			//sys.sendHtmlMessage(src, "<br><font color=black><timestamp/><b><u> FINALS OF THE " + tourtier.toUpperCase() + " TOURNAMENT:</b></u></font>", chan);
 		} else {
-			sys.sendHtmlMessage(src, "<br><font color=blue><timestamp/><b><u> ROUND " + roundnumber + " OF " + tourtier.toUpperCase() + " TOURNAMENT:</b></u></font>", chan);
+			myStr = "<center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Round <i>"+roundnumber+"</i> of <i style='color:red; font-weight:bold;'>"+tourtier+"</i> tournament!</font><hr width=300/>";
+			//sys.sendHtmlMessage(src, "<br><font color=blue><timestamp/><b><u> ROUND " + roundnumber + " OF " + tourtier.toUpperCase() + " TOURNAMENT:</b></u></font>", chan);
 		}
 		if (battlesLost.length > 0) {
-			sys.sendMessage(src, "", chan);
-			sys.sendHtmlMessage(src, "<br><font color=red><timestamp/><b><u>Battles Finished:</b></font></u>", chan);
+			//sys.sendMessage(src, "", chan);
+			//sys.sendHtmlMessage(src, "<br><font color=red><timestamp/><b><u>Battles Finished:</b></font></u>", chan);
+			myStr += "<br><b><u>Battles Finished:</u></b><br>";
 			for (var i = 0; i < battlesLost.length; i += 2) {
-				sys.sendMessage(src, battlesLost[i] + " won against " + battlesLost[i + 1], chan);
+				myStr += battlesLost[i] + " won against " + battlesLost[i + 1]+"<br>";
+				//sys.sendMessage(src, battlesLost[i] + " won against " + battlesLost[i + 1], chan);
 			}
-			sys.sendMessage(src, "", chan);
+			myStr += "<br>";
+			//sys.sendMessage(src, "", chan);
 		}
 		if (tourbattlers.length > 0) {
 			if (battlesStarted.indexOf(true) != -1) {
-				sys.sendHtmlMessage(src, "<br><font color=green><timestamp/><b><u>Ongoing battles:</b></u></font>", chan);
+				//sys.sendHtmlMessage(src, "<br><font color=green><timestamp/><b><u>Ongoing battles:</b></u></font>", chan);
+				myStr += "<br><b><u>Ongoing battles:</u></b><br>";
 				for (var i = 0; i < tourbattlers.length; i += 2) {
 					if (battlesStarted[i / 2] == true) {
-						sys.sendMessage(src, script.padd(tourplayers[tourbattlers[i]]) + " VS " + tourplayers[tourbattlers[i + 1]], chan);
+						myStr += script.padd(tourplayers[tourbattlers[i]]) + " VS " + tourplayers[tourbattlers[i + 1]]+"<br>";
+						//sys.sendMessage(src, script.padd(tourplayers[tourbattlers[i]]) + " VS " + tourplayers[tourbattlers[i + 1]], chan);
 					}
 				}
-				sys.sendMessage(src, "", chan);
+				myStr += "<br>";
+				//sys.sendMessage(src, "", chan);
 			}
 			if (battlesStarted.indexOf(false) != -1) {
-				sys.sendHtmlMessage(src, "<br><font color=purple><timestamp/><u><b>Yet to start battles:</b></u></font>", chan);
-				sys.sendMessage(src, "", chan);
+				//sys.sendHtmlMessage(src, "<br><font color=purple><timestamp/><u><b>Yet to start battles:</b></u></font>", chan);
+				myStr += "<br><b><u>Yet to start battles:</u></b><br>";
+				//sys.sendMessage(src, "", chan);
 				for (var i = 0; i < tourbattlers.length; i += 2) {
 					if (battlesStarted[i / 2] == false) {
-						sys.sendMessage(src, tourplayers[tourbattlers[i]] + " VS " + tourplayers[tourbattlers[i + 1]], chan);
+						myStr += tourplayers[tourbattlers[i]] + " VS " + tourplayers[tourbattlers[i + 1]]+"<br>";
+						//sys.sendMessage(src, tourplayers[tourbattlers[i]] + " VS " + tourplayers[tourbattlers[i + 1]], chan);
 					}
 				}
-				sys.sendMessage(src, "".chan);
+				//sys.sendMessage(src, "".chan);
 			}
 		}
 		if (tourmembers.length > 0) {
-			sys.sendHtmlMessage(src, "<br><font color=navy><timestamp/><b><u>Members to the next round:</b></u></font>", chan);
+			myStr += "<br><b><u>Members to the next round:</u></b><br>";
+			//sys.sendHtmlMessage(src, "<br><font color=navy><timestamp/><b><u>Members to the next round:</b></u></font>", chan);
 			var str = "";
 			for (x in tourmembers) {
-				str += (str.length == 0 ? "" : ", ") + tourplayers[tourmembers[x]];
+				myStr += (str.length == 0 ? "" : ", ") + tourplayers[tourmembers[x]]+"<br>";
+				//str += (str.length == 0 ? "" : ", ") + tourplayers[tourmembers[x]];
 			}
-			sys.sendMessage(src, str, chan);
-			sys.sendMessage(src, "", chan);
+			//sys.sendMessage(src, str, chan);
+			//sys.sendMessage(src, "", chan);
 		}
-		sys.sendHtmlMessage(src, border, chan);
-		sys.sendMessage(src, "", chan);
+		//sys.sendHtmlMessage(src, border, chan);
+		//sys.sendMessage(src, "", chan);
+		sys.sendHtmlMessage(src, myStr, chan);
 		return;
 	}
 	if (command == "unjoin") {
@@ -776,7 +791,8 @@ function handleCommand(src, message, command, commandData, tar, chan) {
 			if (typeof (prize) == "undefined") {
 				prize = "No prize";
 			}
-			sys.sendHtmlAll("<font color=green><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</font></b><br><font color=blue><timestamp/><b>±±± A Tournament was started by " + html_escape(sys.name(src)) + "! ±±±</font></b><br><font color=purple><timestamp/><b>Tier:</b></font> " + tourtier + "<br><font color=red><timestamp/><b>Entrants:</b></font> " + tournumber + "<br><font color=green><timestamp/><b>Prize:</font></b> " + html_escape(prize) + "<br><font color=black><timestamp/><b>±±± Type /join to join the tournament! ±±±</font></b><br><font color=green><timestamp/><b>««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»»</font></b>", 0);
+			sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Tour Started by "+html_escape(sys.name(src))+"!</font><hr width=300/><i>Only join if you're in tier <font color=red style='font-weight:bold;'>"+tourtier+"</font>!<br/><br/>Amount of players permitted :: "+tournumber+"<br/><b>HAVE FUN! /JOIN TO JOIN!<br/><br/></td></tr></table></center><br/>");
+			//sys.sendHtmlAll("<font color=green><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</font></b><br><font color=blue><timestamp/><b>±±± A Tournament was started by " + html_escape(sys.name(src)) + "! ±±±</font></b><br><font color=purple><timestamp/><b>Tier:</b></font> " + tourtier + "<br><font color=red><timestamp/><b>Entrants:</b></font> " + tournumber + "<br><font color=green><timestamp/><b>Prize:</font></b> " + html_escape(prize) + "<br><font color=black><timestamp/><b>±±± Type /join to join the tournament! ±±±</font></b><br><font color=green><timestamp/><b>««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»»</font></b>", 0);
 		}
 		return;
 	}
