@@ -160,7 +160,7 @@ module.exports = {
 		League.add("If you lose a gym battle, you can rematch that gym at a time specified by the gym leader.");
 		League.add("If you lose to an elite 4 or the champion, you must start back over at the first elite.");
 		League.add("If you defeat the gyms, elites, and the champion, you will be in the Hall of Fame!");
-		League.add("If the league member does not have set rules, follow these guidelines:</ol><ul><b><li>Wifi Tier</li><b><li>Singles battle</li><b><li>Best 2 out of 3 decides winner</li></ul></li>");
+		League.add("If the league member does not have set rules, follow these guidelines:</ol><ul><b><li>5th Gen OU Tier</li><b><li>Singles battle</li><b><li>Best 2 out of 3 decides winner</li></ul></li>");
 		League.finish();
 
 		Lists.LeagueRules = League;
