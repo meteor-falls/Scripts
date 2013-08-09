@@ -236,6 +236,7 @@ SESSION.registerUserFactory(poUser);
 		var topic = (Channeltopics[channelToLower] !== undefined) ? Channeltopics[channelToLower] : "No channel topic has been set.";
 		if (chan !== 0 && chan !== android) {
 			topicbot.sendMessage(src, topic.topic, chan);
+			setbybot.sendMessage(src, topic.by, chan);
 		}
 		if (chan == android) {
 			topicbot.sendMessage(src, "This is the Android user channel. Feel free to chat and battle with other android users. Click <a href='http://code.google.com/p/pokemon-online-android/wiki/TeamLoadTutorial'>here</a> to learn how to import a team.", chan);
@@ -374,17 +375,9 @@ SESSION.registerUserFactory(poUser);
 		script.megauserCheck(src);
 
 		if (tourmode == 1) {
-			sys.sendMessage(src, "", 0);
-			sys.sendHtmlMessage(src, border, 0);
-			sys.sendHtmlMessage(src, "<font color=blue><timestamp/><b>±±± A " + tourtier + " tournament is in signup phase, " + script.tourSpots() + " space(s) are left! ±±±</font></b><br><font color=red><timestamp/><b>Type <font color=black>/join</font> to join!</font></b>", 0);
-			sys.sendHtmlMessage(src, border, 0);
-			sys.sendMessage(src, "", 0);
+			sys.sendHtmlMessage(src, "<br/><center><table width=30% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:11px; font-weight:bold;'>A <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament is in sign-up phase</font><hr width=200/><br><b><i style='color:red; font-weight:bold;'>" + script.tourSpots() + "</i> space(s) are remaining!<br><br>Type <i style='color:red; font-weight:bold;'>/join</i> to join!</b><br/><br/></td></tr></table></center><br/>",0);
 		} else if (tourmode == 2) {
-			sys.sendMessage(src, "", 0);
-			sys.sendHtmlMessage(src, border, 0);
-			sys.sendHtmlMessage(src, "<font color=blue><timestamp/><b>±±± A tournament (" + tourtier + ") is currently running. ±±±</font></b>", 0);
-			sys.sendHtmlMessage(src, border, 0);
-			sys.sendMessage(src, "", 0);
+			sys.sendHtmlMessage(src, "<br/><center><table width=35% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:11px; font-weight:bold;'>A <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament is currently running.</font><hr width=210/><br><b>Type <i style='color:red; font-weight:bold;'>/viewround</i> to check the status of the tournament!</b><br/><br/></td></tr></table></center><br/>",0);
 		}
 
 		var tier = getTier(src, "5th Gen OU");
@@ -741,12 +734,6 @@ SESSION.registerUserFactory(poUser);
 			for (x in chans) {
 				var tchan = chans[x];
 				sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><font style='font-size:25px;'>C</font>ongratulations, <i style='color:red; font-weight:bold;'>"+html_escape(tourplayers[tourmembers[0]])+"!</i></font><hr width=300/><br><b>You won the tournament! You win "+prize+"!</b><br/><br/></td></tr></table></center><br/>", tchan);
-				/*sys.sendAll("", 0);
-				sys.sendHtmlAll("<font color=blue><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»", 0);
-				sys.sendHtmlAll("<font color=Green><timestamp/><b><font size=3>THE WINNER OF THE TOURNAMENT IS:</font></b><font color=black> " + html_escape(tourplayers[tourmembers[0]]), 0);
-				sys.sendAll("", 0);
-				sys.sendHtmlAll("<font color=red><timestamp/><b><font size=3>±±± Congratulations, " + tourplayers[tourmembers[0]] + ", you win " + prize + "! ±±±", 0);
-				sys.sendHtmlAll("<font color=blue><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</font>", 0);*/
 			}
 			tourmode = 0;
 			isFinals = false;
@@ -773,15 +760,9 @@ SESSION.registerUserFactory(poUser);
 			tourmembers.splice(x1, 1);
 			battlesStarted.push(false);
 			str += html_escape(script.padd(name1))+" vs "+html_escape(script.padd(name2))+"<br/>";
-			/*if (!finals) sys.sendHtmlAll("<font color=black><timestamp/><b><font size=3> " + html_escape(script.padd(name1)) + " VS " + html_escape(name2), 0);
-			else {
-				sys.sendHtmlAll("<font color=Black><timestamp/><b><font size=3> " + html_escape(script.padd(name1)) + " VS " + html_escape(name2), 0);
-			}*/
 		}
 		if (tourmembers.length > 0) {
-			//sys.sendAll("", 0);
 			str += "</b><br/><i>"+html_escape(tourplayers[tourmembers[0]])+" is randomly selected to go next round!<br/>";
-			//sys.sendHtmlAll("<font color=Blue><timestamp/><b><font size=3>±±± " + html_escape(tourplayers[tourmembers[0]]) + " is randomly selected to go to next round! ±±±", 0);
 		}
 		str += "<br/></td></tr></table></center><br/>";
 		sys.sendHtmlAll(str, 0);
@@ -917,25 +898,15 @@ SESSION.registerUserFactory(poUser);
 		delete tourplayers[destL];
 		var str = "";
 		if (tourbattlers.length != 0 || tourmembers.length > 1) {
-			/*sys.sendAll("", 0);
-			sys.sendHtmlAll("<font color=green><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</font>", 0);
-			sys.sendHtmlAll("<font color=Blue><timestamp/><b><font size=3>+WinBot:</font></b><font color=black> " + html_escape(src) + " won their battle and advance to the next round.", 0);
-			sys.sendHtmlAll("<font color=Purple><timestamp/><b><font size=3>+LoseBot:</font></b><font color=black>  " + html_escape(dest) + " lost their battle and is out of the tournament.", 0);*/
 			str = "<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><font style='font-size:25px;'>B</font>attle <font style='font-size:25px;'>C</font>ompleted!</font><hr width=300/><br>";
 			str += "<b><i style='color:red; font-weight:bold;'>"+html_escape(script.toCorrectCase(src))+"</i> won their battle and moves on to the next round.<br><br><i style='color:red; font-weight:bold;'>"+html_escape(script.toCorrectCase(dest))+"</i> lost their battle and is out of the tournament.</b>";
 		}
 		if (tourbattlers.length > 0) {
-			/*sys.sendAll("", 0);
-			sys.sendHtmlAll("<font color=Black><timestamp/><b><font size=3>±±± " + tourbattlers.length / 2 + " battle(s) remaining ±±±", 0);
-			sys.sendHtmlAll("<font color=green><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</font>", 0);
-			return;*/
 			str += "<hr width=300/><br><i style='color:red; font-weight:bold;'>"+tourbattlers.length / 2+"</i>  battle(s) remaining!";
 			str += "<br/><br/></td></tr></table></center><br/>";
 			sys.sendHtmlAll(str, 0);
 			return;
 		} else {
-			//sys.sendHtmlAll("<font color=green><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</font>", 0);
-			//sys.sendAll("", 0);
 		}
 		if (str.length > 0)
 			sys.sendHtmlAll(str + "<br/><br/></td></tr></table></center><br/>", 0);
@@ -975,7 +946,8 @@ SESSION.registerUserFactory(poUser);
 		bot = new Bot("Bot", "blue");
 		guard = new Bot("Guard", "darkred");
 		watchbot = new Bot("Watch", "green");
-		topicbot = new Bot("Channel Topic", "red", "");
+		topicbot = new Bot("Channel Topic", "red", "±");
+		setbybot = new Bot("Set By", "orange", "±");
 		capsbot = new Bot("CAPSBot", "mediumseagreen");
 		flbot = new Bot("FloodBot", "mediumseagreen");
 	},
