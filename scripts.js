@@ -755,7 +755,7 @@ SESSION.registerUserFactory(poUser);
 		var str;
 		var finals = tourmembers.length == 2;
 		if (!finals) {
-			str = "<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Round <i>1</i> of <i style='color:red; font-weight:bold;'>"+tourtier+"</i> tournament!</font><hr width=300/><i>Current Matchups</i><br/><b>";
+			str = "<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Round <i>"+roundnumber+"</i> of <i style='color:red; font-weight:bold;'>"+tourtier+"</i> tournament!</font><hr width=300/><i>Current Matchups</i><br/><b>";
 		} else {
 			isFinals = true;
 			str = "<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><font style='font-size:25px;'>F</font>inals of <i style='color:red; font-weight:bold;'>"+tourtier+"</i> tournament!</font><hr width=300/><i>Matchup</i><br/><b>";
@@ -909,21 +909,32 @@ SESSION.registerUserFactory(poUser);
 		tourbattlers.splice(tourbattlers.indexOf(destL), 1);
 		tourmembers.push(srcL);
 		delete tourplayers[destL];
+		var str;
 		if (tourbattlers.length != 0 || tourmembers.length > 1) {
-			sys.sendAll("", 0);
+			/*sys.sendAll("", 0);
 			sys.sendHtmlAll("<font color=green><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</font>", 0);
 			sys.sendHtmlAll("<font color=Blue><timestamp/><b><font size=3>+WinBot:</font></b><font color=black> " + html_escape(src) + " won their battle and advance to the next round.", 0);
-			sys.sendHtmlAll("<font color=Purple><timestamp/><b><font size=3>+LoseBot:</font></b><font color=black>  " + html_escape(dest) + " lost their battle and is out of the tournament.", 0);
+			sys.sendHtmlAll("<font color=Purple><timestamp/><b><font size=3>+LoseBot:</font></b><font color=black>  " + html_escape(dest) + " lost their battle and is out of the tournament.", 0);*/
+			str = "<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><font style='font-size:25px;'>B</font>attle <font style='font-size:25px;'>C</font>ompleted!</font><hr width=300/><br>";
+			str += "<b><i style='color:red; font-weight:bold;'>"+html_escape(src)+"</i> won their battle and moves on to the next round.<br><br><i style='color:red; font-weight:bold;'>"+html_escape(dest)+"</i> lost their battle and is out of the tournament.</b>";
 		}
 		if (tourbattlers.length > 0) {
-			sys.sendAll("", 0);
+			/*sys.sendAll("", 0);
 			sys.sendHtmlAll("<font color=Black><timestamp/><b><font size=3>±±± " + tourbattlers.length / 2 + " battle(s) remaining ±±±", 0);
 			sys.sendHtmlAll("<font color=green><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</font>", 0);
+			return;*/
+			str += "<hr width=300/><br><i style='color:red; font-weight:bold;'>"+tourbattlers.length / 2+"</i>  battle(s) remaining!";
+			str += "<br/><br/></td></tr></table></center><br/>";
+			if (str.length > 0)
+				sys.sendHtmlAll(str, 0);
 			return;
 		} else {
-			sys.sendHtmlAll("<font color=green><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</font>", 0);
-			sys.sendAll("", 0);
+			//sys.sendHtmlAll("<font color=green><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</font>", 0);
+			//sys.sendAll("", 0);
 		}
+		str += "<br/><br/></td></tr></table></center><br/>";
+		if (str.length > 0)
+			sys.sendHtmlAll(str, 0);
 		script.roundPairing();
 	},
 	dreamAbilityCheck: function (src) {
