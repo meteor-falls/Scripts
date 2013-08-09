@@ -902,7 +902,7 @@ SESSION.registerUserFactory(poUser);
 			str += "<b><i style='color:red; font-weight:bold;'>"+html_escape(script.toCorrectCase(src))+"</i> won their battle and moves on to the next round.<br><br><i style='color:red; font-weight:bold;'>"+html_escape(script.toCorrectCase(dest))+"</i> lost their battle and is out of the tournament.</b>";
 		}
 		if (tourbattlers.length > 0) {
-			str += "<hr width=300/><br><i style='color:red; font-weight:bold;'>"+tourbattlers.length / 2+"</i>  battle(s) remaining!";
+			str += "<br><hr width=300/><br><i style='color:red; font-weight:bold;'>"+tourbattlers.length / 2+"</i>  battle(s) remaining!";
 			str += "<br/><br/></td></tr></table></center><br/>";
 			sys.sendHtmlAll(str, 0);
 			return;
