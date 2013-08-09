@@ -898,6 +898,12 @@ SESSION.registerUserFactory(poUser);
 		}
 		return false;
 	},
+	toCorrectCase: function(name) {
+		if (sys.id(name) !== undefined) {
+			return sys.name(sys.id(name));
+		}
+		return name;
+	},
 	tourBattleEnd: function (src, dest) {
 		if (!script.areOpponentsForTourBattle2(src, dest) || !script.ongoingTourneyBattle(src)) return;
 		battlesLost.push(src);
@@ -916,25 +922,26 @@ SESSION.registerUserFactory(poUser);
 			sys.sendHtmlAll("<font color=Blue><timestamp/><b><font size=3>+WinBot:</font></b><font color=black> " + html_escape(src) + " won their battle and advance to the next round.", 0);
 			sys.sendHtmlAll("<font color=Purple><timestamp/><b><font size=3>+LoseBot:</font></b><font color=black>  " + html_escape(dest) + " lost their battle and is out of the tournament.", 0);*/
 			str = "<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><font style='font-size:25px;'>B</font>attle <font style='font-size:25px;'>C</font>ompleted!</font><hr width=300/><br>";
-			str += "<b><i style='color:red; font-weight:bold;'>"+html_escape(src)+"</i> won their battle and moves on to the next round.<br><br><i style='color:red; font-weight:bold;'>"+html_escape(dest)+"</i> lost their battle and is out of the tournament.</b>";
+			str += "<b><i style='color:red; font-weight:bold;'>"+html_escape(script.toCorrectCase(src))+"</i> won their battle and moves on to the next round.<br><br><i style='color:red; font-weight:bold;'>"+html_escape(script.toCorrectCase(dest))+"</i> lost their battle and is out of the tournament.</b>";
 		}
 		if (tourbattlers.length > 0) {
 			/*sys.sendAll("", 0);
 			sys.sendHtmlAll("<font color=Black><timestamp/><b><font size=3>±±± " + tourbattlers.length / 2 + " battle(s) remaining ±±±", 0);
 			sys.sendHtmlAll("<font color=green><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</font>", 0);
 			return;*/
-			str += "<hr width=300/><br><i style='color:red; font-weight:bold;'>"+tourbattlers.length / 2+"</i>  battle(s) remaining!";
-			str += "<br/><br/></td></tr></table></center><br/>";
 			if (str.length > 0)
-				sys.sendHtmlAll(str, 0);
+				str += "<hr width=300/><br><i style='color:red; font-weight:bold;'>"+tourbattlers.length / 2+"</i>  battle(s) remaining!";
+			else
+				str = "<hr width=300/><br><i style='color:red; font-weight:bold;'>"+tourbattlers.length / 2+"</i>  battle(s) remaining!";
+			str += "<br/><br/></td></tr></table></center><br/>";
+			sys.sendHtmlAll(str, 0);
 			return;
 		} else {
 			//sys.sendHtmlAll("<font color=green><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</font>", 0);
 			//sys.sendAll("", 0);
 		}
 		str += "<br/><br/></td></tr></table></center><br/>";
-		if (str.length > 0)
-			sys.sendHtmlAll(str, 0);
+		sys.sendHtmlAll(str, 0);
 		script.roundPairing();
 	},
 	dreamAbilityCheck: function (src) {
