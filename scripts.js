@@ -915,7 +915,7 @@ SESSION.registerUserFactory(poUser);
 		tourbattlers.splice(tourbattlers.indexOf(destL), 1);
 		tourmembers.push(srcL);
 		delete tourplayers[destL];
-		var str;
+		var str = "";
 		if (tourbattlers.length != 0 || tourmembers.length > 1) {
 			/*sys.sendAll("", 0);
 			sys.sendHtmlAll("<font color=green><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</font>", 0);
@@ -929,10 +929,7 @@ SESSION.registerUserFactory(poUser);
 			sys.sendHtmlAll("<font color=Black><timestamp/><b><font size=3>±±± " + tourbattlers.length / 2 + " battle(s) remaining ±±±", 0);
 			sys.sendHtmlAll("<font color=green><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</font>", 0);
 			return;*/
-			if (str.length > 0)
-				str += "<hr width=300/><br><i style='color:red; font-weight:bold;'>"+tourbattlers.length / 2+"</i>  battle(s) remaining!";
-			else
-				str = "<hr width=300/><br><i style='color:red; font-weight:bold;'>"+tourbattlers.length / 2+"</i>  battle(s) remaining!";
+			str += "<hr width=300/><br><i style='color:red; font-weight:bold;'>"+tourbattlers.length / 2+"</i>  battle(s) remaining!";
 			str += "<br/><br/></td></tr></table></center><br/>";
 			sys.sendHtmlAll(str, 0);
 			return;
@@ -940,8 +937,8 @@ SESSION.registerUserFactory(poUser);
 			//sys.sendHtmlAll("<font color=green><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</font>", 0);
 			//sys.sendAll("", 0);
 		}
-		str += "<br/><br/></td></tr></table></center><br/>";
-		sys.sendHtmlAll(str, 0);
+		if (str.length > 0)
+			sys.sendHtmlAll(str + "<br/><br/></td></tr></table></center><br/>", 0);
 		script.roundPairing();
 	},
 	dreamAbilityCheck: function (src) {
