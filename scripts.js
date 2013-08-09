@@ -755,10 +755,10 @@ SESSION.registerUserFactory(poUser);
 		var str;
 		var finals = tourmembers.length == 2;
 		if (!finals) {
-			str = "<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Round <i>1</i> of <i style='color:red; font-weight:bold;'>5th Gen OU</i> tournament!</font><hr width=300/><i>Current Matchups</i><br/><b>";
+			str = "<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Round <i>1</i> of <i style='color:red; font-weight:bold;'>"+tourtier+"</i> tournament!</font><hr width=300/><i>Current Matchups</i><br/><b>";
 		} else {
 			isFinals = true;
-			str = "<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><font style='font-size:25px;'>F</font>inals of <i style='color:red; font-weight:bold;'>5th Gen OU</i> tournament!</font><hr width=300/><i>Matchup</i><br/><b>";
+			str = "<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><font style='font-size:25px;'>F</font>inals of <i style='color:red; font-weight:bold;'>"+tourtier+"</i> tournament!</font><hr width=300/><i>Matchup</i><br/><b>";
 		}
 		var i = 0;
 		while (tourmembers.length >= 2) {
