@@ -791,7 +791,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
 			if (typeof (prize) == "undefined") {
 				prize = "No prize";
 			}
-			sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Tournament Started by <i style='color:red; font-weight:bold;'>"+html_escape(sys.name(src))+"!</i><hr width=300/><table cellspacing=2 cellpadding=2><tr><td><b>Tier: <font style='color:red; font-weight:bold;'>"+tourtier+"</i></td></tr><tr><td><b>Players: <font style='color:red; font-weight:bold;'>"+tournumber+"</i></td></tr><tr><td><b>Prize: <font style='color:red; font-weight:bold;'>"+html_escape(prize)+"</i></td></tr></table><hr width=300/><center style='margin-right: 7px;'><b>Type <font color=red>/join</font> to join!<br/></td></tr></table></center><br/>",0);
+			sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Tournament Started by <i style='color:red; font-weight:bold;'>"+html_escape(sys.name(src))+"!</i></font><hr width=300/><table cellspacing=2 cellpadding=2><tr><td><b>Tier: <font style='color:red; font-weight:bold;'>"+tourtier+"</i></td></tr><tr><td><b>Players: <font style='color:red; font-weight:bold;'>"+tournumber+"</i></td></tr><tr><td><b>Prize: <font style='color:red; font-weight:bold;'>"+html_escape(prize)+"</i></td></tr></table><hr width=300/><center style='margin-right: 7px;'><b>Type <font color=red>/join</font> to join!<br/></td></tr></table></center><br/>",0);
 		}
 		return;
 	}
