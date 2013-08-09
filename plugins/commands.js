@@ -791,8 +791,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
 			if (typeof (prize) == "undefined") {
 				prize = "No prize";
 			}
-			sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Tour Started by "+html_escape(sys.name(src))+"!</font><hr width=300/><i>Only join if you're in tier <font color=red style='font-weight:bold;'>"+tourtier+"</font>!<br/><br/>Amount of players permitted :: "+tournumber+"<br/><b>HAVE FUN! /JOIN TO JOIN!<br/><br/></td></tr></table></center><br/>", 0);
-			//sys.sendHtmlAll("<font color=green><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</font></b><br><font color=blue><timestamp/><b>±±± A Tournament was started by " + html_escape(sys.name(src)) + "! ±±±</font></b><br><font color=purple><timestamp/><b>Tier:</b></font> " + tourtier + "<br><font color=red><timestamp/><b>Entrants:</b></font> " + tournumber + "<br><font color=green><timestamp/><b>Prize:</font></b> " + html_escape(prize) + "<br><font color=black><timestamp/><b>±±± Type /join to join the tournament! ±±±</font></b><br><font color=green><timestamp/><b>««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»»</font></b>", 0);
+			sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Tournament Started by <i style='color:red; font-weight:bold;'>"+html_escape(sys.name(src))+"!</i><hr width=300/><table cellspacing=2 cellpadding=2><tr><td><b>Tier: <font style='color:red; font-weight:bold;'>"+tourtier+"</i></td></tr><tr><td><b>Players: <font style='color:red; font-weight:bold;'>"+tournumber+"</i></td></tr><tr><td><b>Prize: <font style='color:red; font-weight:bold;'>"+html_escape(prize)+"</i></td></tr></table><hr width=300/><center style="margin-right: 7px;"><b>Type <font color=red>/join</font> to join!<br/></td></tr></table></center><br/>",0);
 		}
 		return;
 	}
@@ -861,10 +860,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
 			return;
 		}
 		tournumber = count;
-		sys.sendHtmlAll("<font color=red><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</font>", 0);
-		sys.sendHtmlAll("<font color=black><timestamp/><b><font size=3> " + html_escape(sys.name(src)) + " changed the number of entrants to " + count + "!", 0);
-		sys.sendHtmlAll("<font color=blue><timestamp/><b><font size=3>±±± " + script.tourSpots() + " more spot(s) left! ±±±", 0);
-		sys.sendHtmlAll("<font color=red><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</font>", 0);
+		sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><i style='color:red; font-weight:bold;'>" + html_escape(sys.name(src)) + "</i> changed the number of entrants to <i style='color:red; font-weight:bold;'>" + count + "!</i></font><hr width=300/><br><b><i style='color:red; font-weight:bold;'>" + script.tourSpots() + "</i> more spot(s) left!</b><br/><br/></td></tr></table></center><br/>", 0);
 		if (script.tourSpots() == 0) {
 			tourmode = 2;
 			roundnumber = 0;
@@ -875,10 +871,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
 	if (command == "endtour") {
 		if (tourmode != 0) {
 			tourmode = 0;
-			/*sys.sendHtmlAll("<font color=green><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</font>", 0);
-			sys.sendHtmlAll("<font color=Blue><timestamp/><b><font size=3> The tournament was closed by " + html_escape(sys.name(src)) + "!", 0);
-			sys.sendHtmlAll("<font color=green><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</font>", 0);*/
-			sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><font style='font-size:25px;'>The</font> tour was ended by <i style='color:red; font-weight:bold;'>"+sys.name(src)+"!</i></font><hr width=300/><br><b>Sorry! A new tournament may be starting soon!</b><br/><br/></td></tr></table></center><br/>", 0);
+			sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><font style='font-size:25px;'>T</font>he tour was ended by <i style='color:red; font-weight:bold;'>"+sys.name(src)+"!</i></font><hr width=300/><br><b>Sorry! A new tournament may be starting soon!</b><br/><br/></td></tr></table></center><br/>", 0);
 		} else {
 			bot.sendMessage(src, "Sorry, you are unable to end a tournament because one is not currently running.", chan);
 		}
