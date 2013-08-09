@@ -1,3 +1,23 @@
+/* Documentation for prototype Bot:
+   Creates a bot. Example:
+   vpbot = new Bot("Meteor Falls", "red", "+", true);
+   
+   Function documentation:
+   new Bot (name, color, prefix, withItalics):
+   Creates a bot with name name, colored color. Prefix is optional and can be empty. 
+   Default is "+". withItalics can be true/false depending if the bot should have italics like auth.
+   Example: vpbot = new Bot("Meteor Falls", "green");
+   
+   Bot.sendAll(message, channel):
+   Sends message to channel. The message will be formatted with given configuration.
+   Channel is optional and if none given sends message to every channel.
+   Example: vpbot.sendAll("Welcome to Meteor Falls!");
+   
+   Bot.sendMessage(id, message, channel):
+   Sends message to id in channel. The message will be formatted with given configuration.
+   Channel is optional and if none given sends message to every channel.
+   Example: vpbot.sendMessage(src, "Hey, "+sys.name(src)+"!", 0);
+*/
 Bot = function (name, color, prefix, italics) {
 	if (!italics) {
 		italics = false;

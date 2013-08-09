@@ -1,3 +1,45 @@
+/* Documentation for class Reg:
+   - Everything is stored in the file Reg.json
+   
+   Reg.save (key, value):
+   Creates/overwrites key with value.
+   Example: Reg.save("Server_Name", "Hello");
+   
+   Reg.init (key, value):
+   Creates key with value (no overwrite).
+   Example: Reg.init("Script_Loaded", true);
+   
+   Reg.get (key):
+   Gets data associated with key. Can be undefined (if the key doesn't exist)
+   Example: Reg.get("Server_Name");
+   
+   Reg.remove (key):
+   Removes key.
+   Example: Reg.remove("Server_Name");
+   
+   Reg.removeIf (function): [ADVANCED]
+   Removes all keys which the function returns true on. Function passed gets two parameters. 
+   First is the data associated with the current key, second is the name of the key.
+   Example: Reg.removeIf(function (key_data, key_name) {
+   if (key_name.indexOf("AutoIdle") != -1) {
+   return true;
+   }
+   
+   return false;
+   });
+   
+   Reg.removeIfValue (key, value):
+   Removes key if the data associated with it is value.
+   Example: Reg.removeIfValue("Server_Name", "Hello");
+
+   Reg.saveData ():
+   Saves all data stored to Reg.json. All functions do this automaticly, so no need to use this.
+   Example: Reg.saveData();
+
+   Reg.clearAll ():
+   Removes ALL data stored and clears Reg.json. Useful if you made a huge mistake or change that requires it to be flushed.
+   Example: Reg.clearAll();   
+*/
 Reg = new(function () {
 	var file = "Reg.json";
 	this.data = {};

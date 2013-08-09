@@ -1,3 +1,37 @@
+/* Documentation for prototype CommandList:
+   Create a command list. Example:
+   
+   var User = new CommandList("title commands", "blue");
+   User.add("cmd1", "desc for cmd1");
+   etc.
+   User.finish();
+   Lists.User = User;
+   
+   To display, use: 
+   Lists.User.display(src, chan);
+   
+   Function documentation:
+   new CommandList (title, bordercolor, help, list_type):
+   Creates a command list with title, title. The borders will be colored with bordercolor.
+   Help is the help message (default is "Type the following in the main chat in order to use them:")
+   list_type should be "ul" (unordered list) or "ol" (ordered list). Default is ul.
+   Example: var User = new CommandList("User Commands", "red", "This is the list of user commands:", "ol");
+   
+   CommandList.add (command, description):
+   Adds command with description to the command list.
+   description is useless if the title of the list did not contain "Commands" (for rules and other lists.)
+   Example: User.add("cmd1", "desc for cmd1");
+   
+   CommandList.finish ():
+   Needs to be called to finish the command list (adds final border).
+   Example: User.finish();
+   
+   CommandList.display (player, channel):
+   Displays the command list to id player in channel channel.
+   Example: User.display(1, 0);
+   
+   Note: Can also be used for rules and other lists.
+*/
 CommandList = function (title, bordercolor, help, listtype) {
 	this.title = title;
 	this.bordercolor = bordercolor;
