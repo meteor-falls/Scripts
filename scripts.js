@@ -740,7 +740,7 @@ SESSION.registerUserFactory(poUser);
 			var chans = [0];
 			for (x in chans) {
 				var tchan = chans[x];
-				sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><font style='font-size:25px;'>C</font>ongratulations, <i style='color:red; font-weight:bold;'>"+html_escape(tourplayers[tourmembers[0]])+"!</i></font><hr width=300/><br><b>You won the tournament! You win "+prize+"!</b><br/><br/></td></tr></table></center><br/>");
+				sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><font style='font-size:25px;'>C</font>ongratulations, <i style='color:red; font-weight:bold;'>"+html_escape(tourplayers[tourmembers[0]])+"!</i></font><hr width=300/><br><b>You won the tournament! You win "+prize+"!</b><br/><br/></td></tr></table></center><br/>", tchan);
 				/*sys.sendAll("", 0);
 				sys.sendHtmlAll("<font color=blue><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»", 0);
 				sys.sendHtmlAll("<font color=Green><timestamp/><b><font size=3>THE WINNER OF THE TOURNAMENT IS:</font></b><font color=black> " + html_escape(tourplayers[tourmembers[0]]), 0);
