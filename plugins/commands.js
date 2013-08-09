@@ -223,7 +223,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
 		League.template += "</ol><br><h2><font color=red>±±The Champion±±</font></h2><ul><b>" + Champ + "</b></ul>";
 		League.finish();
 		League.display(src, chan);
-		sys.sendHtmlMessage(src, '<i><b><font color=blue>Type /leaguerules to see the rules of the league!</font>');
+		sys.sendHtmlMessage(src, '<i><b><font color=blue>Type /leaguerules to see the rules of the league!</font>',chan);
 		return;
 	}
 	if (command == "leaguerules") {
@@ -871,7 +871,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
 	if (command == "endtour") {
 		if (tourmode != 0) {
 			tourmode = 0;
-			sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><font style='font-size:25px;'>T</font>he tour was ended by <i style='color:red; font-weight:bold;'>"+sys.name(src)+"!</i></font><hr width=300/><br><b>Sorry! A new tournament may be starting soon!</b><br/><br/></td></tr></table></center><br/>", 0);
+			sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>The tour was ended by <i style='color:red; font-weight:bold;'>HHT!</i></font><hr width=300/><br><b>Sorry! A new tournament may be starting soon!</b><br/><br/></td></tr></table></center><br/>", 0);
 		} else {
 			bot.sendMessage(src, "Sorry, you are unable to end a tournament because one is not currently running.", chan);
 		}
