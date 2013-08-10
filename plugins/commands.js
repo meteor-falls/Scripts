@@ -37,6 +37,23 @@ function handleCommand(src, message, command, commandData, tar, chan) {
 		});
 		return;
 	}
+    if (command == "forcejsessionrefill") {
+		var allowed = Config.updateperms;
+		if (allowed.indexOf(originalName.toLowerCase()) == -1) {
+			bot.sendMessage(src, 'You may not use /' + command + ', noob.', chan);
+			return;
+		}
+        
+        var data = JSESSION.getUserData(),
+            i;
+        
+        for (i in data) {
+            delete data[i];
+        }
+        
+        JSESSION.refill();
+		sys.sendHtmlAll('<font color=blue><timestamp/><b>+ScriptBot: </b></font>' + sys.name(src) + ' forced a JSESSION refill!', 0);
+	}
 	if (command == "updatetiers" || command == "loadtiers") {
 		var allowed = Config.updateperms;
 		if (allowed.indexOf(originalName.toLowerCase()) == -1) {

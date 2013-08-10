@@ -81,7 +81,7 @@ function poUser(id) {
 	this.caps = 0;
 	this.muted = false;
 
-	this.originalName = "";
+	this.originalName = sys.name(id);
 	this.megauser = false;
 }
 
@@ -545,7 +545,11 @@ JSESSION.refill();
 	},
 	afterChangeTeam: function (src) {
 		var myUser = JSESSION.users(src);
-		sys.callQuickly("JSESSION.users(" + src + ").originalName = sys.name(" + src + ");", 10);
+        
+        sys.setTimer(function () {
+            JSESSION.users(src).originalName = sys.name(src);
+        });
+        
 		script.megauserCheck(src);
 		if (typeof myUser.teamChanges == 'undefined') {
 			myUser.teamChanges = 0;
