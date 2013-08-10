@@ -14,7 +14,9 @@ var Config = {
 	plugins: ['jsession.js', 'init.js', 'commands.js', 'lists.js', 'bot.js', 'reg.js'] // Plugins to load on script load.
 };
 
-var JSESSION;
+if (typeof JSESSION === "undefined") {
+    JSESSION = {};
+}
 
 function PluginHandler(dir) {
 	this.dir = dir;
