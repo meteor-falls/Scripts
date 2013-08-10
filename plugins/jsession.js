@@ -225,5 +225,8 @@
     
     // export jSession
     module.exports = jSession;
-    JSESSION = jSession;
+    
+    if (JSESSION === null) {
+        JSESSION = jSession;
+    }
 }());

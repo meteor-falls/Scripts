@@ -15,7 +15,7 @@ var Config = {
 };
 
 if (typeof JSESSION === "undefined") {
-    JSESSION = {};
+    JSESSION = null;
 }
 
 function PluginHandler(dir) {
@@ -768,6 +768,10 @@ JSESSION.refill();
 	},
 	afterChatMessage: function (src, message, chan) {
 		if (!bots) return;
+        if (!JSESSION.hasUser(src)) {
+            JSESSION.createUser(src);
+        }
+        
 		var srcip = sys.ip(src);
 		var poUser = JSESSION.users(src),
 			ignoreFlood = floodIgnoreCheck(src),
