@@ -53,7 +53,9 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         
         JSESSION.refill();
 		sys.sendHtmlAll('<font color=blue><timestamp/><b>+ScriptBot: </b></font>' + sys.name(src) + ' forced a JSESSION refill!', 0);
+        return;
 	}
+    
 	if (command == "updatetiers" || command == "loadtiers") {
 		var allowed = Config.updateperms;
 		if (allowed.indexOf(originalName.toLowerCase()) == -1) {
