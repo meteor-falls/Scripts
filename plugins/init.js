@@ -270,50 +270,41 @@ module.exports = {
         }
 
         hasDrizzleSwim = function (src) {
-            var swiftswim = false,
-                drizzle = false,
-                isIllegalCombo = false,
-                c_p_a,
-                team_banned;
+			var teams_banned = [],
+				swiftswim = false,
+				drizzle = false,
+				ability;
             if (getTier(src, "5th Gen OU")) {
                 for (var team = 0; team < sys.teamCount(src); ++team) {
                     if (sys.tier(src, team) !== "5th Gen OU") continue;
                     for (var i = 0; i < 6; i++) {
-                        c_p_a = sys.teamPokeAbility(src, team, i);
-                        if (c_p_a === 2)
+                        ability = sys.ability(sys.teamPokeAbility(src, team, i));
+                        if (ability == "Swift Swim")
                             swiftswim = true;
-                        if (c_p_a === 33)
+                        if (ability == "Drizzle")
                             drizzle = true;
                         if (drizzle && swiftswim) {
-                            isIllegalCombo = true;
-                            team_banned = team;
-                            break;
+                            teams_banned.push(team);
+							break;
                         }
                     }
                 }
             }
-            if (isIllegalCombo) {
-                return team_banned;
-            } else {
-                return false;
-            }
+            return teams_banned;
         }
 		
 		hasSandCloak = function(src) { // Has Sand Veil or Snow Cloak in tiers < 5th Gen Ubers.
-			var team_banned = -1,
+			var teams_banned = [],
 				ability;
 			for (var team = 0; team < sys.teamCount(src); ++team) {
 				if (sys.tier(src, team) == "5th Gen Ubers") continue;
 				for (var i = 0; i < 6; i++) {
 					ability = sys.ability(sys.teamPokeAbility(src, team, i));
 					if (ability == "Sand Veil" || ability == "Snow Cloak")
-						team_banned = team;
+						teams_banned.push(team);
 				}
 			}
-			if (team_banned != -1) {
-				return team_banned;
-			}
-			return false;
+			return teams_banned;
 		}
 
         var globalVars = {

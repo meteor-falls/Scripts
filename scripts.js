@@ -271,14 +271,18 @@ SESSION.registerUserFactory(poUser);
 		}
 		
 		var drizzleSwim = hasDrizzleSwim(src);
-		if (drizzleSwim !== false) {
-			bot.sendMessage(src, "Sorry, DrizzleSwim is banned from 5th Gen OU.");
-			sys.changeTier(src, drizzleSwim, "5th Gen Ubers");
+		if (drizzleSwim.length > 0) {
+			for (var i = 0; i < drizzleSwim.length; i++) {
+				bot.sendMessage(src, "Sorry, DrizzleSwim is banned from 5th Gen OU.");
+				sys.changeTier(src, drizzleSwim[i], "5th Gen Ubers");
+			}
 		}
 		var sandCloak = hasSandCloak(src);
-		if (sandCloak !== false) {
-			bot.sendMessage(src, "Sorry, Sand Veil & Snow Cloak is only usable in 5th Gen Ubers.");
-			sys.changeTier(src, sandCloak, "5th Gen Ubers");
+		if (sandCloak.length > 0) {
+			for (var i = 0; i < sandCloak.length; i++) {
+				bot.sendMessage(src, "Sorry, Sand Veil & Snow Cloak are only usable in 5th Gen Ubers.");
+				sys.changeTier(src, sandCloak[i], "5th Gen Ubers");
+			}
 		}
 
 		script.megauserCheck(src);
@@ -297,16 +301,20 @@ SESSION.registerUserFactory(poUser);
 	
 	beforeChangeTier: function (src, oldtier, newtier) {
 		var drizzleSwim = hasDrizzleSwim(src);
-		if (drizzleSwim !== false) {
-			bot.sendMessage(src, "Sorry, DrizzleSwim is banned from 5th Gen OU.");
-			sys.changeTier(src, drizzleSwim, "5th Gen Ubers");
-			sys.stopEvent();
+		if (drizzleSwim.length > 0) {
+			for (var i = 0; i < drizzleSwim.length; i++) {
+				bot.sendMessage(src, "Sorry, DrizzleSwim is banned from 5th Gen OU.");
+				sys.changeTier(src, drizzleSwim[i], "5th Gen Ubers");
+				sys.stopEvent();
+			}
 		}
 		var sandCloak = hasSandCloak(src);
-		if (sandCloak !== false) {
-			bot.sendMessage(src, "Sorry, Sand Veil & Snow Cloak is only usable in 5th Gen Ubers.");
-			sys.changeTier(src, sandCloak, "5th Gen Ubers");
-			sys.stopEvent();
+		if (sandCloak.length > 0) {
+			for (var i = 0; i < sandCloak.length; i++) {
+				bot.sendMessage(src, "Sorry, Sand Veil & Snow Cloak are only usable in 5th Gen Ubers.");
+				sys.changeTier(src, sandCloak[i], "5th Gen Ubers");
+				sys.stopEvent();
+			}
 		}
 		if (newtier == "5th Gen OU") {
 			if (script.dreamAbilityCheck(src)) {
@@ -317,16 +325,20 @@ SESSION.registerUserFactory(poUser);
 	
 	beforeChangeTeam: function(src) {
 		var drizzleSwim = hasDrizzleSwim(src);
-		if (drizzleSwim !== false) {
-			bot.sendMessage(src, "Sorry, DrizzleSwim is banned from 5th Gen OU.");
-			sys.changeTier(src, drizzleSwim, "5th Gen Ubers");
-			sys.stopEvent();
+		if (drizzleSwim.length > 0) {
+			for (var i = 0; i < drizzleSwim.length; i++) {
+				bot.sendMessage(src, "Sorry, DrizzleSwim is banned from 5th Gen OU.");
+				sys.changeTier(src, drizzleSwim[i], "5th Gen Ubers");
+				sys.stopEvent();
+			}
 		}
 		var sandCloak = hasSandCloak(src);
-		if (sandCloak !== false) {
-			bot.sendMessage(src, "Sorry, Sand Veil & Snow Cloak is only usable in 5th Gen Ubers.");
-			sys.changeTier(src, sandCloak, "5th Gen Ubers");
-			sys.stopEvent();
+		if (sandCloak.length > 0) {
+			for (var i = 0; i < sandCloak.length; i++) {
+				bot.sendMessage(src, "Sorry, Sand Veil & Snow Cloak are only usable in 5th Gen Ubers.");
+				sys.changeTier(src, sandCloak[i], "5th Gen Ubers");
+				sys.stopEvent();
+			}
 		}
 	},
 	
