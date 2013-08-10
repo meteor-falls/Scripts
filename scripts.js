@@ -11,8 +11,10 @@ var Config = {
 	updateperms: ['hht', 'ethan', 'ian', 'theunknownone'], // People who can update scripts/tiers.
 	
 	// Do not touch unless you are adding a new plugin.
-	plugins: ['init.js', 'commands.js', 'lists.js', 'bot.js', 'reg.js'] // Plugins to load on script load.
+	plugins: ['jsession.js', 'init.js', 'commands.js', 'lists.js', 'bot.js', 'reg.js'] // Plugins to load on script load.
 };
+
+var JSESSION;
 
 function PluginHandler(dir) {
 	this.dir = dir;
@@ -81,8 +83,8 @@ function poUser(id) {
 	this.megauser = false;
 }
 
-SESSION.identifyScriptAs("MF Script 0.3 Beta");
-SESSION.registerUserFactory(poUser);
+JSESSION.identifyScriptAs("MF Script 0.3 Beta");
+JSESSION.registerUserFactory(poUser);
 
 ({
 	serverStartUp: function () {
@@ -104,7 +106,7 @@ SESSION.registerUserFactory(poUser);
 	},
 
 	beforeChannelJoin: function (src, channel) {
-		var user = SESSION.users(src);
+		var user = JSESSION.users(src);
 		if (channel == staffchannel && !user.megauser && getAuth(src) < 1 || channel == watch && getAuth(src) < 1) {
 			guard.sendMessage(src, "HEY! GET AWAY FROM THERE!", 0);
 			watchbot.sendAll(sys.name(src) + "(IP: " + sys.ip(src) + ") tried to join " + sys.channel(channel) + "!", watch);
@@ -125,14 +127,17 @@ SESSION.registerUserFactory(poUser);
 		}
 		var cname = sys.channel(channel);
 		ChannelNames.splice(ChannelNames.indexOf(cname), 1);
+        
+        JSESSION.destroyChannel(channel);
 	},
 	
 	megauserCheck: function (src) {
-		SESSION.users(src).megauser = sys.name(src).toLowerCase() in MegaUsers;
+		JSESSION.users(src).megauser = sys.name(src).toLowerCase() in MegaUsers;
 	},
 
 	afterChannelCreated: function (chan, name, src) {
 		ChannelNames.push(name);
+        JSESSION.createChannel(chan);
 	},
 
 	afterChannelJoin: function (src, chan) {
@@ -165,7 +170,7 @@ SESSION.registerUserFactory(poUser);
 
 		pruneTempbans();
 
-		var poUser = SESSION.users(src),
+		var poUser = JSESSION.users(src),
 			cu_rb, t_n = sys.time() * 1;
 		if (typeof Tempbans[srcip] !== "undefined") {
 			if (sys.auth(src) > 2) return;
@@ -201,9 +206,11 @@ SESSION.registerUserFactory(poUser);
             sys.putInChannel(src, android);
 			watchbot.sendAll("Android user, " + sys.name(src) + ", was kicked out of " + sys.channel(0) + " and placed in the Android Channel.", watch);
         }
+        
+        JSESSION.createUser(src);
 	},
 	afterLogIn: function (src) {
-		var poUser = SESSION.users(src),
+		var poUser = JSESSION.users(src),
 			myName = sys.name(src),
 			ip = sys.ip(src),
 			myAuth = getAuth(src),
@@ -362,7 +369,7 @@ SESSION.registerUserFactory(poUser);
 			return;
 		}
 		
-		var poUser = SESSION.users(src),
+		var poUser = JSESSION.users(src),
 			isMuted = poUser.muted,
 			originalName = poUser.originalName,
 			isLManager = Leaguemanager == originalName.toLowerCase(),
@@ -520,10 +527,12 @@ SESSION.registerUserFactory(poUser);
 		lastToLogout = {
 			'name': sys.name(src),
 			'color': namecolor(src)
-		}
+		};
+        
+        JSESSION.destroyUser(src);
 	},
 	afterLogOut: function (src) {
-		var user = SESSION.users(src);
+		var user = JSESSION.users(src);
 		var shown = true;
 		if (lastToLogout.name === undefined || lastToLogout.color === undefined || typeof lastToLogout != 'object') shown = false;
 		 if (sys.numPlayers() < 30 && shown && !user.autokick && sys.os(src) != "android") {
@@ -532,8 +541,8 @@ SESSION.registerUserFactory(poUser);
 		/* Due to some glitch with v2, we send the message in afterLogOut (beforeLogOut has a problem...) */
 	},
 	afterChangeTeam: function (src) {
-		var myUser = SESSION.users(src);
-		sys.callQuickly("SESSION.users(" + src + ").originalName = sys.name(" + src + ");", 10);
+		var myUser = JSESSION.users(src);
+		sys.callQuickly("JSESSION.users(" + src + ").originalName = sys.name(" + src + ");", 10);
 		script.megauserCheck(src);
 		if (typeof myUser.teamChanges == 'undefined') {
 			myUser.teamChanges = 0;
@@ -566,7 +575,7 @@ SESSION.registerUserFactory(poUser);
 			}
 		}
 
-		sys.callLater("if(SESSION.users(" + src + ") != undefined) SESSION.users(" + src + ").teamChanges--;", 5);
+		sys.callLater("if(JSESSION.users(" + src + ") != undefined) JSESSION.users(" + src + ").teamChanges--;", 5);
 
 		watchbot.sendAll(sys.name(src) + " changed teams.", watch);
 	},
@@ -749,7 +758,7 @@ SESSION.registerUserFactory(poUser);
 	afterChatMessage: function (src, message, chan) {
 		if (!bots) return;
 		var srcip = sys.ip(src);
-		var poUser = SESSION.users(src),
+		var poUser = JSESSION.users(src),
 			ignoreFlood = floodIgnoreCheck(src),
 			auth = getAuth(src);
 		if (auth < 1 && !ignoreFlood) {
@@ -758,7 +767,7 @@ SESSION.registerUserFactory(poUser);
 			}
 			time = sys.time() * 1;
 			poUser.floodCount += 1;
-			sys.callLater("if (SESSION.users(" + src + ") !== undefined) { SESSION.users(" + src + ").floodCount--;  };", 8);
+			sys.callLater("if (JSESSION.users(" + src + ") !== undefined) { JSESSION.users(" + src + ").floodCount--;  };", 8);
 			if (poUser.floodCount > 5 && poUser.muted == false) {
 				flbot.sendAll(sys.name(src) + " was kicked and muted for flooding.", 0);
 				poUser.muted = true;

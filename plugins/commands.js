@@ -1,5 +1,5 @@
 function handleCommand(src, message, command, commandData, tar, chan) {
-	var poUser = SESSION.users(src),
+	var poUser = JSESSION.users(src),
 		isMuted = poUser.muted,
 		originalName = poUser.originalName,
 		isLManager = Leaguemanager == originalName.toLowerCase(),
@@ -338,7 +338,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
 			bot.sendMessage(tar, "<ping/>" + html_escape(sys.name(src)) + " has sent you a ping!", chan);
 			return;
 		}
-		if (myAuth > 0 && SESSION.users(tar).emotesOn == true) mess = emoteFormat(mess);
+		if (myAuth > 0 && JSESSION.users(tar).emotesOn == true) mess = emoteFormat(mess);
 		else mess = html_escape(mess);
 		bot.sendMessage(src, "Your message was sent!", chan);
 		bot.sendMessage(tar, '<ping/>' + html_escape(sys.name(src)) + ' sent you a message! The message says: ' + mess);
@@ -1517,7 +1517,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
 			timeString = "for " + getTimeString(time);
 
 		if (tar != undefined) {
-			SESSION.users(tar).muted = true;
+			JSESSION.users(tar).muted = true;
 		}
 
 		if (mutetime == undefined || mutetime == 0 || mutetime == "forever") {
@@ -1557,7 +1557,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
 		Reg.save("Mutes", JSON.stringify(Mutes));
 
 		if (tar !== undefined) {
-			SESSION.users(tar).muted = false;
+			JSESSION.users(tar).muted = false;
 		}
 
 		return;
@@ -1733,7 +1733,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
 		Reg.save("Megausers", JSON.stringify(MegaUsers));
 
 		if (tar !== undefined) {
-			SESSION.users(tar).megauser = true;
+			JSESSION.users(tar).megauser = true;
 		}
 
 		return;
@@ -1753,7 +1753,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
 
 		bot.sendAll(commandData + ' is no longer a megauser!', chan);
 		if (tar !== undefined) {
-			SESSION.users(tar).megauser = false;
+			JSESSION.users(tar).megauser = false;
 		}
 
 		return;
