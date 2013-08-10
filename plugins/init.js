@@ -298,6 +298,23 @@ module.exports = {
                 return false;
             }
         }
+		
+		hasSandCloak = function(src) { // Has Sand Veil or Snow Cloak in tiers < 5th Gen Ubers.
+			var team_banned = -1,
+				ability;
+			for (var team = 0; team < sys.teamCount(src); ++team) {
+				if (sys.tier(src, team) == "5th Gen Ubers") continue;
+				for (var i = 0; i < 6; i++) {
+					ability = sys.ability(sys.teamPokeAbility(src, team, i));
+					if (ability == "Sand Veil" || ability == "Snow Cloak")
+						team_banned = team;
+				}
+			}
+			if (team_banned != -1) {
+				return team_banned;
+			}
+			return false;
+		}
 
         var globalVars = {
             border: "<font color=green><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</b></font>",
