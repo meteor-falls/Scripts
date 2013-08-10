@@ -531,17 +531,21 @@ JSESSION.refill();
 			'name': sys.name(src),
 			'color': namecolor(src)
 		};
-        
-        JSESSION.destroyUser(src);
 	},
+    /* Due to some glitch with v2, we send the message in afterLogOut (beforeLogOut has a problem...) */
 	afterLogOut: function (src) {
 		var user = JSESSION.users(src);
 		var shown = true;
-		if (lastToLogout.name === undefined || lastToLogout.color === undefined || typeof lastToLogout != 'object') shown = false;
+		
+        if (lastToLogout.name === undefined || lastToLogout.color === undefined || typeof lastToLogout != 'object') {
+            shown = false;
+        }
+                
 		 if (sys.numPlayers() < 30 && shown && !user.autokick && sys.os(src) != "android") {
 			logoutMessage(html_escape(lastToLogout.name), lastToLogout.color);
 		}
-		/* Due to some glitch with v2, we send the message in afterLogOut (beforeLogOut has a problem...) */
+        
+        JSESSION.destroyUser(src);
 	},
 	afterChangeTeam: function (src) {
 		var myUser = JSESSION.users(src);
