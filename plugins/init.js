@@ -270,22 +270,21 @@ module.exports = {
         }
 
         hasDrizzleSwim = function (src) {
-			var teams_banned = [],
-				swiftswim = false,
-				drizzle = false,
-				ability;
+            var swiftswim = false,
+                drizzle = false,
+                teams_banned = [];
             if (getTier(src, "5th Gen OU")) {
                 for (var team = 0; team < sys.teamCount(src); ++team) {
                     if (sys.tier(src, team) !== "5th Gen OU") continue;
                     for (var i = 0; i < 6; i++) {
                         ability = sys.ability(sys.teamPokeAbility(src, team, i));
-                        if (ability == "Swift Swim")
+                        if (ability === "Swift Swim")
                             swiftswim = true;
-                        if (ability == "Drizzle")
+                        if (ability === "Drizzle")
                             drizzle = true;
                         if (drizzle && swiftswim) {
                             teams_banned.push(team);
-							break;
+                            break;
                         }
                     }
                 }
