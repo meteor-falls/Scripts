@@ -85,6 +85,7 @@ function poUser(id) {
 
 JSESSION.identifyScriptAs("MF Script 0.3 Beta");
 JSESSION.registerUserFactory(poUser);
+JSESSION.refill();
 
 ({
 	serverStartUp: function () {
