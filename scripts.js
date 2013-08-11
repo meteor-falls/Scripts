@@ -5,10 +5,10 @@ Credit to: Max, Lutra
 var Config = {
 	// Configuration for the script. Edit as you please.
 	repourl: "https://raw.github.com/meteor-falls/Scripts/master/plugins/", // Repo to load plugins from.
-	plugindir: "scripts/", // Plugin directory.
+	plugindir: "plugins/", // Plugin directory.
 	serverowner: "HHT", // The server owner.
 	evalperms: ['hht', 'ethan'], // People who can use eval.
-	updateperms: ['hht', 'ethan', 'ian', 'theunknownone'], // People who can update scripts/tiers.
+	updateperms: ['hht', 'ethan', 'ian', 'theunknownone', 'max1'], // People who can update scripts/tiers.
 	
 	// Do not touch unless you are adding a new plugin.
 	plugins: ['jsession.js', 'init.js', 'commands.js', 'lists.js', 'bot.js', 'reg.js'] // Plugins to load on script load.
