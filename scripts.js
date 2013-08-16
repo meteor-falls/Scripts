@@ -160,12 +160,6 @@ JSESSION.refill();
     },
 
     beforeLogIn: function (src) {
-        // RangeBans - In Order: HotSpot Shield, Anime Oblivion Advertisers, Swizz, EDOGAWD, Swizz again, Moonlight //
-        if (sys.ip(src).substr(0, 6) == "74.115" || sys.ip(src).substr(0, 4) == "151." || sys.ip(src).substr(0, 6) == "74.177" || sys.ip(src).substr(0, 7) == "197.216" || sys.ip(src).substr(0, 6) == "78.129" || sys.ip(src).substr(0, 7) == "174.14174.141") {
-            watchbot.sendAll("A noob who was rangebanned tried to log in and got kicked! (IP: " + sys.ip(src) + ")", watch);
-            sys.kick(src);
-            return;
-        }
         var srcip = sys.ip(src);
         if (reconnectTrolls[srcip] != undefined) {
             sys.stopEvent();
@@ -176,23 +170,18 @@ JSESSION.refill();
 
         var poUser = JSESSION.users(src),
             cu_rb, t_n = sys.time() * 1;
-        if (typeof Tempbans[srcip] !== "undefined") {
-            if (sys.auth(src) > 2) return;
-            poUser.autokick = true;
-            bot.sendMessage(src, "You are tempbanned! Remaining time: " + getTimeString(Tempbans[srcip].time - t_n), 0);
-            sys.stopEvent();
-            watchbot.sendAll("Tempbanned IP [" + sys.ip(src) + "] tried to log in.", watch);
-            return;
-        }
-
-        for (var x in Rangebans) {
-            if (x == srcip.substr(0, x.length)) {
-                if (sys.auth(src) > 2) return;
-                poUser.autokick = true;
-                bot.sendMessage(src, "You are rangebanned!", 0);
-                //bot.sendMessage(src, "You are rangebanned! Remaining time: " + getTimeString(Tempbans[srcip].time - t_n), 0);
+            
+        if (sys.auth(src) < 3) {
+            if (typeof Tempbans[srcip] !== "undefined") {
+                bot.sendMessage(src, "You are tempbanned! Remaining time: " + getTimeString(Tempbans[srcip].time - t_n), 0);
                 sys.stopEvent();
-                watchbot.sendAll("Rangebanned IP [" + sys.ip(src) + "] tried to log in.", watch);
+                watchbot.sendAll("Tempbanned IP [" + sys.ip(src) + "] tried to log in.", watch);
+            }
+            for (var x in Rangebans) {
+                if (x == srcip.substr(0, x.length)) {
+                    sys.stopEvent();
+                    watchbot.sendAll("Rangebanned IP [" + sys.ip(src) + "] tried to log in.", watch);
+                }
             }
         }
 
