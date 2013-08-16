@@ -142,7 +142,6 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         }
         Lists.Owner.display(src, chan);
         return;
-        // USER COMMANDS
     }
     if (command == "burn") {
         if (tar == undefined) {
@@ -450,67 +449,45 @@ function handleCommand(src, message, command, commandData, tar, chan) {
             return;
         }
         var myStr;
-        //sys.sendMessage(src, "", chan);
-        //sys.sendHtmlMessage(src, border, chan);
         var finals = isFinals;
         if (finals) {
             myStr = "<center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Finals of <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament:</font><hr width=300/>";
-            //<i>Matchups</i><br/><b>"++" vs "++"</b><br/><s>Loser</s> vs Winner<br/><br/></td></tr></table></center><br/>
-            //sys.sendHtmlMessage(src, "<br><font color=black><timestamp/><b><u> FINALS OF THE " + tourtier.toUpperCase() + " TOURNAMENT:</b></u></font>", chan);
         } else {
             myStr = "<center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Round <i>" + roundnumber + "</i> of <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament!</font><hr width=300/>";
-            //sys.sendHtmlMessage(src, "<br><font color=blue><timestamp/><b><u> ROUND " + roundnumber + " OF " + tourtier.toUpperCase() + " TOURNAMENT:</b></u></font>", chan);
         }
         if (battlesLost.length > 0) {
-            //sys.sendMessage(src, "", chan);
-            //sys.sendHtmlMessage(src, "<br><font color=red><timestamp/><b><u>Battles Finished:</b></font></u>", chan);
             myStr += "<br><b><u>Battles Finished:</u></b><br>";
             for (var i = 0; i < battlesLost.length; i += 2) {
                 myStr += battlesLost[i] + " won against " + battlesLost[i + 1] + "<br>";
-                //sys.sendMessage(src, battlesLost[i] + " won against " + battlesLost[i + 1], chan);
             }
             myStr += "<br>";
-            //sys.sendMessage(src, "", chan);
         }
         if (tourbattlers.length > 0) {
             if (battlesStarted.indexOf(true) != -1) {
-                //sys.sendHtmlMessage(src, "<br><font color=green><timestamp/><b><u>Ongoing battles:</b></u></font>", chan);
                 myStr += "<br><b><u>Ongoing battles:</u></b><br>";
                 for (var i = 0; i < tourbattlers.length; i += 2) {
                     if (battlesStarted[i / 2] == true) {
                         myStr += script.padd(tourplayers[tourbattlers[i]]) + " VS " + tourplayers[tourbattlers[i + 1]] + "<br>";
-                        //sys.sendMessage(src, script.padd(tourplayers[tourbattlers[i]]) + " VS " + tourplayers[tourbattlers[i + 1]], chan);
                     }
                 }
                 myStr += "<br>";
-                //sys.sendMessage(src, "", chan);
             }
             if (battlesStarted.indexOf(false) != -1) {
-                //sys.sendHtmlMessage(src, "<br><font color=purple><timestamp/><u><b>Yet to start battles:</b></u></font>", chan);
                 myStr += "<br><b><u>Yet to start battles:</u></b><br>";
-                //sys.sendMessage(src, "", chan);
                 for (var i = 0; i < tourbattlers.length; i += 2) {
                     if (battlesStarted[i / 2] == false) {
                         myStr += tourplayers[tourbattlers[i]] + " VS " + tourplayers[tourbattlers[i + 1]] + "<br>";
-                        //sys.sendMessage(src, tourplayers[tourbattlers[i]] + " VS " + tourplayers[tourbattlers[i + 1]], chan);
                     }
                 }
-                //sys.sendMessage(src, "".chan);
             }
         }
         if (tourmembers.length > 0) {
             myStr += "<br><b><u>Members to the next round:</u></b><br>";
-            //sys.sendHtmlMessage(src, "<br><font color=navy><timestamp/><b><u>Members to the next round:</b></u></font>", chan);
             var str = "";
             for (x in tourmembers) {
                 myStr += (str.length == 0 ? "" : ", ") + tourplayers[tourmembers[x]] + "<br>";
-                //str += (str.length == 0 ? "" : ", ") + tourplayers[tourmembers[x]];
             }
-            //sys.sendMessage(src, str, chan);
-            //sys.sendMessage(src, "", chan);
         }
-        //sys.sendHtmlMessage(src, border, chan);
-        //sys.sendMessage(src, "", chan);
         sys.sendHtmlMessage(src, myStr, chan);
         return;
     }
@@ -580,7 +557,6 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         var num = sys.rand(1, 279);
         var numb = sys.rand(1, 646);
         var Links = ["<font color=navy><timestamp/><b>+RouletteBot: </b></font><b><font color=" + namecolor(src) + ">" + html_escape(sys.name(src)) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won a <b><font color=red>" + sys.nature(sys.rand(1, 25)) + "</b></font> <b><font color=blue>" + sys.pokemon(numb) + "!<img src='pokemon:" + numb + "&gen=5' width='50'></b></font>", "<font color=navy><timestamp/><b>+RouletteBot: </b></font><b><font color=" + namecolor(src) + ">" + sys.name(src) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won <b><font color=red>" + sys.item(num) + "! <img src='item:" + num + "'></b></font>"];
-        //var i = Math.round(2 * Math.random())
         sys.sendHtmlAll(Links[0], chan);
         return;
     }
@@ -722,7 +698,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         Reg.save("Champ", commandData);
         return;
     }
-    // Megausers stuff 
+    // MegaUser Commands
     if (poUser.megauser == false && myAuth < 1) {
         bot.sendMessage(src, "The command " + command + " doesn't exist.", chan);
         return;
@@ -1915,7 +1891,6 @@ function handleCommand(src, message, command, commandData, tar, chan) {
             a, found = false;
         for (a in banlist) {
             if (sys.dbIp(commandData) == sys.dbIp(banlist[a])) {
-                // ON PURPOSE!
                 found = true;
                 sys.unban(banlist[a]);
                 sys.sendHtmlAll("<font color=blue><timestamp/><b>" + banlist[a] + " was unbanned by " + html_escape(sys.name(src)) + "!", 0);
@@ -2006,9 +1981,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         return;
     }
     if (command == "eval") {
-        var allowed = [];
-        for (var i in Config.evalperms) allowed.push(sys.dbIp(Config.evalperms[i]));
-        if (sys.ip(src) == "127.0.0.1" || allowed.indexOf(sys.ip(src)) > -1) {
+        if (sys.ip(src) == "127.0.0.1" || Config.evalperms.indexOf(originalName.toLowerCase()) > -1) {
             bot.sendMessage(src, "You evaluated: " + html_escape(commandData), chan);
             try {
                 sys.eval(commandData);
@@ -2018,11 +1991,6 @@ function handleCommand(src, message, command, commandData, tar, chan) {
             }
             return;
         }
-    }
-    var ip = sys.ip(src);
-    if (HostIps.indexOf(ip) == -1) {
-        bot.sendMessage(src, "The command " + command + " doesn't exist.", chan);
-        return;
     }
 
     bot.sendMessage(src, "The command " + command + " doesn't exist.", chan);
