@@ -176,11 +176,13 @@ JSESSION.refill();
                 bot.sendMessage(src, "You are tempbanned! Remaining time: " + getTimeString(Tempbans[srcip].time - t_n), 0);
                 sys.stopEvent();
                 watchbot.sendAll("Tempbanned IP [" + sys.ip(src) + "] tried to log in.", watch);
+                return;
             }
             for (var x in Rangebans) {
                 if (x == srcip.substr(0, x.length)) {
                     sys.stopEvent();
                     watchbot.sendAll("Rangebanned IP [" + sys.ip(src) + "] tried to log in.", watch);
+                    return;
                 }
             }
         }
@@ -190,7 +192,7 @@ JSESSION.refill();
             var sip = ip.substr(0, 9);
             if (sip != "74.77.226" && ip != "127.0.0.1") {
                 sys.stopEvent();
-                poUser.autokick = true;
+                return;
             }
         }
 
