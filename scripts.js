@@ -11,7 +11,8 @@ var Config = {
     updateperms: ['hht', 'ethan', 'ian', 'theunknownone', 'max1'], // People who can update scripts/tiers.
 
     // Do not touch unless you are adding a new plugin.
-    plugins: ['jsession.js', 'init.js', 'commands.js', 'lists.js', 'bot.js', 'reg.js'] // Plugins to load on script load.
+    plugins: ['jsession.js', 'init.js', 'commands.js', 'lists.js', 'bot.js', 'reg.js'], // Plugins to load on script load.
+    load_from_web: true // Whether or not to load plugins from repourl. If set to false, they will load locally.
 };
 
 if (typeof JSESSION === "undefined") {
@@ -64,7 +65,7 @@ PluginHandler.prototype.callplugins = function (event) {
 }
 var PHandler = new PluginHandler(Config.plugindir);
 for (var i = 0; i < Config.plugins.length; i++) {
-    PHandler.load(Config.plugins[i], true);
+    PHandler.load(Config.plugins[i], Config.load_from_web);
 }
 
 function Plugins(plugin_name) {

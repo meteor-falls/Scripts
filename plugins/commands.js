@@ -546,7 +546,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         } else {
             Emotetoggles[sys.name(src).toLowerCase()] = {};
         }
-        Reg.save("Emotetoggles", JSON.stringify(Emoteperms));
+        Reg.save("Emotetoggles", JSON.stringify(Emotetoggles));
         return;
     }
     if (command == "spin") {
