@@ -298,6 +298,7 @@ module.exports = {
                 ability;
             for (var team = 0; team < sys.teamCount(src); ++team) {
                 if (sys.tier(src, team) == "5th Gen Ubers") continue;
+                if (sys.gen(src, team) != 5) continue; // Only care about 5th Gen
                 for (var i = 0; i < 6; i++) {
                     ability = sys.ability(sys.teamPokeAbility(src, team, i));
                     if (ability == "Sand Veil" || ability == "Snow Cloak")
