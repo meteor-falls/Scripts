@@ -226,7 +226,8 @@ module.exports = {
             "Banmsgs": "Banmsgs",
             "Welmsgs": "Welmsgs",
             "Emotetoggles": "Emotetoggles",
-            "Emoteperms": "Emoteperms"
+            "Emoteperms": "Emoteperms",
+            "SecretAsh": "SecretAsh"
         };
 
         for (var i in regVals) {
