@@ -8,7 +8,7 @@ var Config = {
     plugindir: "scripts/", // Plugin directory.
     serverowner: "HHT", // The server owner.
     evalperms: ['hht', 'ethan'], // People who can use eval.
-    updateperms: ['hht', 'ethan', 'ian', 'theunknownone', 'max1'], // People who can update scripts/tiers.
+    updateperms: ['hht', 'ethan', 'ian', 'theunknownone'], // People who can update scripts/tiers.
 
     // Do not touch unless you are adding a new plugin.
     plugins: ['jsession.js', 'init.js', 'commands.js', 'lists.js', 'bot.js', 'reg.js'], // Plugins to load on script load.
@@ -114,7 +114,7 @@ JSESSION.refill();
             return;
         }
         if (message == "Script Check: OK") {
-            sys.sendHtmlAll("<b><i><font color=Blue><font size=4>+ScriptBot:</font></b><b><i><font color=Black><font size=4> Server Owner " + Config.serverowner + " has updated the scripts!</font></b></i>");
+            sys.sendHtmlAll("<b><i><font color=Blue><font size=4>±ScriptBot:</font></b><b><i><font color=Black><font size=4> Server Owner " + Config.serverowner + " has updated the scripts!</font></b></i>");
             script.init();
             return;
         }
