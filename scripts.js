@@ -72,6 +72,17 @@ function Plugins(plugin_name) {
     if (!PHandler.plugins.hasOwnProperty(plugin_name)) return null;
     return PHandler.plugins[plugin_name];
 }
+function reloadPlugin(plugin_name) {
+    if (plugin_name === "init.js") {
+        script.init();
+    } else if (plugin_name == "lists.js") {
+        script.loadCommandLists();
+    } else if (plugin_name == "bot.js") {
+        script.loadBots();
+    } else if (plugin_name == "reg.js") {
+        script.loadRegHelper();
+    }
+}
 
 var global = this;
 
@@ -423,29 +434,23 @@ JSESSION.refill();
             var tar = sys.id(commandData);
 
             if (myAuth >= 3) {
-                if (command == "updateplugin") {
+                if (command == "update") {
                     if (commandData == undefined) {
-                        bot.sendMessage(src, "Specify a plugin!", chan);
+                        // ???
+                        Plugins('commands.js').handle(src, "/update", "updatescript", commandData, tar, chan);
                         return;
                     }
-                    bot.sendMessage(src, "Updating plugin " + commandData + "...", chan);
-                    if (PHandler.load(commandData, true)) {
-                        bot.sendMessage(src, "Plugin " + commandData + " updated successfully!", chan);
-                    } else {
-                        bot.sendMessage(src, "Failure updating plugin " + commandData, chan);
-                    }
-                    return;
-                }
-                if (command == "removeplugin") {
-                    if (commandData == undefined) {
-                        bot.sendMessage(src, "Specify a plugin!", chan);
+                    if (Plugins(commandData) == null) {
+                        bot.sendMessage(src, "Plugin "+commandData+" not found.", chan);
                         return;
                     }
-                    if (PHandler.unload(commandData)) {
-                        bot.sendMessage(src, "Plugin " + commandData + " removed successfully!", chan);
-                    } else {
-                        bot.sendMessage(src, "Plugin " + commandData + " doesn't exist.", chan);
-                    }
+                    bot.sendMessage(src, "Updating plugin "+commandData+"...", chan);
+                    sys.webCall(Config.repourl + commandData, function(resp) {
+                        sys.writeToFile(Config.plugindir + commandData, resp);
+                        PHandler.load(commandData, false);
+                        reloadPlugin(commandData);
+                        bot.sendMessage(src, "Plugin "+commandData+" updated!", chan);
+                    });
                     return;
                 }
             }
