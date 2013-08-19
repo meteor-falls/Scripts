@@ -227,7 +227,7 @@ module.exports = {
             "Welmsgs": "Welmsgs",
             "Emotetoggles": "Emotetoggles",
             "Emoteperms": "Emoteperms",
-            "SecretAsh": "SecretAsh"
+            "SacredAsh": "SacredAsh"
         };
 
         for (var i in regVals) {
