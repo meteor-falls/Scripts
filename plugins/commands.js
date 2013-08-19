@@ -55,7 +55,27 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         sys.sendHtmlAll('<font color=blue><timestamp/><b>±ScriptBot: </b></font>' + sys.name(src) + ' forced a JSESSION refill!', 0);
         return;
     }
+    
+    if (command == "togglesacredash") {
+        var allowed = Config.updateperms;
+        if (allowed.indexOf(originalName.toLowerCase()) == -1) {
+            bot.sendMessage(src, 'You may not use /' + command + ', noob.', chan);
+            return;
+        }
 
+        var toggled = '';
+        
+        if (SacredAsh[sys.name(src).toLowerCase()]) {
+            delete SacredAsh[sys.name(src).toLowerCase()];
+            toggled = 'off';
+        } else {
+            SacredAsh[sys.name(src).toLowerCase()] = true;
+            toggled = 'on';
+        }
+        
+        sys.sendHtmlMessage(src, '<font color=blue><timestamp/><b>±Ho-Oh: </b></font> Turned Sacred Ash ' + toggled + '.', 0);
+        return;
+    }
     if (command == "updatetiers" || command == "loadtiers") {
         var allowed = Config.updateperms;
         if (allowed.indexOf(originalName.toLowerCase()) == -1) {
