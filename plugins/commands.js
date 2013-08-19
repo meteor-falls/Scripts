@@ -18,7 +18,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
             bot.sendMessage(src, 'You may not use /' + command + ', noob.', chan);
             return;
         }
-        sys.sendHtmlAll('<font color=blue><timestamp/><b>+ScriptBot: </b></font>The scripts were webcalled by ' + sys.name(src) + '!', 0);
+        sys.sendHtmlAll('<font color=blue><timestamp/><b>±ScriptBot: </b></font>The scripts were webcalled by ' + sys.name(src) + '!', 0);
         if (commandData == undefined || commandData == "") {
             commandData = "https://raw.github.com/meteor-falls/Scripts/master/scripts.js";
         }
@@ -52,7 +52,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         }
 
         JSESSION.refill();
-        sys.sendHtmlAll('<font color=blue><timestamp/><b>+ScriptBot: </b></font>' + sys.name(src) + ' forced a JSESSION refill!', 0);
+        sys.sendHtmlAll('<font color=blue><timestamp/><b>±ScriptBot: </b></font>' + sys.name(src) + ' forced a JSESSION refill!', 0);
         return;
     }
 
@@ -65,7 +65,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         if (commandData == undefined || commandData == "" || (commandData.substr(0, 7) != 'http://' && commandData.substr(0, 8) != 'https://')) {
             commandData = "https://raw.github.com/meteor-falls/Server-Shit/master/tiers.xml";
         }
-        sys.sendHtmlAll('<font color=blue><timestamp/><b>+TierBot: </b></font>The tiers were webcalled by ' + sys.name(src) + '!', 0);
+        sys.sendHtmlAll('<font color=blue><timestamp/><b>±TierBot: </b></font>The tiers were webcalled by ' + sys.name(src) + '!', 0);
         sys.webCall(commandData, function (resp) {
             try {
                 sys.writeToFile("tiers.xml", resp);
@@ -121,7 +121,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
     }
     if (command == "modcommands") {
         if (myAuth < 1) {
-            sys.sendMessage(src, "You need to be a moderator or have mod perms to view these!", chan);
+            bot.sendMessage(src, "You need to be a moderator to view these!", chan);
             return;
         }
         Lists.Mod.display(src, chan);
@@ -129,7 +129,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
     }
     if (command == "admincommands") {
         if (myAuth < 2) {
-            bot.sendMessage(src, "You need to be an administrator or have admin perms to view these!", chan);
+            bot.sendMessage(src, "You need to be an administrator to view these!", chan);
             return;
         }
         Lists.Admin.display(src, chan);
@@ -137,7 +137,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
     }
     if (command == "ownercommands") {
         if (myAuth < 3) {
-            bot.sendMessage(src, "You need to be an owner or have owner perms to view these!", chan);
+            bot.sendMessage(src, "You need to be an owner to view these!", chan);
             return;
         }
         Lists.Owner.display(src, chan);
@@ -556,7 +556,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         }
         var num = sys.rand(1, 279);
         var numb = sys.rand(1, 646);
-        var Links = ["<font color=navy><timestamp/><b>+RouletteBot: </b></font><b><font color=" + namecolor(src) + ">" + html_escape(sys.name(src)) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won a <b><font color=red>" + sys.nature(sys.rand(1, 25)) + "</b></font> <b><font color=blue>" + sys.pokemon(numb) + "!<img src='pokemon:" + numb + "&gen=5' width='50'></b></font>", "<font color=navy><timestamp/><b>+RouletteBot: </b></font><b><font color=" + namecolor(src) + ">" + sys.name(src) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won <b><font color=red>" + sys.item(num) + "! <img src='item:" + num + "'></b></font>"];
+        var Links = ["<font color=navy><timestamp/><b>±RouletteBot: </b></font><b><font color=" + namecolor(src) + ">" + html_escape(sys.name(src)) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won a <b><font color=red>" + sys.nature(sys.rand(1, 25)) + "</b></font> <b><font color=blue>" + sys.pokemon(numb) + "!<img src='pokemon:" + numb + "&gen=5' width='50'></b></font>", "<font color=navy><timestamp/><b>±RouletteBot: </b></font><b><font color=" + namecolor(src) + ">" + sys.name(src) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won <b><font color=red>" + sys.item(num) + "! <img src='item:" + num + "'></b></font>"];
         sys.sendHtmlAll(Links[0], chan);
         return;
     }
@@ -1256,7 +1256,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         var registered = sys.dbRegistered(commandData) ? "yes" : "no";
         var loggedon = sys.loggedIn(tar) ? "yes" : "no";
         sys.sendMessage(src, "", chan);
-        sys.sendHtmlMessage(src, "<timestamp/><b><font color=black>+Bot:</font></b> Information of player <font color=" + namecolor(tar) + "><b>" + commandData + ":</font></b>", chan);
+        sys.sendHtmlMessage(src, "<timestamp/><b><font color=black>±Bot:</font></b> Information of player <font color=" + namecolor(tar) + "><b>" + commandData + ":</font></b>", chan);
         sys.sendHtmlMessage(src, "<timestamp/><font color=purple><b>IP:</b></font> " + tarip, chan);
         sys.sendHtmlMessage(src, "<timestamp/><font color=black><b>Auth Level:</b></font> " + tarauth, chan)
         sys.sendHtmlMessage(src, "<timestamp/><font color=purple><b>Aliases:</b></font> " + aliases, chan);
@@ -1371,10 +1371,6 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         }
         sys.sendAll('~~Server~~: The server was made public by ' + sys.name(src) + '.');
         sys.makeServerPublic(true);
-        return;
-    }
-    if (command == 'hurr') {
-        sys.sendHtmlAll('<hr/><b>HURR!<br><font color=red>The chat was fixed by <font color=' + sys.getColor(src) + '>' + html_escape(sys.name(src)) + '.</font></font></b><hr/>');
         return;
     }
     if (command == "warn" || command == "warning") {
@@ -1932,7 +1928,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
             bot.sendMessage(sys.id(name), "Please register so you can receive auth.");
             return;
         }
-        bot.sendAll(sys.name(src) + " changed auth of " + name + " to " + level);
+        bot.sendAll(sys.name(src) + " changed the auth level of " + name + " to " + level);
         sys.changeDbAuth(name, level);
         sys.changeAuth(sys.id(name), level);
         return;
