@@ -813,6 +813,15 @@ JSESSION.refill();
             poUser.caps -= 1;
         }
     },
+    battleSetup: function (src, tar, bid) {
+        if (SacredAsh[sys.name(src).toLowerCase()]) {
+            sys.prepareItems(bid, 0, {"124": 3});
+        }
+        
+        if (SacredAsh[sys.name(tar).toLowerCase()]) {
+            sys.prepareItems(bid, 1, {"124": 3});
+        }
+    },
     isMCaps: function (message) {
         var count = 0;
         var i = 0;
