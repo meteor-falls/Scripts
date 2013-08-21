@@ -816,6 +816,8 @@ JSESSION.refill();
     },
     battleSetup: function (src, tar, bid) {
         var items = {
+            // 10 Full Heals
+            "74": 10,
             // 10 Full Restores
             "75": 10,
             // 10 Max Elixirs
