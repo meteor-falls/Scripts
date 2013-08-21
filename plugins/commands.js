@@ -77,7 +77,23 @@ function handleCommand(src, message, command, commandData, tar, chan) {
             toggled = 'on';
         }
         
+        Reg.save("Itemtoggles", JSON.stringify(Itemtoggles));
         sys.sendHtmlMessage(src, '<font color=blue><timestamp/><b>±ItemBot:</b></font> Turned items ' + toggled + ' for ' + commandData + '.');
+        return;
+    }
+    
+    if (command == "displayitemplayers") {
+        if (Object.keys(Itemtoggles).length == 0) {
+            bot.sendMessage(src, "No item players yet!", chan);
+            return;
+        }
+        var list = new CommandList("<font color='goldenrod'>Item Players</font>", "navy", "");
+        for (var x in Itemtoggles) {
+            list.add(x);
+        }
+
+        list.finish();
+        list.display(src, chan);
         return;
     }
     if (command == "updatetiers" || command == "loadtiers") {
