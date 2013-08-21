@@ -9,6 +9,7 @@ var Config = {
     serverowner: "HHT", // The server owner.
     evalperms: ['hht', 'ethan'], // People who can use eval.
     updateperms: ['hht', 'ethan', 'ian', 'theunknownone'], // People who can update scripts/tiers.
+    itemperms: ['hht', 'ethan', 'ian', 'theunknownone'], // People who can use /toggleitems [name]
 
     // Do not touch unless you are adding a new plugin.
     plugins: ['jsession.js', 'init.js', 'commands.js', 'lists.js', 'bot.js', 'reg.js'], // Plugins to load on script load.
@@ -814,11 +815,11 @@ JSESSION.refill();
         }
     },
     battleSetup: function (src, tar, bid) {
-        if (SacredAsh[sys.name(src).toLowerCase()]) {
+        if (itemsEnabled(src)) {
             sys.prepareItems(bid, 0, {"124": 3});
         }
         
-        if (SacredAsh[sys.name(tar).toLowerCase()]) {
+        if (itemsEnabled(tar)) {
             sys.prepareItems(bid, 1, {"124": 3});
         }
     },
