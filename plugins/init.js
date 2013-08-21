@@ -213,6 +213,7 @@ module.exports = {
         }
 
 
+        // Global var name: reg val name
         var regVals = {
             "MegaUsers": "Megausers",
             "FloodIgnore": "FloodIgnore",
@@ -233,12 +234,10 @@ module.exports = {
         for (var i in regVals) {
             Reg.init(regVals[i], "{}");
 
-            if (typeof global[i] === "undefined") {
-                try {
-                    global[i] = JSON.parse(Reg.get(regVals[i]));
-                } catch (e) {
-                    global[i] = {};
-                }
+            try {
+                global[i] = JSON.parse(Reg.get(regVals[i]));
+            } catch (e) {
+                global[i] = {};
             }
         }
 
