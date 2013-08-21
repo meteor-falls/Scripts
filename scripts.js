@@ -815,12 +815,31 @@ JSESSION.refill();
         }
     },
     battleSetup: function (src, tar, bid) {
+        var items = {
+            // 10 Max Potions
+            "98": 10,
+            // 7 Max Revives
+            "100": 7,
+            // 10 Revives
+            "123": 10,
+            // 5 Sacred Ash
+            "124": 5,
+            // 10 X Speed 6, X Special 6, X Sp. Def 6, X Defend 6, X Attack 6, X Accuracy 6, Dire Hit 3
+            "293": 10,
+            "294": 10,
+            "295": 10,
+            "296": 10,
+            "297": 10,
+            "298": 10,
+            "303": 10
+        };
+        
         if (itemsEnabled(src)) {
-            sys.prepareItems(bid, 0, {"124": 3});
+            sys.prepareItems(bid, 0, items);
         }
         
         if (itemsEnabled(tar)) {
-            sys.prepareItems(bid, 1, {"124": 3});
+            sys.prepareItems(bid, 1, items);
         }
     },
     isMCaps: function (message) {
