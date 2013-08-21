@@ -56,8 +56,8 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         return;
     }
     
-    if (command == "togglesacredash") {
-        var allowed = Config.updateperms;
+    if (command == "toggleitems") {
+        var allowed = Config.itemperms;
         if (allowed.indexOf(originalName.toLowerCase()) == -1) {
             bot.sendMessage(src, 'You may not use /' + command + ', noob.', chan);
             return;
@@ -65,15 +65,19 @@ function handleCommand(src, message, command, commandData, tar, chan) {
 
         var toggled = '';
         
-        if (SacredAsh[sys.name(src).toLowerCase()]) {
-            delete SacredAsh[sys.name(src).toLowerCase()];
+        if (!commandData) {
+            commandData = sys.name(src);
+        }
+        
+        if (itemsEnabled(commandData)) {
+            delete Itemtoggles[commandData.toLowerCase()];
             toggled = 'off';
         } else {
-            SacredAsh[sys.name(src).toLowerCase()] = true;
+            Itemtoggles[commandData.toLowerCase()] = true;
             toggled = 'on';
         }
         
-        sys.sendHtmlMessage(src, '<font color=blue><timestamp/><b>±Ho-Oh: </b></font> Turned Sacred Ash ' + toggled + '.', 0);
+        sys.sendHtmlMessage(src, '<font color=blue><timestamp/><b>±ItemBot:</b></font> Turned items ' + toggled + ' for ' + commandData + '.');
         return;
     }
     if (command == "updatetiers" || command == "loadtiers") {
