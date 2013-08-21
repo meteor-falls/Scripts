@@ -227,7 +227,7 @@ module.exports = {
             "Welmsgs": "Welmsgs",
             "Emotetoggles": "Emotetoggles",
             "Emoteperms": "Emoteperms",
-            "SacredAsh": "SacredAsh"
+            "Itemtoggles": "Itemtoggles"
         };
 
         for (var i in regVals) {
@@ -253,6 +253,10 @@ module.exports = {
             if (Emotetoggles[sys.name(src).toLowerCase()] == undefined) return false;
             return true;
         }
+        
+        itemsEnabled = function (src) {
+            return Itemtoggles.hasOwnProperty((sys.name(src) || src).toLowerCase());
+        };
 
         getTier = function (src, tier) {
             return sys.hasTier(src, tier);
