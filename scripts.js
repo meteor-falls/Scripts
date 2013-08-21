@@ -816,6 +816,10 @@ JSESSION.refill();
     },
     battleSetup: function (src, tar, bid) {
         var items = {
+            // 10 Full Restores
+            "75": 10,
+            // 10 Max Elixirs
+            "96": 10,
             // 10 Max Potions
             "98": 10,
             // 7 Max Revives
@@ -825,13 +829,14 @@ JSESSION.refill();
             // 5 Sacred Ash
             "124": 5,
             // 10 X Speed 6, X Special 6, X Sp. Def 6, X Defend 6, X Attack 6, X Accuracy 6, Dire Hit 3
-            "293": 10,
+            // Disabled: unimplemented by PO
+            /*"293": 10,
             "294": 10,
             "295": 10,
             "296": 10,
             "297": 10,
             "298": 10,
-            "303": 10
+            "303": 10*/
         };
         
         if (itemsEnabled(src)) {
