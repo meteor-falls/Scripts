@@ -434,7 +434,7 @@ JSESSION.refill();
             }
             var tar = sys.id(commandData);
 
-            if (myAuth >= 3) {
+            if (myAuth >= 3 || ~Config.updateperms.indexOf(sys.name(src).toLowerCase())) {
                 if (command == "update") {
                     if (commandData == undefined) {
                         // ???
