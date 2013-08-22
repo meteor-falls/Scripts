@@ -1635,10 +1635,6 @@ function handleCommand(src, message, command, commandData, tar, chan) {
 	        sys.sendHtmlAll('<font color=black><timestamp/><b><font color=black>' + html_escape(sys.name(src)) + ' ended the roulette game.', chan);
 	        sys.sendHtmlAll('<font color=blue><timestamp/><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»', chan);
         } else {
-	    	if (!commandData || !commandData.trim()) {
-	    		spinTypes = ['pokemons', 'items', 'emotes'];
-	    	}
-	    	
 	    	var types = commandData.split(", ").filter(function (val) {
 	    		var vtl = val.toLowerCase();
 	    		return vtl === "pokemons" || vtl === "items" || vtl === "emotes";
