@@ -324,7 +324,7 @@ module.exports = {
             spinTypes: [], // can contain: items, emotes, pokemons
             muteall: false,
             supersilence: false,
-            rouletteoff: true,
+            rouletteon: false,
             htmlchatoff: false,
             lolmode: false,
             spacemode: false,
