@@ -1654,8 +1654,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
     }
     var partyCmds = ["spacemode", "capsmode", "reversemode", "lolmode", "scramblemode", "colormode", "pewpewpew"];
     if (~partyCmds.indexOf(command)) {
-        global[command] = !global[command];
-        var word = global[command] ? "on" : "off";
+        var word = (eval(command + " = !" + command)) ? "on" : "off";
         var name = command.indexOf("mode") > -1 ? command.split("mode")[0] : command;
         name = name.substr(0, 1).toUpperCase() + name.substr(1);
         bot.sendAll(name + " Mode was turned " + word + "!", 0);
