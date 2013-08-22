@@ -13,7 +13,8 @@ var Config = {
 
     // Do not touch unless you are adding a new plugin.
     plugins: ['jsession.js', 'init.js', 'commands.js', 'lists.js', 'bot.js', 'reg.js'], // Plugins to load on script load.
-    load_from_web: true // Whether or not to load plugins from repourl. If set to false, they will load locally.
+    load_from_web: true, // Whether or not to load plugins from repourl. If set to false, they will load locally.
+    stripHtmlFromChannelMessages: true // If HTML should be stripped from channel messages outputted onto the server window.
 };
 
 if (typeof JSESSION === "undefined") {
@@ -86,6 +87,9 @@ function reloadPlugin(plugin_name) {
 }
 
 var global = this;
+var ignoreNextChanMsg = false,
+    // Lookups are slow. Cache this as NewMessage is called many, many times.
+    stripHtmlFromChannelMessages = Config.stripHtmlFromChannelMessages;
 
 function poUser(id) {
     this.id = id;
@@ -110,6 +114,20 @@ JSESSION.refill();
         Plugins('init.js')['init']();
     },
     afterNewMessage: function (message) {
+        if (ignoreNextChanMsg) {
+            // Don't call sys.stopEvent here
+            ignoreNextChanMsg = false;
+            return;
+        }
+        
+        // Strip HTML. :]
+        if (stripHtmlFromChannelMessages && message.substring(0, 2) === "[#") {
+            sys.stopEvent();
+            ignoreNextChanMsg = true;
+            print(html_strip(message));
+            return;
+        }
+        
         if (message.substr(0, 33) == "The name of the server changed to") {
             servername = message.substring(34, message.lastIndexOf("."));
             return;
