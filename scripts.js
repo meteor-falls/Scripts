@@ -509,13 +509,8 @@ JSESSION.refill();
         if (sys.auth(src) > 0 && sys.auth(src) < 4) {
             sendStr = "<font color=" + namecolor(src) + "><timestamp/>+<i><b>" + html_escape(sys.name(src)) + ": </b></i></font>" + (hasEmotesToggled(src) ? emoteFormat(message) : message);
         }
-        if (pewpewpew) {
-            sendStr = pewpewpewmessage(oldmessage);
-        }
-
         sys.stopEvent();
-
-        sys.sendHtmlAll(sendStr, chan);
+        sys.sendHtmlAll(pewpewpew ? pewpewpewmessage(oldmessage) : sendStr, chan);
 
         watchbot.sendAll(" [Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Message -- " + html_escape(sys.name(src)) + ": " + html_escape(oldmessage), watch);
 
