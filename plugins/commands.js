@@ -1627,7 +1627,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         return;
     }
     if (command == "roulette") {
-        rouletteoff = Boolean(~rouletteoff);
+        rouletteoff = rouletteoff ? false : true;
         
         spinTypes = [];
         if (rouletteoff) {
