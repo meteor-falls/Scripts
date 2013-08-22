@@ -585,7 +585,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         return;
     }
     if (command == "spin") {
-        if (typeof (rouletteoff) != "undefined" && rouletteoff != false) {
+        if (!rouletteon) {
             bot.sendMessage(src, "Roulette has been turned off!", chan);
             return;
         }
@@ -1627,10 +1627,10 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         return;
     }
     if (command == "roulette") {
-        rouletteoff = rouletteoff ? false : true;
+        rouletteon = !rouletteon;
         
         spinTypes = [];
-        if (rouletteoff) {
+        if (!rouletteon) {
 	        sys.sendHtmlAll('<font color=blue><timestamp/><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»', chan);
 	        sys.sendHtmlAll('<font color=black><timestamp/><b><font color=black>' + html_escape(sys.name(src)) + ' ended the roulette game.', chan);
 	        sys.sendHtmlAll('<font color=blue><timestamp/><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»', chan);
