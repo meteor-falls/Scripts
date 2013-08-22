@@ -1003,6 +1003,10 @@ function handleCommand(src, message, command, commandData, tar, chan) {
             return;
         }
         commandData = commandData.split(":");
+        if (commandData[1] == undefined || commandData[1] == "") {
+            bot.sendMessage(src, "Usage of this command is: [kick/ban/welcome]:[message]", chan);
+            return;
+        }
         var which = commandData[0];
         var message = cut(commandData, 1, ":");
         var whichl = which.toLowerCase();
