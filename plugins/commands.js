@@ -596,12 +596,21 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         
         var randomEmote = emotes[Math.floor(Math.random() * emotes.length)];
             
-        var possibilities = [
-            "<font color=navy><timestamp/><b>±RouletteBot: </b></font><b><font color=" + namecolor(src) + ">" + html_escape(sys.name(src)) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won a <b><font color=red>" + sys.nature(sys.rand(1, 25)) + "</b></font> <b><font color=blue>" + sys.pokemon(numb) + "!<img src='icon:" + numb + "'></b></font>",
-            "<font color=navy><timestamp/><b>±RouletteBot: </b></font><b><font color=" + namecolor(src) + ">" + sys.name(src) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won <b><font color=red>" + sys.item(num) + "! <img src='item:" + num + "'></b></font>",
-            "<font color=navy><timestamp/><b>±RouletteBot: </b></font><b><font color=" + namecolor(src) + ">" + sys.name(src) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won " + EmoteList[randomEmote] + "!"
-        ];
-        sys.sendHtmlAll(possibilities[sys.rand(0, possibilities.length)], chan);
+        var possibilities = [];
+        
+        if (~spinTypes.indexOf('pokemons')) {
+        	possibilities.push("<b><font color=" + namecolor(src) + ">" + html_escape(sys.name(src)) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won a <b><font color=red>" + sys.nature(sys.rand(1, 25)) + "</b></font> <b><font color=blue>" + sys.pokemon(numb) + "!<img src='icon:" + numb + "'></b></font>");
+        }
+        
+        if (~spinTypes.indexOf('items')) {
+        	possibilities.push("<font color=navy><timestamp/><b>±RouletteBot: </b></font><b><font color=" + namecolor(src) + ">" + sys.name(src) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won <b><font color=red>" + sys.item(num) + "! <img src='item:" + num + "'></b></font>");
+        }
+        
+        if (~spinTypes.indexOf('emotes')) {
+        	possibilities.push("<font color=navy><timestamp/><b>±RouletteBot: </b></font><b><font color=" + namecolor(src) + ">" + sys.name(src) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won " + EmoteList[randomEmote] + "!");
+        }
+
+        sys.sendHtmlAll("<font color=navy><timestamp/><b>±RouletteBot:</b></font> " + possibilities[sys.rand(0, possibilities.length)], chan);
         return;
     }
     if (command == "megausers") {
@@ -1617,27 +1626,34 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         sys.changeName(src, commandData);
         return;
     }
-    if (command == "rouletteoff") {
-        if (rouletteoff) {
-            bot.sendMessage(src, "Roulette is already off!", chan);
-            return;
-        }
-        sys.sendHtmlAll('<font color=blue><timestamp/><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»', chan);
-        sys.sendHtmlAll('<font color=black><timestamp/><b><font color=black>' + html_escape(sys.name(src)) + ' ended the roulette game.', chan);
-        sys.sendHtmlAll('<font color=blue><timestamp/><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»', chan);
-        rouletteoff = true;
-        return;
-    }
     if (command == "roulette") {
-        if (!rouletteoff) {
-            bot.sendMessage(src, "Roulette is already on!", chan);
-            return;
+        rouletteoff = !rouletteoff;
+        spinTypes = [];
+        if (rouletteoff) {
+	        sys.sendHtmlAll('<font color=blue><timestamp/><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»', chan);
+	        sys.sendHtmlAll('<font color=black><timestamp/><b><font color=black>' + html_escape(sys.name(src)) + ' ended the roulette game.', chan);
+	        sys.sendHtmlAll('<font color=blue><timestamp/><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»', chan);
+        } else {
+	    	if (!commandData || !commandData.trim()) {
+	    		spinTypes = ['pokemons', 'items', 'emotes'];
+	    	}
+	    	
+	    	var types = commandData.split(", ").filter(function (val) {
+	    		var vtl = val.toLowerCase();
+	    		return vtl === "pokemons" || vtl === "items" || vtl === "emotes";
+	    	});
+	    	
+	    	if (types.length) {
+	    		spinTypes = types;
+	    	} else {
+	    		spinTypes = ['pokemons', 'items', 'emotes'];
+	    	}
+	    	
+	        sys.sendHtmlAll('<font color=blue><timestamp/><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»', chan);
+	        sys.sendHtmlAll('<font color=red><timestamp/><b>A roulette game was started by <font color=black>' + html_escape(sys.name(src)) + (spinTypes.length !== 3 ? ' with type(s) ' + spinTypes.join(", ") + ' : '') + '!', chan);
+	        sys.sendHtmlAll('<font color=green><timestamp/><b>Type /spin to play!', chan);
+	        sys.sendHtmlAll('<font color=blue><timestamp/><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»', chan);
         }
-        sys.sendHtmlAll('<font color=blue><timestamp/><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»', chan);
-        sys.sendHtmlAll('<font color=red><timestamp/><b>A roulette game was started by <font color=black>' + html_escape(sys.name(src)) + '!', chan);
-        sys.sendHtmlAll('<font color=green><timestamp/><b>Type /spin to play!', chan);
-        sys.sendHtmlAll('<font color=blue><timestamp/><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»', chan);
-        rouletteoff = false;
         return;
     }
     var partyCmds = ["spacemode", "capsmode", "reversemode", "lolmode", "scramblemode", "colormode", "pewpewpew"];
