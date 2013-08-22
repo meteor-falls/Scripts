@@ -1607,11 +1607,6 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         return;
     }
     if (command == "imp") {
-        if (commandData == "Ian" && sys.name(src) == "Leskra") {
-            sys.stopEvent();
-            bot.sendMessage(src, "You may not superimp Ian...", chan);
-            return;
-        }
         sys.sendHtmlAll('<font color=#8A2BE2><timestamp/><b>' + html_escape(sys.name(src)) + ' has impersonated ' + html_escape(commandData) + '!</font></b>');
         sys.changeName(src, commandData);
         return;
