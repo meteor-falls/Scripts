@@ -325,7 +325,6 @@ module.exports = {
             supersilence: false,
             rouletteoff: true,
             htmlchatoff: false,
-            CommandsOff: [],
             lolmode: false,
             spacemode: false,
             capsmode: false,
