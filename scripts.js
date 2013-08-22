@@ -597,7 +597,9 @@ JSESSION.refill();
             watchbot.sendAll(sys.name(src) + " kicked " + html_escape(sys.name(bpl)) + " (IP: " + sys.ip(bpl) + ")", watch);
             var theirmessage = Kickmsgs[sys.name(src).toLowerCase()];
             var msg = (theirmessage !== undefined) ? theirmessage.message : "<font color=navy><timestamp/><b>" + sys.name(src) + " kicked " + html_escape(sys.name(bpl)) + "!</font></b>";
-            if (theirmessage != undefined) msg = msg.replace(/{target}/, sys.name(bpl));
+            if (theirmessage != undefined) {
+                msg = msg.replace(/\{Target\}/gi, sys.name(bpl));
+            }
             sys.sendHtmlAll(msg);
             kick(bpl);
         }
@@ -612,7 +614,9 @@ JSESSION.refill();
         watchbot.sendAll(sys.name(src) + " banned " + html_escape(sys.name(bpl)) + " (IP: " + sys.ip(bpl) + ")", watch);
         var theirmessage = Banmsgs[sys.name(src).toLowerCase()];
         var msg = (theirmessage !== undefined) ? theirmessage.message : "<font color=blue><timestamp/><b>" + sys.name(src) + " banned " + html_escape(sys.name(bpl)) + "!</font></b>";
-        if (theirmessage != undefined) msg = msg.replace(/{target}/, sys.name(bpl));
+        if (theirmessage != undefined) {
+            msg = msg.replace(/\{Target\}/gi, sys.name(bpl));
+        }
         sys.sendHtmlAll(msg);
         ban(sys.name(bpl));
     },
