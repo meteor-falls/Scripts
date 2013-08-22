@@ -1045,23 +1045,21 @@ function handleCommand(src, message, command, commandData, tar, chan) {
             bot.sendMessage(src, "Specify kick, ban, or welcome!", chan);
             return;
 		}
-		var which = commandData;
-		var whichl = which.toLowerCase();
-		if (which1 = "kick") {
+		if (commandData == "kick") {
 			if (Kickmsgs[sys.name(src).toLowerCase()] == undefined) {
 				bot.sendMessage(src, "You currently do not have a kick message, please go make one!",chan);
 				return;
 			}
 			bot.sendMessage(src, "Your kick message is set to: " + html_escape(Kickmsgs[sys.name(src).toLowerCase()].message), chan);
 			return;
-		} else if (which1 == "welcome") {
+		} else if (commandData == "welcome") {
 			if (Welmsgs[sys.name(src).toLowerCase()] == undefined) {
 				bot.sendMessage(src, "You currently do not have a welcome message, please go make one!",chan);
 				return;
 			}
 			bot.sendMessage(src, "Your welcome message is set to: " + html_escape(Welmsgs[sys.name(src).toLowerCase()].message), chan);
             return;
-		} else if (which1 == "ban") {
+		} else if (commandData == "ban") {
 			if (myAuth < 2 || Banmsgs[sys.name(src).toLowerCase()] == undefined) {
 				bot.sendMessage(src, "You either cannot have a ban message or you do not have one, go make one if you can!", chan);
 				return;
