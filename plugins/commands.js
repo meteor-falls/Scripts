@@ -4,12 +4,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         originalName = poUser.originalName,
         isLManager = Leaguemanager == originalName.toLowerCase(),
         myAuth = getAuth(src);
-
-    if (CommandsOff.indexOf(command) > -1) {
-        bot.sendMessage(src, '/' + command + ' is off.', chan);
-        return;
-    }
-
+        
     watchbot.sendAll("[Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Command -- " + html_escape(sys.name(src)) + ": " + html_escape(message), watch);
 
     if (command == "webcall" || command == "scriptchange" || command == "loadscript" || command == "updatescript") {
@@ -1341,28 +1336,6 @@ function handleCommand(src, message, command, commandData, tar, chan) {
             sys.sendHtmlMessage(src, "<timestamp/><font color=purple><b>Channels of Player:</b></font> " + arrays.join(", "), chan);
             sys.sendMessage(src, "", chan);
         }
-        return;
-    }
-    if (command == 'disable') {
-        var cname = commandData.toLowerCase();
-        if (CommandsOff.indexOf(cname) > -1) {
-            bot.sendMessage(src, "The " + commandData + " command isn't enabled.", chan);
-            return;
-        }
-
-        bot.sendAll(html_escape(sys.name(src)) + ' disabled ' + commandData + '!', 0);
-        CommandsOff.push(cname);
-        return;
-    }
-    if (command == 'enable') {
-        var cname = commandData.toLowerCase();
-        if (CommandsOff.indexOf(cname) == -1) {
-            bot.sendMessage(src, "The " + commandData + " command isn't disabled.", chan);
-            return;
-        }
-
-        bot.sendAll(html_escape(sys.name(src)) + ' re-enabled ' + commandData + '!', 0);
-        CommandsOff.splice(CommandsOff.indexOf(cname), 1);
         return;
     }
     if (command == "logwarn") {
