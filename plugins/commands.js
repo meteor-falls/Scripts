@@ -1363,7 +1363,19 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         sys.sendAll(sys.name(src) + ": " + warning, chan);
         return;
     }
-
+    if (command == "tellupdate") {
+        if (tar == undefined) {
+            bot.sendMessage(src, "This person doesn't exist.", chan);
+            return;
+        }
+        if (myAuth <= getAuth(tar) && myAuth < 3) {
+            bot.sendMessage(src, "Can't tell someone with higher or equal auth to update.", chan);
+            return;
+        }
+        sys.sendAll(sys.name(src) + ": Hello " + commandData + ", you have to update to version 2.1.0 to be able to battle on this server.", chan);
+        sys.sendAll(sys.name(src) + ": You can download it here: https://github.com/po-devs/pokemon-online/releases/download/2.1.0/Pokemon-Online-v2.1.0-Setup.exe . Close PO before running the installer, then come back when it's done.", chan);
+        return;
+    }
     if (command == "silence") {
         if (muteall) {
             bot.sendMessage(src, "Silence is already on!", chan);
