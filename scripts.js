@@ -460,7 +460,6 @@ JSESSION.refill();
             return;
         }
 
-        // if ((markdownson && sys.auth(src) < 1) || sys.auth(src) > 0) {
         var oldmessage = message;
 
         var emotes = false,
@@ -471,9 +470,7 @@ JSESSION.refill();
                 msg = format(src, message);
             }
 
-            message = msg;
-            oldEmoteMsg = msg;
-            message = msg;
+            message = oldEmoteMsg = msg;
 
             if (oldEmoteMsg != message) {
                 emotes = true;
@@ -513,7 +510,7 @@ JSESSION.refill();
             sendStr = "<font color=" + namecolor(src) + "><timestamp/>+<i><b>" + html_escape(sys.name(src)) + ": </b></i></font>" + (hasEmotesToggled(src) ? emoteFormat(message) : message);
         }
         if (pewpewpew) {
-            sendStr = pewpewpewmessage(message);
+            sendStr = pewpewpewmessage(oldmessage);
         }
 
         sys.stopEvent();
