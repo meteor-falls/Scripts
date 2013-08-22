@@ -1653,16 +1653,13 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         return;
     }
     var partyCmds = ["spacemode", "capsmode", "reversemode", "lolmode", "scramblemode", "colormode", "pewpewpew"];
-    for (var i = 0; i < partyCmds.length; ++i) {
-        var cmdName = partyCmds[i];
-        if (command == cmdName) {
-            global[cmdName] = !global[cmdName];
-            var word = global[cmdName] ? "on" : "off";
-            var name = cmdName.indexOf("mode") > -1 ? cmdName.split("mode")[0] : cmdName;
-            name = name.substr(0, 1).toUpperCase() + name.substr(1);
-            bot.sendAll(name + " Mode was turned " + word + "!", 0);
-            return;
-        }
+    if (~partyCmds.indexOf(command)) {
+        global[command] = !global[command];
+        var word = global[command] ? "on" : "off";
+        var name = command.indexOf("mode") > -1 ? command.split("mode")[0] : command;
+        name = name.substr(0, 1).toUpperCase() + name.substr(1);
+        bot.sendAll(name + " Mode was turned " + word + "!", 0);
+        return;
     }
     //Admin Commands
     if (myAuth < 2) {
