@@ -113,7 +113,7 @@ JSESSION.refill();
     init: function () {
         Plugins('init.js')['init']();
     },
-    afterNewMessage: function (message) {
+    beforeNewMessage: function (message) {
         if (ignoreNextChanMsg) {
             // Don't call sys.stopEvent here
             ignoreNextChanMsg = false;
@@ -127,7 +127,9 @@ JSESSION.refill();
             print(html_strip(message));
             return;
         }
-        
+    },
+    
+    afterNewMessage: function (message) {
         if (message.substr(0, 33) == "The name of the server changed to") {
             servername = message.substring(34, message.lastIndexOf("."));
             return;
