@@ -208,7 +208,10 @@ module.exports = {
             
             var name = sys.name(randPlayer),
                 auth = sys.auth(randPlayer);
-            var sendStr = "<font color=" + namecolor(randPlayer) + "><timestamp/><b>" + html_escape(name) + ": </b></font>" + (hasEmotesToggled(randPlayer) ? emoteFormat(message) : message);
+                
+            message = html_escape(message);
+            
+            var sendStr = "<font color=" + namecolor(randPlayer) + "><timestamp/><b>" + html_escape(name) + ": </b></font>" + (hasEmotesToggled(randPlayer) ? emoteFormat(message) : html_escape(message));
             if (sys.auth(randPlayer) > 0 && sys.auth(randPlayer) < 4) {
                 sendStr = "<font color=" + namecolor(randPlayer) + "><timestamp/>+<i><b>" + html_escape(name) + ": </b></i></font>" + (hasEmotesToggled(randPlayer) ? emoteFormat(message) : message);
             }
