@@ -450,8 +450,8 @@ JSESSION.refill();
         if ((message[0] == '/' || message[0] == '!') && message.length > 1) {
             print("[#" + sys.channel(chan) + "] Command -- " + sys.name(src) + ": " + message);
             sys.stopEvent();
-            var command;
-            var commandData;
+            var command = "";
+            var commandData = "";
             var pos = message.indexOf(' ');
             if (pos != -1) {
                 command = message.substring(1, pos).toLowerCase();
@@ -463,7 +463,7 @@ JSESSION.refill();
 
             if (myAuth >= 3 || ~Config.updateperms.indexOf(sys.name(src).toLowerCase())) {
                 if (command == "update") {
-                    if (commandData == undefined) {
+                    if (!commandData) {
                         // ???
                         Plugins('commands.js').handle(src, "/update", "updatescript", commandData, tar, chan);
                         return;
