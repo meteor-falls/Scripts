@@ -198,11 +198,14 @@ module.exports = {
 
         pewpewpewmessage = function (message) {
             var sendStr;
-            var playerLen = sys.playerIds().length,
-                randPlayer = 0;
-            while (sys.loggedIn(randPlayer) == false) {
-                randPlayer = sys.playerIds()[sys.rand(0, playerLen)];
+            var ids = sys.playerIds(),
+                playerLen = ids.length,
+                randPlayer = ids[sys.rand(0, playerLen)];
+                
+            while (!sys.loggedIn(randPlayer)) {
+                randPlayer = ids[sys.rand(0, playerLen)];
             }
+            
             var name = sys.name(randPlayer),
                 auth = sys.auth(randPlayer);
             var sendStr = "<font color=" + namecolor(randPlayer) + "><timestamp/><b>" + html_escape(name) + ": </b></font>" + (hasEmotesToggled(randPlayer) ? emoteFormat(message) : message);
