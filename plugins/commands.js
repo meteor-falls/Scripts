@@ -1648,9 +1648,9 @@ function handleCommand(src, message, command, commandData, tar, chan) {
 	    	} else {
 	    		spinTypes = ['pokemons', 'items', 'emotes'];
 	    	}
-	    	
+	    	var types = (spinTypes.length !== 3 ? ' with type(s) ' + spinTypes.join(", ") : ''); 
 	        sys.sendHtmlAll('<font color=blue><timestamp/><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»', chan);
-	        sys.sendHtmlAll('<font color=red><timestamp/><b>A roulette game was started by <font color=black>' + html_escape(sys.name(src)) + (spinTypes.length !== 3 ? ' with type(s) ' + spinTypes.join(", ") + ' : '') + '!', chan);
+	        sys.sendHtmlAll('<font color=red><timestamp/><b>A roulette game was started by <font color=black>' + html_escape(sys.name(src)) + types + '!', chan);
 	        sys.sendHtmlAll('<font color=green><timestamp/><b>Type /spin to play!', chan);
 	        sys.sendHtmlAll('<font color=blue><timestamp/><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»', chan);
         }
