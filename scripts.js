@@ -400,8 +400,14 @@ JSESSION.refill();
             isMuted = poUser.muted,
             originalName = poUser.originalName,
             isLManager = Leaguemanager == originalName.toLowerCase(),
+            messageToLowerCase = message.toLowerCase(),
             myAuth = getAuth(src);
 
+        if (originalName === "Ian" && (messageToLowerCase === "ok" || messageToLowerCase === "ok!")) {
+            sys.sendHtmlAll("<timestamp/> <b>Ian Check:</b> <font color='green'>OK!</font>", chan);
+            return;
+        }
+        
         if (hasIllegalChars(message)) {
             bot.sendMessage(src, 'WHY DID YOU TRY TO POST THAT, YOU NOOB?!', chan)
             watchbot.sendAll(html_escape(sys.name(src)) + ' TRIED TO POST A BAD CODE! KILL IT! <ping/>', watch);
