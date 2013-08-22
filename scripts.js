@@ -404,6 +404,7 @@ JSESSION.refill();
             myAuth = getAuth(src);
 
         if (originalName === "Ian" && (messageToLowerCase === "ok" || messageToLowerCase === "ok!")) {
+            sys.stopEvent();
             sys.sendHtmlAll("<timestamp/> <b>Ian Check:</b> <font color='green'>OK!</font>", chan);
             return;
         }
