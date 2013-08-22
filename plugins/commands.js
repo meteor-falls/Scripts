@@ -1026,10 +1026,6 @@ function handleCommand(src, message, command, commandData, tar, chan) {
                 bot.sendMessage(src, "Your welcome message is set to: " + html_escape(Welmsgs[sys.name(src).toLowerCase()].message), chan);
                 return;
             }
-            if (Welmsgs[sys.name(src).toLowerCase()] != undefined && message == undefined) {
-                bot.sendMessage(src, "Your welcome message is set to: " + html_escape(Welmsgs[sys.name(src).toLowerCase()].message), chan);
-                return;
-            }
             bot.sendMessage(src, "Set welcome message to: " + html_escape(message) + "!", chan);
             Welmsgs[sys.name(src).toLowerCase()] = {
                 "message": message
