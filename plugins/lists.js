@@ -215,9 +215,7 @@ module.exports = {
         Mod.add("emoteperms <font color=red><b>[name]</b></font>", "To add/remove [name] from the emote permission list.");
         Mod.add("imp <font color=red><b>[name]</b></font>", "To change your name to [name].");
         Mod.add("motd <font color=red><b>[message]</b></font>", "To change the Message of the Day to [message].");
-        Mod.add("roulette", "To start a roulette game.");
-        Mod.add("disable <font color=red><b>[command]</b></font>", "To disable [command]. Most user commands can be disabled.");
-        Mod.add("enable <font color=red><b>[command]</b></font>", "To re-enable [command].");
+        Mod.add("roulette", "To start or end a roulette (/spin) game.");
         Mod.add("info <font color=red><b>[player]</b></font>", "To view info about [player].");
         Mod.add("hurr", "To fix the chat if it got messed up.");
         Mod.add("sendall <font color=red><b>[message]</b></font>", "To send a message to everyone.");
