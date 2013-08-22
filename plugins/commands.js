@@ -596,8 +596,10 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         }
         var num = sys.rand(1, 279);
         var numb = sys.rand(1, 646);
-        var emotes = Object.keys(EmoteList),
-            randomEmote = emotes[Math.floor(Math.random() * emotes.length)];
+        var emotes = Object.keys(EmoteList);
+        emotes.splice(emotes.indexOf("__display__"), 1);
+        
+        var randomEmote = emotes[Math.floor(Math.random() * emotes.length)];
             
         var possibilities = [
             "<font color=navy><timestamp/><b>±RouletteBot: </b></font><b><font color=" + namecolor(src) + ">" + html_escape(sys.name(src)) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won a <b><font color=red>" + sys.nature(sys.rand(1, 25)) + "</b></font> <b><font color=blue>" + sys.pokemon(numb) + "!<img src='pokemon:" + numb + "&gen=5' width='50'></b></font>",
