@@ -259,13 +259,20 @@ module.exports = {
         }
 
         hasEmotesToggled = function (src) {
-            if (getAuth(src) <= 0 && !hasEmotePerms(sys.name(src))) return false;
-            if (Emotetoggles[sys.name(src).toLowerCase()] == undefined) return false;
-            return true;
+            return Emotetoggles.hasOwnProperty(JSESSION.users(src).originalName.toLowerCase());
         }
         
         itemsEnabled = function (src) {
-            return Itemtoggles.hasOwnProperty((sys.name(src) || src).toLowerCase());
+            var name = sys.name(src),
+                user;
+            
+            if (!name) {
+                name = src;
+            } else if ((user = JSESSION.users(src)) && user.originalName) {
+                name = user.orignalName;
+            }
+            
+            return Itemtoggles.hasOwnProperty(name.toLowerCase());
         };
 
         getTier = function (src, tier) {
