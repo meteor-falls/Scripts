@@ -765,7 +765,6 @@ module.exports = {
 
             // Misc "emotes". Pokemons (basic only), icons, items, and avatars.
             message = message.replace(/(trainer|icon|item|pokemon):(\d+)/gi, "<img src='$1:$2'>");
-            // Shortcut
             message = message.replace(/:\)/g, "<img src='item:177'>");
             return message;
         };
