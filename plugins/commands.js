@@ -1022,7 +1022,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
             return;
         }
         
-        var wallmessage = html_escape(command);
+        var wallmessage = html_escape(commandData);
         
         if (hasEmotesToggled(src)) {
         	wallmessage = emoteFormat(wallmessage);
