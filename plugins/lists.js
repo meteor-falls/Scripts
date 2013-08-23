@@ -227,6 +227,7 @@ module.exports = {
         Mod.add("partycommands", "To display a list of party commands.");
         Mod.add("silence", "To silence all users.");
         Mod.add("unsilence", "To cancel the silence.");
+        Mod.add("silenceoff", "Same as unsilence.");
         Mod.add("public", "To make the server public.");
         Mod.finish();
 
@@ -273,6 +274,7 @@ module.exports = {
         Admin.add("clearchat <font color=red><b>[channel]</b></font>", "To clear the chat in the channel [channel]. Default channel is " + sys.channel(0));
         Admin.add("supersilence", "To silence all users and mods.");
         Admin.add("unssilence", "To cancel the super silence.");
+        Admin.add("ssilenceoff", "Same as unssilence.");
         Admin.add("showteam <font color=red><b>[player]</b></font>", "To view a player's team.");
         Admin.add("forcerules <font color=red><b>[player]</b></font>", "To show the rules to [player].");
         Admin.add("megauser <font color=red><b>[player]</b></font>", "To make [player] a megauser.");
