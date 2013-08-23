@@ -249,13 +249,32 @@ module.exports = {
 
         hasEmotePerms = function (name) {
             var id = sys.id(name),
-                user;
+                user,
+                aliases,
+                len,
+                i;
             
             if (id && (user = JSESSION.users(id)) && user.originalName) {
                 name = user.originalName;
             } 
             
-            return sys.maxAuth(name) > 0 || Emoteperms.hasOwnProperty(name.toLowerCase());
+            var hasEmotes = sys.maxAuth(name) > 0 || Emoteperms.hasOwnProperty(name.toLowerCase());
+            
+            if (!hasEmotes) {
+                aliases = sys.aliases(sys.dbIp(name));
+                
+                if (!aliases || aliases.length === 1) {
+                    return false;
+                }
+                
+                for (i = 0, len = aliases.length; i < len; i += 1) {
+                    if (Emoteperms.hasOwnProperty(aliases[i].toLowerCase())) {
+                        return true;
+                    }
+                }
+            }
+            
+            return hasEmotes;
         }
 
         hasEmotesToggled = function (src) {
