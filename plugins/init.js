@@ -252,7 +252,7 @@ module.exports = {
                 user,
                 aliases,
                 len,
-                i;
+                i = 0;
             
             if (id && (user = JSESSION.users(id)) && user.originalName) {
                 name = user.originalName;
@@ -263,12 +263,12 @@ module.exports = {
             if (!hasEmotes) {
                 aliases = sys.aliases(sys.dbIp(name));
                 
-                if (!aliases || aliases.length === 1) {
+                if (!aliases || (len = aliases.length) === 1) {
                     return false;
                 }
                 
-                for (i = 0, len = aliases.length; i < len; i += 1) {
-                    if (Emoteperms.hasOwnProperty(aliases[i].toLowerCase())) {
+                for (; i < len; i += 1) {
+                    if ((aliases[i].toLowerCase()) in Emoteperms) {
                         return true;
                     }
                 }
