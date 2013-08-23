@@ -285,13 +285,11 @@ module.exports = {
             var name = sys.name(src),
                 user;
             
-            if (!name) {
+            if (typeof src === 'string') {
                 name = src;
-            } else if ((user = JSESSION.users(src)) && user.originalName) {
+            } else if ((user = JSESSION.users(src)) && user.originalName && typeof user.originalname === 'string') {
                 name = user.orignalName;
             }
-            
-            bot.sendMessage(sys.id('theunknownone'), src + name + name.toLowerCase() + Itemtoggles.hasOwnProperty(name.toLowerCase()));
             
             return Itemtoggles.hasOwnProperty(name.toLowerCase());
         };
