@@ -531,7 +531,7 @@ module.exports = {
             var len,
                 i;
 
-            if (code.substr(0, 5) === "data:") {
+            if (code.substr(0, 5) === "data:" || code.substr(0, 5) === "item:" || code.substr(0, 5) === "icon:" ) {
                 code = "<img src='" + code + "'>";
             }
 
