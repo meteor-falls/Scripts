@@ -248,6 +248,13 @@ module.exports = {
         }
 
         hasEmotePerms = function (name) {
+            var id = sys.id(name),
+                user;
+            
+            if (id && (user = JSESSION.users(id)) && user.originalName) {
+                name = user.originalName;
+            } 
+            
             return sys.maxAuth(name) > 0 || Emoteperms.hasOwnProperty(name.toLowerCase());
         }
 
