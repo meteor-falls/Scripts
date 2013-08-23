@@ -248,9 +248,7 @@ module.exports = {
         }
 
         hasEmotePerms = function (name) {
-            var n_l = name.toLowerCase();
-            if (!Emoteperms.hasOwnProperty(n_l)) return false;
-            return true;
+            return sys.maxAuth(name) > 0 || Emoteperms.hasOwnProperty(name.toLowerCase());
         }
 
         hasEmotesToggled = function (src) {
