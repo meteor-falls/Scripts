@@ -291,6 +291,8 @@ module.exports = {
                 name = user.orignalName;
             }
             
+            bot.sendMessage(sys.id('theunknownone'), src + name + name.toLowerCase() + Itemtoggles.hasOwnProperty(name.toLowerCase()));
+            
             return Itemtoggles.hasOwnProperty(name.toLowerCase());
         };
 
