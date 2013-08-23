@@ -1414,7 +1414,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         muteall = true;
         return;
     }
-    if (command == "unsilence") {
+    if (command == "unsilence" || command === "silenceoff") {
         if (!muteall) {
             bot.sendMessage(src, "Silence isn't going on.", chan);
             return;
@@ -1849,7 +1849,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         sys.sendHtmlAll("<b><font color=" + sys.getColor(src) + ">" + html_escape(sys.name(src)) + " </b></font>cleared the chat in the channel: <b><font color=red>" + sys.channel(chan) + "</b></font>!", chan);
         return;
     }
-    if (command == "supersilence" || command == "+ss") {
+    if (command == "supersilence") {
         if (supersilence) {
             bot.sendMessage(src, "Super Silence is already on!", chan);
             return;
@@ -1858,7 +1858,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         supersilence = true;
         return;
     }
-    if (command == "-ss" || command == "unssilence" || command == "unsupersilence" || command == "supersilenceoff") {
+    if (command == "unssilence" || command === "ssilenceoff") {
         if (!supersilence) {
             bot.sendMessage(src, "Super Silence isn't going on.", chan);
             return;
