@@ -643,6 +643,10 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         	possibilities.push("<b><font color=" + namecolor(src) + ">" + sys.name(src) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won " + EmoteList[randomEmote] + "!");
         }
 
+		if (~spinTypes.indexOf('avatars') || ~spinTypes.indexOf('trainers')) {
+        	possibilities.push("<b><font color=" + namecolor(src) + ">" + sys.name(src) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won <img src='trainer:" + sys.rand(1, 301) + "'>!");
+		}
+		
         sys.sendHtmlAll("<font color=navy><timestamp/><b>±RouletteBot:</b></font> " + possibilities[sys.rand(0, possibilities.length)], chan);
         return;
     }
@@ -1667,20 +1671,25 @@ function handleCommand(src, message, command, commandData, tar, chan) {
 	        sys.sendHtmlAll('<font color=black><timestamp/><b><font color=black>' + html_escape(sys.name(src)) + ' ended the roulette game.', chan);
 	        sys.sendHtmlAll('<font color=blue><timestamp/><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»', chan);
         } else {
-	    	var types = commandData.split(", ").filter(function (val) {
+	    	var types = commandData.split(", ").filter(function (val, index, array) {
 	    		var vtl = val.toLowerCase();
-	    		return vtl === "pokemons" || vtl === "items" || vtl === "emotes";
+	    		return (vtl === "pokemons" || vtl === "items" || vtl === "emotes" || vtl === "trainers" || vtl === "avatars") && array.indexOf(vtl) === -1;
 	    	});
+	    	
+	    	if (~types.indexOf('trainers') && ~types.indexOf('avatars')) {
+	    		types.splice(types.indexOf('trainers'), 1);
+	    	}
 	    	
 	    	if (types.length) {
 	    		spinTypes = types;
 	    	} else {
-	    		spinTypes = ['pokemons', 'items', 'emotes'];
+	    		spinTypes = ['pokemons', 'items', 'emotes', 'avatars'];
 	    	}
+	    	
 	        sys.sendHtmlAll('<font color=blue><timestamp/><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»', chan);
 	        sys.sendHtmlAll('<font color=red><timestamp/><b>A roulette game was started by <font color=black>' + html_escape(sys.name(src)) + '!', chan);
-	        if (spinTypes.length !== 3) {
-	            sys.sendHtmlAll('<font color=red><timestamp/><b>Type(s): ' + spinTypes.join(", "), chan);
+	        if (spinTypes.length <= 3) {
+	            sys.sendHtmlAll('<font color=orange><timestamp/><b>Type(s):</b></font> ' + spinTypes.join(", "), chan);
 	        }
 	        sys.sendHtmlAll('<font color=green><timestamp/><b>Type /spin to play!', chan);
 	        sys.sendHtmlAll('<font color=blue><timestamp/><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»', chan);
