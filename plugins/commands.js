@@ -130,7 +130,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         }
         
         if (command === "updateann") {
-        	sys.sendHtmlAll('<font color=blue><timestamp/><b>±TierBot: </b></font>The tiers were webcalled by ' + sys.name(src) + '!', 0);
+        	sys.sendHtmlAll('<font color=blue><timestamp/><b>±AnnouncementBot: </b></font>The announcement was webcalled by ' + sys.name(src) + '!', 0);
         }
         
         sys.webCall(commandData, function (resp) {
@@ -1014,24 +1014,23 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         bot.sendMessage(src, "The MOTD is: " + html_escape(Reg.get("MOTD")), chan);
         return;
     }
-    if (command == "cwall") {
+    if (command == "wall" || command == "cwall") {
+    	var wallchan = (command === "cwall" ? chan : undefined);
+    	
         if (commandData == undefined) {
             bot.sendMessage(src, "Please post a message.", chan);
             return;
         }
-        sys.sendHtmlAll("<br><font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>", chan);
-        sys.sendHtmlAll("<font color=" + namecolor(src) + "><timestamp/>+<b><i>" + sys.name(src) + ":</b><font color=black> " + html_escape(commandData) + "<br>", chan);
-        sys.sendHtmlAll("<font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>", chan);
-        return;
-    }
-    if (command == "wall") {
-        if (commandData == undefined) {
-            bot.sendMessage(src, "Please post a message.", chan);
-            return;
+        
+        var wallmessage = html_escape(command);
+        
+        if (hasEmotesToggled(src)) {
+        	wallmessage = emoteFormat(wallmessage);
         }
-        sys.sendHtmlAll("<br><font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>");
-        sys.sendHtmlAll("<font color=" + namecolor(src) + "><timestamp/>+<b><i>" + sys.name(src) + ":</b><font color=black> " + html_escape(commandData) + "<br>");
-        sys.sendHtmlAll("<font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>");
+        
+        sys.sendHtmlAll("<br><font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>", wallchan);
+        sys.sendHtmlAll("<font color=" + namecolor(src) + "><timestamp/>+<b><i>" + sys.name(src) + ":</b><font color=black> " + wallmessage + "<br>", wallchan);
+        sys.sendHtmlAll("<font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>", wallchan);
         return;
     }
     if (command == "message") {
