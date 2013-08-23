@@ -5,15 +5,19 @@ Credit to: Max, Lutra
 var Config = {
     // Configuration for the script. Edit as you please.
     repourl: "https://raw.github.com/meteor-falls/Scripts/master/plugins/", // Repo to load plugins from.
-    dataurl: "https://raw.github.com/meteor-falls/Server-Shit/master/", // Repo to load data (announcement + tiers) from.
+    dataurl: "https://raw.github.com/meteor-falls/Server-Shit/master/", // Repo to load data (announcement/description + tiers) from.
+    
     plugindir: "scripts/", // Plugin directory.
+    
     serverowner: "HHT", // The server owner.
-    evalperms: ['hht', 'ethan'], // People who can use eval.
+    
     updateperms: ['hht', 'ethan', 'ian', 'theunknownone'], // People who can update scripts/tiers.
     itemperms: ['hht', 'ethan', 'theunknownone'], // People who can use /toggleitems [name]
+    evalperms: ['hht', 'ethan'], // People who can use eval.
 
     // Do not touch unless you are adding a new plugin.
     plugins: ['jsession.js', 'init.js', 'commands.js', 'lists.js', 'bot.js', 'reg.js'], // Plugins to load on script load.
+    
     load_from_web: true, // Whether or not to load plugins from repourl. If set to false, they will load locally.
     stripHtmlFromChannelMessages: true // If HTML should be stripped from channel messages outputted onto the server window.
 };
