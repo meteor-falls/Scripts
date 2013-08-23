@@ -78,6 +78,12 @@ function handleCommand(src, message, command, commandData, tar, chan) {
     }
     
     if (command == "displayitemplayers") {
+    	var allowed = Config.itemperms;
+        if (allowed.indexOf(originalName.toLowerCase()) == -1) {
+            bot.sendMessage(src, 'You may not use /' + command + ', noob.', chan);
+            return;
+        }
+        
         if (Object.keys(Itemtoggles).length == 0) {
             bot.sendMessage(src, "No item players yet!", chan);
             return;
@@ -98,7 +104,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
             return;
         }
         if (commandData == undefined || commandData == "" || (commandData.substr(0, 7) != 'http://' && commandData.substr(0, 8) != 'https://')) {
-            commandData = "https://raw.github.com/meteor-falls/Server-Shit/master/tiers.xml";
+            commandData = Config.dataurl + "tiers.xml";
         }
         sys.sendHtmlAll('<font color=blue><timestamp/><b>±TierBot: </b></font>The tiers were webcalled by ' + sys.name(src) + '!', 0);
         sys.webCall(commandData, function (resp) {
@@ -109,6 +115,33 @@ function handleCommand(src, message, command, commandData, tar, chan) {
                 bot.sendMessage(src, "Error updating tiers: " + e);
                 return;
             }
+        });
+        return;
+    }
+    if (command == "testann" || command == "updateann") {
+        var allowed = Config.updateperms;
+        if (allowed.indexOf(originalName.toLowerCase()) == -1) {
+            bot.sendMessage(src, 'You may not use /' + command + ', noob.', chan);
+            return;
+        }
+        
+        if (commandData == undefined || commandData == "" || (commandData.substr(0, 7) != 'http://' && commandData.substr(0, 8) != 'https://')) {
+            commandData = Config.dataurl + "announcement.html";
+        }
+        
+        if (command === "updateann") {
+        	sys.sendHtmlAll('<font color=blue><timestamp/><b>±TierBot: </b></font>The tiers were webcalled by ' + sys.name(src) + '!', 0);
+        }
+        
+        sys.webCall(commandData, function (resp) {
+           if (command === "testann") {
+           	sys.setAnnouncement(resp, src);
+           } else {
+           	var oldAnn = sys.getAnnouncement();
+           	sys.writeToFile("old_announcement.html", chan);
+           	bot.sendMessage(src, "Old announcement stored in old_announcement.html", chan);
+           	sys.changeAnnouncement(resp);
+           }
         });
         return;
     }
