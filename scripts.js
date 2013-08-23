@@ -804,7 +804,7 @@ JSESSION.refill();
             time = sys.time() * 1;
             poUser.floodCount += 1;
             sys.callLater("if (JSESSION.users(" + src + ") !== undefined) { JSESSION.users(" + src + ").floodCount--;  };", 8);
-            if (poUser.floodCount > 5 && poUser.muted == false) {
+            if (poUser.floodCount > 7 && poUser.muted == false) {
                 flbot.sendAll(sys.name(src) + " was kicked and muted for flooding.", 0);
                 poUser.muted = true;
                 Mutes[srcip] = {
@@ -813,7 +813,7 @@ JSESSION.refill();
                     "reason": "Flooding.",
                     "time": time + 300
                 }
-                kick(src, true); /* sys.kick instead of qC */
+                kick(src, true);
                 return;
             }
         }
@@ -821,7 +821,7 @@ JSESSION.refill();
             time = sys.time() * 1;
         if (script.isMCaps(message) && auth < 1 && !ignoreFlood) {
             poUser.caps += 1;
-            if (poUser.caps >= 5 && poUser.muted == false) {
+            if (poUser.caps >= 6 && poUser.muted == false) {
                 if (Capsignore[sys.name(src).toLowerCase()] !== undefined) return;
                 capsbot.sendAll(sys.name(src) + " was muted for 5 minutes for CAPS.", 0);
                 poUser.muted = true;
