@@ -51,14 +51,14 @@ PluginHandler.prototype.load = function (plugin_name, webcall) {
     }
     this.plugins[plugin_name] = module.exports;
     return module.exports;
-}
+};
+
 PluginHandler.prototype.unload = function (plugin_name) {
-    if (!this.plugins.hasOwnProperty(plugin_name)) return false;
-    delete this.plugins[plugin_name];
-    return true;
-}
+    return (delete this.plugins[plugin_name]);
+};
+
 PluginHandler.prototype.callplugins = function (event) {
-    var args = Array.prototype.slice.call(arguments, 1);
+    var args = [].slice.call(arguments, 1);
     var ret = true;
     for (var plugin in plugins) {
         if (plugins[plugin].hasOwnProperty(event)) {
@@ -73,7 +73,7 @@ PluginHandler.prototype.callplugins = function (event) {
 var PHandler = new PluginHandler(Config.plugindir);
 for (var i = 0; i < Config.plugins.length; i++) {
     var plugin = Config.plugins[i],
-        plugin_name = plugin.indexOf(".js") > -1 ? plugin : plugin + ".js";
+        plugin_name = (plugin.indexOf(".") === -1) ? plugin + ".js" : plugin;
     PHandler.load(plugin_name, Config.load_from_web);
 }
 
