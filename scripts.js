@@ -516,11 +516,11 @@ JSESSION.refill();
         if (hasEmotesToggled(src)) {
             emoteMessage = emoteFormat(simpleMessage);
             
-
             if (simpleMessage !== emoteMessage) {
                 emotes = true;
             }
             
+            simpleMessage = emoteMessage;
         }
         
         message = simpleMessage;
