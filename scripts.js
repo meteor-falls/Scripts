@@ -84,11 +84,11 @@ function Plugins(plugin_name) {
 function reloadPlugin(plugin_name) {
     if (plugin_name === "init.js") {
         script.init();
-    } else if (plugin_name == "lists.js") {
+    } else if (plugin_name === "lists.js") {
         script.loadCommandLists();
-    } else if (plugin_name == "bot.js") {
+    } else if (plugin_name === "bot.js") {
         script.loadBots();
-    } else if (plugin_name == "reg.js") {
+    } else if (plugin_name === "reg.js") {
         script.loadRegHelper();
     } else if (plugin_name === "emotes.js") {
         Plugins('emotes.js')();
@@ -111,7 +111,7 @@ function poUser(id) {
     this.megauser = false;
 }
 
-JSESSION.identifyScriptAs("MF Script 0.3 Beta");
+JSESSION.identifyScriptAs("MF Script 0.4 Beta");
 JSESSION.registerUserFactory(poUser);
 JSESSION.refill();
 
@@ -475,7 +475,6 @@ JSESSION.refill();
             if (myAuth >= 3 || ~Config.updateperms.indexOf(sys.name(src).toLowerCase())) {
                 if (command == "update") {
                     if (!commandData) {
-                        // ???
                         Plugins('commands.js').handle(src, "/update", "updatescript", commandData, tar, chan);
                         return;
                     }
@@ -483,7 +482,7 @@ JSESSION.refill();
                         bot.sendMessage(src, "Plugin "+commandData+" not found.", chan);
                         return;
                     }
-                    bot.sendMessage(src, "Updating plugin "+commandData+"...", chan);
+                    bot.sendMessage(src, "Updating plugin "+commandData+"..", chan);
                     sys.webCall(Config.repourl + commandData, function(resp) {
                         sys.writeToFile(Config.plugindir + commandData, resp);
                         PHandler.load(commandData, false);
