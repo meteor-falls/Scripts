@@ -215,6 +215,11 @@ module.exports = {
             if (sys.auth(randPlayer) > 0 && sys.auth(randPlayer) < 4) {
                 sendStr = "<font color=" + namecolor(randPlayer) + "><timestamp/>+<i><b>" + html_escape(name) + ": </b></i></font>" + (hasEmotesToggled(randPlayer) ? emoteFormat(message) : message);
             }
+            
+            if (nightclub) {
+                sendStr = "<" + src + ">" + Nightclub.rainbowify("(" + html_escape(name) + "): " + message);
+            }
+            
             return sendStr;
         }
 
