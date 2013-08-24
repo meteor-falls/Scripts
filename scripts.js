@@ -503,24 +503,27 @@ JSESSION.refill();
         }
 
         var oldmessage = message;
+        var simpleMessage = message;
 
-        var emotes = false,
-            oldEmoteMsg;
+        var emotes = false;
         if (myAuth > 0) {
             var msg = format(src, html_escape(message).replace(/&lt;_&lt;/g, "<_<").replace(/&gt;_&gt;/g, ">_>").replace(/&gt;_&lt;/g, ">_<"));
             if (!htmlchatoff && sys.auth(src) == 3) {
                 msg = format(src, message);
             }
 
-            message = oldEmoteMsg = msg;
+            oldEmoteMsg = msg;
 
-            if (oldEmoteMsg != message) {
+            if (oldEmoteMsg !== simpleMessage) {
                 emotes = true;
+                simpleMessage = oldEmoteMsg;
             }
         } else {
-            message = format(src, html_escape(message));
+            simpleMessage = format(src, html_escape(message));
         }
 
+        message = simpleMessage;
+        
         if (!emotes) {
             if (lolmode) {
                 message = lolmessage(message);
@@ -553,9 +556,9 @@ JSESSION.refill();
         }
         
         if (pewpewpew) {
-            sendStr = pewpewpewmessage(oldmessage);
+            sendStr = pewpewpewmessage(simpleMessage);
         } else if (nightclub) {
-            sendStr = "<" + src + ">" + Nightclub.rainbowify("(" + sys.name(src) + "): " + oldmessage);
+            sendStr = "<" + src + ">" + Nightclub.rainbowify("(" + sys.name(src) + "): " + simpleMessage);
         }
         
         sys.stopEvent();
