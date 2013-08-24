@@ -502,24 +502,28 @@ JSESSION.refill();
             return;
         }
 
-        var oldmessage = message;
+        var originalMessage = message;
         var simpleMessage = message;
+        var emoteMessage = message;
 
         var emotes = false;
         if (myAuth > 0) {
-            var msg = format(src, html_escape(message).replace(/&lt;_&lt;/g, "<_<").replace(/&gt;_&gt;/g, ">_>").replace(/&gt;_&lt;/g, ">_<"));
+            emoteMessage = format(src, html_escape(emoteMessage).replace(/&lt;_&lt;/g, "<_<").replace(/&gt;_&gt;/g, ">_>").replace(/&gt;_&lt;/g, ">_<"));
             if (!htmlchatoff && sys.auth(src) == 3) {
-                msg = format(src, message);
+                emoteMessage = format(src, emoteMessage);
+            }
+            
+            if (hasEmotesToggled(src)) {
+                emoteMessage = emoteFormat(emoteMessage);
             }
 
-            oldEmoteMsg = msg;
-
-            if (oldEmoteMsg !== simpleMessage) {
+            if (simpleMessage !== emoteMessage) {
                 emotes = true;
-                simpleMessage = oldEmoteMsg;
             }
+            
+            simpleMessage = emoteMessage;
         } else {
-            simpleMessage = format(src, html_escape(message));
+            simpleMessage = format(src, html_escape(simpleMessage));
         }
 
         message = simpleMessage;
@@ -550,15 +554,19 @@ JSESSION.refill();
             }
         }
 
-        var sendStr = "<font color=" + namecolor(src) + "><timestamp/><b>" + html_escape(sys.name(src)) + ": </b></font>" + (hasEmotesToggled(src) ? emoteFormat(message) : message);
+        var sendStr = "<font color=" + namecolor(src) + "><timestamp/><b>" + html_escape(sys.name(src)) + ": </b></font>" + message;
         if (sys.auth(src) > 0 && sys.auth(src) < 4) {
-            sendStr = "<font color=" + namecolor(src) + "><timestamp/>+<i><b>" + html_escape(sys.name(src)) + ": </b></i></font>" + (hasEmotesToggled(src) ? emoteFormat(message) : message);
+            sendStr = "<font color=" + namecolor(src) + "><timestamp/>+<i><b>" + html_escape(sys.name(src)) + ": </b></i></font>" + message;
         }
         
         if (pewpewpew) {
             sendStr = pewpewpewmessage(simpleMessage);
         } else if (nightclub) {
-            sendStr = "<" + src + ">" + Nightclub.rainbowify("(" + sys.name(src) + "): " + simpleMessage);
+            if (emotes) {
+                sendStr = "<" + src + ">" + Nightclub.rainbowify("(" + sys.name(src) + "): ") + simpleMessage;
+            } else {
+                sendStr = "<" + src + ">" + Nightclub.rainbowify("(" + sys.name(src) + "): " + simpleMessage);
+            }
         }
         
         sys.stopEvent();
