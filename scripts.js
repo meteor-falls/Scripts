@@ -611,9 +611,7 @@ JSESSION.refill();
     afterChangeTeam: function (src) {
         var myUser = JSESSION.users(src);
 
-        sys.setTimer(function () {
-            JSESSION.users(src).originalName = sys.name(src);
-        });
+        myUser.originalName = sys.name(src);
 
         script.megauserCheck(src);
         if (typeof myUser.teamChanges == 'undefined') {
