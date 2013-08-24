@@ -507,25 +507,22 @@ JSESSION.refill();
         var emoteMessage = message;
 
         var emotes = false;
-        if (myAuth > 0) {
-            emoteMessage = format(src, html_escape(emoteMessage).replace(/&lt;_&lt;/g, "<_<").replace(/&gt;_&gt;/g, ">_>").replace(/&gt;_&lt;/g, ">_<"));
-            if (!htmlchatoff && sys.auth(src) == 3) {
-                emoteMessage = format(src, emoteMessage);
-            }
+        simpleMessage = format(src, html_escape(simpleMessage).replace(/&lt;_&lt;/g, "<_<").replace(/&gt;_&gt;/g, ">_>").replace(/&gt;_&lt;/g, ">_<"));
+        
+        if (myAuth === 3 && !htmlchatoff) {
+            simpleMessage = format(src, originalMessage);
+        }
             
-            if (hasEmotesToggled(src)) {
-                emoteMessage = emoteFormat(emoteMessage);
-            }
+        if (hasEmotesToggled(src)) {
+            emoteMessage = emoteFormat(simpleMessage);
+            
 
             if (simpleMessage !== emoteMessage) {
                 emotes = true;
             }
             
-            simpleMessage = emoteMessage;
-        } else {
-            simpleMessage = format(src, html_escape(simpleMessage));
         }
-
+        
         message = simpleMessage;
         
         if (!emotes) {
