@@ -153,6 +153,23 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         Leaguemanager = sys.name(tar).toLowerCase();
         return;
     }
+    
+    // Prevent other commands if the chat is silenced.
+    if (myAuth < 1 && muteall) {
+        sys.stopEvent();
+        bot.sendMessage(src, "Shut up! Silence is on!", chan);
+        watchbot.sendAll(" [Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Silence Message -- " + html_escape(sys.name(src)) + ": " + html_escape(message), watch);
+        script.afterChatMessage(src, message, chan);
+        return;
+    }
+	if (myAuth < 2 && supersilence) {
+	    sys.stopEvent();
+	    bot.sendMessage(src, "Shut up! Super Silence is on!", chan);
+	    watchbot.sendAll(" [Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Silence Message -- " + html_escape(sys.name(src)) + ": " + html_escape(message), watch);
+	    script.afterChatMessage(src, message, chan);
+	    return;
+	}
+        
     if (command == "commands") {
         Lists.Commands.display(src, chan);
         return;
