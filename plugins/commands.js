@@ -1431,28 +1431,51 @@ function handleCommand(src, message, command, commandData, tar, chan) {
             bot.sendMessage(src, "You can't kick nothing!", chan);
             return;
         }
+       
         var t = commandData.split(':'),
-            tar = sys.id(t[0])
-            reason = t[1];
-
-        if (tar == undefined) {
-            bot.sendMessage(src, "This person doesn't exist.", chan);
-            return;
+        	tars = (t[0].split("*")),
+        	tar,
+        	reason = t[1] || "No reason.",
+        	toKick = [],
+        	len = tars.length,
+        	i = 0;
+        
+        for (; i < len; i += 1) {
+        	tar = sys.id(tars[i]);
+        	
+        	if (tar === undefined) {
+            	bot.sendMessage(src, "This person (" + tars[i] + ") doesn't exist.", chan);
+            	continue;
+        	}
+        	
+        	if (myAuth <= getAuth(tar) && myAuth < 3) {
+            	bot.sendMessage(src, "Can't kick someone (" + tars[i] + ") with higher or equal auth.", chan);
+            	continue;
+    		}
+    		
+    		toKick.push(sys.name(tar));
         }
-        if (myAuth <= getAuth(tar) && myAuth < 3) {
-            bot.sendMessage(src, "Can't kick someone with higher or equal auth.", chan);
-            return;
+        
+        if (!toKick.length) {
+        	bot.sendMessage(src, "No one to kick.", chan);
+        	return;
         }
-        if (reason == undefined || reason == "") {
-            reason = 'No reason.';
+        
+        var theirmesssage = Kickmsgs[sys.name(src).toLowerCase()];
+        var tarNames = andJoin(toKick);
+        var msg = (theirmessage !== undefined) ? theirmessage.message : "<font color=red><timestamp/><b>" + tarNames + " " + (toKick.length === 1 ? "was" : "were") + " kicked by " + html_escape(sys.name(src)) + "!";
+        
+        if (theirmessage != undefined) {
+        	msg = msg.replace(/\{Target\}/gi, tarNames);
         }
-        t[0] = getName(t[0]);
-        var theirmessage = Kickmsgs[sys.name(src).toLowerCase()];
-        var msg = (theirmessage !== undefined) ? theirmessage.message : "<font color=red><timestamp/><b>" + t[0] + " was kicked by " + html_escape(sys.name(src)) + "!";
-        if (theirmessage != undefined) msg = msg.replace(/{target}/gi, t[0]);
+        
         var treason = "<br></font></b><font color=black><timestamp/><b>Reason:</font></b> " + reason;
         sys.sendHtmlAll(msg + treason);
-        kick(tar);
+        
+        for (i = 0, len = toKick.length; i < len; i += 1) {
+        	kick(sys.id(toKick[i]));
+        }
+        
         return;
     }
     if (command == 'public') {
