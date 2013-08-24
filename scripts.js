@@ -7,7 +7,7 @@ var Config = {
     repourl: "https://raw.github.com/meteor-falls/Scripts/master/plugins/", // Repo to load plugins from.
     dataurl: "https://raw.github.com/meteor-falls/Server-Shit/master/", // Repo to load data (announcement/description + tiers) from.
     
-    plugindir: "scripts/", // Plugin directory.
+    plugindir: "plugins/", // Plugin directory.
     
     serverowner: "HHT", // The server owner.
     
@@ -16,7 +16,7 @@ var Config = {
     evalperms: ['hht', 'ethan'], // People who can use eval.
 
     // Do not touch unless you are adding a new plugin.
-    plugins: ['jsession.js', 'init.js', 'emotes.js', 'commands.js', 'lists.js', 'bot.js', 'reg.js'], // Plugins to load on script load.
+    plugins: ['jsession', 'init', 'emotes', 'commands', 'lists', 'bot', 'reg'], // Plugins to load on script load.
     
     load_from_web: true, // Whether or not to load plugins from repourl. If set to false, they will load locally.
     stripHtmlFromChannelMessages: true // If HTML should be stripped from channel messages outputted onto the server window.
@@ -72,7 +72,9 @@ PluginHandler.prototype.callplugins = function (event) {
 }
 var PHandler = new PluginHandler(Config.plugindir);
 for (var i = 0; i < Config.plugins.length; i++) {
-    PHandler.load(Config.plugins[i], Config.load_from_web);
+    var plugin = Config.plugins[i],
+        plugin_name = plugin.indexOf(".js") > -1 ? plugin : plugin + ".js";
+    PHandler.load(plugin_name, Config.load_from_web);
 }
 
 function Plugins(plugin_name) {
