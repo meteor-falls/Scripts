@@ -236,7 +236,7 @@ module.exports = {
         /** MODERATION COMMANDS **/
         var Moderate = new CommandList("Moderation Commands", "navy");
         Moderate.add("logwarn <font color=red><b>[player]</b></font>", "To warn [player] of excessive logs.");
-        Moderate.add("kick <font color=red><b>[player]</b></font>:<font color=red><b>[reason]</b></font>", "To kick [player] from the server. [reason] is optional.");
+        Moderate.add("kick <font color=red><b>[player*player2]</b></font>:<font color=red><b>[reason]</b></font>", "To kick [player] from the server. You can kick multiple players with by separating their names with '*'. [reason] is optional.");
         Moderate.add("channelkick <font color=red><b>[player]</b></font>", "To kick [player] from the channel.");
         Moderate.add("mute <font color=red><b>[person]</b></font>:<font color=red><b>[time]</b></font>:<font color=red><b>[unit]</b></font>:<font color=red><b>[reason]</b></font>", "To mute someone, [time], [timeunit], and [reason] is optional. [Units are: seconds, minutes, hours, days, weeks, months, years, decades. Default is minutes]. If no time is specified, mutes forever. You can skip time by doing: /mute [player]:::[reason].");
         Moderate.add("unmute <font color=red><b>[person]</b></font>", "To unmute [person].");
