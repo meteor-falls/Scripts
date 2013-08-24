@@ -278,8 +278,7 @@ module.exports = {
         }
 
         hasEmotesToggled = function (src) {
-            return false;
-            //return Emotetoggles.hasOwnProperty(JSESSION.users(src).originalName.toLowerCase());
+            return Emotetoggles.hasOwnProperty(JSESSION.users(src).originalName.toLowerCase());
         }
         
         itemsEnabled = function (src) {
