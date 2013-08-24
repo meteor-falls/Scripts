@@ -2103,22 +2103,6 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         Lists.Auth.display(src, chan);
         return;
     }
-    if (command == "eval") {
-        if (sys.ip(src) == "127.0.0.1" || Config.evalperms.indexOf(originalName.toLowerCase()) > -1) {
-            bot.sendMessage(src, "You evaluated: " + html_escape(commandData), chan);
-            try {
-                var res = sys.eval(commandData);
-                sys.sendHtmlMessage(src, "<timestamp/><b>Evaluation Check: </b><font color='green'>OK</font>", chan);
-                sys.sendHtmlMessage(src, "<timestamp/><b>Response: </b> " + res, chan);
-            } catch (error) {
-                sys.sendHtmlMessage(src, "<timestamp/><b>Evaluation Check: </b><font color='red'>" + error + "</font>", chan);
-                if (error.backtracetext) {
-                    sys.sendHtmlMessage(src, "<timestamp/><b>Backtrace:</b> <br/> " + error.backtracetext.replace(/\n/g, "<br/>"), chan);
-                }
-            }
-            return;
-        }
-    }
 
     bot.sendMessage(src, "The command " + command + " doesn't exist.", chan);
     return;
