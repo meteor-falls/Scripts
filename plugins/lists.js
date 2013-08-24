@@ -215,19 +215,19 @@ module.exports = {
         Mod.add("emoteperms <font color=red><b>[name]</b></font>", "To add/remove [name] from the emote permission list.");
         Mod.add("imp <font color=red><b>[name]</b></font>", "To change your name to [name].");
         Mod.add("motd <font color=red><b>[message]</b></font>", "To change the Message of the Day to [message].");
-        Mod.add("roulette", "To start a roulette game.");
-        Mod.add("disable <font color=red><b>[command]</b></font>", "To disable [command]. Most user commands can be disabled.");
-        Mod.add("enable <font color=red><b>[command]</b></font>", "To re-enable [command].");
+        Mod.add("roulette <font color='red'><b>&lt;type1, type2&gt;</b></font>", "To start or end a roulette (/spin) game. Types can include: pokemons, items, emotes, avatars. By default, all 4 are enabled.");
         Mod.add("info <font color=red><b>[player]</b></font>", "To view info about [player].");
         Mod.add("hurr", "To fix the chat if it got messed up.");
         Mod.add("sendall <font color=red><b>[message]</b></font>", "To send a message to everyone.");
         Mod.add("sendhtmlall <font color=red><b>[message]</b></font>", "To send a HTML message to everyone.");
         Mod.add("warn <font color=red><b>[player]</b></font>:<font color=red><b>[reason]</b></font>", "To send a warning to [player] with reason [reason].");
+        Mod.add("tellupdate <font color=red><b>[player]</b></font>", "To tell [player] how to update to the latest version.");
         Mod.add("getmotd", "To get the MOTD (including HTML).");
         Mod.add("moderationcommands", "To display a list of commands that moderate the chat.");
         Mod.add("partycommands", "To display a list of party commands.");
         Mod.add("silence", "To silence all users.");
         Mod.add("unsilence", "To cancel the silence.");
+        Mod.add("silenceoff", "Same as unsilence.");
         Mod.add("public", "To make the server public.");
         Mod.finish();
 
@@ -246,6 +246,7 @@ module.exports = {
         Moderate.add("tempbans", "To see a list of temporarily banned players.");
         Moderate.add("rangebans", "To see a list of rangebanned ips.");
         Moderate.add("message <font color=red><b>[kick/ban/welcome]:[message]</b></font>", "To set your kick, ban, or welcome message. Use {target} to say target (if kick or ban msg). If it is a welcome message, use {server} to say the server. You can use HTML, but don't aboose. Example: " + html_escape("<font color=green><timestamp/> <b>Ian struck the banhammer on {target}!</b></font>."));
+        Moderate.add("viewmessage", "<fontcolor=red><b>[kick/ban/welcome]</b></font", "To view your kick, ban, or welcome message.");
         Moderate.add("removemessage", "<fontcolor=red><b>[kick/ban/welcome]</b></font", "To remove a kick, ban, or welcome message.");
 
         Moderate.finish();
@@ -273,6 +274,7 @@ module.exports = {
         Admin.add("clearchat <font color=red><b>[channel]</b></font>", "To clear the chat in the channel [channel]. Default channel is " + sys.channel(0));
         Admin.add("supersilence", "To silence all users and mods.");
         Admin.add("unssilence", "To cancel the super silence.");
+        Admin.add("ssilenceoff", "Same as unssilence.");
         Admin.add("showteam <font color=red><b>[player]</b></font>", "To view a player's team.");
         Admin.add("forcerules <font color=red><b>[player]</b></font>", "To show the rules to [player].");
         Admin.add("megauser <font color=red><b>[player]</b></font>", "To make [player] a megauser.");

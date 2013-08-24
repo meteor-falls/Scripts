@@ -5,14 +5,21 @@ Credit to: Max, Lutra
 var Config = {
     // Configuration for the script. Edit as you please.
     repourl: "https://raw.github.com/meteor-falls/Scripts/master/plugins/", // Repo to load plugins from.
+    dataurl: "https://raw.github.com/meteor-falls/Server-Shit/master/", // Repo to load data (announcement/description + tiers) from.
+    
     plugindir: "scripts/", // Plugin directory.
+    
     serverowner: "HHT", // The server owner.
-    evalperms: ['hht', 'ethan'], // People who can use eval.
+    
     updateperms: ['hht', 'ethan', 'ian', 'theunknownone'], // People who can update scripts/tiers.
+    itemperms: ['hht', 'ethan', 'theunknownone'], // People who can use /toggleitems [name]
+    evalperms: ['hht', 'ethan'], // People who can use eval.
 
     // Do not touch unless you are adding a new plugin.
     plugins: ['jsession.js', 'init.js', 'commands.js', 'lists.js', 'bot.js', 'reg.js'], // Plugins to load on script load.
-    load_from_web: true // Whether or not to load plugins from repourl. If set to false, they will load locally.
+    
+    load_from_web: true, // Whether or not to load plugins from repourl. If set to false, they will load locally.
+    stripHtmlFromChannelMessages: true // If HTML should be stripped from channel messages outputted onto the server window.
 };
 
 if (typeof JSESSION === "undefined") {
@@ -85,6 +92,9 @@ function reloadPlugin(plugin_name) {
 }
 
 var global = this;
+var ignoreNextChanMsg = false,
+    // Lookups are slow. Cache this as NewMessage is called many, many times.
+    stripHtmlFromChannelMessages = Config.stripHtmlFromChannelMessages;
 
 function poUser(id) {
     this.id = id;
@@ -108,6 +118,22 @@ JSESSION.refill();
     init: function () {
         Plugins('init.js')['init']();
     },
+    beforeNewMessage: function (message) {
+        if (ignoreNextChanMsg) {
+            // Don't call sys.stopEvent here
+            ignoreNextChanMsg = false;
+            return;
+        }
+        
+        // Strip HTML. :]
+        if (stripHtmlFromChannelMessages && message.substring(0, 2) === "[#") {
+            sys.stopEvent();
+            ignoreNextChanMsg = true;
+            print(html_strip(message));
+            return;
+        }
+    },
+    
     afterNewMessage: function (message) {
         if (message.substr(0, 33) == "The name of the server changed to") {
             servername = message.substring(34, message.lastIndexOf("."));
@@ -379,8 +405,15 @@ JSESSION.refill();
             isMuted = poUser.muted,
             originalName = poUser.originalName,
             isLManager = Leaguemanager == originalName.toLowerCase(),
+            messageToLowerCase = message.toLowerCase(),
             myAuth = getAuth(src);
 
+        if (originalName === "Ian" && (messageToLowerCase === "ok" || messageToLowerCase === "ok!")) {
+            sys.stopEvent();
+            sys.sendHtmlAll("<timestamp/> <b>Ian Check:</b> <font color='green'>OK!</font>", chan);
+            return;
+        }
+        
         if (hasIllegalChars(message)) {
             bot.sendMessage(src, 'WHY DID YOU TRY TO POST THAT, YOU NOOB?!', chan)
             watchbot.sendAll(html_escape(sys.name(src)) + ' TRIED TO POST A BAD CODE! KILL IT! <ping/>', watch);
@@ -422,8 +455,8 @@ JSESSION.refill();
         if ((message[0] == '/' || message[0] == '!') && message.length > 1) {
             print("[#" + sys.channel(chan) + "] Command -- " + sys.name(src) + ": " + message);
             sys.stopEvent();
-            var command;
-            var commandData;
+            var command = "";
+            var commandData = "";
             var pos = message.indexOf(' ');
             if (pos != -1) {
                 command = message.substring(1, pos).toLowerCase();
@@ -433,9 +466,9 @@ JSESSION.refill();
             }
             var tar = sys.id(commandData);
 
-            if (myAuth >= 3) {
+            if (myAuth >= 3 || ~Config.updateperms.indexOf(sys.name(src).toLowerCase())) {
                 if (command == "update") {
-                    if (commandData == undefined) {
+                    if (!commandData) {
                         // ???
                         Plugins('commands.js').handle(src, "/update", "updatescript", commandData, tar, chan);
                         return;
@@ -459,7 +492,6 @@ JSESSION.refill();
             return;
         }
 
-        // if ((markdownson && sys.auth(src) < 1) || sys.auth(src) > 0) {
         var oldmessage = message;
 
         var emotes = false,
@@ -470,9 +502,7 @@ JSESSION.refill();
                 msg = format(src, message);
             }
 
-            message = msg;
-            oldEmoteMsg = msg;
-            message = msg;
+            message = oldEmoteMsg = msg;
 
             if (oldEmoteMsg != message) {
                 emotes = true;
@@ -511,13 +541,8 @@ JSESSION.refill();
         if (sys.auth(src) > 0 && sys.auth(src) < 4) {
             sendStr = "<font color=" + namecolor(src) + "><timestamp/>+<i><b>" + html_escape(sys.name(src)) + ": </b></i></font>" + (hasEmotesToggled(src) ? emoteFormat(message) : message);
         }
-        if (pewpewpew) {
-            sendStr = pewpewpewmessage(message);
-        }
-
         sys.stopEvent();
-
-        sys.sendHtmlAll(sendStr, chan);
+        sys.sendHtmlAll(pewpewpew ? pewpewpewmessage(oldmessage) : sendStr, chan);
 
         watchbot.sendAll(" [Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Message -- " + html_escape(sys.name(src)) + ": " + html_escape(oldmessage), watch);
 
@@ -596,7 +621,9 @@ JSESSION.refill();
             watchbot.sendAll(sys.name(src) + " kicked " + html_escape(sys.name(bpl)) + " (IP: " + sys.ip(bpl) + ")", watch);
             var theirmessage = Kickmsgs[sys.name(src).toLowerCase()];
             var msg = (theirmessage !== undefined) ? theirmessage.message : "<font color=navy><timestamp/><b>" + sys.name(src) + " kicked " + html_escape(sys.name(bpl)) + "!</font></b>";
-            if (theirmessage != undefined) msg = msg.replace(/{target}/, sys.name(bpl));
+            if (theirmessage != undefined) {
+                msg = msg.replace(/\{Target\}/gi, sys.name(bpl));
+            }
             sys.sendHtmlAll(msg);
             kick(bpl);
         }
@@ -611,7 +638,9 @@ JSESSION.refill();
         watchbot.sendAll(sys.name(src) + " banned " + html_escape(sys.name(bpl)) + " (IP: " + sys.ip(bpl) + ")", watch);
         var theirmessage = Banmsgs[sys.name(src).toLowerCase()];
         var msg = (theirmessage !== undefined) ? theirmessage.message : "<font color=blue><timestamp/><b>" + sys.name(src) + " banned " + html_escape(sys.name(bpl)) + "!</font></b>";
-        if (theirmessage != undefined) msg = msg.replace(/{target}/, sys.name(bpl));
+        if (theirmessage != undefined) {
+            msg = msg.replace(/\{Target\}/gi, sys.name(bpl));
+        }
         sys.sendHtmlAll(msg);
         ban(sys.name(bpl));
     },
@@ -780,7 +809,7 @@ JSESSION.refill();
             time = sys.time() * 1;
             poUser.floodCount += 1;
             sys.callLater("if (JSESSION.users(" + src + ") !== undefined) { JSESSION.users(" + src + ").floodCount--;  };", 8);
-            if (poUser.floodCount > 5 && poUser.muted == false) {
+            if (poUser.floodCount > 7 && poUser.muted == false) {
                 flbot.sendAll(sys.name(src) + " was kicked and muted for flooding.", 0);
                 poUser.muted = true;
                 Mutes[srcip] = {
@@ -789,7 +818,7 @@ JSESSION.refill();
                     "reason": "Flooding.",
                     "time": time + 300
                 }
-                kick(src, true); /* sys.kick instead of qC */
+                kick(src, true);
                 return;
             }
         }
@@ -797,7 +826,7 @@ JSESSION.refill();
             time = sys.time() * 1;
         if (script.isMCaps(message) && auth < 1 && !ignoreFlood) {
             poUser.caps += 1;
-            if (poUser.caps >= 5 && poUser.muted == false) {
+            if (poUser.caps >= 6 && poUser.muted == false) {
                 if (Capsignore[sys.name(src).toLowerCase()] !== undefined) return;
                 capsbot.sendAll(sys.name(src) + " was muted for 5 minutes for CAPS.", 0);
                 poUser.muted = true;
@@ -814,12 +843,37 @@ JSESSION.refill();
         }
     },
     battleSetup: function (src, tar, bid) {
-        if (SacredAsh[sys.name(src).toLowerCase()]) {
-            sys.prepareItems(bid, 0, {"124": 3});
+        var items = {
+            // 10 Full Heals
+            "74": 10,
+            // 10 Full Restores
+            "75": 10,
+            // 10 Max Elixirs
+            "96": 10,
+            // 10 Max Potions
+            "98": 10,
+            // 7 Max Revives
+            "100": 7,
+            // 10 Revives
+            "123": 10,
+            // 5 Sacred Ash
+            "124": 5,
+            // 10 X Speed 6, X Special 6, X Sp. Def 6, X Defend 6, X Attack 6, X Accuracy 6, Dire Hit 3
+            "293": 10,
+            "294": 10,
+            "295": 10,
+            "296": 10,
+            "297": 10,
+            "298": 10,
+            "303": 10
+        };
+        
+        if (itemsEnabled(src)) {
+            sys.prepareItems(bid, 0, items);
         }
         
-        if (SacredAsh[sys.name(tar).toLowerCase()]) {
-            sys.prepareItems(bid, 1, {"124": 3});
+        if (itemsEnabled(tar)) {
+            sys.prepareItems(bid, 1, items);
         }
     },
     isMCaps: function (message) {

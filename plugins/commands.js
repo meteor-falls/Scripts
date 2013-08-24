@@ -4,12 +4,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         originalName = poUser.originalName,
         isLManager = Leaguemanager == originalName.toLowerCase(),
         myAuth = getAuth(src);
-
-    if (CommandsOff.indexOf(command) > -1) {
-        bot.sendMessage(src, '/' + command + ' is off.', chan);
-        return;
-    }
-
+        
     watchbot.sendAll("[Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Command -- " + html_escape(sys.name(src)) + ": " + html_escape(message), watch);
 
     if (command == "webcall" || command == "scriptchange" || command == "loadscript" || command == "updatescript") {
@@ -56,8 +51,8 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         return;
     }
     
-    if (command == "togglesacredash") {
-        var allowed = Config.updateperms;
+    if (command == "toggleitems") {
+        var allowed = Config.itemperms;
         if (allowed.indexOf(originalName.toLowerCase()) == -1) {
             bot.sendMessage(src, 'You may not use /' + command + ', noob.', chan);
             return;
@@ -65,15 +60,41 @@ function handleCommand(src, message, command, commandData, tar, chan) {
 
         var toggled = '';
         
-        if (SacredAsh[sys.name(src).toLowerCase()]) {
-            delete SacredAsh[sys.name(src).toLowerCase()];
+        if (!commandData) {
+            commandData = sys.name(src);
+        }
+        
+        if (itemsEnabled(commandData)) {
+            delete Itemtoggles[commandData.toLowerCase()];
             toggled = 'off';
         } else {
-            SacredAsh[sys.name(src).toLowerCase()] = true;
+            Itemtoggles[commandData.toLowerCase()] = true;
             toggled = 'on';
         }
         
-        sys.sendHtmlMessage(src, '<font color=blue><timestamp/><b>±Ho-Oh: </b></font> Turned Sacred Ash ' + toggled + '.', 0);
+        Reg.save("Itemtoggles", JSON.stringify(Itemtoggles));
+        sys.sendHtmlMessage(src, '<font color=blue><timestamp/><b>±ItemBot:</b></font> Turned items ' + toggled + ' for ' + commandData + '.');
+        return;
+    }
+    
+    if (command == "displayitemplayers") {
+    	var allowed = Config.itemperms;
+        if (allowed.indexOf(originalName.toLowerCase()) == -1) {
+            bot.sendMessage(src, 'You may not use /' + command + ', noob.', chan);
+            return;
+        }
+        
+        if (Object.keys(Itemtoggles).length == 0) {
+            bot.sendMessage(src, "No item players yet!", chan);
+            return;
+        }
+        var list = new CommandList("<font color='goldenrod'>Item Players</font>", "navy", "");
+        for (var x in Itemtoggles) {
+            list.add(x);
+        }
+
+        list.finish();
+        list.display(src, chan);
         return;
     }
     if (command == "updatetiers" || command == "loadtiers") {
@@ -83,7 +104,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
             return;
         }
         if (commandData == undefined || commandData == "" || (commandData.substr(0, 7) != 'http://' && commandData.substr(0, 8) != 'https://')) {
-            commandData = "https://raw.github.com/meteor-falls/Server-Shit/master/tiers.xml";
+            commandData = Config.dataurl + "tiers.xml";
         }
         sys.sendHtmlAll('<font color=blue><timestamp/><b>±TierBot: </b></font>The tiers were webcalled by ' + sys.name(src) + '!', 0);
         sys.webCall(commandData, function (resp) {
@@ -94,6 +115,33 @@ function handleCommand(src, message, command, commandData, tar, chan) {
                 bot.sendMessage(src, "Error updating tiers: " + e);
                 return;
             }
+        });
+        return;
+    }
+    if (command == "testann" || command == "updateann") {
+        var allowed = Config.updateperms;
+        if (allowed.indexOf(originalName.toLowerCase()) == -1) {
+            bot.sendMessage(src, 'You may not use /' + command + ', noob.', chan);
+            return;
+        }
+        
+        if (commandData == undefined || commandData == "" || (commandData.substr(0, 7) != 'http://' && commandData.substr(0, 8) != 'https://')) {
+            commandData = Config.dataurl + "announcement.html";
+        }
+        
+        if (command === "updateann") {
+        	sys.sendHtmlAll('<font color=blue><timestamp/><b>±AnnouncementBot: </b></font>The announcement was webcalled by ' + sys.name(src) + '!', 0);
+        }
+        
+        sys.webCall(commandData, function (resp) {
+           if (command === "testann") {
+           	sys.setAnnouncement(resp, src);
+           } else {
+           	var oldAnn = sys.getAnnouncement();
+           	sys.writeToFile("old_announcement.html", chan);
+           	bot.sendMessage(src, "Old announcement stored in old_announcement.html", chan);
+           	sys.changeAnnouncement(resp);
+           }
         });
         return;
     }
@@ -570,14 +618,36 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         return;
     }
     if (command == "spin") {
-        if (typeof (rouletteoff) != "undefined" && rouletteoff != false) {
+        if (!rouletteon) {
             bot.sendMessage(src, "Roulette has been turned off!", chan);
             return;
         }
         var num = sys.rand(1, 279);
         var numb = sys.rand(1, 646);
-        var Links = ["<font color=navy><timestamp/><b>±RouletteBot: </b></font><b><font color=" + namecolor(src) + ">" + html_escape(sys.name(src)) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won a <b><font color=red>" + sys.nature(sys.rand(1, 25)) + "</b></font> <b><font color=blue>" + sys.pokemon(numb) + "!<img src='pokemon:" + numb + "&gen=5' width='50'></b></font>", "<font color=navy><timestamp/><b>±RouletteBot: </b></font><b><font color=" + namecolor(src) + ">" + sys.name(src) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won <b><font color=red>" + sys.item(num) + "! <img src='item:" + num + "'></b></font>"];
-        sys.sendHtmlAll(Links[0], chan);
+        var emotes = Object.keys(EmoteList);
+        emotes.splice(emotes.indexOf("__display__"), 1);
+        
+        var randomEmote = emotes[Math.floor(Math.random() * emotes.length)];
+            
+        var possibilities = [];
+        
+        if (~spinTypes.indexOf('pokemons')) {
+        	possibilities.push("<b><font color=" + namecolor(src) + ">" + html_escape(sys.name(src)) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won a <b><font color=red>" + sys.nature(sys.rand(1, 25)) + "</b></font> <b><font color=blue>" + sys.pokemon(numb) + "!<img src='icon:" + numb + "'></b></font>");
+        }
+        
+        if (~spinTypes.indexOf('items')) {
+        	possibilities.push("<b><font color=" + namecolor(src) + ">" + sys.name(src) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won <b><font color=red>" + sys.item(num) + "! <img src='item:" + num + "'></b></font>");
+        }
+        
+        if (~spinTypes.indexOf('emotes')) {
+        	possibilities.push("<b><font color=" + namecolor(src) + ">" + sys.name(src) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won " + EmoteList[randomEmote] + "!");
+        }
+
+		if ((~spinTypes.indexOf('avatars')) || (~spinTypes.indexOf('trainers'))) {
+        	possibilities.push("<b><font color=" + namecolor(src) + ">" + sys.name(src) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won <img src='trainer:" + sys.rand(1, 301) + "'>!");
+		}
+		
+        sys.sendHtmlAll("<font color=navy><timestamp/><b>±RouletteBot:</b></font> " + possibilities[sys.rand(0, possibilities.length)], chan);
         return;
     }
     if (command == "megausers") {
@@ -948,24 +1018,23 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         bot.sendMessage(src, "The MOTD is: " + html_escape(Reg.get("MOTD")), chan);
         return;
     }
-    if (command == "cwall") {
+    if (command == "wall" || command == "cwall") {
+    	var wallchan = (command === "cwall" ? chan : undefined);
+    	
         if (commandData == undefined) {
             bot.sendMessage(src, "Please post a message.", chan);
             return;
         }
-        sys.sendHtmlAll("<br><font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>", chan);
-        sys.sendHtmlAll("<font color=" + namecolor(src) + "><timestamp/>+<b><i>" + sys.name(src) + ":</b><font color=black> " + html_escape(commandData) + "<br>", chan);
-        sys.sendHtmlAll("<font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>", chan);
-        return;
-    }
-    if (command == "wall") {
-        if (commandData == undefined) {
-            bot.sendMessage(src, "Please post a message.", chan);
-            return;
+        
+        var wallmessage = html_escape(commandData);
+        
+        if (hasEmotesToggled(src)) {
+        	wallmessage = emoteFormat(wallmessage);
         }
-        sys.sendHtmlAll("<br><font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>");
-        sys.sendHtmlAll("<font color=" + namecolor(src) + "><timestamp/>+<b><i>" + sys.name(src) + ":</b><font color=black> " + html_escape(commandData) + "<br>");
-        sys.sendHtmlAll("<font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>");
+        
+        sys.sendHtmlAll("<br><font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>", wallchan);
+        sys.sendHtmlAll("<font color=" + namecolor(src) + "><timestamp/>+<b><i>" + sys.name(src) + ":</b><font color=black> " + wallmessage + "<br>", wallchan);
+        sys.sendHtmlAll("<font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>", wallchan);
         return;
     }
     if (command == "message") {
@@ -982,10 +1051,6 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         var message = cut(commandData, 1, ":");
         var whichl = which.toLowerCase();
         if (whichl == "kick") {
-            if (Kickmsgs[sys.name(src).toLowerCase()] != undefined && message == undefined) {
-                bot.sendMessage(src, "Your kick message is set to: " + html_escape(Kickmsgs[sys.name(src).toLowerCase()].message), chan);
-                return;
-            }
             bot.sendMessage(src, "Set kick message to: " + html_escape(message) + "!", chan);
             Kickmsgs[sys.name(src).toLowerCase()] = {
                 "message": message
@@ -993,14 +1058,6 @@ function handleCommand(src, message, command, commandData, tar, chan) {
             Reg.save("Kickmsgs", JSON.stringify(Kickmsgs));
             return;
         } else if (whichl == "welcome") {
-            if (Welmsgs[sys.name(src).toLowerCase()] != undefined && message == undefined) {
-                bot.sendMessage(src, "Your welcome message is set to: " + html_escape(Welmsgs[sys.name(src).toLowerCase()].message), chan);
-                return;
-            }
-            if (Welmsgs[sys.name(src).toLowerCase()] != undefined && message == undefined) {
-                bot.sendMessage(src, "Your welcome message is set to: " + html_escape(Welmsgs[sys.name(src).toLowerCase()].message), chan);
-                return;
-            }
             bot.sendMessage(src, "Set welcome message to: " + html_escape(message) + "!", chan);
             Welmsgs[sys.name(src).toLowerCase()] = {
                 "message": message
@@ -1012,10 +1069,6 @@ function handleCommand(src, message, command, commandData, tar, chan) {
                 bot.sendMessage(src, "You need to be a higher auth to set your ban message!", chan);
                 return;
             }
-            if (Banmsgs[sys.name(src).toLowerCase()] != undefined && message == undefined) {
-                bot.sendMessage(src, "Your ban message is set to: " + html_escape(Banmsgs[sys.name(src).toLowerCase()].message), chan);
-                return;
-            }
             bot.sendMessage(src, "Set ban message to: " + html_escape(message) + "!", chan);
             Banmsgs[sys.name(src).toLowerCase()] = {
                 "message": message
@@ -1023,11 +1076,42 @@ function handleCommand(src, message, command, commandData, tar, chan) {
             Reg.save("Banmsgs", JSON.stringify(Banmsgs));
             return;
         } else {
-            bot.sendMessage(src, "Specify kick or ban!", chan);
+            bot.sendMessage(src, "Specify kick, ban, or welcome!", chan);
             return;
         }
     }
-    if (command == "removemessage") {
+	if (command == "viewmessage") {
+		if (commandData == undefined) {
+            bot.sendMessage(src, "Specify kick, ban, or welcome!", chan);
+            return;
+		}
+		if (commandData == "kick") {
+			if (Kickmsgs[sys.name(src).toLowerCase()] == undefined) {
+				bot.sendMessage(src, "You currently do not have a kick message, please go make one!",chan);
+				return;
+			}
+			bot.sendMessage(src, "Your kick message is set to: " + html_escape(Kickmsgs[sys.name(src).toLowerCase()].message), chan);
+			return;
+		} else if (commandData == "welcome") {
+			if (Welmsgs[sys.name(src).toLowerCase()] == undefined) {
+				bot.sendMessage(src, "You currently do not have a welcome message, please go make one!",chan);
+				return;
+			}
+			bot.sendMessage(src, "Your welcome message is set to: " + html_escape(Welmsgs[sys.name(src).toLowerCase()].message), chan);
+            return;
+		} else if (commandData == "ban") {
+			if (myAuth < 2 || Banmsgs[sys.name(src).toLowerCase()] == undefined) {
+				bot.sendMessage(src, "You either cannot have a ban message or you do not have one, go make one if you can!", chan);
+				return;
+			}
+			bot.sendMessage(src, "Your ban message is set to: " + html_escape(Banmsgs[sys.name(src).toLowerCase()].message), chan);
+			return;
+		} else {
+			bot.sendMessage(src, "Specify kick, ban, or welcome!", chan);
+			return;
+		}
+	}
+	if (command == "removemessage") {
         var lower = commandData.toLowerCase();
         if (lower == "kick") {
             if (Kickmsgs[sys.name(src).toLowerCase()] == undefined) {
@@ -1299,28 +1383,6 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         }
         return;
     }
-    if (command == 'disable') {
-        var cname = commandData.toLowerCase();
-        if (CommandsOff.indexOf(cname) > -1) {
-            bot.sendMessage(src, "The " + commandData + " command isn't enabled.", chan);
-            return;
-        }
-
-        bot.sendAll(html_escape(sys.name(src)) + ' disabled ' + commandData + '!', 0);
-        CommandsOff.push(cname);
-        return;
-    }
-    if (command == 'enable') {
-        var cname = commandData.toLowerCase();
-        if (CommandsOff.indexOf(cname) == -1) {
-            bot.sendMessage(src, "The " + commandData + " command isn't disabled.", chan);
-            return;
-        }
-
-        bot.sendAll(html_escape(sys.name(src)) + ' re-enabled ' + commandData + '!', 0);
-        CommandsOff.splice(CommandsOff.indexOf(cname), 1);
-        return;
-    }
     if (command == "logwarn") {
         if (tar == undefined) {
             bot.sendMessage(src, "This person doesn't exist.", chan);
@@ -1334,7 +1396,19 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         sys.sendAll(sys.name(src) + ": " + warning, chan);
         return;
     }
-
+    if (command == "tellupdate") {
+        if (tar == undefined) {
+            bot.sendMessage(src, "This person doesn't exist.", chan);
+            return;
+        }
+        if (myAuth <= getAuth(tar) && myAuth < 3) {
+            bot.sendMessage(src, "Can't tell someone with higher or equal auth to update.", chan);
+            return;
+        }
+        sys.sendAll(sys.name(src) + ": Hello " + commandData + ", you have to update to version 2.1.0 to be able to battle on this server.", chan);
+        sys.sendAll(sys.name(src) + ": You can download it here: https://github.com/po-devs/pokemon-online/releases/download/2.1.0/Pokemon-Online-v2.1.0-Setup.exe . Close PO before running the installer, then come back when it's done.", chan);
+        return;
+    }
     if (command == "silence") {
         if (muteall) {
             bot.sendMessage(src, "Silence is already on!", chan);
@@ -1344,7 +1418,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         muteall = true;
         return;
     }
-    if (command == "unsilence") {
+    if (command == "unsilence" || command === "silenceoff") {
         if (!muteall) {
             bot.sendMessage(src, "Silence isn't going on.", chan);
             return;
@@ -1584,49 +1658,50 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         return;
     }
     if (command == "imp") {
-        if (commandData == "Ian" && sys.name(src) == "Leskra") {
-            sys.stopEvent();
-            bot.sendMessage(src, "You may not superimp Ian...", chan);
-            return;
-        }
         sys.sendHtmlAll('<font color=#8A2BE2><timestamp/><b>' + html_escape(sys.name(src)) + ' has impersonated ' + html_escape(commandData) + '!</font></b>');
         sys.changeName(src, commandData);
         return;
     }
-    if (command == "rouletteoff") {
-        if (rouletteoff) {
-            bot.sendMessage(src, "Roulette is already off!", chan);
-            return;
-        }
-        sys.sendHtmlAll('<font color=blue><timestamp/><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»', chan);
-        sys.sendHtmlAll('<font color=black><timestamp/><b><font color=black>' + html_escape(sys.name(src)) + ' ended the roulette game.', chan);
-        sys.sendHtmlAll('<font color=blue><timestamp/><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»', chan);
-        rouletteoff = true;
-        return;
-    }
     if (command == "roulette") {
-        if (!rouletteoff) {
-            bot.sendMessage(src, "Roulette is already on!", chan);
-            return;
+        rouletteon = !rouletteon;
+        
+        spinTypes = [];
+        if (!rouletteon) {
+	        sys.sendHtmlAll('<font color=blue><timestamp/><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»', chan);
+	        sys.sendHtmlAll('<font color=black><timestamp/><b><font color=black>' + html_escape(sys.name(src)) + ' ended the roulette game.', chan);
+	        sys.sendHtmlAll('<font color=blue><timestamp/><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»', chan);
+        } else {
+	    	var types = commandData.split(", ").map(function (val) {
+	    		return val.toLowerCase();
+	    	}).filter(function (val, index, array) {
+	    		return (val === "pokemons" || val === "items" || val === "emotes" || val === "trainers" || val === "avatars") && array.indexOf(val) === -1;
+	    	});
+	    	
+	    	if ((~types.indexOf('trainers')) && (~types.indexOf('avatars'))) {
+	    		types.splice(types.indexOf('trainers'), 1);
+	    	}
+	    	
+	    	if (types.length) {
+	    		spinTypes = types;
+	    	} else {
+	    		spinTypes = ['pokemons', 'items', 'emotes', 'avatars'];
+	    	}
+	    	
+	        sys.sendHtmlAll('<font color=blue><timestamp/><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»', chan);
+	        sys.sendHtmlAll('<font color=red><timestamp/><b>A roulette game was started by <font color=black>' + html_escape(sys.name(src)) + '!', chan);
+	        sys.sendHtmlAll('<font color=orange><timestamp/><b>Type(s):</b></font> ' + spinTypes.join(", "), chan);
+	        sys.sendHtmlAll('<font color=green><timestamp/><b>Type /spin to play!', chan);
+	        sys.sendHtmlAll('<font color=blue><timestamp/><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»', chan);
         }
-        sys.sendHtmlAll('<font color=blue><timestamp/><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»', chan);
-        sys.sendHtmlAll('<font color=red><timestamp/><b>A roulette game was started by <font color=black>' + html_escape(sys.name(src)) + '!', chan);
-        sys.sendHtmlAll('<font color=green><timestamp/><b>Type /spin to play!', chan);
-        sys.sendHtmlAll('<font color=blue><timestamp/><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»', chan);
-        rouletteoff = false;
         return;
     }
     var partyCmds = ["spacemode", "capsmode", "reversemode", "lolmode", "scramblemode", "colormode", "pewpewpew"];
-    for (var i = 0; i < partyCmds.length; ++i) {
-        var cmdName = partyCmds[i];
-        if (command == cmdName) {
-            global[cmdName] = !global[cmdName];
-            var word = global[cmdName] ? "on" : "off";
-            var name = cmdName.indexOf("mode") > -1 ? cmdName.split("mode")[0] : cmdName;
-            name = name.substr(0, 1).toUpperCase() + name.substr(1);
-            bot.sendAll(name + " Mode was turned " + word + "!", 0);
-            return;
-        }
+    if (~partyCmds.indexOf(command)) {
+        var word = (eval(command + " = !" + command)) ? "on" : "off";
+        var name = command.indexOf("mode") > -1 ? command.split("mode")[0] : command;
+        name = name.substr(0, 1).toUpperCase() + name.substr(1);
+        bot.sendAll(name + " Mode was turned " + word + "!", 0);
+        return;
     }
     //Admin Commands
     if (myAuth < 2) {
@@ -1782,7 +1857,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         sys.sendHtmlAll("<b><font color=" + sys.getColor(src) + ">" + html_escape(sys.name(src)) + " </b></font>cleared the chat in the channel: <b><font color=red>" + sys.channel(chan) + "</b></font>!", chan);
         return;
     }
-    if (command == "supersilence" || command == "+ss") {
+    if (command == "supersilence") {
         if (supersilence) {
             bot.sendMessage(src, "Super Silence is already on!", chan);
             return;
@@ -1791,7 +1866,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         supersilence = true;
         return;
     }
-    if (command == "-ss" || command == "unssilence" || command == "unsupersilence" || command == "supersilenceoff") {
+    if (command == "unssilence" || command === "ssilenceoff") {
         if (!supersilence) {
             bot.sendMessage(src, "Super Silence isn't going on.", chan);
             return;
@@ -2000,10 +2075,14 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         if (sys.ip(src) == "127.0.0.1" || Config.evalperms.indexOf(originalName.toLowerCase()) > -1) {
             bot.sendMessage(src, "You evaluated: " + html_escape(commandData), chan);
             try {
-                sys.eval(commandData);
+                var res = sys.eval(commandData);
                 sys.sendHtmlMessage(src, "<timestamp/><b>Evaluation Check: </b><font color='green'>OK</font>", chan);
+                sys.sendHtmlMessage(src, "<timestamp/><b>Response: </b> " + res, chan);
             } catch (error) {
                 sys.sendHtmlMessage(src, "<timestamp/><b>Evaluation Check: </b><font color='red'>" + error + "</font>", chan);
+                if (error.backtracetext) {
+                    sys.sendHtmlMessage(src, "<timestamp/><b>Backtrace:</b> <br/> " + error.backtracetext.replace(/\n/g, "<br/>"), chan);
+                }
             }
             return;
         }
