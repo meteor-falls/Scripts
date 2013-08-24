@@ -499,7 +499,6 @@ JSESSION.refill();
                     }
                     return;
                 }
-                return;
             }
 
             Plugins('commands.js').handle(src, message, command, commandData, tar, chan);
