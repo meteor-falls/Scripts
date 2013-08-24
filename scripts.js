@@ -1,4 +1,4 @@
-/* Meteor Falls Version 0.3 Scripts.
+/* Meteor Falls Version 0.4 Scripts.
 By: HHT, TheUnknownOne, Ethan
 Credit to: Max, Lutra
 */
@@ -16,7 +16,7 @@ var Config = {
     evalperms: ['hht', 'ethan'], // People who can use eval.
 
     // Do not touch unless you are adding a new plugin.
-    plugins: ['jsession.js', 'init.js', 'commands.js', 'lists.js', 'bot.js', 'reg.js'], // Plugins to load on script load.
+    plugins: ['jsession.js', 'init.js', 'emotes.js', 'commands.js', 'lists.js', 'bot.js', 'reg.js'], // Plugins to load on script load.
     
     load_from_web: true, // Whether or not to load plugins from repourl. If set to false, they will load locally.
     stripHtmlFromChannelMessages: true // If HTML should be stripped from channel messages outputted onto the server window.
@@ -88,6 +88,8 @@ function reloadPlugin(plugin_name) {
         script.loadBots();
     } else if (plugin_name == "reg.js") {
         script.loadRegHelper();
+    } else if (plugin_name === "emotes.js") {
+        Plugins('emotes.js')();
     }
 }
 
@@ -117,6 +119,7 @@ JSESSION.refill();
     },
     init: function () {
         Plugins('init.js')['init']();
+        Plugins('emotes.js')();
     },
     beforeNewMessage: function (message) {
         if (ignoreNextChanMsg) {
@@ -224,7 +227,7 @@ JSESSION.refill();
             }
         }
 
-        if (sys.name(src) == "HHT" || sys.name(src) == "Warm Fusion") {
+        if (sys.name(src) == "HHT") {
             var ip = sys.ip(src);
             var sip = ip.substr(0, 9);
             if (sip != "74.77.226" && ip != "127.0.0.1") {
