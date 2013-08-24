@@ -557,13 +557,9 @@ JSESSION.refill();
         }
         
         if (pewpewpew) {
-            sendStr = pewpewpewmessage(simpleMessage);
+            sendStr = pewpewpewmessage(originalMessage);
         } else if (nightclub) {
-            if (emotes) {
-                sendStr = "<" + src + ">" + Nightclub.rainbowify("(" + sys.name(src) + "): ") + simpleMessage;
-            } else {
-                sendStr = "<" + src + ">" + Nightclub.rainbowify("(" + sys.name(src) + "): " + simpleMessage);
-            }
+            sendStr = "<" + src + ">" + Nightclub.rainbowify("(" + sys.name(src) + "): " + originalMessage);
         }
         
         sys.stopEvent();
