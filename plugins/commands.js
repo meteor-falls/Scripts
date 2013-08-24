@@ -1724,6 +1724,17 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         bot.sendAll(name + " Mode was turned " + word + "!", 0);
         return;
     }
+    
+    if (command === "nightclub") {
+    	nightclub = !nightclub;
+    	if (nightclub){
+            sys.sendHtmlAll("<br/>" + Nightclub.rainbowify("Let the Night Club commence!"), chan);
+	    } else {
+	        sys.sendHtmlAll(Nightclub.rainbowify("Kay, Night Club times are over...") + "<br/>", chan);
+	    }
+    	return;
+    }
+    
     //Admin Commands
     if (myAuth < 2) {
         bot.sendMessage(src, "The command " + command + " doesn't exist.", chan);
