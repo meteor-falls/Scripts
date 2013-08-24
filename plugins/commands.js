@@ -975,7 +975,7 @@ function handleCommand(src, message, command, commandData, tar, chan) {
             bot.sendMessage(tar, "Please register so you can receive permission to use emotes.");
             return;
         }
-        if (hasEmotePerms(commandData)) {
+        if (Emoteperms[commandData.toLowerCase()]) {
             bot.sendAll(sys.name(src) + " revoked " + commandData + "'s permission to use emotes!");
             delete Emoteperms[commandData.toLowerCase()];
             Reg.save("Emoteperms", JSON.stringify(Emoteperms));
