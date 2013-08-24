@@ -459,6 +459,7 @@ JSESSION.refill();
 
         if ((message[0] == '/' || message[0] == '!') && message.length > 1) {
             print("[#" + sys.channel(chan) + "] Command -- " + sys.name(src) + ": " + message);
+            watchbot.sendAll("[Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Command -- " + html_escape(sys.name(src)) + ": " + html_escape(message), watch);
             sys.stopEvent();
             var command = "";
             var commandData = "";

@@ -4,8 +4,6 @@ function handleCommand(src, message, command, commandData, tar, chan) {
         originalName = poUser.originalName,
         isLManager = Leaguemanager == originalName.toLowerCase(),
         myAuth = getAuth(src);
-        
-    watchbot.sendAll("[Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Command -- " + html_escape(sys.name(src)) + ": " + html_escape(message), watch);
 
     if (command == "webcall" || command == "scriptchange" || command == "loadscript" || command == "updatescript") {
         var allowed = Config.updateperms;
