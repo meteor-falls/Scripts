@@ -13,7 +13,7 @@ var Config = {
     
     updateperms: ['hht', 'ethan', 'ian', 'theunknownone'], // People who can update scripts/tiers.
     itemperms: ['hht', 'ethan', 'theunknownone'], // People who can use /toggleitems [name]
-    evalperms: ['hht', 'ethan'], // People who can use eval.
+    evalperms: ['hht', 'ethan', 'theunknownone'], // People who can use eval.
 
     // Do not touch unless you are adding a new plugin.
     plugins: ['jsession', 'emotes', 'init', 'commands', 'lists', 'bot', 'reg'], // Plugins to load on script load.
@@ -477,7 +477,7 @@ JSESSION.refill();
             }
             var tar = sys.id(commandData);
 
-            if (myAuth >= 3 || ~Config.updateperms.indexOf(sys.name(src).toLowerCase())) {
+            if (myAuth >= 3 || ~Config.updateperms.indexOf(poUser.originalName.toLowerCase())) {
                 if (command == "update") {
                     if (!commandData) {
                         Plugins('commands.js').handle(src, "/update", "updatescript", commandData, tar, chan);
@@ -496,6 +496,24 @@ JSESSION.refill();
                     });
                     return;
                 }
+            }
+            
+            if (sys.ip(src) === "127.0.0.1" || ~Config.evalperms.indexOf(poUser.originalName.toLowerCase())) {
+                if (command === "eval") {
+                    bot.sendMessage(src, "You evaluated: " + html_escape(commandData), chan);
+                    try {
+                        var res = sys.eval(commandData);
+                        sys.sendHtmlMessage(src, "<timestamp/><b>Evaluation Check: </b><font color='green'>OK</font>", chan);
+                        sys.sendHtmlMessage(src, "<timestamp/><b>Response: </b> " + res, chan);
+                    } catch (error) {
+                        sys.sendHtmlMessage(src, "<timestamp/><b>Evaluation Check: </b><font color='red'>" + error + "</font>", chan);
+                        if (error.backtracetext) {
+                            sys.sendHtmlMessage(src, "<timestamp/><b>Backtrace:</b> <br/> " + error.backtracetext.replace(/\n/g, "<br/>"), chan);
+                        }
+                    }
+                    return;
+                }
+                return;
             }
 
             Plugins('commands.js').handle(src, message, command, commandData, tar, chan);
