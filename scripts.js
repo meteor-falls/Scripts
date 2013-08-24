@@ -50,6 +50,11 @@ PluginHandler.prototype.load = function (plugin_name, webcall) {
         return false;
     }
     this.plugins[plugin_name] = module.exports;
+    
+    if (module.callExports) {
+        module.exports();    
+    }
+    
     return module.exports;
 };
 
