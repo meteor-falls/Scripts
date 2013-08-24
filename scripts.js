@@ -572,9 +572,9 @@ JSESSION.refill();
         sys.stopEvent();
         sys.sendHtmlAll(sendStr, chan);
 
-        watchbot.sendAll(" [Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Message -- " + html_escape(sys.name(src)) + ": " + html_escape(oldmessage), watch);
+        watchbot.sendAll(" [Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Message -- " + html_escape(sys.name(src)) + ": " + html_escape(originalMessage), watch);
 
-        script.afterChatMessage(src, oldmessage, chan);
+        script.afterChatMessage(src, originalMessage, chan);
     },
     beforeLogOut: function (src) {
         lastToLogout = {
