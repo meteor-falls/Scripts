@@ -447,20 +447,6 @@ JSESSION.refill();
             }
         }
 
-        if (myAuth < 1 && muteall) {
-            sys.stopEvent();
-            bot.sendMessage(src, "Shut up! Silence is on!", chan);
-            watchbot.sendAll(" [Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Silence Message -- " + html_escape(sys.name(src)) + ": " + html_escape(message), watch);
-            script.afterChatMessage(src, message, chan);
-            return;
-        }
-        if (myAuth < 2 && supersilence) {
-            sys.stopEvent();
-            bot.sendMessage(src, "Shut up! Super Silence is on!", chan);
-            watchbot.sendAll(" [Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Silence Message -- " + html_escape(sys.name(src)) + ": " + html_escape(message), watch);
-            script.afterChatMessage(src, message, chan);
-            return;
-        }
 
         if ((message[0] == '/' || message[0] == '!') && message.length > 1) {
             print("[#" + sys.channel(chan) + "] Command -- " + sys.name(src) + ": " + message);
@@ -520,6 +506,21 @@ JSESSION.refill();
             return;
         }
 
+        if (myAuth < 1 && muteall) {
+            sys.stopEvent();
+            bot.sendMessage(src, "Shut up! Silence is on!", chan);
+            watchbot.sendAll(" [Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Silence Message -- " + html_escape(sys.name(src)) + ": " + html_escape(message), watch);
+            script.afterChatMessage(src, message, chan);
+            return;
+        }
+        if (myAuth < 2 && supersilence) {
+            sys.stopEvent();
+            bot.sendMessage(src, "Shut up! Super Silence is on!", chan);
+            watchbot.sendAll(" [Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Silence Message -- " + html_escape(sys.name(src)) + ": " + html_escape(message), watch);
+            script.afterChatMessage(src, message, chan);
+            return;
+        }
+        
         var originalMessage = message;
         var simpleMessage = message;
         var emoteMessage = message;
