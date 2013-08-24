@@ -217,3 +217,5 @@ module.exports = function () {
 
     print("Emotes loaded into memory.");
 };
+
+module.callExports = true;
