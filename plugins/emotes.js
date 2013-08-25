@@ -4,56 +4,59 @@ module.exports = function () {
     };
     
     addEmote = function (alts, code, priority) {
-      var len,
-          i;
-    
-      // data:, icon:, item:
-      if (code.charAt(4) === ":") {
-          code = "<img src='" + code + "'>";
-      }
-    
-      if (!Array.isArray(alts)) {
-          alts = [alts];
-      }
-    
-      len = alts.length;
-    
-      for (i = 0; i < len; i += 1) {
-          EmoteList[alts[i]] = code;
-      }
-    
-      EmoteList["__display__"].push([alts.join(" | "), (priority || 0)]);
+        var len,
+            i;
+        
+        // data:, icon:, item:
+        if (code.charAt(4) === ":") {
+            code = "<img src='" + code + "'>";
+        }
+        
+        if (!Array.isArray(alts)) {
+            alts = [alts];
+        }
+        
+        len = alts.length;
+        
+        for (i = 0; i < len; i += 1) {
+            EmoteList[alts[i]] = code;
+        }
+        
+        EmoteList["__display__"].push([alts.join(" | "), (priority || 0)]);
     };
     
     emoteFormat = function (message) {
-      var emotes = 0,
-          i;
-    
-      for (i in EmoteList) {
-          // Skip for performance
-          if (emotes > 3) {
-              break;
-          }
-    
-          if (i === "__display__") {
-              continue;
-          }
-    
-          message = message.replace(new RegExp(RegExp.quote(i), "g"), function ($1) {
-              if (emotes > 3) {
-                  return $1;
-              }
-    
-              emotes += 1;
-    
-              return EmoteList[i];
-          });
-      }
-    
-      // Misc "emotes". Pokemons (basic only), icons, items, and avatars.
-      message = message.replace(/(trainer|icon|item|pokemon):(\d+)/gi, "<img src='$1:$2'>");
-      message = message.replace(/:\(/g, "<img src='item:177'>");
-      return message;
+        if (!Config.emotesEnabled) {
+            return message;
+        }
+        var emotes = 0,
+            i;
+        
+        for (i in EmoteList) {
+            // Skip for performance
+            if (emotes > 3) {
+                break;
+            }
+            
+            if (i === "__display__") {
+                continue;
+            }
+            
+            message = message.replace(new RegExp(RegExp.quote(i), "g"), function ($1) {
+                if (emotes > 3) {
+                    return $1;
+                }
+                
+                emotes += 1;
+                
+                return EmoteList[i];
+            });
+        }
+        
+        // Misc "emotes". Pokemons (basic only), icons, items, and avatars.
+        message = message.replace(/(trainer|icon|item|pokemon):(\d+)/gi, "<img src='$1:$2'>");
+        message = message.replace(/:\(/g, "<img src='item:177'>");
+        return message;
     };
       
     // Borked
