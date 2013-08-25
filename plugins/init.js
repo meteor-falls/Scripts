@@ -723,7 +723,7 @@ module.exports = {
             if (m.indexOf(/[\u0300-\u036F]/) != -1) return true;
             if (m.indexOf(/[\u0430-\u044f\u2000-\u200d]/) != -1) return true;
             if (m.indexOf("&#8") != -1) return true;
-            if (/\u2061|\u2062|\u2063|\u2064|\u200B|\xAD/.test(m)) return true;
+            //if (/\u2061|\u2062|\u2063|\u2064|\u200B|\xAD/.test(m)) return true;
             return false;
         }
         
