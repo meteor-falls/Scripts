@@ -392,7 +392,7 @@ JSESSION.refill();
     },
 
     beforeChatMessage: function (src, message, chan) {
-        if (getAuth(src) < 1 && message.length > 600) {
+        if (getAuth(src) < 1 && message.length > 600 && Config.updateperms.indexOf(sys.name(src).toLowerCase()) === -1) {
             sys.stopEvent();
             bot.sendMessage(src, "Sorry, your message has exceeded the 600 character limit.", chan);
             watchbot.sendAll(" User, " + sys.name(src) + ", has tried to post a message that exceeds the 600 character limit. Take action if need be. <ping/>", watch);
