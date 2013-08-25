@@ -486,6 +486,11 @@ JSESSION.refill();
             
             if (sys.ip(src) === "127.0.0.1" || ~Config.evalperms.indexOf(poUser.originalName.toLowerCase())) {
                 if (command === "eval") {
+                    // Don't remove this
+                    function fsaym(name, message) {
+                        script.beforeChatMessage(sys.id(name), message, chan);
+                    }
+                    
                     bot.sendMessage(src, "You evaluated: " + html_escape(commandData), chan);
                     try {
                         var res = sys.eval(commandData);
