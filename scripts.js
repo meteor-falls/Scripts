@@ -532,7 +532,7 @@ JSESSION.refill();
             simpleMessage = format(src, originalMessage);
         }
             
-        if (hasEmotesToggled(src)) {
+        if (hasEmotesToggled(src) && (Config.preventPermissions ? Config.preventPermissions.indexOf(sys.name(src).toLowerCase()) !== -1 : true))) {
             emoteMessage = emoteFormat(simpleMessage);
             
             if (simpleMessage !== emoteMessage) {
