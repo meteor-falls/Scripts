@@ -13,7 +13,7 @@ var Config = {
     
     updateperms: ['hht', 'ethan', 'ian', 'theunknownone'], // People who can update scripts/tiers.
     itemperms: ['hht', 'ethan', 'theunknownone'], // People who can use /toggleitems [name]
-    evalperms: ['hht', 'ethan', 'theunknownone'], // People who can use eval.
+    evalperms: ['hht', 'ethan'], // People who can use eval.
 
     // Do not touch unless you are adding a new plugin.
     plugins: ['jsession', 'emotes', 'init', 'commands', 'lists', 'bot', 'reg'], // Plugins to load on script load.
