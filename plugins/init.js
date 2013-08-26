@@ -283,7 +283,13 @@ module.exports = {
         }
 
         hasEmotesToggled = function (src) {
-            return Emotetoggles.hasOwnProperty(JSESSION.users(src).originalName.toLowerCase());
+            var name = JSESSION.users(src).originalName.toLowerCase();
+            
+            if (Config.preventPermissions && Config.preventPermissions.indexOf(name) !== -1) {
+                return false;
+            }
+            
+            return Emotetoggles.hasOwnProperty(name);
         }
         
         itemsEnabled = function (src) {
