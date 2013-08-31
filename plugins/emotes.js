@@ -26,6 +26,9 @@ module.exports = function () {
     };
     
     emoteFormat = function (message) {
+        if (!Config.emotesEnabled) {
+            return message;
+        }
         var emotes = 0,
             i;
         
