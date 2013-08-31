@@ -11,9 +11,9 @@ var Config = {
     
     serverowner: "HHT", // The server owner.
     
-    updateperms: ['hht', 'ian', 'theunknownone'], // People who can update scripts/tiers.
-    itemperms: ['hht', 'theunknownone'], // People who can use /toggleitems [name]
-    evalperms: ['hht', 'theunknownone'], // People who can use eval.
+    updateperms: ['hht', 'ian'], // People who can update scripts/tiers.
+    itemperms: ['hht'], // People who can use /toggleitems [name]
+    evalperms: ['hht'], // People who can use eval.
 
     // Do not touch unless you are adding a new plugin.
     plugins: ['jsession', 'emotes', 'init', 'commands', 'lists', 'bot', 'reg'], // Plugins to load on script load.
