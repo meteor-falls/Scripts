@@ -11,7 +11,7 @@ var Config = {
     
     serverowner: "HHT", // The server owner.
     
-    updateperms: ['hht', 'ian'], // People who can update scripts/tiers.
+    updateperms: ['hht', 'ethan', 'ian'], // People who can update scripts/tiers.
     itemperms: ['hht'], // People who can use /toggleitems [name]
     evalperms: ['hht'], // People who can use eval.
 
