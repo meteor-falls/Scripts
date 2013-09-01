@@ -3,22 +3,32 @@ By: HHT, TheUnknownOne, Ethan
 Credit to: Max, Lutra
 */
 var Config = {
-    // Configuration for the script. Edit as you please.
+    // Configuration for the script.
     repourl: "https://raw.github.com/meteor-falls/Scripts/master/plugins/", // Repo to load plugins from.
     dataurl: "https://raw.github.com/meteor-falls/Server-Shit/master/", // Repo to load data (announcement/description + tiers) from.
     
     plugindir: "plugins/", // Plugin directory.
     
     serverowner: "HHT", // The server owner.
-    
-    updateperms: ['hht', 'ethan', 'ian'], // People who can update scripts/tiers.
-    itemperms: ['hht'], // People who can use /toggleitems [name]
-    evalperms: ['hht'], // People who can use eval.
+   
+    permissions: {
+        update: ["hht", "ethan", "ian"], // People who can update scripts/tiers.
+        items: ["hht"], // People who can use /toggleitems [name]
+        
+        // Gives users access to all commands of that level.
+        // The user must be the level below it though.
+        // For example, if HHT wants admin perms, he must already have mod.
+        auth_permissions: {
+            mod: [],
+            admin: [],
+            owner: []
+        }
+    },
 
     // Do not touch unless you are adding a new plugin.
     plugins: ['jsession', 'emotes', 'init', 'commands', 'lists', 'bot', 'reg'], // Plugins to load on script load.
     
-    load_from_web: true, // Whether or not to load plugins from repourl. If set to false, they will load locally.
+    load_from_web: false, // Whether or not to load plugins from repourl. If set to false, they will load locally.
     stripHtmlFromChannelMessages: true, // If HTML should be stripped from channel messages outputted onto the server window.
     emotesEnabled: true // If emotes are enabled
 };
@@ -463,46 +473,12 @@ JSESSION.refill();
                 command = message.substr(1).toLowerCase();
             }
             var tar = sys.id(commandData);
-
-            if (myAuth >= 3 || ~Config.updateperms.indexOf(poUser.originalName.toLowerCase())) {
-                if (command == "update") {
-                    if (!commandData) {
-                        Plugins('commands.js').handle(src, "/update", "updatescript", commandData, tar, chan);
-                        return;
-                    }
-                    if (Plugins(commandData) == null) {
-                        bot.sendMessage(src, "Plugin "+commandData+" not found.", chan);
-                        return;
-                    }
-                    bot.sendMessage(src, "Updating plugin "+commandData+"..", chan);
-                    sys.webCall(Config.repourl + commandData, function(resp) {
-                        sys.writeToFile(Config.plugindir + commandData, resp);
-                        PHandler.load(commandData, false);
-                        reloadPlugin(commandData);
-                        bot.sendMessage(src, "Plugin "+commandData+" updated!", chan);
-                    });
-                    return;
-                }
-            }
             
-            if (sys.ip(src) === "127.0.0.1" || ~Config.evalperms.indexOf(poUser.originalName.toLowerCase())) {
-                if (command === "eval") {
-                    bot.sendMessage(src, "You evaluated: " + html_escape(commandData), chan);
-                    try {
-                        var res = sys.eval(commandData);
-                        sys.sendHtmlMessage(src, "<timestamp/><b>Evaluation Check: </b><font color='green'>OK</font>", chan);
-                        sys.sendHtmlMessage(src, "<timestamp/><b>Response: </b> " + res, chan);
-                    } catch (error) {
-                        sys.sendHtmlMessage(src, "<timestamp/><b>Evaluation Check: </b><font color='red'>" + error + "</font>", chan);
-                        if (error.backtracetext) {
-                            sys.sendHtmlMessage(src, "<timestamp/><b>Backtrace:</b> <br/> " + error.backtracetext.replace(/\n/g, "<br/>"), chan);
-                        }
-                    }
-                    return;
-                }
+            if (!Plugins('commands.js').can_use_command(src, command)) {
+                bot.sendMessage(src, "The command " + command + " doesn't exist.", chan);
+                return;
             }
-
-            Plugins('commands.js').handle(src, message, command, commandData, tar, chan);
+            Plugins('commands.js').handle_command(src, message, command, commandData, tar, chan);
             return;
         }
 
