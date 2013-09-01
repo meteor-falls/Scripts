@@ -1969,7 +1969,7 @@ module.exports = {
             cmd = commands[command];
         if (cmd.specialPerms) {
             var list = [].concat(cmd.specialPerms);
-            if (list.indexOf(name.toLowerCase()) > -1 && srcauth === cmd.authLevel - 1)
+            if (list.indexOf(name.toLowerCase()) > -1)
                 return true;
         }
         if (cmd.authLevel && cmd.authLevel > srcauth) return false; // Normal check

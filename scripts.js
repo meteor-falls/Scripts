@@ -16,8 +16,6 @@ var Config = {
         items: ["hht"], // People who can use /toggleitems [name]
         
         // Gives users access to all commands of that level.
-        // The user must be the level below it though.
-        // For example, if HHT wants admin perms, he must already have mod.
         auth_permissions: {
             mod: [],
             admin: [],
