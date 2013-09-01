@@ -1378,7 +1378,7 @@ addCommand(1, ["kick", "k"], function (src, command, commandData, tar, chan) {
         return;
     }
 
-    var theirmesssage = Kickmsgs[sys.name(src).toLowerCase()];
+    var theirmessage = Kickmsgs[sys.name(src).toLowerCase()];
     var tarNames = andJoin(toKick);
     var msg = (theirmessage !== undefined) ? theirmessage.message : "<font color=red><timestamp/><b>" + tarNames + " " + (toKick.length === 1 ? "was" : "were") + " kicked by " + html_escape(sys.name(src)) + "!";
 
