@@ -7,7 +7,7 @@ function addCommand(authLevel, name, callback) {
 
     var names = [].concat(name),
         i;
-    for (i in names) {
+    for (i = 0; i < names.length; i++) {
         commands[names[i]] = {
             'authLevel': authLevel,
             'callback': callback
