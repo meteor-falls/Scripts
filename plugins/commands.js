@@ -139,7 +139,7 @@ addCommand(0, ["testann", "updateann"], function (src, command, commandData, tar
             sys.setAnnouncement(resp, src);
         } else {
             var oldAnn = sys.getAnnouncement();
-            sys.writeToFile("old_announcement.html", chan);
+            sys.writeToFile("old_announcement.html", oldAnn);
             bot.sendMessage(src, "Old announcement stored in old_announcement.html", chan);
             sys.changeAnnouncement(resp);
         }
