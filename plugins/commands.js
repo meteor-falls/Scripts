@@ -14,7 +14,7 @@ function addCommand(authLevel, name, callback) {
         }
     }
 }
-/** USER COMMANDS **/
+/** USER COMMANDS */
 addCommand(0, ["webcall", "scriptchange", "loadscript", "updatescript"], function (src, command, commandData, tar, chan) {
     var allowed = Config.updateperms;
     if (allowed.indexOf(this.originalName.toLowerCase()) == -1) {
@@ -908,7 +908,7 @@ addCommand(0, "endtour", function (src, command, commandData, tar, chan) {
         bot.sendMessage(src, "Sorry, you are unable to end a tournament because one is not currently running.", chan);
     }
 });
-/** MOD COMMANDS **/
+/** MOD COMMANDS */
 addCommand(1, "modcommands", function (src, command, commandData, tar, chan) {
     Lists.Mod.display(src, chan);
 });
@@ -1633,7 +1633,7 @@ addCommand(1, "nightclub", function (src, command, commandData, tar, chan) {
         sys.sendHtmlAll(Nightclub.rainbowify("Kay, Night Club times are over...") + "<br/>", chan);
     }
 });
-/** ADMIN COMMANDS **/
+/** ADMIN COMMANDS */
 addCommand(2, "admincommands", function (src, command, commandData, tar, chan) {
     Lists.Admin.display(src, chan);
 });
@@ -1904,7 +1904,7 @@ addCommand(2, "unban", function (src, command, commandData, tar, chan) {
     }
     if (!found) bot.sendMessage(src, "He/she's not banned!", chan);
 });
-/** OWNER COMMANDS **/
+/** OWNER COMMANDS */
 addCommand(3, "ownercommands", function (src, command, commandData, tar, chan) {
     Lists.Owner.display(src, chan);
 });
