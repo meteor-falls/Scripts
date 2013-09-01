@@ -1798,7 +1798,7 @@ addCommand(3, "update", function(src, command, commandData, tar, chan) {
         reloadPlugin(commandData);
         bot.sendMessage(src, "Plugin "+commandData+" updated!", chan);
     });
-}, Config.permissions.auth_permissions.owner);
+}, Config.permissions.auth_permissions.owner.concat(Config.permissions.update));
 addCommand(3, ["webcall", "scriptchange", "loadscript", "updatescript"], function (src, command, commandData, tar, chan) {
     sys.webCall(commandData, function (resp) {
         try {
