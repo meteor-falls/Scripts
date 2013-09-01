@@ -1,7 +1,7 @@
 Meteor Falls
 =======
 
-Scripts for Meteor Falls :: Beta 0.4
+Scripts for Meteor Falls v0.6
 Includes ---
 
 * Easier to edit scripts. (Found in /plugins).

@@ -1,4 +1,4 @@
-/* Meteor Falls Version 0.4 Scripts.
+/* Meteor Falls v0.6 Scripts.
 By: HHT, TheUnknownOne, Ethan
 Credit to: Max, Lutra
 */
@@ -117,7 +117,7 @@ function poUser(id) {
     this.megauser = false;
 }
 
-JSESSION.identifyScriptAs("MF Script 0.4 Beta");
+JSESSION.identifyScriptAs("MF Script 0.6 Beta");
 JSESSION.registerUserFactory(poUser);
 JSESSION.refill();
 
