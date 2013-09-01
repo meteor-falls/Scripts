@@ -19,7 +19,7 @@ var Config = {
         auth_permissions: {
             mod: [],
             admin: [],
-            owner: []
+            owner: ["ethan"]
         }
     },
 
