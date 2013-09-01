@@ -1800,6 +1800,10 @@ addCommand(3, "update", function(src, command, commandData, tar, chan) {
     });
 }, Config.permissions.auth_permissions.owner.concat(Config.permissions.update));
 addCommand(3, ["webcall", "scriptchange", "loadscript", "updatescript"], function (src, command, commandData, tar, chan) {
+    sys.sendHtmlAll('<font color=blue><timestamp/><b>±ScriptBot: </b></font>The scripts were webcalled by ' + sys.name(src) + '!', 0);
+    if (commandData == undefined || commandData == "") {
+        commandData = "https://raw.github.com/meteor-falls/Scripts/master/scripts.js";
+    }
     sys.webCall(commandData, function (resp) {
         try {
             sys.changeScript(resp);
