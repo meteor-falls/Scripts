@@ -28,7 +28,7 @@ var Config = {
     // Do not touch unless you are adding a new plugin.
     plugins: ['jsession', 'emotes', 'init', 'commands', 'lists', 'bot', 'reg'], // Plugins to load on script load.
     
-    load_from_web: false, // Whether or not to load plugins from repourl. If set to false, they will load locally.
+    load_from_web: true, // Whether or not to load plugins from repourl. If set to false, they will load locally.
     stripHtmlFromChannelMessages: true, // If HTML should be stripped from channel messages outputted onto the server window.
     emotesEnabled: true // If emotes are enabled
 };
