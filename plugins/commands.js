@@ -1,4 +1,5 @@
-var commands = {};
+var commands = {},
+    disabledCmds = [];
 function addCommand(authLevel, name, callback, specialPerms) {
     // Proper checks
     if (typeof authLevel !== "number") return;
@@ -1962,6 +1963,7 @@ addCommand(3, "authoptions", function (src, command, commandData, tar, chan) {
 module.exports = {
     can_use_command: function(src, command) {
         if (!commands.hasOwnProperty(command)) return false;
+        if (disabledCmds.indexOf(command.toLowerCase()) > -1) return false;
         var srcauth = getAuth(src),
             name = JSESSION.users(src).originalName,
             cmd = commands[command];
