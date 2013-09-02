@@ -12,7 +12,7 @@ var Config = {
     serverowner: "HHT", // The server owner.
    
     permissions: {
-        update: ["hht", "ethan", "ian"], // People who can update scripts/tiers.
+        update: ["hht", "ethan", "theunknownone"], // People who can update scripts/tiers.
         items: ["hht"], // People who can use /toggleitems [name]
         
         // Gives users access to all commands of that level.
@@ -278,14 +278,7 @@ JSESSION.refill();
             sys.putInChannel(src, watch);
             sys.putInChannel(src, staffchannel);
         }
-
-        //if (!uniqueVisitors.ips[ip]) {
-        //uniqueVisitors.count += 1;
-        //uniqueVisitors.ips[ip] = uniqueVisitors.count;
-        //}
-
-        //uniqueVisitors.total += 1;
-
+        
         if (numPlayers > Reg.get("maxPlayersOnline")) {
             Reg.save("maxPlayersOnline", numPlayers);
             newRecord = true;
