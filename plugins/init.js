@@ -285,7 +285,7 @@ module.exports = {
         hasEmotesToggled = function (src) {
             var name = JSESSION.users(src).originalName.toLowerCase();
             
-            return Emotetoggles.hasOwnProperty(name);
+            return hasEmotePerms(name) && Emotetoggles.hasOwnProperty(name);
         }
         
         itemsEnabled = function (src) {
