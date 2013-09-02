@@ -782,6 +782,131 @@ addCommand(0, "endtour", function (src, command, commandData, tar, chan) {
         bot.sendMessage(src, "Sorry, you are unable to end a tournament because one is not currently running.", chan);
     }
 });
+
+addCommand(0, "message", function (src, command, commandData, tar, chan) {
+    if (this.poUser.megauser == false && this.myAuth < 1) {
+        bot.sendMessage(src, "You need to be a higher auth to use this command!", chan);
+        return;
+    }
+    
+    if (commandData == undefined) {
+        bot.sendMessage(src, "Specify kick, ban, or welcome!", chan);
+        return;
+    }
+    
+    commandData = commandData.split(":");
+    if (commandData[1] == undefined || commandData[1] == "") {
+        bot.sendMessage(src, "Usage of this command is: [kick/ban/welcome]:[message]", chan);
+        return;
+    }
+    var which = commandData[0];
+    var message = cut(commandData, 1, ":");
+    var whichl = which.toLowerCase();
+    
+    if (whichl == "kick") {
+        bot.sendMessage(src, "Set kick message to: " + html_escape(message) + "!", chan);
+        Kickmsgs[sys.name(src).toLowerCase()] = {
+            "message": message
+        };
+        Reg.save("Kickmsgs", JSON.stringify(Kickmsgs));
+    } else if (whichl == "welcome") {
+        bot.sendMessage(src, "Set welcome message to: " + html_escape(message) + "!", chan);
+        Welmsgs[sys.name(src).toLowerCase()] = {
+            "message": message
+        };
+        Reg.save("Welmsgs", JSON.stringify(Welmsgs));
+    } else if (whichl == "ban") {
+        if (this.myAuth < 2) {
+            bot.sendMessage(src, "You need to be a higher auth to set your ban message!", chan);
+            return;
+        }
+        bot.sendMessage(src, "Set ban message to: " + html_escape(message) + "!", chan);
+        Banmsgs[sys.name(src).toLowerCase()] = {
+            "message": message
+        };
+        Reg.save("Banmsgs", JSON.stringify(Banmsgs));
+    } else {
+        bot.sendMessage(src, "Specify kick, ban, or welcome!", chan);
+    }
+}, Config.permissions.auth_permissions.mod);
+
+addCommand(0, "viewmessage", function (src, command, commandData, tar, chan) {
+    if (this.poUser.megauser == false && this.myAuth < 1) {
+        bot.sendMessage(src, "You need to be a higher auth to use this command!", chan);
+        return;
+    }
+    
+    if (commandData == undefined) {
+        bot.sendMessage(src, "Specify kick, ban, or welcome!", chan);
+        return;
+    }
+    if (commandData == "kick") {
+        if (Kickmsgs[sys.name(src).toLowerCase()] == undefined) {
+            bot.sendMessage(src, "You currently do not have a kick message, please go make one!", chan);
+            return;
+        }
+        bot.sendMessage(src, "Your kick message is set to: " + html_escape(Kickmsgs[sys.name(src).toLowerCase()].message), chan);
+        return;
+    } else if (commandData == "welcome") {
+        if (Welmsgs[sys.name(src).toLowerCase()] == undefined) {
+            bot.sendMessage(src, "You currently do not have a welcome message, please go make one!", chan);
+            return;
+        }
+        bot.sendMessage(src, "Your welcome message is set to: " + html_escape(Welmsgs[sys.name(src).toLowerCase()].message), chan);
+        return;
+    } else if (commandData == "ban") {
+        if (this.myAuth < 2 || Banmsgs[sys.name(src).toLowerCase()] == undefined) {
+            bot.sendMessage(src, "You either cannot have a ban message or you do not have one, go make one if you can!", chan);
+            return;
+        }
+        bot.sendMessage(src, "Your ban message is set to: " + html_escape(Banmsgs[sys.name(src).toLowerCase()].message), chan);
+        return;
+    } else {
+        bot.sendMessage(src, "Specify kick, ban, or welcome!", chan);
+        return;
+    }
+}, Config.permissions.auth_permissions.mod);
+
+addCommand(0, "removemessage", function (src, command, commandData, tar, chan) {
+    if (this.poUser.megauser == false && this.myAuth < 1) {
+        bot.sendMessage(src, "You need to be a higher auth to use this command!", chan);
+        return;
+    }
+    
+    var lower = commandData.toLowerCase();
+    if (lower == "kick") {
+        if (Kickmsgs[sys.name(src).toLowerCase()] == undefined) {
+            bot.sendMessage(src, "You don't have a kick message!", chan);
+            return;
+        }
+        delete Kickmsgs[sys.name(src).toLowerCase()];
+        Reg.save("Kickmsgs", JSON.stringify(Kickmsgs));
+        bot.sendMessage(src, "Kick message removed!", chan);
+        return;
+    } else if (lower == "ban") {
+        if (Banmsgs[sys.name(src).toLowerCase()] == undefined) {
+            bot.sendMessage(src, "You don't have a ban message!", chan);
+            return;
+        }
+        delete Banmsgs[sys.name(src).toLowerCase()];
+        Reg.save("Banmsgs", JSON.stringify(Banmsgs));
+        bot.sendMessage(src, "Ban message removed!", chan);
+        return;
+    } else if (lower == "welcome") {
+        if (Welmsgs[sys.name(src).toLowerCase()] == undefined) {
+            bot.sendMessage(src, "You don't have a welcome message!", chan);
+            return;
+        }
+        delete Welmsgs[sys.name(src).toLowerCase()];
+        Reg.save("Welmsgs", JSON.stringify(Welmsgs));
+        bot.sendMessage(src, "Welcome message removed!", chan);
+        return;
+    } else {
+        bot.sendMessage(src, "Specify a message (kick/ban/welcome) !", chan);
+        return;
+    }
+}, Config.permissions.auth_permissions.mod);
+
 /** MOD COMMANDS */
 addCommand(1, "modcommands", function (src, command, commandData, tar, chan) {
     Lists.Mod.display(src, chan);
@@ -851,110 +976,7 @@ addCommand(1, ["wall", "cwall"], function (src, command, commandData, tar, chan)
     sys.sendHtmlAll("<font color=" + namecolor(src) + "><timestamp/>+<b><i>" + sys.name(src) + ":</b><font color=black> " + wallmessage + "<br>", wallchan);
     sys.sendHtmlAll("<font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>", wallchan);
 }, Config.permissions.auth_permissions.mod);
-addCommand(1, "message", function (src, command, commandData, tar, chan) {
-    if (commandData == undefined) {
-        bot.sendMessage(src, "Specify kick, ban, or welcome!", chan);
-        return;
-    }
-    commandData = commandData.split(":");
-    if (commandData[1] == undefined || commandData[1] == "") {
-        bot.sendMessage(src, "Usage of this command is: [kick/ban/welcome]:[message]", chan);
-        return;
-    }
-    var which = commandData[0];
-    var message = cut(commandData, 1, ":");
-    var whichl = which.toLowerCase();
-    if (whichl == "kick") {
-        bot.sendMessage(src, "Set kick message to: " + html_escape(message) + "!", chan);
-        Kickmsgs[sys.name(src).toLowerCase()] = {
-            "message": message
-        };
-        Reg.save("Kickmsgs", JSON.stringify(Kickmsgs));
-    } else if (whichl == "welcome") {
-        bot.sendMessage(src, "Set welcome message to: " + html_escape(message) + "!", chan);
-        Welmsgs[sys.name(src).toLowerCase()] = {
-            "message": message
-        };
-        Reg.save("Welmsgs", JSON.stringify(Welmsgs));
-    } else if (whichl == "ban") {
-        if (this.myAuth < 2) {
-            bot.sendMessage(src, "You need to be a higher auth to set your ban message!", chan);
-            return;
-        }
-        bot.sendMessage(src, "Set ban message to: " + html_escape(message) + "!", chan);
-        Banmsgs[sys.name(src).toLowerCase()] = {
-            "message": message
-        };
-        Reg.save("Banmsgs", JSON.stringify(Banmsgs));
-    } else {
-        bot.sendMessage(src, "Specify kick, ban, or welcome!", chan);
-    }
-}, Config.permissions.auth_permissions.mod);
-addCommand(1, "viewmessage", function (src, command, commandData, tar, chan) {
-    if (commandData == undefined) {
-        bot.sendMessage(src, "Specify kick, ban, or welcome!", chan);
-        return;
-    }
-    if (commandData == "kick") {
-        if (Kickmsgs[sys.name(src).toLowerCase()] == undefined) {
-            bot.sendMessage(src, "You currently do not have a kick message, please go make one!", chan);
-            return;
-        }
-        bot.sendMessage(src, "Your kick message is set to: " + html_escape(Kickmsgs[sys.name(src).toLowerCase()].message), chan);
-        return;
-    } else if (commandData == "welcome") {
-        if (Welmsgs[sys.name(src).toLowerCase()] == undefined) {
-            bot.sendMessage(src, "You currently do not have a welcome message, please go make one!", chan);
-            return;
-        }
-        bot.sendMessage(src, "Your welcome message is set to: " + html_escape(Welmsgs[sys.name(src).toLowerCase()].message), chan);
-        return;
-    } else if (commandData == "ban") {
-        if (this.myAuth < 2 || Banmsgs[sys.name(src).toLowerCase()] == undefined) {
-            bot.sendMessage(src, "You either cannot have a ban message or you do not have one, go make one if you can!", chan);
-            return;
-        }
-        bot.sendMessage(src, "Your ban message is set to: " + html_escape(Banmsgs[sys.name(src).toLowerCase()].message), chan);
-        return;
-    } else {
-        bot.sendMessage(src, "Specify kick, ban, or welcome!", chan);
-        return;
-    }
-}, Config.permissions.auth_permissions.mod);
-addCommand(1, "removemessage", function (src, command, commandData, tar, chan) {
-    var lower = commandData.toLowerCase();
-    if (lower == "kick") {
-        if (Kickmsgs[sys.name(src).toLowerCase()] == undefined) {
-            bot.sendMessage(src, "You don't have a kick message!", chan);
-            return;
-        }
-        delete Kickmsgs[sys.name(src).toLowerCase()];
-        Reg.save("Kickmsgs", JSON.stringify(Kickmsgs));
-        bot.sendMessage(src, "Kick message removed!", chan);
-        return;
-    } else if (lower == "ban") {
-        if (Banmsgs[sys.name(src).toLowerCase()] == undefined) {
-            bot.sendMessage(src, "You don't have a ban message!", chan);
-            return;
-        }
-        delete Banmsgs[sys.name(src).toLowerCase()];
-        Reg.save("Banmsgs", JSON.stringify(Banmsgs));
-        bot.sendMessage(src, "Ban message removed!", chan);
-        return;
-    } else if (lower == "welcome") {
-        if (Welmsgs[sys.name(src).toLowerCase()] == undefined) {
-            bot.sendMessage(src, "You don't have a welcome message!", chan);
-            return;
-        }
-        delete Welmsgs[sys.name(src).toLowerCase()];
-        Reg.save("Welmsgs", JSON.stringify(Welmsgs));
-        bot.sendMessage(src, "Welcome message removed!", chan);
-        return;
-    } else {
-        bot.sendMessage(src, "Specify a message (kick/ban/welcome) !", chan);
-        return;
-    }
-}, Config.permissions.auth_permissions.mod);
+
 addCommand(1, "sendhtmlall", function (src, command, commandData, tar, chan) {
     if (commandData == undefined) {
         bot.sendMessage(src, "Sorry, invalid message.", chan);
