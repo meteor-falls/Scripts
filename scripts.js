@@ -109,7 +109,7 @@ function reloadPlugin(plugin_name) {
         
         // We also have to reload the command lists,
         // otherwise /emotes won't be updated
-        script.loadCommandList();
+        script.loadCommandLists();
     }
 }
 
