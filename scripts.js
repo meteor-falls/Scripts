@@ -106,6 +106,10 @@ function reloadPlugin(plugin_name) {
         script.loadRegHelper();
     } else if (plugin_name === "emotes.js") {
         Plugins('emotes.js')();
+        
+        // We also have to reload the command lists,
+        // otherwise /emotes won't be updated
+        script.loadCommandList();
     }
 }
 
