@@ -62,7 +62,7 @@ module.exports = function () {
                 emotes += 1;
                 
                 if (uobj && uobj.lastEmote) {
-                    uobj.lastEmote.push(i;
+                    uobj.lastEmote.push(i);
                 }
                 
                 return EmoteList[i];
