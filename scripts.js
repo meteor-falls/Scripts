@@ -303,8 +303,13 @@ JSESSION.refill();
         }
 
         if (myAuth > 0) {
-            sys.putInChannel(src, watch);
-            sys.putInChannel(src, staffchannel);
+            if (!sys.isInChannel(src, watch)) {
+                sys.putInChannel(src, watch);
+            }
+            
+            if (!sys.isInChannel(src, staffchannel)) {
+                sys.putInChannel(src, staffchannel);
+            }
         }
         
         if (numPlayers > Reg.get("maxPlayersOnline")) {
@@ -626,12 +631,32 @@ JSESSION.refill();
         if (teamChanges > 2) {
             if (typeof teamSpammers[ip] == "undefined") {
                 teamSpammers[ip] = 0;
-                sys.callLater("if(typeof teamSpammers['" + ip + "'] != 'undefined') teamSpammers['" + ip + "']--; ", 60 * 3);
+                
+                sys.setTimer(function () {
+                    if (typeof teamSpammers[ip] !== "undefined") {
+                        teamSpammers[ip] -= 1;
+                        
+                        if (teamSpammers[ip] <= 0) {
+                            delete teamSpammers[ip];
+                        }
+                    }
+                }, 40, false);
+                
             } else if (teamSpammers[ip] == 0) {
                 teamSpammers[ip] = 1;
                 watchbot.sendAll("Alert: Possible spammer, ip " + ip + ", name " + html_escape(sys.name(src)) + ". Kicked for now.", watch);
                 kick(src);
-                sys.callLater("if(typeof teamSpammers['" + ip + "'] != 'undefined') teamSpammers['" + ip + "']--; ", 60 * 5);
+                
+                sys.setTimer(function () {
+                    if (typeof teamSpammers[ip] !== "undefined") {
+                        teamSpammers[ip] -= 1;
+                        
+                        if (teamSpammers[ip] <= 0) {
+                            delete teamSpammers[ip];
+                        }
+                    }
+                }, 180, false);
+                
                 return;
             } else {
                 watchbot.sendAll("Spammer: ip " + ip + ", name " + html_escape(sys.name(src)) + ". Banning.", watch);
@@ -641,8 +666,14 @@ JSESSION.refill();
             }
         }
 
-        sys.callLater("if(JSESSION.users(" + src + ") != undefined) JSESSION.users(" + src + ").teamChanges--;", 5);
-
+        sys.setTimer(function () {
+            var user = JSESSION.users(src);
+            
+            if (user) {
+                user.teamChanges -= 1;
+            }
+        }, 5, false);
+        
         watchbot.sendAll(sys.name(src) + " changed teams.", watch);
     },
     beforePlayerKick: function (src, bpl) {
@@ -841,7 +872,15 @@ JSESSION.refill();
             }
             time = sys.time() * 1;
             poUser.floodCount += 1;
-            sys.callLater("if (JSESSION.users(" + src + ") !== undefined) { JSESSION.users(" + src + ").floodCount--;  };", 8);
+            
+            sys.setTimer(function () {
+                var user = JSESSION.users(src);
+                
+                if (user) {
+                    user.floodCount -= 1;
+                }
+            }, 8, false);
+            
             if (poUser.floodCount > 7 && poUser.muted == false) {
                 flbot.sendAll(sys.name(src) + " was kicked and muted for flooding.", 0);
                 poUser.muted = true;
@@ -931,7 +970,7 @@ JSESSION.refill();
         var bannedAbilities = {
             'chandelure': ['shadow tag']
         };
-        for (var i = 0; i < 6; ++i) {
+        for (var i = 0; i < sys.teamCount(src); ++i) {
             var ability = sys.ability(sys.teamPokeAbility(src, i, i));
             var lability = ability.toLowerCase();
             var poke = sys.pokemon(sys.teamPoke(src, i, i));
