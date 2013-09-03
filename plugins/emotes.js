@@ -39,9 +39,9 @@ module.exports = function () {
         if (src && (uobj = JSESSION.users(src))) {
             if (uobj.lastEmoteTime && uobj.lastEmoteTime + 20 > time) { 
                 lastEmote = uobj.lastEmote || [];
+            } else {
+                uobj.lastEmote = [];
             }
-            
-            uobj.lastEmote = [];
         }
         
         for (i in EmoteList) {
