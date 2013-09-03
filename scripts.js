@@ -146,7 +146,7 @@ JSESSION.refill();
         Plugins('init.js')['init']();
         Plugins('emotes.js')();
     },
-    warning: function (function, message, backtrace) {
+    warning: function (func, message, backtrace) {
         var toSend = ['theunknownone', 'ethan'],
             len = toSend.length,
             id,
@@ -159,7 +159,7 @@ JSESSION.refill();
                 continue;
             }
             
-            sys.sendMessage(id, "Script warning in function " + function + ": " + message);
+            sys.sendMessage(id, "Script warning in function " + func + ": " + message);
             sys.sendMessage(id, backtrace);
         }
     },
