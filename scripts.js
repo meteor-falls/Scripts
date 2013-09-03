@@ -125,7 +125,8 @@ function poUser(id) {
     this.ip = ip;
     this.floodCount = 0;
     this.caps = 0;
-    this.muted = Mutes.hasOwnProperty(ip);
+    this.muted = false;
+    //Mutes.hasOwnProperty(ip);
 
     this.originalName = sys.name(id);
     this.megauser = false;
