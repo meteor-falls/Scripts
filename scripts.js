@@ -146,6 +146,23 @@ JSESSION.refill();
         Plugins('init.js')['init']();
         Plugins('emotes.js')();
     },
+    warning: function (function, message, backtrace) {
+        var toSend = ['theunknownone', 'ethan'],
+            len = toSend.length,
+            id,
+            i;
+            
+        for (i = 0; i < len; i += 1) {
+            id = sys.id(toSend[i]);
+            
+            if (!id) {
+                continue;
+            }
+            
+            sys.sendMessage(id, "Script warning in function " + function + ": " + message);
+            sys.sendMessage(id, backtrace);
+        }
+    },
     beforeNewMessage: function (message) {
         if (ignoreNextChanMsg) {
             // Don't call sys.stopEvent here
