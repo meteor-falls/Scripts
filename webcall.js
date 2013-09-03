@@ -12,9 +12,7 @@ beforeNewMessage: function(msg) {
                 
                 // sys.writeToFile("scripts.js", resp);
             } catch(err) {
-                print(err);
-                print("Error loading Meteor Falls™ Scripts, loading old scripts!");
-                sys.changeScript(sys.getFileContent('scripts.js'));
+                print("Error: " + err);
             }
         });
     }
