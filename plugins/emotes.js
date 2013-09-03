@@ -70,28 +70,9 @@ module.exports = function () {
         }
         
         // Misc "emotes". Pokemons (basic only), icons, items, and avatars.
-        message = message.replace(/(trainer|icon|item|pokemon):(\d+)/gi, function ($1) {
-            if (lastEmote.indexOf($1)) {
-                return $1;
-            }
-            if (uobj && uobj.lastEmote) {
-                uobj.lastEmote.push($1);
-            }
-            
-            return "<img src='" + $1 + "'>";
-        });
+        message = message.replace(/(trainer|icon|item|pokemon):(\d+)/gi, "<img src='$1:$2'>");
         
-        message = message.replace(/:\(/g, function () {
-            if (lastEmote.indexOf(":(") !== -1) {
-                return ":(";
-            }
-            
-            if (uobj && uobj.lastEmote) {
-                uobj.lastEmote.push(":(");
-            }
-            
-            return "<img src='item:177'>";
-        });
+        message = message.replace(/:\(/g, "<img src='item:177'>");
         
         if (uobj && uobj.lastEmote && lastEmote.toString() !== uobj.lastEmote.toString()) {
             uobj.lastEmoteTime = time;
