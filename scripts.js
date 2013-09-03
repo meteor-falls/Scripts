@@ -119,14 +119,19 @@ var ignoreNextChanMsg = false,
     stripHtmlFromChannelMessages = Config.stripHtmlFromChannelMessages;
 
 function poUser(id) {
+    var ip = sys.ip(id);
+    
     this.id = id;
-    this.ip = sys.ip(id);
+    this.ip = ip;
     this.floodCount = 0;
     this.caps = 0;
-    this.muted = false;
+    this.muted = Mutes.hasOwnProperty(ip);
 
     this.originalName = sys.name(id);
-    this.megauser = false;
+    this.megauser = MegaUsers.hasOwnPrpoerty(this.originalName.toLowerCase());
+    
+    // This is an array so we can track multiple emotes in their last message.
+    this.lastEmote = [];
 }
 
 JSESSION.identifyScriptAs("MF Script 0.6 Beta");
