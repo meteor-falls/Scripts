@@ -25,12 +25,24 @@ module.exports = function () {
         EmoteList["__display__"].push([alts.join(" | "), (priority || 0)]);
     };
     
-    emoteFormat = function (message) {
+    emoteFormat = function (message, src) {
         if (!Config.emotesEnabled) {
             return message;
         }
+        
         var emotes = 0,
+            uobj,
+            lastEmote = [],
+            time = +sys.time(),
             i;
+            
+        if (src && (uobj = JSESSION.users(src))) {
+            if (uobj.lastEmoteTime && uobj.lastEmoteTime + 20 > time) { 
+                lastEmote = uobj.lastEmote || [];
+            }
+            
+            uobj.lastEmote = [];
+        }
         
         for (i in EmoteList) {
             // Skip for performance
@@ -43,19 +55,48 @@ module.exports = function () {
             }
             
             message = message.replace(new RegExp(RegExp.quote(i), "g"), function ($1) {
-                if (emotes > 3) {
+                if (emotes > 3 || lastEmote.indexOf(i) !== -1) {
                     return $1;
                 }
                 
                 emotes += 1;
+                
+                if (uobj && uobj.lastEmote) {
+                    uobj.lastEmote.push(i;
+                }
                 
                 return EmoteList[i];
             });
         }
         
         // Misc "emotes". Pokemons (basic only), icons, items, and avatars.
-        message = message.replace(/(trainer|icon|item|pokemon):(\d+)/gi, "<img src='$1:$2'>");
-        message = message.replace(/:\(/g, "<img src='item:177'>");
+        message = message.replace(/(trainer|icon|item|pokemon):(\d+)/gi, function ($1, $2) {
+            if (lastEmote.indexOf($1 + ":" + $2)) {
+                return $1 + ":" + $2;
+            }
+            if (uobj && uobj.lastEmote) {
+                uobj.lastEmote.push($1 + ":" + $2);
+            }
+            
+            return "<img src='" + $1 + ":" + $2 + "'>";
+        });
+        
+        message = message.replace(/:\(/g, function () {
+            if (lastEmote.indexOf(":(") !== -1) {
+                return ":(";
+            }
+            
+            if (uobj && uobj.lastEmote) {
+                uobj.lastEmote.push(":(");
+            }
+            
+            return "<img src='item:177'>";
+        });
+        
+        if (uobj) {
+            uobj.lastEmoteTime = time;
+        }
+        
         return message;
     };
       
