@@ -37,7 +37,7 @@ module.exports = function () {
             i;
             
         if (src && (uobj = JSESSION.users(src))) {
-            if (uobj.lastEmoteTime && uobj.lastEmoteTime + 20 > time) { 
+            if (uobj.lastEmoteTime && uobj.lastEmoteTime + 10 > time) { 
                 lastEmote = uobj.lastEmote || [];
             } else {
                 uobj.lastEmote = [];
@@ -93,7 +93,7 @@ module.exports = function () {
             return "<img src='item:177'>";
         });
         
-        if (uobj) {
+        if (uobj && uobj.lastEmote && lastEmote.toString() !== uobj.lastEmote.toString()) {
             uobj.lastEmoteTime = time;
         }
         
