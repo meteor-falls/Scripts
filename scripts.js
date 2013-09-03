@@ -128,7 +128,7 @@ function poUser(id) {
     this.muted = Mutes.hasOwnProperty(ip);
 
     this.originalName = sys.name(id);
-    this.megauser = MegaUsers.hasOwnPrpoerty(this.originalName.toLowerCase());
+    this.megauser = MegaUsers.hasOwnProperty(this.originalName.toLowerCase());
     
     // This is an array so we can track multiple emotes in their last message.
     this.lastEmote = [];
