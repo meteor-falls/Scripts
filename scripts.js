@@ -509,7 +509,7 @@ JSESSION.refill();
         }
             
         if (hasEmotesToggled(src)) {
-            emoteMessage = emoteFormat(simpleMessage);
+            emoteMessage = emoteFormat(simpleMessage, src);
             
             if (simpleMessage !== emoteMessage) {
                 emotes = true;
