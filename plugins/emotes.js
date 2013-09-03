@@ -71,7 +71,7 @@ module.exports = function () {
         
         // Misc "emotes". Pokemons (basic only), icons, items, and avatars.
         message = message.replace(/(trainer|icon|item|pokemon):(\d+)/gi, function ($1) {
-            if (lastEmote.indexOf($1) {
+            if (lastEmote.indexOf($1)) {
                 return $1;
             }
             if (uobj && uobj.lastEmote) {
