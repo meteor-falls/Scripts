@@ -876,7 +876,9 @@ JSESSION.refill();
                 
             }, 8 * 1000, false);
             
-            if (poUser.floodCount > 7 && !poUser.muted) {
+            var limit = (chan === testchan ? 18 : 7);
+            
+            if (poUser.floodCount > limit && !poUser.muted) {
                 flbot.sendAll(sys.name(src) + " was kicked and muted for flooding.", 0);
                 poUser.muted = true;
                 Mutes[srcip] = {
@@ -893,7 +895,10 @@ JSESSION.refill();
             time = sys.time() * 1;
         if (script.isMCaps(message) && auth < 1 && !ignoreFlood) {
             poUser.caps += 1;
-            if (poUser.caps >= 6 && poUser.muted == false) {
+            
+            var limit = (chan === testchan ? 15 : 6);
+            
+            if (poUser.caps >= limit && poUser.muted == false) {
                 if (Capsignore[sys.name(src).toLowerCase()] !== undefined) return;
                 capsbot.sendAll(sys.name(src) + " was muted for 5 minutes for CAPS.", 0);
                 poUser.muted = true;
