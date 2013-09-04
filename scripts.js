@@ -414,7 +414,6 @@ JSESSION.refill();
             for (var i = 0; i < drizzleSwim.length; i++) {
                 bot.sendMessage(src, "Sorry, DrizzleSwim is banned from 5th Gen OU.");
                 sys.changeTier(src, drizzleSwim[i], "5th Gen Ubers");
-                sys.stopEvent();
             }
         }
         var sandCloak = hasSandCloak(src);
@@ -422,7 +421,6 @@ JSESSION.refill();
             for (var i = 0; i < sandCloak.length; i++) {
                 bot.sendMessage(src, "Sorry, Sand Veil & Snow Cloak are only usable in 5th Gen Ubers.");
                 sys.changeTier(src, sandCloak[i], "5th Gen Ubers");
-                sys.stopEvent();
             }
         }
     },
