@@ -70,11 +70,13 @@ CommandList.prototype.display = function (player, channel) {
     sys.sendHtmlMessage(player, this.template, channel);
 };
 
+// Default border: 2
+// Default padding: 5
 TableList = function (name, color, border, padding, borderColor) {
    this.name = name;
    this.color = color;
-   this.border = border || 2;
-   this.padding = padding || 5;
+   this.border = border;
+   this.padding = padding;
    this.borderColor = borderColor;
    
    this.template = "<font color=" + borderColor + " size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br><h2>" + name + "</h2><br>";
@@ -209,7 +211,7 @@ module.exports = {
         Lists.Tour = Tour;
 
         /** EMOTES **/
-        var Emotes = new TableList("Emotes", "stripe", 1, 3, "navy");
+        var Emotes = new TableList("Emotes", "stripe", 1, 2, "navy");
         // var Emotes = new CommandList("Emote List", "navy", "If you have emote permissions, type these emotes in the main chat of a channel to use them:");
 
         // EmoteList["__display__"].sort(function (a, b) {
