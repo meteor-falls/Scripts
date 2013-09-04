@@ -115,6 +115,25 @@ TableList.prototype.add = function (elements, isBold) {
     this.template += out;
 };
 
+TableList.prototype.addEvery = function (elements, isBold, every, remainingIsBold) {
+    var out = [],
+        len,
+        element;
+        
+    for (element = 0, len = elements.length; i < len; i += 1) {
+        out.push(elements[element]);
+        
+        if (out.length >= every) {
+            this.add(out, isBold);
+            out = [];
+        }
+    }
+    
+    if (out.length) {
+        this.add(out, remainingIsBold === undefined ? isBold : remainingIsBold);
+    }
+};
+
 TableList.prototype.finish = function () {
     this.template += "</table><br><br/><font color=" + this.borderColor + " size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font>";
 };
