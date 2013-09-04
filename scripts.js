@@ -290,7 +290,7 @@ JSESSION.refill();
 
         JSESSION.createUser(src);
     },
-    afterLogIn: function afterLogIn(src) {
+    afterLogIn: function afterLogIn(src, defaultChan) {
         var poUser = JSESSION.users(src),
             myName = sys.name(src),
             ip = sys.ip(src),
@@ -320,7 +320,17 @@ JSESSION.refill();
         }
 
         function displayBot(name, message, color) {
-            sys.sendHtmlMessage(src, "<font color='" + color + "'><timestamp/> ±<b>" + name + ":</b></font> " + message);
+            var chan = defaultChan;
+            
+            if (sys.os(src) === "android") {
+                if (!sys.isInChannel(src, android)) {
+                    sys.putInChannel(src, android);
+                }
+                
+                chan = android;
+            } 
+            
+            sys.sendHtmlMessage(src, "<font color='" + color + "'><timestamp/> ±<b>" + name + ":</b></font> " + message, chan);
         }
 
         displayBot("ServerBot", "Hey, <b><font color='" + namecolor(src) + "'>" + sys.name(src) + "</font></b>!", "purple");
