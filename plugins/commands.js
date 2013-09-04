@@ -464,19 +464,18 @@ addCommand(0, "spin", function (src, command, commandData, tar, chan) {
     sys.sendHtmlAll("<font color=navy><timestamp/><b>±RouletteBot:</b></font> " + possibilities[sys.rand(0, possibilities.length)], chan);
 });
 addCommand(0, "megausers", function (src, command, commandData, tar, chan) {
-    var mus = Object.keys(MegaUsers);
-    if (mus.length == 0) {
-        bot.sendMessage(src, "No megausers yet!", chan);
+    var list,
+        keys = Object.keys(MegaUsers);
+        
+    if (keys.length === 0) {
+        bot.sendMessage(src, "There are no megausers.", chan);
         return;
     }
-    mus = MegaUsers;
-    var muList = new CommandList("<font color='goldenrod'>Megausers</font>", "navy", "");
-    for (var x in mus) {
-        muList.add(x);
-    }
-
-    muList.finish();
-    muList.display(src, chan);
+    
+    list = new TableList("Megausers", "cornflowerblue", 2, 5, "navy");
+    list.addEvery(keys, false, 10);
+    list.finish();
+    list.display(src, chan);
 });
 addCommand(0, "floodignorelist", function (src, command, commandData, tar, chan) {
     var mus = Object.keys(FloodIgnore);
