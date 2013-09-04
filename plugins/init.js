@@ -84,7 +84,32 @@ module.exports = {
                 break;
             }
         }
-
+        
+        // If a player is banned.
+        isBanned = function (playerName) {
+            // Return their name. This allows us to accept ids as well.
+            var trueName = exports.name(playerName).toLowerCase(),
+                bans = sys.banList();
+            
+            return bans.indexOf(trueName) !== -1;
+        };
+        
+        // Returns the amount of seconds name is temporary banned for.
+        // This > sys.dbTempBanTime.
+        // NOTE: Unlike sys.dbTempBanTime, this returns 0 if the player isn't banned.
+        tempBanTime = function (playerName) {
+            // Return their name. This allows us to accept ids as well.
+            var trueName = exports.name(playerName).toLowerCase();
+            
+            // If they aren't banned, return 0.
+            if (!exports.isBanned(trueName)) {
+                return 0;
+            }
+            
+            // Otherwise, return for how long they are banned.
+            return sys.dbTempBanTime(trueName);
+        };
+    
         namecolor = function (src) {
             var getColor = sys.getColor(src);
             if (getColor == '#000000') {
@@ -232,7 +257,6 @@ module.exports = {
             "Autoidle": "Autoidle",
             "Channeltopics": "Channeltopics",
             "Mutes": "Mutes",
-            "Tempbans": "Tempbans",
             "Rangebans": "Rangebans",
             "Kickmsgs": "Kickmsgs",
             "Banmsgs": "Banmsgs",
@@ -534,7 +558,20 @@ module.exports = {
             }
             sys.kick(src);
         }
-
+        
+        // Temporarly bans a player.
+        // NOTE: Time is in minutes.
+        // NOTE: This is done quietly.
+        tempBan = function (name, time) {
+            // Since there is basically nothing to customise atm (kick is done automatically), this is simply a small wrapper (though it does kick players under the same alt.)
+            // Ensure time is an integer.
+            time = Math.round(time);
+            
+            sys.tempBan(name, time);
+            
+            aliasKick(sys.ip(name));
+        };
+    
         aliasKick = function (ip) {
             var aliases = sys.aliases(ip),
                 alias, id, addIp = false;
@@ -555,18 +592,7 @@ module.exports = {
                 }, 3000);
             }
         }
-
-        pruneTempbans = function () {
-            var x, t = Tempbans,
-                c_inst, TIME_NOW = sys.time() * 1;
-            for (x in t) {
-                c_inst = t[x];
-                if (c_inst.time != 0 && c_inst.time < TIME_NOW) {
-                    delete t[x];
-                }
-            }
-        }
-
+        
         pruneMutes = function () {
             var x, t = Mutes,
                 c_inst, TIME_NOW = sys.time() * 1;
