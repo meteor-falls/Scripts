@@ -203,7 +203,7 @@ JSESSION.refill();
             return;
         }
         if (channel !== android && sys.os(src) == "android") {
-            if (sys.isInChannel(android)) {
+            if (sys.isInChannel(src, android)) {
                 guard.sendMessage(src, "Sorry, you cannot go to a channel other than Android Channel.", android);
                 watchbot.sendAll(sys.name(src) + "(IP: " + sys.ip(src) + ") tried to join " + sys.channel(channel) + " with an android phone!", watch);
             }
