@@ -89,7 +89,7 @@ TableList.prototype.bgcolor = function () {
         if (this.zebra) {
             color = "#eaeaea"; 
         } else {
-            color = "#efefef";
+            color = "#f4f4f4";
         }
         
         this.zebra = !this.zebra;
@@ -219,14 +219,14 @@ module.exports = {
         for (var i = 0, len = EmoteList["__display__"].length; i < len; i += 1) {
             emotesToAdd.push(html_escape(EmoteList["__display__"][i][0]));
             
-            if (emotesToAdd.length >= 9) {
-                Emotes.add(emotesToAdd, true);
+            if (emotesToAdd.length >= 8) {
+                Emotes.add(emotesToAdd, false);
                 emotesToAdd = [];
             }
         }
         
         if (emotesToAdd.length) {
-           Emotes.add(emotesToAdd, true);
+           Emotes.add(emotesToAdd, false);
         }
 
         Emotes.finish();
