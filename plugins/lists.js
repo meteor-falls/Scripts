@@ -305,7 +305,7 @@ module.exports = {
         Moderate.add("tempban <font color=red>[person]:[time]:[timeunit]:[reason]</font>", "To tempban [person] for [time]. [timeunit] and [reason] are optional. Units are the same from /mute. Default time is 30 minutes.");
         Moderate.add("untempban <font color=red>[person]</font>", "To remove [person]'s tempban.");
         Moderate.add("mutes", "To see a list of muted people.");
-        Moderate.add("tempbans", "To see a list of temporarily banned players.");
+        //Moderate.add("tempbans", "To see a list of temporarily banned players.");
         Moderate.add("rangebans", "To see a list of rangebanned ips.");
         Moderate.add("message <font color=red><b>[kick/ban/welcome]:[message]</b></font>", "To set your kick, ban, or welcome message. Use {target} to say target (if kick or ban msg). If it is a welcome message, use {server} to say the server. You can use HTML, but don't aboose. Example: " + html_escape("<font color=green><timestamp/> <b>Ian struck the banhammer on {target}!</b></font>."));
         Moderate.add("viewmessage", "<fontcolor=red><b>[kick/ban/welcome]</b></font", "To view your kick, ban, or welcome message.");
