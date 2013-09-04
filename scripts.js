@@ -640,7 +640,7 @@ JSESSION.refill();
                             delete teamSpammers[ip];
                         }
                     }
-                }, 40, false);
+                }, 40 * 1000, false);
                 
             } else if (teamSpammers[ip] == 0) {
                 teamSpammers[ip] = 1;
@@ -655,7 +655,7 @@ JSESSION.refill();
                             delete teamSpammers[ip];
                         }
                     }
-                }, 180, false);
+                }, 180 * 1000, false);
                 
                 return;
             } else {
@@ -672,7 +672,7 @@ JSESSION.refill();
             if (user) {
                 user.teamChanges -= 1;
             }
-        }, 5, false);
+        }, 5 * 1000, false);
         
         watchbot.sendAll(sys.name(src) + " changed teams.", watch);
     },
@@ -861,18 +861,12 @@ JSESSION.refill();
         if (!JSESSION.hasUser(src)) {
             JSESSION.createUser(src);
         }
-
-        function _debug(m) {
-            sys.sendMessage(sys.id('theunknownone'), m);
-        }
         
         var srcip = sys.ip(src);
         var poUser = JSESSION.users(src),
             ignoreFlood = floodIgnoreCheck(src),
             auth = getAuth(src);
             
-        _debug(auth);
-        _debug(ignoreFlood);
         if (auth < 1 && !ignoreFlood) {
             if (poUser.floodCount < 0) {
                 poUser.floodCount = 0;
@@ -881,8 +875,6 @@ JSESSION.refill();
             time = +sys.time();
             poUser.floodCount += 1;
             
-            _debug('Flood:');
-            _debug(poUser.floodCount);
             sys.setTimer(function () {
                 var user = JSESSION.users(src);
                 
@@ -890,11 +882,9 @@ JSESSION.refill();
                     user.floodCount -= 1;
                 }
                 
-                _debug('Flood timer called: ' + user.floodCount);
-            }, 8, false);
+            }, 8 * 1000, false);
             
             if (poUser.floodCount > 7 && !poUser.muted) {
-                _debug('Muted')
                 flbot.sendAll(sys.name(src) + " was kicked and muted for flooding.", 0);
                 poUser.muted = true;
                 Mutes[srcip] = {
