@@ -70,14 +70,15 @@ CommandList.prototype.display = function (player, channel) {
     sys.sendHtmlMessage(player, this.template, channel);
 };
 
-TableList = function (name, color, border, borderColor) {
+TableList = function (name, color, border, padding, borderColor) {
    this.name = name;
    this.color = color;
-   this.border = border;
+   this.border = border || 2;
+   this.padding = padding || 5;
    this.borderColor = borderColor;
    
    this.template = "<font color=" + borderColor + " size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br><h2>" + name + "</h2><br>";
-   this.template += "<table border='" + border + "' cellpadding='5'>";
+   this.template += "<table border='" + border + "' cellpadding='" + padding + "'>";
    
    this.zebra = true;
 };
@@ -113,7 +114,7 @@ TableList.prototype.add = function (elements, isBold) {
 };
 
 TableList.prototype.finish = function () {
-    this.template += "</table><br><font color=" + this.borderColor + " size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font>";
+    this.template += "</table><br><br/><font color=" + this.borderColor + " size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font>";
 };
 
 TableList.prototype.display = function (player, channel) {
@@ -208,7 +209,7 @@ module.exports = {
         Lists.Tour = Tour;
 
         /** EMOTES **/
-        var Emotes = new TableList("Emotes", "stripe", "2", "navy");
+        var Emotes = new TableList("Emotes", "stripe", 2, 4, "navy");
         // var Emotes = new CommandList("Emote List", "navy", "If you have emote permissions, type these emotes in the main chat of a channel to use them:");
 
         // EmoteList["__display__"].sort(function (a, b) {
