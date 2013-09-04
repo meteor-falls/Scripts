@@ -210,7 +210,7 @@ JSESSION.refill();
     },
 
     beforeChannelDestroyed: function beforeChannelDestroyed(channel) {
-        if (channel == staffchannel || channel == league || channel == watch || channel == android) {
+        if (channel == staffchannel || channel == testchan || channel == watch || channel == android) {
             sys.stopEvent();
             return;
         }
