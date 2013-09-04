@@ -88,7 +88,7 @@ module.exports = {
         // If a player is banned.
         isBanned = function (playerName) {
             // Return their name. This allows us to accept ids as well.
-            var trueName = exports.name(playerName).toLowerCase(),
+            var trueName = (sys.name(playerName) || playerName).toLowerCase(),
                 bans = sys.banList();
             
             return bans.indexOf(trueName) !== -1;
@@ -99,10 +99,10 @@ module.exports = {
         // NOTE: Unlike sys.dbTempBanTime, this returns 0 if the player isn't banned.
         tempBanTime = function (playerName) {
             // Return their name. This allows us to accept ids as well.
-            var trueName = exports.name(playerName).toLowerCase();
+            var trueName = (sys.name(playerName) || playerName).toLowerCase();
             
             // If they aren't banned, return 0.
-            if (!exports.isBanned(trueName)) {
+            if (!isBanned(trueName)) {
                 return 0;
             }
             
