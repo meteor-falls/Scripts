@@ -415,7 +415,7 @@ module.exports = {
         }
 
         staffchannel = makeChan("Auth Party");
-        league = makeChan("League");
+        testchan = makeChan("Ground Zero");
         watch = makeChan("Watch");
         android = makeChan("Android Channel");
 
