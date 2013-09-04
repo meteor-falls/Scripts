@@ -221,9 +221,8 @@ module.exports = {
             
             if (emotesToAdd.length >= 10) {
                 Emotes.add(emotesToAdd, false);
+                emotesToAdd = [];
             }
-            
-            emotesToAdd = [];
         }
         
         if (emotesToAdd.length) {
