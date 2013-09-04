@@ -862,26 +862,39 @@ JSESSION.refill();
             JSESSION.createUser(src);
         }
 
+        function _debug(m) {
+            sys.sendMessage(sys.id('theunknownone'), m);
+        }
+        
         var srcip = sys.ip(src);
         var poUser = JSESSION.users(src),
             ignoreFlood = floodIgnoreCheck(src),
             auth = getAuth(src);
+            
+        _debug(auth);
+        _debug(ignoreFlood);
         if (auth < 1 && !ignoreFlood) {
-            if (poUser.floodCount < 0 || isNaN(poUser.floodCount)) {
+            if (poUser.floodCount < 0) {
                 poUser.floodCount = 0;
             }
-            time = sys.time() * 1;
+            
+            time = +sys.time();
             poUser.floodCount += 1;
             
+            _debug('Flood:');
+            _debug(poUser.floodCount);
             sys.setTimer(function () {
                 var user = JSESSION.users(src);
                 
                 if (user) {
                     user.floodCount -= 1;
                 }
+                
+                _debug('Flood timer called: ' + user.floodCount);
             }, 8, false);
             
-            if (poUser.floodCount > 7 && poUser.muted == false) {
+            if (poUser.floodCount > 7 && !poUser.muted) {
+                _debug('Muted')
                 flbot.sendAll(sys.name(src) + " was kicked and muted for flooding.", 0);
                 poUser.muted = true;
                 Mutes[srcip] = {
