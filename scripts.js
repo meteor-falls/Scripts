@@ -259,19 +259,11 @@ JSESSION.refill();
             sys.stopEvent();
             return;
         }
-
-        pruneTempbans();
-
+        
         var poUser = JSESSION.users(src),
             cu_rb, t_n = sys.time() * 1;
             
         if (sys.auth(src) < 3) {
-            if (typeof Tempbans[srcip] !== "undefined") {
-                bot.sendMessage(src, "You are tempbanned! Remaining time: " + getTimeString(Tempbans[srcip].time - t_n), 0);
-                sys.stopEvent();
-                watchbot.sendAll("Tempbanned IP [" + sys.ip(src) + "] tried to log in.", watch);
-                return;
-            }
             for (var x in Rangebans) {
                 if (x == srcip.substr(0, x.length)) {
                     sys.stopEvent();
@@ -691,20 +683,45 @@ JSESSION.refill();
         }
     },
 
-    beforePlayerBan: function beforePlayerBan(src, bpl) {
+    beforePlayerBan: function beforePlayerBan(src, bpl, time) {
         sys.stopEvent();
+        
         if (getAuth(bpl) >= getAuth(src)) {
             bot.sendMessage(src, "You may not ban this person!");
             return;
         }
-        watchbot.sendAll(sys.name(src) + " banned " + html_escape(sys.name(bpl)) + " (IP: " + sys.ip(bpl) + ")", watch);
-        var theirmessage = Banmsgs[sys.name(src).toLowerCase()];
-        var msg = (theirmessage !== undefined) ? theirmessage.message : "<font color=blue><timestamp/><b>" + sys.name(src) + " banned " + html_escape(sys.name(bpl)) + "!</font></b>";
-        if (theirmessage != undefined) {
-            msg = msg.replace(/\{Target\}/gi, sys.name(bpl));
+        
+        var targetName = sys.name(bpl);
+                
+        var banMessage = Banmsgs[sys.name(src).toLowerCase()];
+        
+        if (banMessage) {
+            banMessage = banMessage.replace(/\{Target\}/gi, targetName);
         }
-        sys.sendHtmlAll(msg);
-        ban(sys.name(bpl));
+        
+        watchbot.sendAll(sys.name(src) + " banned " + html_escape(targetName) + " (IP: " + sys.ip(bpl) + ")", watch);
+
+        if (time) {
+            // Temporary ban.
+            // Time is in minutes, and getTimeString expects seconds.
+            if (banMessage) {
+                sys.sendHtmlAll(banMessage);
+            } else {
+                sys.sendHtmlAll("<font color=blue><timestamp/><b>" + sys.name(src) + " banned " + html_escape(targetName) + " for " + getTimeString(time * 60) + "!</font></b>");
+            }
+            
+            tempBan(targetName, time);
+        } else {
+            // Permanent ban.
+            
+            if (banMessage) {
+                sys.sendHtmlAll(banMessage);
+            } else {
+                sys.sendHtmlAll("<font color=blue><timestamp/><b>" + sys.name(src) + " banned " + html_escape(targetName) + "!</font></b>");
+            }
+            
+            ban(targetName);
+        }
     },
 
     beforeChallengeIssued: function beforeChallengeIssued(src, dest) {
