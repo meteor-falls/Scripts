@@ -79,7 +79,7 @@ TableList = function (name, color, border, padding, borderColor) {
    this.padding = padding;
    this.borderColor = borderColor;
    
-   this.template = "<font color=" + borderColor + " size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br><h2>" + name + "</h2><br>";
+   this.template = "<font color=" + borderColor + " size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br><h2>" + name + "</h2>";
    this.template += "<table border='" + border + "' cellpadding='" + padding + "'>";
    
    this.zebra = true;
