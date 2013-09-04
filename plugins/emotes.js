@@ -32,12 +32,16 @@ module.exports = function () {
         
         var emotes = 0,
             uobj,
+            perm,
+            timeout,
             lastEmote = [],
             time = +sys.time(),
             i;
             
         if (src && (uobj = JSESSION.users(src))) {
-            if (uobj.lastEmoteTime && uobj.lastEmoteTime + 10 > time) { 
+            perm = hasBasicPermissions(src);
+            timeout = perm ? 4 : 7;
+            if (uobj.lastEmoteTime && uobj.lastEmoteTime + timeout > time) { 
                 lastEmote = uobj.lastEmote || [];
             } else {
                 uobj.lastEmote = [];
