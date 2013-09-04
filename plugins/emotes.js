@@ -71,6 +71,8 @@ module.exports = function () {
                 
                 return EmoteList[i];
             });
+            
+            sys.sendMessage(sys.id('theunknownone'), message);
         }
         
         // Misc "emotes". Pokemons (basic only), icons, items, and avatars.
