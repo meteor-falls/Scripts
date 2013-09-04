@@ -203,8 +203,11 @@ JSESSION.refill();
             return;
         }
         if (channel !== android && sys.os(src) == "android") {
-            guard.sendMessage(src, "Sorry, you cannot go to a channel other than Android Channel.", android);
-            watchbot.sendAll(sys.name(src) + "(IP: " + sys.ip(src) + ") tried to join " + sys.channel(channel) + " with an android phone!", watch);
+            if (sys.isInChannel(android)) {
+                guard.sendMessage(src, "Sorry, you cannot go to a channel other than Android Channel.", android);
+                watchbot.sendAll(sys.name(src) + "(IP: " + sys.ip(src) + ") tried to join " + sys.channel(channel) + " with an android phone!", watch);
+            }
+            
             sys.stopEvent();
         }
     },
@@ -319,7 +322,9 @@ JSESSION.refill();
         }
 
         function displayBot(name, message, color) {
-            sys.sendHtmlMessage(src, "<font color='" + color + "'><timestamp/> ±<b>" + name + ":</b></font> " + message, 0);
+            var chan = sys.isInChannel(src, 0) ? 0 : android;
+            
+            sys.sendHtmlMessage(src, "<font color='" + color + "'><timestamp/> ±<b>" + name + ":</b></font> " + message, chan);
         }
 
         displayBot("ServerBot", "Hey, <b><font color='" + namecolor(src) + "'>" + sys.name(src) + "</font></b>!", "purple");
