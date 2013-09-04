@@ -87,9 +87,9 @@ TableList.prototype.bgcolor = function () {
     
     if (color === "zebra" || color === "stripe") {
         if (this.zebra) {
-            color = "#f9f9f9"; 
+            color = "#eaeaea"; 
         } else {
-            color = "white";
+            color = "#efefef";
         }
         
         this.zebra = !this.zebra;
@@ -219,14 +219,14 @@ module.exports = {
         for (var i = 0, len = EmoteList["__display__"].length; i < len; i += 1) {
             emotesToAdd.push(html_escape(EmoteList["__display__"][i][0]));
             
-            if (emotesToAdd.length >= 10) {
-                Emotes.add(emotesToAdd, false);
+            if (emotesToAdd.length >= 9) {
+                Emotes.add(emotesToAdd, true);
                 emotesToAdd = [];
             }
         }
         
         if (emotesToAdd.length) {
-           Emotes.add(emotesToAdd, false);
+           Emotes.add(emotesToAdd, true);
         }
 
         Emotes.finish();
