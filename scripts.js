@@ -13,7 +13,6 @@ var Config = {
    
     permissions: {
         update: ["hht", "ethan", "theunknownone"], // People who can update scripts/tiers.
-        items: ["hht"], // People who can use /toggleitems [name]
         
         // Gives users access to all commands of that level.
         auth_permissions: {
