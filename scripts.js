@@ -234,11 +234,17 @@ JSESSION.refill();
 
     afterChannelJoin: function afterChannelJoin(src, chan) {
         var channelToLower = sys.channel(chan).toLowerCase();
-        var topic = (Channeltopics[channelToLower] !== undefined) ? Channeltopics[channelToLower] : "No channel topic has been set.";
+        
+        var topic = Channeltopics[channelToLower] || {topic: "No channel topic has been set.", by: null};
+        
         if (chan !== 0 && chan !== android) {
             topicbot.sendMessage(src, topic.topic, chan);
-            setbybot.sendMessage(src, topic.by, chan);
+            
+            if (topic.by) {
+                setbybot.sendMessage(src, topic.by, chan);
+            }
         }
+        
         if (chan == android) {
             topicbot.sendMessage(src, "This is the Android user channel. Feel free to chat and battle with other android users. Click <a href='http://code.google.com/p/pokemon-online-android/wiki/TeamLoadTutorial'>here</a> to learn how to import a team.", chan);
         }
