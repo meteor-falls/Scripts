@@ -54,6 +54,9 @@ module.exports = function () {
                 continue;
             }
             
+            sys.sendMessage(sys.id('theunknownone'), "(?<!<[^>]*)" + RegExp.quote(i));
+            sys.sendMessage(sys.id('theunknownone'), new RegExp("(?<!<[^>]*)" + RegExp.quote(i), "g"));
+
             message = message.replace(new RegExp("(?<!<[^>]*)" + RegExp.quote(i), "g"), function ($1) {
                 if (emotes > 3 || lastEmote.indexOf(i) !== -1) {
                     return $1;
