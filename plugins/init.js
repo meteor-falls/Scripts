@@ -290,7 +290,7 @@ module.exports = {
                 name = uobj.originalName;
             }
             
-            return getAuth(src) > 0 || Config.permissons.update.indexOf(name.toLowerCase());
+            return getAuth(src) > 0 || Config.permissions.update.indexOf(name.toLowerCase());
         };
 
         hasEmotesToggled = function (src) {
