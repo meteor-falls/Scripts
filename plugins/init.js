@@ -505,7 +505,9 @@ module.exports = {
                 c = playerIdList[xlist];
                 if (ip == sys.ip(c)) {
                     if (!floodBot) {
-                        sys.callQuickly('sys.kick(' + c + ');', 20);
+                        sys.setTimer(function () {
+                            sys.kick(c)
+                        }, 20, false);
                     } else {
                         sys.kick(c);
                     }
@@ -515,7 +517,10 @@ module.exports = {
 
             if (addIp) {
                 reconnectTrolls[ip] = true;
-                sys.callLater("delete reconnectTrolls['" + ip + "'];", 5);
+                
+                sys.setTimer(function () {
+                    delete reconnectTrolls[ip];
+                }, 3000);
             }
             sys.kick(src);
         }
@@ -526,13 +531,18 @@ module.exports = {
             for (alias in aliases) {
                 id = sys.id(aliases[alias]);
                 if (id != undefined) {
-                    sys.callQuickly('sys.kick(' + id + ');', 20);
+                    sys.setTimer(function () {
+                        sys.kick(id);
+                    }, 20, false);
                     addIp = sys.ip(id);
                 }
             }
             if (addIp != false) {
                 reconnectTrolls[addIp] = true;
-                sys.callLater("delete reconnectTrolls['" + addIp + "'];", 5);
+                
+                sys.setTimer(function () {
+                    delete reconnectTrolls[ip];
+                }, 3000);
             }
         }
 
