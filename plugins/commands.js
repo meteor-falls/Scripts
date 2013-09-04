@@ -1131,6 +1131,8 @@ addCommand(1, "mutes", function (src, command, commandData, tar, chan) {
     muteList.finish();
     muteList.display(src, chan);
 }, Config.permissions.auth_permissions.mod);
+
+/*
 addCommand(1, "tempbans", function (src, command, commandData, tar, chan) {
     var mutes = Object.keys(Tempbans);
     if (mutes.length == 0) {
@@ -1148,6 +1150,8 @@ addCommand(1, "tempbans", function (src, command, commandData, tar, chan) {
     muteList.finish();
     muteList.display(src, chan);
 }, Config.permissions.auth_permissions.mod);
+*/
+
 addCommand(1, "rangebans", function (src, command, commandData, tar, chan) {
     var mutes = Object.keys(Rangebans);
     if (mutes.length == 0) {
@@ -1318,6 +1322,7 @@ addCommand(1, ["warn", "warning"], function (src, command, commandData, tar, cha
     sys.sendHtmlMessage(tar, "<font color=red><timestamp/><b>" + html_escape(sys.name(src)) + " warned you!", 0);
     sys.sendHtmlMessage(tar, "<font color=green><timestamp/><b>Reason:</b></font> " + html_escape(cut(parts, 1, ':')), 0);
 }, Config.permissions.auth_permissions.mod);
+
 addCommand(1, ["tempban", "tb"], function (src, command, commandData, tar, chan) {
     var t = commandData.split(':'),
         bantime = t[1],
@@ -1334,19 +1339,12 @@ addCommand(1, ["tempban", "tb"], function (src, command, commandData, tar, chan)
         bot.sendMessage(src, "Target doesn't exist!", chan);
         return;
     }
-    pruneTempbans();
-    if (Tempbans[tarip] != undefined) {
-        bot.sendMessage(src, "This person is already tempbanned.", chan);
+    
+    if (tempBanTime(tarip)) {
+        bot.sendMessage(src, "This person is already (temp)banned.", chan);
         return;
     }
-    var banlist = sys.banList(),
-        a;
-    for (a in banlist) {
-        if (tarip == sys.dbIp(banlist[a])) {
-            bot.sendMessage(src, "This person is already banned.", chan);
-            return;
-        }
-    }
+    
     if (getAuth(t[0]) >= this.myAuth) {
         bot.sendMessage(src, "You dont have sufficient auth to tempban " + commandData + ".", chan);
         return;
@@ -1373,32 +1371,22 @@ addCommand(1, ["tempban", "tb"], function (src, command, commandData, tar, chan)
     }
 
     sys.sendHtmlAll("<font color=red><timestamp/><b> " + t[0] + " has been tempbanned by " + html_escape(sys.name(src)) + " for " + timestr + "!</font></b><br><font color=black><timestamp/><b> Reason:</b> " + reason, 0);
-    if (tar !== undefined) {
-        kick(tar);
-    }
-
-    Tempbans[tarip] = {
-        "by": sys.name(src),
-        "bannedname": commandData,
-        "reason": reason,
-        "time": time + sys.time() * 1
-    };
-    Reg.save("Tempbans", JSON.stringify(Tempbans));
+    
+    tempBan(t[0], time / 60);
 }, Config.permissions.auth_permissions.mod);
+
 addCommand(1, "untempban", function (src, command, commandData, tar, chan) {
     var tip = sys.dbIp(commandData);
     if (tip == undefined) {
         bot.sendMessage(src, "Target doesn't exist!", chan);
         return;
     }
-    pruneTempbans();
-    if (Tempbans[tip] === undefined) {
+    if (!tempBanTime(tip)) {
         bot.sendMessage(src, "This person isn't tempbanned.", chan);
         return;
     }
     sys.sendHtmlAll("<font color=blue><timestamp/><b> " + commandData + "'s tempban has been removed by " + html_escape(sys.name(src)) + "!</font></b>", 0);
-    delete Tempbans[tip];
-    Reg.save("Tempbans", JSON.stringify(Tempbans));
+    sys.unban(commandData);
 }, Config.permissions.auth_permissions.mod);
 addCommand(1, ["mute", "m"], function (src, command, commandData, tar, chan) {
     var v = commandData.split(':'),
