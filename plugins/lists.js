@@ -70,6 +70,56 @@ CommandList.prototype.display = function (player, channel) {
     sys.sendHtmlMessage(player, this.template, channel);
 };
 
+TableList = function (name, color, border, borderColor) {
+   this.name = name;
+   this.color = color;
+   this.border = border;
+   this.borderColor = borderColor;
+   
+   this.template = "<font color=" + borderColor + " size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br><h2>" + title + "</h2><br>";
+   this.template += "<table border='" + border + "' cellpadding='5'>";
+   
+   this.zebra = true;
+};
+
+TableList.prototype.bgcolor = function () {
+    var color = this.color.toLowerCase();
+    
+    if (color === "zebra" || color === "stripe") {
+        if (this.zebra) {
+            color = "#f9f9f9"; 
+        } else {
+            color = "white";
+        }
+        
+        this.zebra = !this.zebra;
+    }
+    
+    return color;
+};
+
+TableList.prototype.add = function (elements, isBold) {
+    var out = this.color === "<tr bgcolor='" + this.bgcolor() + "'>",
+        tags = isBold ? ['<th>', '</th>'] : ['<td>', '</td>'],
+        len,
+        i;
+        
+    for (i = 0, len = elements.length; i < len; i += 1) {
+        out += tags[0] + elements[i] + tags[1];
+    }
+    
+    out += "</tr>";
+    this.template += out;
+};
+
+TableList.prototype.finish = function () {
+    this.template += "</table><br><font color=" + this.borderColor + " size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font>";
+};
+
+TableList.prototype.display = function (player, channel) {
+    sys.sendHtmlMessage(player, this.template, channel);
+};
+
 module.exports = {
     lists: function () {
         var Lists = {};
@@ -158,14 +208,22 @@ module.exports = {
         Lists.Tour = Tour;
 
         /** EMOTES **/
-        var Emotes = new CommandList("Emote List", "navy", "If you have emote permissions, type these emotes in the main chat of a channel to use them:");
+        var Emotes = new TableList("Emotes", "stripe", "2", "navy");
+        // var Emotes = new CommandList("Emote List", "navy", "If you have emote permissions, type these emotes in the main chat of a channel to use them:");
 
-        EmoteList["__display__"].sort(function (a, b) {
-            return (b[1] - a[1]);
-        });
+        // EmoteList["__display__"].sort(function (a, b) {
+            // return (b[1] - a[1]);
+        // });
 
+        var emotesToAdd = [];
         for (var i = 0, len = EmoteList["__display__"].length; i < len; i += 1) {
-            Emotes.add(html_escape(EmoteList["__display__"][i][0]));
+            emotesToAdd.push(html_escape(EmoteList["__display__"][i][0]));
+            
+            if (emotesToAdd.length >= 10) {
+                Emotes.add(emotesToAdd, false);
+            }
+            
+            emotesToAdd = [];
         }
 
         Emotes.finish();
