@@ -45,6 +45,7 @@ module.exports = function () {
         }
         
         for (i in EmoteList) {
+            sys.sendMessage(sys.id('theunknownone'), emotes + " " + i)
             // Skip for performance
             if (emotes > 3) {
                 break;
