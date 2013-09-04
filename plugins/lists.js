@@ -209,7 +209,7 @@ module.exports = {
         Lists.Tour = Tour;
 
         /** EMOTES **/
-        var Emotes = new TableList("Emotes", "stripe", 2, 4, "navy");
+        var Emotes = new TableList("Emotes", "stripe", 1, 3, "navy");
         // var Emotes = new CommandList("Emote List", "navy", "If you have emote permissions, type these emotes in the main chat of a channel to use them:");
 
         // EmoteList["__display__"].sort(function (a, b) {
