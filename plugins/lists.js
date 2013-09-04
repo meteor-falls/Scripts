@@ -76,7 +76,7 @@ TableList = function (name, color, border, borderColor) {
    this.border = border;
    this.borderColor = borderColor;
    
-   this.template = "<font color=" + borderColor + " size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br><h2>" + title + "</h2><br>";
+   this.template = "<font color=" + borderColor + " size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br><h2>" + name + "</h2><br>";
    this.template += "<table border='" + border + "' cellpadding='5'>";
    
    this.zebra = true;
@@ -99,7 +99,7 @@ TableList.prototype.bgcolor = function () {
 };
 
 TableList.prototype.add = function (elements, isBold) {
-    var out = this.color === "<tr bgcolor='" + this.bgcolor() + "'>",
+    var out = "<tr bgcolor='" + this.bgcolor() + "'>",
         tags = isBold ? ['<th>', '</th>'] : ['<td>', '</td>'],
         len,
         i;
