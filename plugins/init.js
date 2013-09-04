@@ -281,12 +281,22 @@ module.exports = {
             
             return hasEmotes;
         }
+        
+        hasBasicPermissions = function (src) {
+            var uobj = JSESSION.users(src),
+                name = sys.name(src);
+                
+            if (uobj && uobj.originalName) {
+                name = uobj.originalName;
+            }
+            
+            return getAuth(src) > 0 || Config.permissons.update.indexOf(name.toLowerCase());
+        };
 
         hasEmotesToggled = function (src) {
             var name = JSESSION.users(src).originalName.toLowerCase();
-            
-            return (getAuth(src) > 0 || hasEmotePerms(name) && Emotetoggles.hasOwnProperty(name));
-        }
+            return (hasBasicPermissions(src) || hasEmotePerms(name)) && Emotetoggles.hasOwnProperty(name);
+        };
         
         itemsEnabled = function (src) {
             var name = sys.name(src),
