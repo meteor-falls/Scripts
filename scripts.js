@@ -320,9 +320,7 @@ JSESSION.refill();
         }
 
         function displayBot(name, message, color) {
-            var chan = sys.isInChannel(src, 0) ? 0 : android;
-            
-            sys.sendHtmlMessage(src, "<font color='" + color + "'><timestamp/> ±<b>" + name + ":</b></font> " + message, chan);
+            sys.sendHtmlMessage(src, "<font color='" + color + "'><timestamp/> ±<b>" + name + ":</b></font> " + message);
         }
 
         displayBot("ServerBot", "Hey, <b><font color='" + namecolor(src) + "'>" + sys.name(src) + "</font></b>!", "purple");
