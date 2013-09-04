@@ -1827,37 +1827,6 @@ addCommand(3, ["webcall", "scriptchange", "loadscript", "updatescript"], functio
         }
     });
 }, Config.permissions.auth_permissions.owner.concat(Config.permissions.update));
-addCommand(3, "toggleitems", function (src, command, commandData, tar, chan) {
-    var toggled = '';
-
-    if (!commandData) {
-        commandData = sys.name(src);
-    }
-
-    if (itemsEnabled(commandData)) {
-        delete Itemtoggles[commandData.toLowerCase()];
-        toggled = 'off';
-    } else {
-        Itemtoggles[commandData.toLowerCase()] = true;
-        toggled = 'on';
-    }
-
-    Reg.save("Itemtoggles", JSON.stringify(Itemtoggles));
-    sys.sendHtmlMessage(src, '<font color=blue><timestamp/><b>±ItemBot:</b></font> Turned items ' + toggled + ' for ' + commandData + '.');
-}, Config.permissions.auth_permissions.owner.concat(Config.permissions.items));
-addCommand(3, "displayitemplayers", function (src, command, commandData, tar, chan) {
-    if (Object.keys(Itemtoggles).length == 0) {
-        bot.sendMessage(src, "No item players yet!", chan);
-        return;
-    }
-    var list = new CommandList("<font color='goldenrod'>Item Players</font>", "navy", "");
-    for (var x in Itemtoggles) {
-        list.add(x);
-    }
-
-    list.finish();
-    list.display(src, chan);
-}, Config.permissions.auth_permissions.owner.concat(Config.permissions.items));
 addCommand(3, ["updatetiers", "loadtiers"], function (src, command, commandData, tar, chan) {
     if (commandData == undefined || commandData == "" || (commandData.substr(0, 7) != 'http://' && commandData.substr(0, 8) != 'https://')) {
         commandData = Config.dataurl + "tiers.xml";
