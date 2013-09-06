@@ -1877,7 +1877,11 @@ addCommand(3, ["scramblemotes"], function (src, command, commandData, tar, chan)
     
     for (i in EmoteList) {
         if (i !== "__display__") {
-            values.push(EmoteList[i]);
+            if (i === "xd") {
+                values.push(EmoteList["mike1"]);
+            } else {
+                values.push(EmoteList[i]);
+            }
         }
     }
     
