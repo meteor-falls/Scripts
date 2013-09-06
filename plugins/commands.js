@@ -1891,8 +1891,12 @@ addCommand(3, ["scramblemotes"], function (src, command, commandData, tar, chan)
     
     EmoteList = emotes;
     
-    script.loadCommandLists();
     bot.sendMessage(src, "Emotes scrambled.", chan);
+}, Config.permissions.auth_permissions.owner.concat(Config.permissions.update));
+
+addCommand(3, ["togglemotes"], function (src, command, commandData, tar, chan) {
+    Config.emotesEnabled = !Config.emotesEnabled;
+    bot.sendAll("Emotes were " + (Config.emotesEnabled ? "enabled!" : "disabled."), chan);
 }, Config.permissions.auth_permissions.owner.concat(Config.permissions.update));
 
 addCommand(3, "bots", function (src, command, commandData, tar, chan) {
