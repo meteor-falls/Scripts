@@ -1889,6 +1889,8 @@ addCommand(3, ["scramblemotes"], function (src, command, commandData, tar, chan)
         emotes[keys[i]] = values[i];
     }
     
+    EmoteList = emotes;
+    
     script.loadCommandLists();
     bot.sendMessage(src, "Emotes scrambled.", chan);
 }, Config.permissions.auth_permissions.owner.concat(Config.permissions.update));
