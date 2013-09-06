@@ -1861,6 +1861,38 @@ addCommand(3, ["testann", "updateann"], function (src, command, commandData, tar
         }
     });
 }, Config.permissions.auth_permissions.owner.concat(Config.permissions.update));
+
+addCommand(3, ["scramblemotes"], function (src, command, commandData, tar, chan) {
+    if (commandData.toLowerCase().trim() === "reset") {
+        reloadPlugin('emotes.js');
+        bot.sendMessage(src, "Emotes reset.", chan);
+        return;
+    }
+    
+    var keys = Object.keys(EmoteList),
+        values = [],
+        emotes = {},
+        len,
+        i;
+    
+    for (i in EmoteList) {
+        if (i === "__display__") {
+            values.push(EmoteList[i]);
+        }
+    }
+    
+    keys.splice(keys.indexOf('__display__'), 1);
+    keys = fisherYates(keys);
+    values = fisherYates(values);
+    
+    for (i = 0, len = keys.length; i < len; i += 1) {
+        emotes[keys[i]] = values[i];
+    }
+    
+    script.loadCommandLists();
+    bot.sendMessage(src, "Emotes scrambled.", chan);
+}, Config.permissions.auth_permissions.owner.concat(Config.permissions.update));
+
 addCommand(3, "bots", function (src, command, commandData, tar, chan) {
     bots = !bots;
     var word = bots ? "on" : "off";
