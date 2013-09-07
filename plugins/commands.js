@@ -1236,7 +1236,7 @@ addCommand(1, "tellemotes", function (src, command, commandData, tar, chan) {
         return;
     }
 	sys.sendAll(sys.name(src) + ": Hey, " + commandData + ", the thing you are confused about is an emote. An emote is basically an emoticon but with a picture put in. Since we tend to enjoy emotes you might see one of us using the emote alot or the chat may be filled with emotes. We are sorry if we use any that is weird and creeps you out. To be able to use emotes you need seniority. To get 'seniority' you need to participate in the chat and our forums! The link to the forums is in the banner above, be sure to check it out. Good day!", chan);
-	}, Config.permissions.auth_permissions.mod);
+}, Config.permissions.auth_permissions.mod);
 addCommand(1, "silence", function (src, command, commandData, tar, chan) {
     if (muteall) {
         bot.sendMessage(src, "Silence is already on!", chan);
@@ -1908,12 +1908,10 @@ addCommand(3, ["scramblemotes"], function (src, command, commandData, tar, chan)
     
     bot.sendMessage(src, "Emotes scrambled.", chan);
 }, Config.permissions.auth_permissions.owner.concat(Config.permissions.update));
-
 addCommand(3, ["togglemotes"], function (src, command, commandData, tar, chan) {
     Config.emotesEnabled = !Config.emotesEnabled;
     bot.sendAll("Emotes were " + (Config.emotesEnabled ? "enabled!" : "disabled."), chan);
 }, Config.permissions.auth_permissions.owner.concat(Config.permissions.update));
-
 addCommand(3, "bots", function (src, command, commandData, tar, chan) {
     bots = !bots;
     var word = bots ? "on" : "off";
