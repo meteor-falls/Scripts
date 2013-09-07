@@ -1,3 +1,6 @@
+/*global sys, SESSION, script: true, Qt, print, gc, version,
+    global: false, Plugin: true, Config: true, module: true, exports: true*/
+
 /* Documentation for prototype CommandList:
    Create a command list. Example:
    

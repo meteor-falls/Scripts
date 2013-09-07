@@ -1,11 +1,12 @@
-/*jslint continue: true, es5: true, evil: true, forin: true, sloppy: true, vars: true, regexp: true, newcap: true*/
 /*global sys, SESSION, script: true, Qt, print, gc, version,
-    global: false, require: false, Config: true, Script: true, module: true, exports: true*/
+    global: false, Plugin: true, Config: true, module: true, exports: true*/
+
 // File: jsession.js
 // Contains JSESSION, which is a replacement for PO's in-built 'SESSION', which is pretty buggy.
 // No dependencies.
 // Table of Content:
 // [expt]: Exports.
+
 (function () {
     function noop() {}
 

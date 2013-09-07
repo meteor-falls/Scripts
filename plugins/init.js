@@ -1,3 +1,6 @@
+/*global sys, SESSION, script: true, Qt, print, gc, version,
+    global: false, Plugin: true, Config: true, module: true, exports: true*/
+
 module.exports = {
     init: function () {
         if (!sys.os) {

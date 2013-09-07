@@ -1,3 +1,7 @@
+/*jslint continue: true, es5: true, evil: true, forin: true, sloppy: true, vars: true, regexp: true, newcap: true*/
+/*global sys, SESSION, script: true, Qt, print, gc, version,
+    global: false, Plugin: true, Config: true, module: true, exports: true*/
+
 /* Documentation for prototype Bot:
    Creates a bot. Example:
    vpbot = new Bot("Meteor Falls", "red", "+", true);

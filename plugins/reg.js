@@ -1,3 +1,6 @@
+/*global sys, SESSION, script: true, Qt, print, gc, version,
+    global: false, Plugin: true, Config: true, module: true, exports: true*/
+
 /* Documentation for class Reg:
    - Everything is stored in the file Reg.json
    

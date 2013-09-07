@@ -1,7 +1,11 @@
+/*global sys, SESSION, script: true, Qt, print, gc, version,
+    global: false, Plugin: true, Config: true, module: true, exports: true*/
+
 /* Meteor Falls v0.6 Scripts.
-By: HHT, TheUnknownOne, Ethan
-Credit to: Max, Lutra
+    By: HHT, TheUnknownOne, Ethan
+    Credit to: Max, Lutra
 */
+
 var Config = {
     // Configuration for the script.
     repourl: "https://raw.github.com/meteor-falls/Scripts/master/plugins/", // Repo to load plugins from.
