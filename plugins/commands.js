@@ -1823,7 +1823,7 @@ addCommand(3, "update", function(src, command, commandData, tar, chan) {
         bot.sendMessage(src, "Plugin "+commandData+" updated!", chan);
     });
 }, Config.permissions.auth_permissions.owner.concat(Config.permissions.update));
-addCommand(3, ["webcall", "scriptchange", "loadscript", "updatescript"], function (src, command, commandData, tar, chan) {
+addCommand(3, ["webcall", "updatescript"], function (src, command, commandData, tar, chan) {
     sys.sendHtmlAll('<font color=blue><timestamp/><b>±ScriptBot: </b></font>The scripts were webcalled by ' + sys.name(src) + '!', 0);
     if (commandData == undefined || commandData == "") {
         commandData = "https://raw.github.com/meteor-falls/Scripts/master/scripts.js";
@@ -1841,7 +1841,7 @@ addCommand(3, ["webcall", "scriptchange", "loadscript", "updatescript"], functio
         }
     });
 }, Config.permissions.auth_permissions.owner.concat(Config.permissions.update));
-addCommand(3, ["updatetiers", "loadtiers"], function (src, command, commandData, tar, chan) {
+addCommand(3, ["updatetiers"], function (src, command, commandData, tar, chan) {
     if (commandData == undefined || commandData == "" || (commandData.substr(0, 7) != 'http://' && commandData.substr(0, 8) != 'https://')) {
         commandData = Config.dataurl + "tiers.xml";
     }
@@ -1876,43 +1876,7 @@ addCommand(3, ["testann", "updateann"], function (src, command, commandData, tar
         }
     });
 }, Config.permissions.auth_permissions.owner.concat(Config.permissions.update));
-
-addCommand(3, ["scramblemotes"], function (src, command, commandData, tar, chan) {
-    if (commandData.toLowerCase().trim() === "reset") {
-        reloadPlugin('emotes.js');
-        bot.sendMessage(src, "Emotes reset.", chan);
-        return;
-    }
-    
-    var keys = Object.keys(EmoteList),
-        values = [],
-        emotes = {},
-        len,
-        i;
-    
-    for (i in EmoteList) {
-        if (i !== "__display__") {
-            if (i === "xd") {
-                values.push(EmoteList["mike1"]);
-            } else {
-                values.push(EmoteList[i]);
-            }
-        }
-    }
-    
-    keys.splice(keys.indexOf('__display__'), 1);
-    keys = fisherYates(keys);
-    values = fisherYates(values);
-    
-    for (i = 0, len = keys.length; i < len; i += 1) {
-        emotes[keys[i]] = values[i];
-    }
-    
-    EmoteList = emotes;
-    
-    bot.sendMessage(src, "Emotes scrambled.", chan);
-}, Config.permissions.auth_permissions.owner.concat(Config.permissions.update));
-addCommand(3, ["togglemotes"], function (src, command, commandData, tar, chan) {
+addCommand(3, ["toggleemotes"], function (src, command, commandData, tar, chan) {
     Config.emotesEnabled = !Config.emotesEnabled;
     bot.sendAll("Emotes were " + (Config.emotesEnabled ? "enabled!" : "disabled."), chan);
 }, Config.permissions.auth_permissions.owner.concat(Config.permissions.update));
