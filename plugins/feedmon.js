@@ -1,4 +1,4 @@
-var Feedmon = (function () {
+module.exports = function () {
     function getPlayer(name) {
         return Feedmons[name.toLowerCase()];
     }
@@ -37,4 +37,4 @@ var Feedmon = (function () {
         randomPokemon: randomPokemon,
         has: has
     };
-}());
+};

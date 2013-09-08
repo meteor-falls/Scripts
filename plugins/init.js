@@ -447,6 +447,7 @@ module.exports = {
             }
         }
 
+        Feedmon = Plugins('feedmon.js')();
         Reg.init('MOTD', '');
         Reg.init('maxPlayersOnline', 0);
         Reg.init('servername', "Meteor Falls");
