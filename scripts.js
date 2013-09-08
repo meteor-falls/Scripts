@@ -31,7 +31,9 @@ var Config = {
     
     load_from_web: true, // Whether or not to load plugins from repourl. If set to false, they will load locally.
     stripHtmlFromChannelMessages: true, // If HTML should be stripped from channel messages outputted onto the server window.
-    emotesEnabled: true // If emotes are enabled
+    emotesEnabled: true, // If emotes are enabled
+    sendTimeout: 5,
+    feedTimeout: 2
 };
 
 if (typeof JSESSION === "undefined") {

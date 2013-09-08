@@ -205,6 +205,9 @@ module.exports = {
         Fun.add("attack <font color=red><b>[player]</b></font>", "To use a pokemon attack on someone.");
         Fun.add("superimp <font color=red><b>[name]</b></font>", "To superimp a name (<font size=2>Wraps your name in '~~'</font>)");
         Fun.add("impoff", "To stop imping.");
+        Fun.add("send", "Sends a random pokemon into the chat.");
+        Fun.add("feed", "Feeds your last caught pokemon.");
+        Fun.add("level <font color=red><b>[option]</b></font>", "If option is full, displays requirements for all levels. Else (even if none specified) displays how many EXP you still need for another level.");
         Fun.finish();
 
         Lists.Fun = Fun;

@@ -595,6 +595,138 @@ addCommand(0, "champ", function (src, command, commandData, tar, chan) {
     bot.sendAll(commandData + " has been made the champion!", 0);
     Reg.save("Champ", commandData);
 });
+
+/* Feedmon commands */
+addCommand(0, "send", function (src, command, commandData, tar, chan) {
+    var n = sys.name(src).toLowerCase();
+
+    if (typeof Feedmons[n] == 'undefined') {
+        Feedmons[n] = {
+            'timeout': 0,
+            'feedtimeout': 0,
+            'total': 0
+        };
+    }
+
+    var time = sys.time() * 1;
+    if (Feedmons[n].timeout > time && Feedmons[n].timeout != 0) {
+        bots.normal.sendTo(src, "Please wait " + getTimeString(Feedmons[n].timeout - time) + " to send out another pokemon.");
+        return;
+    }
+
+    Feedmons[n].timeout = time + Config.sendTimeout;
+    Feedmons[n].total += 1;
+    
+    var pokemon = sys.rand(1, 650);
+    pokemon = sys.pokemon(pokemon);
+    
+    Feedmons[n].last = {
+        'pokemon': pokemon,
+        'exp': 0,
+        'fed': 0,
+        'lvl': 1
+    };
+    
+    bot.sendAll(sys.name(src) + " sent out <b>" + pokemon + "</b>! (Send Out: " + Feedmons[n].total + ")", 0);
+    bot.sendMessage(src, 'Type /feed to feed this pokemon.', chan);
+    return;
+});
+ 
+addCommand(0, "feed", function (src, command, commandData, tar, chan) {
+    var n = sys.name(src).toLowerCase();
+    if (typeof Feedmons[n] == 'undefined') {
+        bots.normal.sendTo(src, "First send out a pokemon!");
+        return;
+    }
+    var time = sys.time() * 1;
+    if (Feedmons[n].feedtimeout > time && Feedmons[n].feedtimeout != 0) {
+        bots.normal.sendTo(src, "Please wait " + getTimeString(Feedmons[n].feedtimeout - time) + " to feed again.");
+        return;
+    }                
+    
+    Feedmons[n].feedtimeout = time + Config.feedTimeout;
+    Feedmons[n].last.fed += 1;
+    
+    var lvl = Feedmons[n].last.lvl,
+        add = [0, 0];
+    if (lvl > 9) add = [30, 30];
+    if (lvl > 17) add = [90, 200];
+    if (lvl > 26) add = [180, 410];
+    if (lvl > 33) add = [280, 500];
+    if (lvl > 39) add = [320, 560];
+    if (lvl > 49) add = [500, 1000];
+    if (lvl > 59) add = [700, 1200];
+    if (lvl > 69) add = [1000, 7000];
+    if (lvl > 64) add = [1700, 20000];
+    if (lvl > 81) add = [2100, 38000];
+    if (lvl > 88) add = [3800, 50000];
+    if (lvl > 94) add = [5000, 74000];
+    if (lvl == 100) add = [10000, 100000];
+    
+    var rand = sys.rand(20 + add[0], 301 + add[1]);
+    Feedmons[n].last.exp += rand;
+    
+    bot.sendMessage(src, 'Your ' + Feedmons[n].last.pokemon + ' gained ' + rand + ' EXP! It now has ' + Feedmons[n].last.exp + ' EXP and it was fed ' + Feedmons[n].last.fed + ' times. It\'s level is ' + Feedmons[n].last.lvl, chan);
+    
+    var cLvl = Feedmons[n].last.lvl,
+        exp_len = exp.length + 1,
+        newlvls = 0,
+        curr = Feedmons[n].last.exp;
+    
+    if (cLvl >= exp_len) return;
+    
+    for (var y = 0; y < exp_len; y++) {
+        if (cLvl > y && cLvl != 1) continue;
+        if (curr >= exp[y]) {
+            newlvls++;
+            continue;
+        }
+        if (exp[y] > curr) {
+            break;
+        }
+    }
+    if (newlvls != 0) {
+        Feedmons[n].last.lvl += newlvls;
+        bot.sendMessage(src, 'Your ' + Feedmons[n].last.pokemon + ' gained ' + newlvls + ' level(s)! It\'s level is now ' + Feedmons[n].last.lvl, chan);
+    }
+    return;
+}
+
+addCommand(0, "level", function (src, command, commandData, tar, chan) {
+    var n = sys.name(src).toLowerCase();
+    if (typeof Feedmons[n] == 'undefined') {
+        bot.sendMessage(src, "First send out a pokemon!", chan);
+        return;
+    }
+    if (!commandData) {
+        commandData = '';
+    }
+    commandData = commandData.toLowerCase();
+
+    if (commandData == 'full') {
+        var expl = exp.length;
+        for (var y = 1; y < expl; y++) {
+            bot.sendMessage(id, "Level " + y + " requires " + exp[y] + " EXP.", chan);
+        return;
+    }
+
+    var s = {};
+    s.lvl = Feedmons[n].last.lvl
+    s.exp = Feedmons[n].last.exp;
+    s.poke = Feedmons[n].last.pokemon;
+    
+    var slvl1 = s.lvl + 1,
+        exp1 = exp[slvl1],
+        newlvl = exp1 - s.exp;
+    
+    if (s.lvl >= exp.length) {
+        bot.sendMessage(src, "Max level already reached.", chan);
+        return;
+    }
+
+    bot.sendMessage(src, "Level " + slvl1 + " requires " + exp1 + " EXP. Your " + s.poke + " has " + s.exp + " EXP, " + newlvl + " EXP remaining for another level!", chan);
+});
+
 addCommand(0, "sub", function (src, command, commandData, tar, chan) {
     if (this.poUser.megauser == false && this.myAuth < 1) {
         bot.sendMessage(src, "You need to be a higher auth to use this command!", chan);
