@@ -707,6 +707,7 @@ addCommand(0, "level", function (src, command, commandData, tar, chan) {
         var expl = exp.length;
         for (var y = 1; y < expl; y++) {
             bot.sendMessage(id, "Level " + y + " requires " + exp[y] + " EXP.", chan);
+        }
         return;
     }
 
