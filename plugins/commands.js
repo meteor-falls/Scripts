@@ -640,7 +640,7 @@ addCommand(0, "feed", function (src, command, commandData, tar, chan) {
     }
     var time = sys.time() * 1;
     if (Feedmons[n].feedtimeout > time && Feedmons[n].feedtimeout != 0) {
-        bots.normal.sendTo(src, "Please wait " + getTimeString(Feedmons[n].feedtimeout - time) + " to feed again.");
+        bots.normal.sendTo(src, "Please wait " + getTimeString(Feedmons[n].feedtimeout - time) + " to feed your " + Feedmons[n].last.pokemon + " again.");
         return;
     }                
     
@@ -666,7 +666,7 @@ addCommand(0, "feed", function (src, command, commandData, tar, chan) {
     var rand = sys.rand(20 + add[0], 301 + add[1]);
     Feedmons[n].last.exp += rand;
     
-    bot.sendMessage(src, 'Your ' + Feedmons[n].last.pokemon + ' gained ' + rand + ' EXP! It now has ' + Feedmons[n].last.exp + ' EXP and it was fed ' + Feedmons[n].last.fed + ' times. It\'s level is ' + Feedmons[n].last.lvl, chan);
+    bot.sendMessage(src, 'Your ' + Feedmons[n].last.pokemon + ' gained ' + rand + ' EXP! It now has ' + Feedmons[n].last.exp + ' EXP and it was fed ' + Feedmons[n].last.fed + ' times. Its level now is ' + Feedmons[n].last.lvl, chan);
     
     var cLvl = Feedmons[n].last.lvl,
         exp_len = exp.length + 1,
@@ -687,7 +687,7 @@ addCommand(0, "feed", function (src, command, commandData, tar, chan) {
     }
     if (newlvls != 0) {
         Feedmons[n].last.lvl += newlvls;
-        bot.sendMessage(src, 'Your ' + Feedmons[n].last.pokemon + ' gained ' + newlvls + ' level(s)! It\'s level is now ' + Feedmons[n].last.lvl, chan);
+        bot.sendMessage(src, 'Your ' + Feedmons[n].last.pokemon + ' gained ' + newlvls + ' level(s)! Its level now is ' + Feedmons[n].last.lvl, chan);
     }
     return;
 });
