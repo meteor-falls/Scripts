@@ -27,7 +27,7 @@ var Config = {
     },
 
     // Do not touch unless you are adding a new plugin.
-    plugins: ['jsession', 'emotes', 'feedmon', 'init', 'commands', 'lists', 'bot', 'reg'], // Plugins to load on script load.
+    plugins: ['mathjs', 'jsession', 'emotes', 'feedmon', 'init', 'commands', 'lists', 'bot', 'reg'], // Plugins to load on script load.
     
     load_from_web: true, // Whether or not to load plugins from repourl. If set to false, they will load locally.
     stripHtmlFromChannelMessages: true, // If HTML should be stripped from channel messages outputted onto the server window.
@@ -58,6 +58,7 @@ PluginHandler.prototype.load = function PluginHandler_load(plugin_name, webcall)
     var module = {
         exports: {}
     };
+    var exports = module.exports;
     try {
         eval(fileContent);
     } catch (e) {
@@ -117,7 +118,9 @@ function reloadPlugin(plugin_name) {
         // otherwise /emotes won't be updated
         script.loadCommandLists();
     } else if (plugin_name === "feedmon.js") {
-        // Nothing
+        Feedmon = Plugins('feedmon.js')();
+    } else if (plugin_name === "mathjs.js") {
+        MathJS = Plugins('mathjs.js');
     }
 }
 

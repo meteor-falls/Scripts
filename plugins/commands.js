@@ -209,6 +209,20 @@ addCommand(0, "scriptinfo", function (src, command, commandData, tar, chan) {
 addCommand(0, "emotes", function (src, command, commandData, tar, chan) {
     Lists.Emotes.display(src, chan);
 });
+
+addCommand(0, ["calc", "calculate"], function (src, command, commandData, tar, chan) {
+    var res;
+    
+    try {
+        res = MathJS.eval(commandData);
+        
+        bot.sendMessage(src, ">> " + commandData, chan);
+        bot.sendMessage(src, "<< " + res, chan);
+    } catch (ex) {
+        bot.sendMessage(src, "Error in parsing your expression (" + commandData + "). Code: " + ex.name, chan);
+    }
+});
+
 addCommand(0, ["bbcode", "bbcodes"], function (src, command, commandData, tar, chan) {
     var BB = new CommandList("BB Code List", "navy", "Type in these BB Codes to use them:");
     var formatBB = function (m) {
