@@ -598,77 +598,73 @@ addCommand(0, "champ", function (src, command, commandData, tar, chan) {
 
 /* Feedmon commands */
 addCommand(0, "send", function (src, command, commandData, tar, chan) {
-    var n = sys.name(src).toLowerCase();
-
-    if (typeof Feedmons[n] == 'undefined') {
-        Feedmons[n] = {
-            'timeout': 0,
-            'feedtimeout': 0,
-            'total': 0
-        };
-    }
-
-    var time = sys.time() * 1;
-    if (Feedmons[n].timeout > time && Feedmons[n].timeout != 0) {
-        bots.normal.sendTo(src, "Please wait " + getTimeString(Feedmons[n].timeout - time) + " to send out another pokemon.");
+    var name = sys.name(src).toLowerCase();
+    var feedmon = Feedmon.ensurePlayer(name);
+    var time = +sys.time();
+    
+    if (Feedmon.checkTimeout(name, "timeout")) {
+        bots.normal.sendTo(src, "Please wait " + getTimeString(feedmon.timeout - time) + " to send out another pokemon.");
         return;
     }
 
-    Feedmons[n].timeout = time + Config.sendTimeout;
-    Feedmons[n].total += 1;
+    feedmon.timeout = time + Config.sendTimeout;
+    feedmon.total += 1;
     
-    var pokemon = sys.rand(1, 650);
-    pokemon = sys.pokemon(pokemon);
+    var pokemon = Feedmon.randomPokemon();
     
-    Feedmons[n].last = {
+    feedmon.last = {
         'pokemon': pokemon,
         'exp': 0,
         'fed': 0,
         'lvl': 1
     };
     
-    bot.sendAll(sys.name(src) + " sent out <b>" + pokemon + "</b>! (Send Out: " + Feedmons[n].total + ")", 0);
+    bot.sendAll(sys.name(src) + " sent out <b>" + pokemon + "</b>! (Send Out: " + feedmon.total + ")", 0);
     bot.sendMessage(src, 'Type /feed to feed this pokemon.', chan);
     return;
 });
  
 addCommand(0, "feed", function (src, command, commandData, tar, chan) {
-    var n = sys.name(src).toLowerCase();
-    if (typeof Feedmons[n] == 'undefined') {
+    var name = sys.name(src).toLowerCase(),
+        feedmon = Feedmon.getPlayer(name);
+    
+    if (!feedmon) {
         bot.sendMessage(src, "First send out a pokemon!", chan);
         return;
     }
-    var time = sys.time() * 1;
-    if (Feedmons[n].feedtimeout > time && Feedmons[n].feedtimeout != 0) {
-        bot.sendMessage(src, "Please wait " + getTimeString(Feedmons[n].feedtimeout - time) + " to feed your " + Feedmons[n].last.pokemon + " again.", chan);
+    
+    var time = +sys.time();
+    if (Feedmon.checkTimeout(name, "feedtimeout")) {
+        bot.sendMessage(src, "Please wait " + getTimeString(feedmon.feedtimeout - time) + " to feed your " + feedmon.last.pokemon + " again.", chan);
         return;
     }                
     
-    Feedmons[n].feedtimeout = time + Config.feedTimeout;
-    Feedmons[n].last.fed += 1;
+    feedmon.feedtimeout = time + Config.feedTimeout;
+    feedmon.last.fed += 1;
     
-    var lvl = Feedmons[n].last.lvl,
-        add = [0, 0];
-    if (lvl > 9) add = [30, 30];
-    if (lvl > 17) add = [90, 200];
-    if (lvl > 26) add = [180, 410];
-    if (lvl > 33) add = [280, 500];
-    if (lvl > 39) add = [320, 560];
-    if (lvl > 49) add = [500, 1000];
-    if (lvl > 59) add = [700, 1200];
-    if (lvl > 69) add = [1000, 7000];
-    if (lvl > 64) add = [1700, 20000];
-    if (lvl > 81) add = [2100, 38000];
-    if (lvl > 88) add = [3800, 50000];
-    if (lvl > 94) add = [5000, 74000];
-    if (lvl == 100) add = [10000, 100000];
+    var lvl = feedmon.last.lvl,
+        bonus = [0, 0];
     
-    var rand = sys.rand(20 + add[0], 301 + add[1]);
-    Feedmons[n].last.exp += rand;
+    if (lvl > 9) bonus = [30, 30];
+    if (lvl > 17) bonus = [90, 200];
+    if (lvl > 26) bonus = [180, 410];
+    if (lvl > 33) bonus = [280, 500];
+    if (lvl > 39) bonus = [320, 560];
+    if (lvl > 49) bonus = [500, 1000];
+    if (lvl > 59) bonus = [700, 1200];
+    if (lvl > 69) bonus = [1000, 7000];
+    if (lvl > 64) bonus = [1700, 20000];
+    if (lvl > 81) bonus = [2100, 38000];
+    if (lvl > 88) bonus = [3800, 50000];
+    if (lvl > 94) bonus = [5000, 74000];
+    if (lvl == 100) bonus = [10000, 100000];
     
-    bot.sendMessage(src, "Your " + Feedmons[n].last.pokemon + " gained " + rand + " EXP! It now has " + Feedmons[n].last.exp + " EXP and it was fed " + Feedmons[n].last.fed + " times. Its level is " + Feedmons[n].last.lvl + ".", chan);
+    var rand = sys.rand(20 + bonus[0], 301 + bonus[1]);
+    feedmon.last.exp += rand;
     
-    var cLvl = Feedmons[n].last.lvl,
+    bot.sendMessage(src, "Your " + feedmon.last.pokemon + " gained " + rand + " EXP! It now has " + feedmon.last.exp + " EXP and it was fed " + feedmon.last.fed + " times. Its level is " + feedmon.last.lvl + ".", chan);
+    
+    var cLvl = feedmon.last.lvl,
         exp_len = exp.length + 1,
         newlvls = 0,
         curr = Feedmons[n].last.exp;
@@ -686,35 +682,34 @@ addCommand(0, "feed", function (src, command, commandData, tar, chan) {
         }
     }
     if (newlvls != 0) {
-        Feedmons[n].last.lvl += newlvls;
-        bot.sendMessage(src, 'Your ' + Feedmons[n].last.pokemon + ' gained ' + newlvls + ' level(s)! Its level is now ' + Feedmons[n].last.lvl, chan);
+        feedmon.last.lvl += newlvls;
+        bot.sendMessage(src, 'Your ' + feedmon.last.pokemon + ' gained ' + newlvls + ' level(s)! Its level is now ' + feedmon.last.lvl, chan);
     }
-    return;
 });
 
 addCommand(0, "level", function (src, command, commandData, tar, chan) {
-    var n = sys.name(src).toLowerCase();
-    if (typeof Feedmons[n] == 'undefined') {
+    var name = sys.name(src).toLowerCase(),
+        feedmon = Feedmon.getPlayer(name);
+    
+    if (!feedmon) {
         bot.sendMessage(src, "First send out a pokemon!", chan);
         return;
     }
-    if (!commandData) {
-        commandData = '';
-    }
-    commandData = commandData.toLowerCase();
+    
+    commandData = (commandData || "").toLowerCase();
 
-    if (commandData == 'full') {
+    if (commandData === 'full') {
         var expl = exp.length;
         for (var y = 1; y < expl; y++) {
-            bot.sendMessage(id, "Level " + y + " requires " + exp[y] + " EXP.", chan);
+            bot.sendMessage(src, "Level " + y + " requires " + exp[y] + " EXP.", chan);
         }
         return;
     }
 
     var s = {};
-    s.lvl = Feedmons[n].last.lvl
-    s.exp = Feedmons[n].last.exp;
-    s.poke = Feedmons[n].last.pokemon;
+    s.lvl = feedmon.last.lvl
+    s.exp = feedmon.last.exp;
+    s.poke = feedmon.last.pokemon;
     
     var slvl1 = s.lvl + 1,
         exp1 = exp[slvl1],
