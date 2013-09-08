@@ -667,7 +667,7 @@ addCommand(0, "feed", function (src, command, commandData, tar, chan) {
     var cLvl = feedmon.last.lvl,
         exp_len = exp.length + 1,
         newlvls = 0,
-        curr = Feedmons[n].last.exp;
+        curr = feedmon.last.exp;
     
     if (cLvl >= exp_len) return;
     
