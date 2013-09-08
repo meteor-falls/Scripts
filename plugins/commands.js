@@ -216,10 +216,11 @@ addCommand(0, ["calc", "calculate"], function (src, command, commandData, tar, c
     try {
         res = MathJS.eval(commandData);
         
-        bot.sendMessage(src, ">> " + commandData, chan);
-        bot.sendMessage(src, "<< " + res, chan);
+        bot.sendMessage(src, html_escape(">> " + commandData), chan);
+        bot.sendMessage(src, html_escape("<< " + res), chan);
     } catch (ex) {
-        bot.sendMessage(src, "Error in parsing your expression (" + commandData + "). Code: " + ex.name, chan);
+        bot.sendMessage(src, "Error in parsing your expression (" + html_escape(commandData) + ").", chan);
+        bot.sendMessage(src, ex, chan);
     }
 });
 
