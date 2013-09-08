@@ -690,7 +690,7 @@ addCommand(0, "feed", function (src, command, commandData, tar, chan) {
         bot.sendMessage(src, 'Your ' + Feedmons[n].last.pokemon + ' gained ' + newlvls + ' level(s)! It\'s level is now ' + Feedmons[n].last.lvl, chan);
     }
     return;
-}
+});
 
 addCommand(0, "level", function (src, command, commandData, tar, chan) {
     var n = sys.name(src).toLowerCase();
