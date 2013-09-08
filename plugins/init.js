@@ -566,15 +566,7 @@ module.exports = {
             for (xlist in playerIdList) {
                 c = playerIdList[xlist];
                 if (ip == sys.ip(c)) {
-                    if (!floodBot) {
-                        sys.setTimer((function (c) {
-                            return function () {
-                                sys.kick(c);
-                            };
-                        }(c)), 20, false);
-                    } else {
-                        sys.kick(c);
-                    }
+                    sys.kick(c);
                     addIp = true;
                 }
             }
@@ -586,7 +578,10 @@ module.exports = {
                     delete reconnectTrolls[ip];
                 }, 3000, false);
             }
-            sys.kick(src);
+            
+            if (sys.loggedIn(src)) {
+                sys.kick(src);
+            }
         }
         
         // Temporarly bans a player.
@@ -608,11 +603,7 @@ module.exports = {
             for (alias in aliases) {
                 id = sys.id(aliases[alias]);
                 if (id != undefined) {
-                    sys.setTimer((function (id) {
-                            return function () {
-                                sys.kick(id);
-                            };
-                        }(id)), 20, false);
+                    sys.kick(id);
                     addIp = sys.ip(id);
                 }
             }
