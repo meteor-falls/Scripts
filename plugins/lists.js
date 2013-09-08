@@ -179,6 +179,7 @@ module.exports = {
         User.add("emotetoggle", "To toggle emotes on or off for you.");
         User.add("bbcode", "To view a list of bbcodes.");
         User.add("selfkick", "Kicks all the ghosts on your ip.");
+        User.add("calc <font color=red><b>[expression]</b></font>", "Evaluates a mathematical expression (10 / 2 * 4 ^ pi). Full documentation <a href='https://github.com/josdejong/mathjs/blob/master/README.md'>here</a>."
         User.finish();
 
         Lists.User = User;
