@@ -71,6 +71,8 @@
         };
     }
     
-    module.exports.Reg = new RegClass();
+    module.exports.Reg = function () {
+        return new RegClass();
+    };
     module.exports.RegClass = RegClass;
 }());

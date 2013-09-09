@@ -1071,7 +1071,7 @@ var poScript = ({
             return;
         }
 
-        Reg = Plugins('reg.js').Reg;
+        Reg = Plugins('reg.js').Reg();
     },
 
     loadBots: function loadBots() { /* Do not touch this section if you don't know what you are doing! */
