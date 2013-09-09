@@ -197,7 +197,7 @@ module.exports = {
             "Emotetoggles": "Emotetoggles",
             "Emoteperms": "Emoteperms",
             "Itemtoggles": "Itemtoggles",
-            "Feedmons": "FeedMons"
+            "Feedmons": "Feedmons"
         };
         
         var i;
