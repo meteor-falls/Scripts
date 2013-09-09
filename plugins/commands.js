@@ -1,7 +1,7 @@
 /*jslint continue: true, es5: true, evil: true, forin: true, sloppy: true, vars: true, regexp: true, newcap: true, nomen: true*/
 /*global sys, SESSION, script: true, Qt, print, gc, version,
     global: false, Plugin: true, Config: true, module: true, exports: true,
-    bot: true, Reg: true, Leaguemanager: true, Lists: true, html_escape: true, namecolor: true, CommandList: true, namecolor: true, MathJS: true, format: true, cut: true, JSESSION: true, emoteFormat: true, hasEmotesToggled: true, tourmode: true, tourmembers: true, getTier: true, tourtier: true, tourplayers: true, roundnumber: true, isFinals: true, battlesLost: true, tourbattlers: true, battlesStarted: true, hasEmotePerms: true, Emotetoggles: true, rouletteon: true, spinTypes: true, EmoteList: true, TableList: true, MegaUsers: true, FloodIgnore: true, Capsignore: true, Autoidle: true, Emoteperms: true, Feedmon: true, getTimeString: true, tournumber: true, prize: true, isTier: true, tournumber: true, Kickmsgs: true, Welmsgs: true, Banmsgs: true, Channeltopics: true, android: true, topicbot: true, Mutes: true, Rangebans: true, getAuth: true, muteall: true, andJoin: true, kick: true, tempBanTime: true, stringToTime: true, tempBan: true, pruneMutes: true, nightclub: true, Nightclub: true, supersilence: true, ev_name: true, getName: true, ban: true, Plugins: true, PHandler: true, reloadPlugin: true, htmlchatoff: true, bots: true, html_strip: true, fisherYates: true, servername: true, isBanned: true, loginMessage: true, logoutMessage: true, cmp: true, floodIgnoreCheck: true, removeTag: true, randcolor: true, colormodemessage: true, lolmessage: true, pewpewpewmessage: true, hasBasicPermissions: true, hasDrizzleSwim: true, hasSandCloak: true, ChannelNames: true, staffchannel: true, testchan: true, watch: true, aliasKick: true, reconnectTrolls: true, nthNumber: true, ChannelLink: true, addChannelLinks: true, firstGen: true, randPoke: true, formatPoke: true, hasIllegalChars: true, teamSpammers: true, Feedmons: true, addEmote: true, Bot: true, guard: true, watchbot: true, setbybot: true, lolmode: true, spacemode: true, reversemode: true, colormode: true, scramblemode: true, capsmode: true, pewpewpew: true, capsbot: true, poScript: true, flbot: true
+    bot: true, Reg: true, Leaguemanager: true, Lists: true, CommandList: true, MathJS: true, format: true, JSESSION: true, emoteFormat: true, hasEmotesToggled: true, tourmode: true, tourmembers: true, getTier: true, tourtier: true, tourplayers: true, roundnumber: true, isFinals: true, battlesLost: true, tourbattlers: true, battlesStarted: true, hasEmotePerms: true, Emotetoggles: true, rouletteon: true, spinTypes: true, EmoteList: true, TableList: true, MegaUsers: true, FloodIgnore: true, Capsignore: true, Autoidle: true, Emoteperms: true, Feedmon: true, tournumber: true, prize: true, isTier: true, tournumber: true, Kickmsgs: true, Welmsgs: true, Banmsgs: true, Channeltopics: true, android: true, topicbot: true, Mutes: true, Rangebans: true, muteall: true, kick: true, tempBanTime: true, tempBan: true, pruneMutes: true, nightclub: true, supersilence: true, ev_name: true, getName: true, ban: true, Plugins: true, PHandler: true, reloadPlugin: true, htmlchatoff: true, bots: true, servername: true, isBanned: true, loginMessage: true, logoutMessage: true, floodIgnoreCheck: true, removeTag: true, randcolor: true, colormodemessage: true, lolmessage: true, pewpewpewmessage: true, hasBasicPermissions: true, hasDrizzleSwim: true, hasSandCloak: true, ChannelNames: true, staffchannel: true, testchan: true, watch: true, aliasKick: true, reconnectTrolls: true, nthNumber: true, ChannelLink: true, addChannelLinks: true, firstGen: true, randPoke: true, formatPoke: true, teamSpammers: true, Feedmons: true, addEmote: true, Bot: true, guard: true, watchbot: true, setbybot: true, lolmode: true, spacemode: true, reversemode: true, colormode: true, scramblemode: true, capsmode: true, pewpewpew: true, capsbot: true, poScript: true, flbot: true, Utils: true
 */
 
 var commands = {},
@@ -74,47 +74,47 @@ addCommand(0, "leaguemanagercommands", function (src, command, commandData, tar,
 });
 
 addCommand(0, "burn", function (src, command, commandData, tar, chan) {
-    if (tar === undefined) {
+    if (!tar) {
         bot.sendMessage(src, "Target doesn't exist!", chan);
         return;
     }
-    sys.sendHtmlAll("<img src=Themes/Classic/status/battle_status4.png><b><font color=red><font size=3>" + html_escape(sys.name(tar)) + " was burned by " + html_escape(sys.name(src)) + " <img src=Themes/Classic/status/battle_status4.png>", chan);
+    sys.sendHtmlAll("<img src=Themes/Classic/status/battle_status4.png><b><font color=red><font size=3>" + Utils.escapeHtml(sys.name(tar)) + " was burned by " + Utils.escapeHtml(sys.name(src)) + " <img src=Themes/Classic/status/battle_status4.png>", chan);
 });
 
 addCommand(0, "freeze", function (src, command, commandData, tar, chan) {
-    if (tar === undefined) {
+    if (!tar) {
         bot.sendMessage(src, "Target doesn't exist!", chan);
         return;
     }
-    sys.sendHtmlAll("<img src=Themes/Classic/status/battle_status3.png><b><font color=blue><font size=3> " + html_escape(sys.name(tar)) + " was frozen by " + html_escape(sys.name(src)) + " <img src=Themes/Classic/status/battle_status3.png>", chan);
+    sys.sendHtmlAll("<img src=Themes/Classic/status/battle_status3.png><b><font color=blue><font size=3> " + Utils.escapeHtml(sys.name(tar)) + " was frozen by " + Utils.escapeHtml(sys.name(src)) + " <img src=Themes/Classic/status/battle_status3.png>", chan);
 });
 
 addCommand(0, "paralyze", function (src, command, commandData, tar, chan) {
-    if (tar === undefined) {
+    if (!tar) {
         bot.sendMessage(src, "Target doesn't exist!", chan);
         return;
     }
-    sys.sendHtmlAll("<img src=Themes/Classic/status/battle_status1.png><b><font color='#C9C909'><font size=3> " + html_escape(sys.name(tar)) + " was paralyzed by " + html_escape(sys.name(src)) + " <img src=Themes/Classic/status/battle_status1.png>", chan);
+    sys.sendHtmlAll("<img src=Themes/Classic/status/battle_status1.png><b><font color='#C9C909'><font size=3> " + Utils.escapeHtml(sys.name(tar)) + " was paralyzed by " + Utils.escapeHtml(sys.name(src)) + " <img src=Themes/Classic/status/battle_status1.png>", chan);
 });
 
 addCommand(0, "poison", function (src, command, commandData, tar, chan) {
-    if (tar === undefined) {
+    if (!tar) {
         bot.sendMessage(src, "Target doesn't exist!", chan);
         return;
     }
-    sys.sendHtmlAll("<img src=Themes/Classic/status/battle_status5.png><b><font color=Purple><font size=3> " + html_escape(sys.name(tar)) + " was poisoned by " + html_escape(sys.name(src)) + " <img src=Themes/Classic/status/battle_status5.png>", chan);
+    sys.sendHtmlAll("<img src=Themes/Classic/status/battle_status5.png><b><font color=Purple><font size=3> " + Utils.escapeHtml(sys.name(tar)) + " was poisoned by " + Utils.escapeHtml(sys.name(src)) + " <img src=Themes/Classic/status/battle_status5.png>", chan);
 });
 
 addCommand(0, "cure", function (src, command, commandData, tar, chan) {
-    if (tar === undefined) {
+    if (!tar) {
         bot.sendMessage(src, "Target doesn't exist!", chan);
         return;
     }
-    sys.sendHtmlAll("<img src=Themes/Classic/status/battle_status2.png><b><font color=Black><font size=3> " + html_escape(sys.name(tar)) + " was put to sleep and cured of all status problems by " + html_escape(sys.name(src)) + " <img src=Themes/Classic/status/battle_status2.png>", chan);
+    sys.sendHtmlAll("<img src=Themes/Classic/status/battle_status2.png><b><font color=Black><font size=3> " + Utils.escapeHtml(sys.name(tar)) + " was put to sleep and cured of all status problems by " + Utils.escapeHtml(sys.name(src)) + " <img src=Themes/Classic/status/battle_status2.png>", chan);
 });
 
 addCommand(0, "facepalm", function (src, command, commandData, tar, chan) {
-    sys.sendHtmlAll("<font color=blue><timestamp/><b>+FacePalmBot:</font><b><font color=" + namecolor(src) + "> " + html_escape(sys.name(src)) + "</font></b> facepalmed!", chan);
+    sys.sendHtmlAll("<font color=blue><timestamp/><b>+FacePalmBot:</font><b><font color=" + Utils.nameColor(src) + "> " + Utils.escapeHtml(sys.name(src)) + "</font></b> facepalmed!", chan);
 });
 
 addCommand(0, "league", function (src, command, commandData, tar, chan) {
@@ -214,7 +214,7 @@ addCommand(0, "superimp", function (src, command, commandData, tar, chan) {
         return;
     }
 
-    sys.sendHtmlAll('<font color=#8A2BE2><timestamp/><b>' + html_escape(sys.name(src)) + ' has super-impersonated ' + html_escape(commandData) + '!</font></b>');
+    sys.sendHtmlAll('<font color=#8A2BE2><timestamp/><b>' + Utils.escapeHtml(sys.name(src)) + ' has super-impersonated ' + Utils.escapeHtml(commandData) + '!</font></b>');
     sys.changeName(src, '~~' + commandData + '~~');
 });
 
@@ -248,9 +248,9 @@ addCommand(0, "me", function (src, command, commandData, tar, chan) {
         bot.sendMessage(src, "You must post a message.", chan);
         return;
     }
-    var color = namecolor(src);
+    var color = Utils.nameColor(src);
     var name = sys.name(src);
-    sys.sendHtmlAll("<font color=" + color + "><timestamp/><b><i>*** " + html_escape(name) + " " + html_escape(commandData) + " ***</font></b></i>", chan);
+    sys.sendHtmlAll("<font color=" + color + "><timestamp/><b><i>*** " + Utils.escapeHtml(name) + " " + Utils.escapeHtml(commandData) + " ***</font></b></i>", chan);
 });
 
 addCommand(0, "rules", function (src, command, commandData, tar, chan) {
@@ -271,10 +271,10 @@ addCommand(0, ["calc", "calculate"], function (src, command, commandData, tar, c
     try {
         res = MathJS.eval(commandData);
         
-        bot.sendMessage(src, html_escape("The result of '" + commandData + "' is:"), chan);
-        bot.sendMessage(src, html_escape(res), chan);
+        bot.sendMessage(src, Utils.escapeHtml("The result of '" + commandData + "' is:"), chan);
+        bot.sendMessage(src, Utils.escapeHtml(res), chan);
     } catch (ex) {
-        bot.sendMessage(src, "Error in parsing your expression (" + html_escape(commandData) + ").", chan);
+        bot.sendMessage(src, "Error in parsing your expression (" + Utils.escapeHtml(commandData) + ").", chan);
         bot.sendMessage(src, ex, chan);
     }
 });
@@ -311,7 +311,7 @@ addCommand(0, ["bbcode", "bbcodes"], function (src, command, commandData, tar, c
 });
 addCommand(0, ["sendto", "ping"], function (src, command, commandData, tar, chan) {
     var r = commandData.split(':');
-    var mess = cut(r, 1, ':');
+    var mess = Utils.cut(r, 1, ':');
     
     tar = sys.id(r[0]);
     
@@ -321,19 +321,19 @@ addCommand(0, ["sendto", "ping"], function (src, command, commandData, tar, chan
     }
     
     if (!mess || command === "ping") {
-        bot.sendMessage(src, "Your ping was sent to " + html_escape(r[0]) + "!", chan);
-        bot.sendMessage(tar, "<ping/>" + html_escape(sys.name(src)) + " has sent you a ping!", chan);
+        bot.sendMessage(src, "Your ping was sent to " + Utils.escapeHtml(r[0]) + "!", chan);
+        bot.sendMessage(tar, "<ping/>" + Utils.escapeHtml(sys.name(src)) + " has sent you a ping!", chan);
         return;
     }
     
     if (this.myAuth > 0 && hasEmotesToggled(src)) {
         mess = emoteFormat(mess);
     } else {
-        mess = html_escape(mess);
+        mess = Utils.escapeHtml(mess);
     }
     
     bot.sendMessage(src, "Your message was sent!", chan);
-    bot.sendMessage(tar, '<ping/>' + html_escape(sys.name(src)) + ' sent you a message! The message says: ' + mess);
+    bot.sendMessage(tar, '<ping/>' + Utils.escapeHtml(sys.name(src)) + ' sent you a message! The message says: ' + mess);
 });
 addCommand(0, "auth", function (src, command, commandData, tar, chan) {
     var authlist = sys.dbAuths().sort();
@@ -387,7 +387,7 @@ addCommand(0, "summonauth", function (src, command, commandData, tar, chan) {
     for (x = 0; x < auths.length; x += 1) {
         auth_id = sys.id(auths[x]);
         if (auth_id) {
-            sys.sendHtmlMessage(auth_id, "<timestamp/><b><font color=" + namecolor(src) + ">" + this.originalName + "</b></font> has summoned all of the auth!<ping/>");
+            sys.sendHtmlMessage(auth_id, "<timestamp/><b><font color=" + Utils.nameColor(src) + ">" + this.originalName + "</b></font> has summoned all of the auth!<ping/>");
         }
     }
 });
@@ -409,7 +409,7 @@ addCommand(0, "join", function (src, command, commandData, tar, chan) {
     if (script.tourSpots() > 0) {
         tourmembers.push(name);
         tourplayers[name] = sys.name(src);
-        sys.sendHtmlAll("<font color=blue><timestamp/><b>" + html_escape(sys.name(src)) + " joined the tournament! " + script.tourSpots() + " more spot(s) left!</b></font>", 0);
+        sys.sendHtmlAll("<font color=blue><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + " joined the tournament! " + script.tourSpots() + " more spot(s) left!</b></font>", 0);
         if (script.tourSpots() === 0) {
             tourmode = 2;
             roundnumber = 0;
@@ -509,7 +509,7 @@ addCommand(0, "attack", function (src, command, commandData, tar, chan) {
     }
 
     var move = sys.rand(1, 559);
-    sys.sendHtmlAll("<font color=green><timestamp/><b><i><font color=green>+AttackBot: </i></font><b><font color=" + namecolor(src) + ">" + html_escape(sys.name(src)) + " </b><font color=black>has used <b>" + randomColor(sys.move(move)) + " </b><font color=black>on <b><font color=" + namecolor(tar) + ">" + html_escape(sys.name(tar)) + "!</font>", chan);
+    sys.sendHtmlAll("<font color=green><timestamp/><b><i><font color=green>+AttackBot: </i></font><b><font color=" + Utils.nameColor(src) + ">" + Utils.escapeHtml(sys.name(src)) + " </b><font color=black>has used <b>" + randomColor(sys.move(move)) + " </b><font color=black>on <b><font color=" + Utils.nameColor(tar) + ">" + Utils.escapeHtml(sys.name(tar)) + "!</font>", chan);
 });
 addCommand(0, "emotetoggle", function (src, command, commandData, tar, chan) {
     if (this.myAuth < 1 && !hasEmotePerms(sys.name(src))) {
@@ -540,19 +540,19 @@ addCommand(0, "spin", function (src, command, commandData, tar, chan) {
     var possibilities = [];
 
     if (spinTypes.indexOf('pokemons') !== -1) {
-        possibilities.push("<b><font color=" + namecolor(src) + ">" + html_escape(sys.name(src)) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won a <b><font color=red>" + sys.nature(sys.rand(1, 25)) + "</b></font> <b><font color=blue>" + sys.pokemon(numb) + "!<img src='icon:" + numb + "'></b></font>");
+        possibilities.push("<b><font color=" + Utils.nameColor(src) + ">" + Utils.escapeHtml(sys.name(src)) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won a <b><font color=red>" + sys.nature(sys.rand(1, 25)) + "</b></font> <b><font color=blue>" + sys.pokemon(numb) + "!<img src='icon:" + numb + "'></b></font>");
     }
 
     if (spinTypes.indexOf('items') !== -1) {
-        possibilities.push("<b><font color=" + namecolor(src) + ">" + sys.name(src) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won <b><font color=red>" + sys.item(num) + "! <img src='item:" + num + "'></b></font>");
+        possibilities.push("<b><font color=" + Utils.nameColor(src) + ">" + sys.name(src) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won <b><font color=red>" + sys.item(num) + "! <img src='item:" + num + "'></b></font>");
     }
 
     if (spinTypes.indexOf('emotes') !== -1) {
-        possibilities.push("<b><font color=" + namecolor(src) + ">" + sys.name(src) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won " + EmoteList[randomEmote] + "!");
+        possibilities.push("<b><font color=" + Utils.nameColor(src) + ">" + sys.name(src) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won " + EmoteList[randomEmote] + "!");
     }
 
     if ((spinTypes.indexOf('avatars') !== -1) || (spinTypes.indexOf('trainers') !== -1)) {
-        possibilities.push("<b><font color=" + namecolor(src) + ">" + sys.name(src) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won <img src='trainer:" + sys.rand(1, 301) + "'>!");
+        possibilities.push("<b><font color=" + Utils.nameColor(src) + ">" + sys.name(src) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won <img src='trainer:" + sys.rand(1, 301) + "'>!");
     }
 
     sys.sendHtmlAll("<font color=navy><timestamp/><b>±RouletteBot:</b></font> " + possibilities[sys.rand(0, possibilities.length)], chan);
@@ -701,7 +701,7 @@ addCommand(0, "send", function (src, command, commandData, tar, chan) {
     var time = +sys.time();
     
     if (Feedmon.checkTimeout(name, "timeout")) {
-        bot.sendMessage(src, "Please wait " + getTimeString(feedmon.timeout - time) + " to send out another pokemon.");
+        bot.sendMessage(src, "Please wait " + Utils.getTimeString(feedmon.timeout - time) + " to send out another pokemon.");
         return;
     }
 
@@ -733,7 +733,7 @@ addCommand(0, "feed", function (src, command, commandData, tar, chan) {
     
     var time = +sys.time();
     if (Feedmon.checkTimeout(name, "feedtimeout")) {
-        bot.sendMessage(src, "Please wait " + getTimeString(feedmon.feedtimeout - time) + " to feed your " + feedmon.last.pokemon + " again.", chan);
+        bot.sendMessage(src, "Please wait " + Utils.getTimeString(feedmon.feedtimeout - time) + " to feed your " + feedmon.last.pokemon + " again.", chan);
         return;
     }
     
@@ -856,7 +856,7 @@ addCommand(0, "sub", function (src, command, commandData, tar, chan) {
         bot.sendMessage(src, "Neither are in the tourney.", chan);
         return;
     }
-    sys.sendHtmlAll("<font color=blue><timestamp/><b>" + html_escape(players[0]) + " and " + html_escape(players[1]) + " were exchanged places in the ongoing tournament by " + html_escape(sys.name(src)) + ".</b></font>", 0);
+    sys.sendHtmlAll("<font color=blue><timestamp/><b>" + Utils.escapeHtml(players[0]) + " and " + Utils.escapeHtml(players[1]) + " were exchanged places in the ongoing tournament by " + Utils.escapeHtml(sys.name(src)) + ".</b></font>", 0);
     var p1 = players[0].toLowerCase();
     var p2 = players[1].toLowerCase(),
         x;
@@ -897,7 +897,7 @@ addCommand(0, "restart", function (src, command, commandData, tar, chan) {
     var name = commandData.toLowerCase();
     if (tourbattlers.indexOf(name) !== -1) {
         battlesStarted[Math.floor(tourbattlers.indexOf(name) / 2)] = false;
-        sys.sendHtmlAll("<font color=green><timestamp/><b>" + html_escape(sys.name(tar)) + "'s match was restarted by " + html_escape(sys.name(src)) + "!</b></font>", 0);
+        sys.sendHtmlAll("<font color=green><timestamp/><b>" + Utils.escapeHtml(sys.name(tar)) + "'s match was restarted by " + Utils.escapeHtml(sys.name(src)) + "!</b></font>", 0);
     }
 });
 addCommand(0, "tour", function (src, command, commandData, tar, chan) {
@@ -945,7 +945,7 @@ addCommand(0, "tour", function (src, command, commandData, tar, chan) {
         prize = "No prize";
     }
     
-    sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Tournament Started by <i style='color:red; font-weight:bold;'>" + html_escape(sys.name(src)) + "!</i></font><hr width=300/><table cellspacing=2 cellpadding=2><tr><td><b>Tier: <font style='color:red; font-weight:bold;'>" + tourtier + "</i></td></tr><tr><td><b>Players: <font style='color:red; font-weight:bold;'>" + tournumber + "</i></td></tr><tr><td><b>Prize: <font style='color:red; font-weight:bold;'>" + html_escape(prize) + "</i></td></tr></table><hr width=300/><center style='margin-right: 7px;'><b>Type <font color=red>/join</font> to join!<br/></td></tr></table></center><br/>", 0);
+    sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Tournament Started by <i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(sys.name(src)) + "!</i></font><hr width=300/><table cellspacing=2 cellpadding=2><tr><td><b>Tier: <font style='color:red; font-weight:bold;'>" + tourtier + "</i></td></tr><tr><td><b>Players: <font style='color:red; font-weight:bold;'>" + tournumber + "</i></td></tr><tr><td><b>Prize: <font style='color:red; font-weight:bold;'>" + Utils.escapeHtml(prize) + "</i></td></tr></table><hr width=300/><center style='margin-right: 7px;'><b>Type <font color=red>/join</font> to join!<br/></td></tr></table></center><br/>", 0);
 });
 addCommand(0, "dq", function (src, command, commandData, tar, chan) {
     if (!this.poUser.megauser && this.myAuth < 1) {
@@ -960,12 +960,12 @@ addCommand(0, "dq", function (src, command, commandData, tar, chan) {
     if (tourmembers.indexOf(name2) !== -1) {
         tourmembers.splice(tourmembers.indexOf(name2), 1);
         delete tourplayers[name2];
-        sys.sendHtmlAll("<font color=red><timestamp/><b>" + html_escape(commandData) + " was disqualified by " + html_escape(sys.name(src)) + "!</b></font>", 0);
+        sys.sendHtmlAll("<font color=red><timestamp/><b>" + Utils.escapeHtml(commandData) + " was disqualified by " + Utils.escapeHtml(sys.name(src)) + "!</b></font>", 0);
         return;
     }
     if (tourbattlers.indexOf(name2) !== -1) {
         battlesStarted[Math.floor(tourbattlers.indexOf(name2) / 2)] = true;
-        sys.sendHtmlAll("<font color=red><timestamp/><b>" + html_escape(commandData) + " was disqualified by " + html_escape(sys.name(src)) + "!</b></font>", 0);
+        sys.sendHtmlAll("<font color=red><timestamp/><b>" + Utils.escapeHtml(commandData) + " was disqualified by " + Utils.escapeHtml(sys.name(src)) + "!</b></font>", 0);
         script.tourBattleEnd(script.tourOpponent(name2), name2);
     }
 });
@@ -988,14 +988,14 @@ addCommand(0, "push", function (src, command, commandData, tar, chan) {
     }
     
     if (tourmode === 2) {
-        sys.sendHtmlAll("<font color=blue><timestamp/><b>" + html_escape(commandData) + " was added to the tournament by " + html_escape(sys.name(src)) + ".</b></font>", 0);
+        sys.sendHtmlAll("<font color=blue><timestamp/><b>" + Utils.escapeHtml(commandData) + " was added to the tournament by " + Utils.escapeHtml(sys.name(src)) + ".</b></font>", 0);
 
         tourmembers.push(commandData.toLowerCase());
         tourplayers[commandData.toLowerCase()] = commandData;
     } else if (tourmode === 1) {
         tourmembers.push(commandData.toLowerCase());
         tourplayers[commandData.toLowerCase()] = commandData;
-        sys.sendHtmlAll("<font color=blue><timestamp/><b>" + html_escape(commandData) + " was added to the tournament by " + html_escape(sys.name(src)) + ".</b></font>", 0);
+        sys.sendHtmlAll("<font color=blue><timestamp/><b>" + Utils.escapeHtml(commandData) + " was added to the tournament by " + Utils.escapeHtml(sys.name(src)) + ".</b></font>", 0);
     }
     
     if (tourmode === 1 && script.tourSpots() === 0) {
@@ -1023,7 +1023,7 @@ addCommand(0, "changecount", function (src, command, commandData, tar, chan) {
         return;
     }
     tournumber = count;
-    sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><i style='color:red; font-weight:bold;'>" + html_escape(sys.name(src)) + "</i> changed the number of entrants to <i style='color:red; font-weight:bold;'>" + count + "!</i></font><hr width=300/><br><b><i style='color:red; font-weight:bold;'>" + script.tourSpots() + "</i> more spot(s) left!</b><br/><br/></td></tr></table></center><br/>", 0);
+    sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(sys.name(src)) + "</i> changed the number of entrants to <i style='color:red; font-weight:bold;'>" + count + "!</i></font><hr width=300/><br><b><i style='color:red; font-weight:bold;'>" + script.tourSpots() + "</i> more spot(s) left!</b><br/><br/></td></tr></table></center><br/>", 0);
     if (script.tourSpots() === 0) {
         tourmode = 2;
         roundnumber = 0;
@@ -1037,7 +1037,7 @@ addCommand(0, "endtour", function (src, command, commandData, tar, chan) {
     }
     if (tourmode !== 0) {
         tourmode = 0;
-        sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>The tour was ended by <i style='color:red; font-weight:bold;'>" + html_escape(sys.name(src)) + "!</i></font><hr width=300/><br><b>Sorry! A new tournament may be starting soon!</b><br/><br/></td></tr></table></center><br/>", 0);
+        sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>The tour was ended by <i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(sys.name(src)) + "!</i></font><hr width=300/><br><b>Sorry! A new tournament may be starting soon!</b><br/><br/></td></tr></table></center><br/>", 0);
     } else {
         bot.sendMessage(src, "Sorry, you are unable to end a tournament because one is not currently running.", chan);
     }
@@ -1060,17 +1060,17 @@ addCommand(0, "message", function (src, command, commandData, tar, chan) {
         return;
     }
     var which = commandData[0];
-    var message = cut(commandData, 1, ":");
+    var message = Utils.cut(commandData, 1, ":");
     var whichl = which.toLowerCase();
     
     if (whichl === "kick") {
-        bot.sendMessage(src, "Set kick message to: " + html_escape(message) + "!", chan);
+        bot.sendMessage(src, "Set kick message to: " + Utils.escapeHtml(message) + "!", chan);
         Kickmsgs[sys.name(src).toLowerCase()] = {
             "message": message
         };
         Reg.save("Kickmsgs", JSON.stringify(Kickmsgs));
     } else if (whichl === "welcome") {
-        bot.sendMessage(src, "Set welcome message to: " + html_escape(message) + "!", chan);
+        bot.sendMessage(src, "Set welcome message to: " + Utils.escapeHtml(message) + "!", chan);
         Welmsgs[sys.name(src).toLowerCase()] = {
             "message": message
         };
@@ -1080,7 +1080,7 @@ addCommand(0, "message", function (src, command, commandData, tar, chan) {
             bot.sendMessage(src, "You need to be a higher auth to set your ban message!", chan);
             return;
         }
-        bot.sendMessage(src, "Set ban message to: " + html_escape(message) + "!", chan);
+        bot.sendMessage(src, "Set ban message to: " + Utils.escapeHtml(message) + "!", chan);
         Banmsgs[sys.name(src).toLowerCase()] = {
             "message": message
         };
@@ -1106,21 +1106,21 @@ addCommand(0, "viewmessage", function (src, command, commandData, tar, chan) {
             bot.sendMessage(src, "You currently do not have a kick message, please go make one!", chan);
             return;
         }
-        bot.sendMessage(src, "Your kick message is set to: " + html_escape(Kickmsgs[sys.name(src).toLowerCase()].message), chan);
+        bot.sendMessage(src, "Your kick message is set to: " + Utils.escapeHtml(Kickmsgs[sys.name(src).toLowerCase()].message), chan);
         return;
     } else if (commandData === "welcome") {
         if (!Welmsgs[sys.name(src).toLowerCase()]) {
             bot.sendMessage(src, "You currently do not have a welcome message, please go make one!", chan);
             return;
         }
-        bot.sendMessage(src, "Your welcome message is set to: " + html_escape(Welmsgs[sys.name(src).toLowerCase()].message), chan);
+        bot.sendMessage(src, "Your welcome message is set to: " + Utils.escapeHtml(Welmsgs[sys.name(src).toLowerCase()].message), chan);
         return;
     } else if (commandData === "ban") {
         if (this.myAuth < 2 || !Banmsgs[sys.name(src).toLowerCase()]) {
             bot.sendMessage(src, "You either cannot have a ban message or you do not have one, go make one if you can!", chan);
             return;
         }
-        bot.sendMessage(src, "Your ban message is set to: " + html_escape(Banmsgs[sys.name(src).toLowerCase()].message), chan);
+        bot.sendMessage(src, "Your ban message is set to: " + Utils.escapeHtml(Banmsgs[sys.name(src).toLowerCase()].message), chan);
         return;
     } else {
         bot.sendMessage(src, "Specify kick, ban, or welcome!", chan);
@@ -1216,7 +1216,7 @@ addCommand(1, "motd", function (src, command, commandData, tar, chan) {
     bot.sendAll("The MOTD has been changed by " + name + " to " + MOTDmessage + ".", 0);
 }, Config.permissions.auth_permissions.mod);
 addCommand(1, "getmotd", function (src, command, commandData, tar, chan) {
-    bot.sendMessage(src, "The MOTD is: " + html_escape(Reg.get("MOTD")), chan);
+    bot.sendMessage(src, "The MOTD is: " + Utils.escapeHtml(Reg.get("MOTD")), chan);
 }, Config.permissions.auth_permissions.mod);
 addCommand(1, ["wall", "cwall"], function (src, command, commandData, tar, chan) {
     var wallchan = (command === "cwall" ? chan : undefined);
@@ -1226,14 +1226,14 @@ addCommand(1, ["wall", "cwall"], function (src, command, commandData, tar, chan)
         return;
     }
 
-    var wallmessage = html_escape(commandData);
+    var wallmessage = Utils.escapeHtml(commandData);
 
     if (hasEmotesToggled(src)) {
         wallmessage = emoteFormat(wallmessage);
     }
 
     sys.sendHtmlAll("<br><font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>", wallchan);
-    sys.sendHtmlAll("<font color=" + namecolor(src) + "><timestamp/>+<b><i>" + sys.name(src) + ":</b><font color=black> " + wallmessage + "<br>", wallchan);
+    sys.sendHtmlAll("<font color=" + Utils.nameColor(src) + "><timestamp/>+<b><i>" + sys.name(src) + ":</b><font color=black> " + wallmessage + "<br>", wallchan);
     sys.sendHtmlAll("<font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>", wallchan);
 }, Config.permissions.auth_permissions.mod);
 
@@ -1388,7 +1388,7 @@ addCommand(1, "mutes", function (src, command, commandData, tar, chan) {
     
     for (x in mutes) {
         c_mute = mutes[x];
-        muteList.add("IP: " + x + ". Muted on " + c_mute.mutedname + " by " + c_mute.by + ". Muted " + (c_mute.time === 0 ? "forever" : "for " + getTimeString(c_mute.time - time_now)));
+        muteList.add("IP: " + x + ". Muted on " + c_mute.mutedname + " by " + c_mute.by + ". Muted " + (c_mute.time === 0 ? "forever" : "for " + Utils.getTimeString(c_mute.time - time_now)));
     }
 
     muteList.finish();
@@ -1446,7 +1446,7 @@ addCommand(1, "info", function (src, command, commandData, tar, chan) {
     var registered = sys.dbRegistered(commandData) ? "yes" : "no";
     var loggedon = sys.loggedIn(tar) ? "yes" : "no";
     sys.sendMessage(src, "", chan);
-    sys.sendHtmlMessage(src, "<timestamp/><b><font color=black>±Bot:</font></b> Information of player <font color=" + namecolor(tar) + "><b>" + commandData + ":</font></b>", chan);
+    sys.sendHtmlMessage(src, "<timestamp/><b><font color=black>±Bot:</font></b> Information of player <font color=" + Utils.nameColor(tar) + "><b>" + commandData + ":</font></b>", chan);
     sys.sendHtmlMessage(src, "<timestamp/><font color=purple><b>IP:</b></font> " + tarip, chan);
     sys.sendHtmlMessage(src, "<timestamp/><font color=black><b>Auth Level:</b></font> " + tarauth, chan);
     sys.sendHtmlMessage(src, "<timestamp/><font color=purple><b>Aliases:</b></font> " + aliases, chan);
@@ -1472,7 +1472,7 @@ addCommand(1, "logwarn", function (src, command, commandData, tar, chan) {
         bot.sendMessage(src, "This person doesn't exist.", chan);
         return;
     }
-    if (this.myAuth <= getAuth(tar) && this.myAuth < 3) {
+    if (this.myAuth <= Utils.getAuth(tar) && this.myAuth < 3) {
         bot.sendMessage(src, "Can't warn someone with higher or equal auth.", chan);
         return;
     }
@@ -1484,7 +1484,7 @@ addCommand(1, "tellupdate", function (src, command, commandData, tar, chan) {
         bot.sendMessage(src, "This person doesn't exist.", chan);
         return;
     }
-    if (this.myAuth <= getAuth(tar) && this.myAuth < 3) {
+    if (this.myAuth <= Utils.getAuth(tar) && this.myAuth < 3) {
         bot.sendMessage(src, "Can't tell someone with higher or equal auth to update.", chan);
         return;
     }
@@ -1496,7 +1496,7 @@ addCommand(1, "tellemotes", function (src, command, commandData, tar, chan) {
         bot.sendMessage(src, "This person doesn't exist.", chan);
         return;
     }
-    if (this.myAuth <= getAuth(tar) && this.myAuth < 3) {
+    if (this.myAuth <= Utils.getAuth(tar) && this.myAuth < 3) {
         bot.sendMessage(src, "Can't tell someone with higher or equal auth to update.", chan);
         return;
     }
@@ -1507,7 +1507,7 @@ addCommand(1, "silence", function (src, command, commandData, tar, chan) {
         bot.sendMessage(src, "Silence is already on!", chan);
         return;
     }
-    sys.sendHtmlAll("<font color=blue><timestamp/><b>" + html_escape(sys.name(src)) + " silenced the chat!</b></font>");
+    sys.sendHtmlAll("<font color=blue><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + " silenced the chat!</b></font>");
     muteall = true;
 }, Config.permissions.auth_permissions.mod);
 addCommand(1, ["unsilence", "silenceoff"], function (src, command, commandData, tar, chan) {
@@ -1515,7 +1515,7 @@ addCommand(1, ["unsilence", "silenceoff"], function (src, command, commandData, 
         bot.sendMessage(src, "Silence isn't going on.", chan);
         return;
     }
-    sys.sendHtmlAll("<font color=green><timestamp/><b>" + html_escape(sys.name(src)) + " ended the silence!</b></font>");
+    sys.sendHtmlAll("<font color=green><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + " ended the silence!</b></font>");
     muteall = false;
 }, Config.permissions.auth_permissions.mod);
 addCommand(1, ["kick", "k"], function (src, command, commandData, tar, chan) {
@@ -1539,7 +1539,7 @@ addCommand(1, ["kick", "k"], function (src, command, commandData, tar, chan) {
             continue;
         }
 
-        if (this.myAuth <= getAuth(tar) && this.myAuth < 3) {
+        if (this.myAuth <= Utils.getAuth(tar) && this.myAuth < 3) {
             bot.sendMessage(src, "Can't kick someone (" + tars[i] + ") with higher or equal auth.", chan);
             continue;
         }
@@ -1553,8 +1553,8 @@ addCommand(1, ["kick", "k"], function (src, command, commandData, tar, chan) {
     }
 
     var theirmessage = Kickmsgs[sys.name(src).toLowerCase()];
-    var tarNames = andJoin(toKick);
-    var msg = (theirmessage !== undefined) ? theirmessage.message : "<font color=red><timestamp/><b>" + tarNames + " " + (toKick.length === 1 ? "was" : "were") + " kicked by " + html_escape(sys.name(src)) + "!";
+    var tarNames = Utils.fancyJoin(toKick);
+    var msg = (theirmessage !== undefined) ? theirmessage.message : "<font color=red><timestamp/><b>" + tarNames + " " + (toKick.length === 1 ? "was" : "were") + " kicked by " + Utils.escapeHtml(sys.name(src)) + "!";
 
     if (theirmessage) {
         msg = msg.replace(/\{Target\}/gi, tarNames);
@@ -1593,8 +1593,8 @@ addCommand(1, ["warn", "warning"], function (src, command, commandData, tar, cha
     }
 
     bot.sendMessage(src, "Warning sent.", chan);
-    sys.sendHtmlMessage(tar, "<font color=red><timestamp/><b>" + html_escape(sys.name(src)) + " warned you!", 0);
-    sys.sendHtmlMessage(tar, "<font color=green><timestamp/><b>Reason:</b></font> " + html_escape(cut(parts, 1, ':')), 0);
+    sys.sendHtmlMessage(tar, "<font color=red><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + " warned you!", 0);
+    sys.sendHtmlMessage(tar, "<font color=green><timestamp/><b>Reason:</b></font> " + Utils.escapeHtml(Utils.cut(parts, 1, ':')), 0);
 }, Config.permissions.auth_permissions.mod);
 
 addCommand(1, ["tempban", "tb"], function (src, command, commandData, tar, chan) {
@@ -1621,7 +1621,7 @@ addCommand(1, ["tempban", "tb"], function (src, command, commandData, tar, chan)
         return;
     }
     
-    if (getAuth(t[0]) >= this.myAuth) {
+    if (Utils.getAuth(t[0]) >= this.myAuth) {
         bot.sendMessage(src, "You dont have sufficient auth to tempban " + commandData + ".", chan);
         return;
     }
@@ -1637,8 +1637,8 @@ addCommand(1, ["tempban", "tb"], function (src, command, commandData, tar, chan)
         time = 30;
         timestr = "30 minutes";
     } else {
-        time = stringToTime(timeunit, bantime);
-        timestr = getTimeString(time);
+        time = Utils.stringToTime(timeunit, bantime);
+        timestr = Utils.getTimeString(time);
     }
 
     if (time > 86400 /* seconds */ && this.myAuth === 1) {
@@ -1646,7 +1646,7 @@ addCommand(1, ["tempban", "tb"], function (src, command, commandData, tar, chan)
         return;
     }
 
-    sys.sendHtmlAll("<font color=red><timestamp/><b> " + t[0] + " has been tempbanned by " + html_escape(sys.name(src)) + " for " + timestr + "!</font></b><br><font color=black><timestamp/><b> Reason:</b> " + reason, 0);
+    sys.sendHtmlAll("<font color=red><timestamp/><b> " + t[0] + " has been tempbanned by " + Utils.escapeHtml(sys.name(src)) + " for " + timestr + "!</font></b><br><font color=black><timestamp/><b> Reason:</b> " + Utils.escapeHtml(reason), 0);
     
     tempBan(t[0], time / 60);
 }, Config.permissions.auth_permissions.mod);
@@ -1661,12 +1661,12 @@ addCommand(1, "untempban", function (src, command, commandData, tar, chan) {
         bot.sendMessage(src, "This person isn't tempbanned.", chan);
         return;
     }
-    sys.sendHtmlAll("<font color=blue><timestamp/><b> " + commandData + "'s tempban has been removed by " + html_escape(sys.name(src)) + "!</font></b>", 0);
+    sys.sendHtmlAll("<font color=blue><timestamp/><b> " + commandData + "'s tempban has been removed by " + Utils.escapeHtml(sys.name(src)) + "!</font></b>", 0);
     sys.unban(commandData);
 }, Config.permissions.auth_permissions.mod);
 addCommand(1, ["mute", "m"], function (src, command, commandData, tar, chan) {
     var v = commandData.split(':'),
-        reason = cut(v, 3, ":"),
+        reason = Utils.cut(v, 3, ":"),
         mutetime = v[1],
         timeunit = v[2],
         tarip = sys.dbIp(v[0]);
@@ -1682,17 +1682,17 @@ addCommand(1, ["mute", "m"], function (src, command, commandData, tar, chan) {
         bot.sendMessage(src, 'This person is already muted.', chan);
         return;
     }
-    if (getAuth(v[0]) >= this.myAuth) {
+    if (Utils.getAuth(v[0]) >= this.myAuth) {
         bot.sendMessage(src, "You don't have sufficient auth to mute " + v[0] + ".", chan);
         return;
     }
     
-    reason = reason || "No reason.";
+    reason = Utils.escapeHtml(reason || "No reason.");
 
-    var time = stringToTime(timeunit, Number(mutetime)),
+    var time = Utils.stringToTime(timeunit, Number(mutetime)),
         time_now = +sys.time(),
         trueTime = time + time_now,
-        timeString = "for " + getTimeString(time);
+        timeString = "for " + Utils.getTimeString(time);
 
     if (tar) {
         JSESSION.users(tar).muted = true;
@@ -1714,7 +1714,7 @@ addCommand(1, ["mute", "m"], function (src, command, commandData, tar, chan) {
     Mutes[tarip] = muteHash;
     Reg.save("Mutes", JSON.stringify(Mutes));
 
-    sys.sendHtmlAll("<font color=blue><timestamp/><b>" + html_escape(sys.name(src)) + " muted " + v[0] + " " + timeString + "!</b></font>");
+    sys.sendHtmlAll("<font color=blue><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + " muted " + v[0] + " " + timeString + "!</b></font>");
     sys.sendHtmlAll("<font color=green><timestamp/><b>Reason:</b></font> " + reason);
 }, Config.permissions.auth_permissions.mod);
 addCommand(1, "unmute", function (src, command, commandData, tar, chan) {
@@ -1728,7 +1728,7 @@ addCommand(1, "unmute", function (src, command, commandData, tar, chan) {
         bot.sendMessage(src, 'This person is not muted.', chan);
         return;
     }
-    sys.sendHtmlAll("<font color=green><timestamp/><b>" + commandData + " was unmuted by " + html_escape(sys.name(src)) + "!</b></font>", 0);
+    sys.sendHtmlAll("<font color=green><timestamp/><b>" + commandData + " was unmuted by " + Utils.escapeHtml(sys.name(src)) + "!</b></font>", 0);
     delete Mutes[ip];
     Reg.save("Mutes", JSON.stringify(Mutes));
 
@@ -1744,7 +1744,7 @@ addCommand(1, ["partycommands", "funmodcommands"], function (src, command, comma
     Lists.Party.display(src, chan);
 }, Config.permissions.auth_permissions.mod);
 addCommand(1, "imp", function (src, command, commandData, tar, chan) {
-    sys.sendHtmlAll('<font color=#8A2BE2><timestamp/><b>' + html_escape(sys.name(src)) + ' has impersonated ' + html_escape(commandData) + '!</font></b>');
+    sys.sendHtmlAll('<font color=#8A2BE2><timestamp/><b>' + Utils.escapeHtml(sys.name(src)) + ' has impersonated ' + Utils.escapeHtml(commandData) + '!</font></b>');
     sys.changeName(src, commandData);
 }, Config.permissions.auth_permissions.mod);
 addCommand(1, "roulette", function (src, command, commandData, tar, chan) {
@@ -1753,7 +1753,7 @@ addCommand(1, "roulette", function (src, command, commandData, tar, chan) {
     spinTypes = [];
     if (!rouletteon) {
         sys.sendHtmlAll('<font color=blue><timestamp/><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»', chan);
-        sys.sendHtmlAll('<font color=black><timestamp/><b><font color=black>' + html_escape(sys.name(src)) + ' ended the roulette game.', chan);
+        sys.sendHtmlAll('<font color=black><timestamp/><b><font color=black>' + Utils.escapeHtml(sys.name(src)) + ' ended the roulette game.', chan);
         sys.sendHtmlAll('<font color=blue><timestamp/><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»', chan);
     } else {
         var types = commandData.split(", ").map(function (val) {
@@ -1773,7 +1773,7 @@ addCommand(1, "roulette", function (src, command, commandData, tar, chan) {
         }
 
         sys.sendHtmlAll('<font color=blue><timestamp/><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»', chan);
-        sys.sendHtmlAll('<font color=red><timestamp/><b>A roulette game was started by <font color=black>' + html_escape(sys.name(src)) + '!', chan);
+        sys.sendHtmlAll('<font color=red><timestamp/><b>A roulette game was started by <font color=black>' + Utils.escapeHtml(sys.name(src)) + '!', chan);
         sys.sendHtmlAll('<font color=orange><timestamp/><b>Type(s):</b></font> ' + spinTypes.join(", "), chan);
         sys.sendHtmlAll('<font color=green><timestamp/><b>Type /spin to play!', chan);
         sys.sendHtmlAll('<font color=blue><timestamp/><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»', chan);
@@ -1788,9 +1788,9 @@ addCommand(1, ["spacemode", "capsmode", "reversemode", "lolmode", "scramblemode"
 addCommand(1, "nightclub", function (src, command, commandData, tar, chan) {
     nightclub = !nightclub;
     if (nightclub) {
-        sys.sendHtmlAll("<br/>" + Nightclub.rainbowify("Let the Night Club commence!"), chan);
+        sys.sendHtmlAll("<br/>" + Utils.nightclub.rainbowify("Let the Night Club commence!"), chan);
     } else {
-        sys.sendHtmlAll(Nightclub.rainbowify("Kay, Night Club times are over...") + "<br/>", chan);
+        sys.sendHtmlAll(Utils.nightclub.rainbowify("Kay, Night Club times are over...") + "<br/>", chan);
     }
 }, Config.permissions.auth_permissions.mod);
 
@@ -1942,14 +1942,14 @@ addCommand(2, "clearchat", function (src, command, commandData, tar, chan) {
     for (c = 0; c < 2999; c += 1) {
         sys.sendAll("", chan);
     }
-    sys.sendHtmlAll("<b><font color=" + sys.getColor(src) + ">" + html_escape(sys.name(src)) + " </b></font>cleared the chat in the channel: <b><font color=red>" + sys.channel(chan) + "</b></font>!", chan);
+    sys.sendHtmlAll("<b><font color=" + sys.getColor(src) + ">" + Utils.escapeHtml(sys.name(src)) + " </b></font>cleared the chat in the channel: <b><font color=red>" + sys.channel(chan) + "</b></font>!", chan);
 }, Config.permissions.auth_permissions.admin);
 addCommand(2, "supersilence", function (src, command, commandData, tar, chan) {
     if (supersilence) {
         bot.sendMessage(src, "Super Silence is already on!", chan);
         return;
     }
-    sys.sendHtmlAll("<font color=blue><timestamp/><b>" + html_escape(sys.name(src)) + " super silenced the chat!</b></font>");
+    sys.sendHtmlAll("<font color=blue><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + " super silenced the chat!</b></font>");
     supersilence = true;
 }, Config.permissions.auth_permissions.admin);
 addCommand(2, ["unssilence", "ssilenceoff"], function (src, command, commandData, tar, chan) {
@@ -1957,7 +1957,7 @@ addCommand(2, ["unssilence", "ssilenceoff"], function (src, command, commandData
         bot.sendMessage(src, "Super Silence isn't going on.", chan);
         return;
     }
-    sys.sendHtmlAll("<font color=green><timestamp/><b>" + html_escape(sys.name(src)) + " ended the super silence!</b></font>");
+    sys.sendHtmlAll("<font color=green><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + " ended the super silence!</b></font>");
     supersilence = false;
 }, Config.permissions.auth_permissions.admin);
 addCommand(2, "private", function (src, command, commandData, tar, chan) {
@@ -2027,7 +2027,7 @@ addCommand(2, "forcerules", function (src, command, commandData, tar, chan) {
         bot.sendMessage(src, "Must force rules to a real person!", chan);
         return;
     }
-    bot.sendMessage(tar, html_escape(sys.name(src)) + " has forced the rules to you!");
+    bot.sendMessage(tar, Utils.escapeHtml(sys.name(src)) + " has forced the rules to you!");
     Lists.Rules.display(tar, chan);
     bot.sendMessage(src, "You have forced " + sys.name(tar) + " to read the rules!", chan);
 }, Config.permissions.auth_permissions.admin);
@@ -2037,7 +2037,7 @@ addCommand(2, ["ban", "sban"], function (src, command, commandData, tar, chan) {
         return;
     }
     var ip = sys.dbIp(commandData);
-    if (this.myAuth <= getAuth(commandData)) {
+    if (this.myAuth <= Utils.getAuth(commandData)) {
         bot.sendMessage(src, "You can't ban this person. What are you thinking!", chan);
         return;
     }
@@ -2054,7 +2054,7 @@ addCommand(2, ["ban", "sban"], function (src, command, commandData, tar, chan) {
     if (command === "ban") {
         commandData = getName(commandData);
         var theirmessage = Banmsgs[sys.name(src).toLowerCase()];
-        var msg = (theirmessage !== undefined) ? theirmessage.message : "<font color=blue><timestamp/><b>" + commandData + ' was banned by ' + html_escape(sys.name(src)) + '!</font></b>';
+        var msg = (theirmessage) ? theirmessage.message : "<font color=blue><timestamp/><b>" + commandData + ' was banned by ' + Utils.escapeHtml(sys.name(src)) + '!</font></b>';
         if (theirmessage) {
             msg = msg.replace(/\{Target\}/gi, commandData);
         }
@@ -2077,7 +2077,7 @@ addCommand(2, "unban", function (src, command, commandData, tar, chan) {
         if (sys.dbIp(commandData) === sys.dbIp(banlist[a])) {
             found = true;
             sys.unban(banlist[a]);
-            sys.sendHtmlAll("<font color=blue><timestamp/><b>" + banlist[a] + " was unbanned by " + html_escape(sys.name(src)) + "!", 0);
+            sys.sendHtmlAll("<font color=blue><timestamp/><b>" + banlist[a] + " was unbanned by " + Utils.escapeHtml(sys.name(src)) + "!", 0);
         }
     }
     if (!found) {
@@ -2193,7 +2193,7 @@ addCommand(3, "changeauth", function (src, command, commandData, tar, chan) {
     sys.changeAuth(sys.id(name), level);
 }, Config.permissions.auth_permissions.owner);
 addCommand(3, "eval", function (src, command, commandData, tar, chan) {
-    bot.sendMessage(src, "You evaluated: " + html_escape(commandData), chan);
+    bot.sendMessage(src, "You evaluated: " + Utils.escapeHtml(commandData), chan);
     try {
         var res = sys.eval(commandData);
         sys.sendHtmlMessage(src, "<timestamp/><b>Evaluation Check: </b><font color='green'>OK</font>", chan);
@@ -2254,7 +2254,7 @@ module.exports = {
             return false;
         }
         
-        var srcauth = getAuth(src),
+        var srcauth = Utils.getAuth(src),
             name = JSESSION.users(src).originalName,
             cmd = commands[command];
         if (cmd.specialPerms) {
@@ -2274,7 +2274,7 @@ module.exports = {
             isMuted = poUser.muted,
             originalName = poUser.originalName,
             isLManager = Leaguemanager === originalName.toLowerCase(),
-            myAuth = getAuth(src);
+            myAuth = Utils.getAuth(src);
 
         var cmd = commands[command];
         if (typeof cmd.callback === "function") {
