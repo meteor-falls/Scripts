@@ -72,7 +72,7 @@ module.exports = function () {
             pname = "<b>" + player.pokemon.name + "</b>";
         
         if (player.pokemon.nickname) {
-            pname = "<b>" + player.pokemon.nickname + "</b> (" + player.pokemon.name + ")";
+            pname = "<b>" + Utils.escapeHtml(player.pokemon.nickname) + "</b> (" + player.pokemon.name + ")";
         }
         
         return pname;

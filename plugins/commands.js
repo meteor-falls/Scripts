@@ -757,6 +757,33 @@ addCommand(0, "feed", function (src, command, commandData, tar, chan) {
     Feedmon.save();
 });
 
+addCommand(0, "nickname", function (src, command, commandData, tar, chan) {
+    var name = sys.name(src).toLowerCase(),
+        player = Feedmon.getPlayer(name),
+        feedmon;
+    
+    if (!player) {
+        bot.sendMessage(src, "First send out a pokemon!", chan);
+        return;
+    }
+    
+    feedmon = Feedmon.getPokemon(name);
+    
+    if (!feedmon) {
+        bot.sendMessage(src, "First send out a Feedmon!", chan);
+        return;
+    }
+    
+    if (commandData.length > 20) {
+        bot.sendMessage(src, "Your nickname is too long (max: 20).", chan);
+        return;
+    }
+    
+    feedmon.nickname = commandData;
+    
+    bot.sendMessage(src, feedmon.name + " is now named " + feedmon.nickname + "!", chan);
+});
+
 addCommand(0, "level", function (src, command, commandData, tar, chan) {
     var name = sys.name(src).toLowerCase(),
         player = Feedmon.getPlayer(name),
@@ -798,6 +825,24 @@ addCommand(0, "level", function (src, command, commandData, tar, chan) {
     // Arrays start 0-index, so don't increment 1 if we want to know the exact level requirement.
     bot.sendMessage(src, "Next level (" + (nextlvl) + ") requires " + table[feedmon.level] + " EXP. Your " + feedname + " has " + feedmon.exp + " EXP, an additional " + (table[feedmon.level] - feedmon.exp) + " is required for level " + nextlvl + ".", chan);
 });
+
+/* Feedmon special commands */
+addCommand(3, "feedset", function (src, command, commandData, tar, chan) {
+    var parts = commandData.split(":"),
+        name = parts[0].toLowerCase(),
+        jsonStr = Utils.cut(parts, 1, ":"),
+        json;
+    
+    try {
+        json = JSON.parse(jsonStr);
+    } catch (ex) {
+        bot.sendMessage(src, "Couldn't parse JSON.", chan);
+        return;
+    }
+    
+    Feedmons[name] = json;
+    bot.sendMessage(src, "Feedmon data of " + name + " set to " + jsonStr, chan);
+}, Config.permissions.feedmon);
 
 addCommand(0, "sub", function (src, command, commandData, tar, chan) {
     if (!this.poUser.megauser && this.myAuth < 1) {
