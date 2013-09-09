@@ -5,7 +5,7 @@
 */
 
 module.exports = function () {
-    var FEEDMON_VERSION = 2.2,
+    var FEEDMON_VERSION = 2.3,
         FEEDMON_TABLE = 'Feedmon_v' + FEEDMON_VERSION;
     
     // Algorithm:
@@ -104,7 +104,7 @@ module.exports = function () {
             bonus = [bonusRange * (Math.round(lvl / 2)), bonusRange * lvl];
         }
         
-        gain = sys.rand((10 * lvl) + bonus[0], (60 * lvl) + bonus[1]);
+        gain = sys.rand((10 * lvl) + bonus[0], (24 * lvl) + bonus[1] + 1);
         feedmon.exp += gain;
         
         if (lvl < 100) {
