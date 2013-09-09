@@ -721,7 +721,8 @@ addCommand(0, "feed", function (src, command, commandData, tar, chan) {
         player = Feedmon.getPlayer(name),
         feedname,
         feedmon,
-        feedexp;
+        feedexp,
+        time = +sys.time();
     
     if (!player) {
         bot.sendMessage(src, "First send out a Feedmon!", chan);
@@ -729,14 +730,14 @@ addCommand(0, "feed", function (src, command, commandData, tar, chan) {
     }
     
     feedmon = Feedmon.getPokemon(name);
-    feedname = Feedmon.getPokemonName(name);
     
     if (!feedmon) {
         bot.sendMessage(src, "First send out a Feedmon!", chan);
         return;
     }
     
-    var time = +sys.time();
+    feedname = Feedmon.getPokemonName(name);
+
     if (Feedmon.checkTimeout(name, "feedtimeout")) {
         bot.sendMessage(src, "Please wait " + Utils.getTimeString(player.feedtimeout - time) + " to feed your " + feedname + " again.", chan);
         return;
@@ -747,7 +748,7 @@ addCommand(0, "feed", function (src, command, commandData, tar, chan) {
     
     feedexp = Feedmon.giveExp(name);
     
-    bot.sendMessage(src, "Your " + feedname + " gained " + feedexp.gain + " EXP! It now has " + feedexp.now + " EXP and it was fed " + feedmon.fed + " times. Its level is " + feedmon.lvl + ".", chan);
+    bot.sendMessage(src, "Your " + feedname + " gained " + feedexp.gain + " EXP! It now has " + feedexp.now + " EXP and it was fed " + feedmon.fed + " times. Its level is " + feedmon.level + ".", chan);
     
     if (feedexp.levelGain) {
         bot.sendMessage(src, 'Your ' + feedname + ' gained ' + feedexp.levelGain + ' level(s)! Its level is now ' + feedmon.level + '!', chan);
@@ -758,44 +759,45 @@ addCommand(0, "feed", function (src, command, commandData, tar, chan) {
 
 // TODO
 addCommand(0, "level", function (src, command, commandData, tar, chan) {
-    bot.sendMessage(src, "This command is disabled. Sorry. :(", chan);
-    
-    /*
     var name = sys.name(src).toLowerCase(),
-        feedmon = Feedmon.getPlayer(name);
+        player = Feedmon.getPlayer(name),
+        table = Feedmon.exp,
+        len,
+        i,
+        nextlvl,
+        feedmon,
+        feedname;
     
-    if (!feedmon) {
+    if (!player) {
         bot.sendMessage(src, "First send out a pokemon!", chan);
         return;
     }
     
-    commandData = (commandData || "").toLowerCase();
-
-    if (commandData === 'full') {
-        var expl = Feedmon.exp.length,
-            y;
-        
-        for (y = 1; y < expl; y += 1) {
-            bot.sendMessage(src, "Level " + y + " requires " + Feedmon.exp[y] + " EXP.", chan);
+    feedmon = Feedmon.getPokemon(name);
+    
+    if (!feedmon) {
+        bot.sendMessage(src, "First send out a Feedmon!", chan);
+        return;
+    }
+    
+    feedname = Feedmon.getPokemonName(name);
+    
+    // TODO: Use TableList
+    if (commandData.toLowerCase() === "full") {
+        for (i = 1, len = table.length; i < len; i += 1) {
+            bot.sendMessage(src, "Level " + i + " requires " + table[i] + " exp.", chan);
         }
         return;
     }
-
-    var s = {};
-    s.lvl = feedmon.last.lvl;
-    s.exp = feedmon.last.exp;
-    s.poke = feedmon.last.pokemon;
     
-    var slvl1 = s.lvl + 1,
-        exp1 = Feedmon.exp[slvl1],
-        newlvl = exp1 - s.exp;
-    
-    if (s.lvl >= Feedmon.exp.length) {
-        bot.sendMessage(src, "Max level already reached.", chan);
+    if (feedmon.level >= 100) {
+        bot.sendMessage(src, "Max level (100) reached.", chan);
         return;
     }
-
-    bot.sendMessage(src, "Level " + slvl1 + " requires " + exp1 + " EXP. Your " + s.poke + " has " + s.exp + " EXP, " + newlvl + " EXP remaining for another level!", chan);*/
+    
+    nextlvl = feedmon.level + 1;
+    // Arrays start 0-index, so don't increment 1 if we want to know the exact level requirement.
+    bot.sendMessage(src, "Next level (" + (nextlvl) + ") requires " + table[feedmon.level] + " EXP. Your " + feedname + " has " + feedmon.exp + " EXP, an additional " + (table[feedmon.level] - feedmon.exp) + " is required for level " + nextlvl + ".", chan);
 });
 
 addCommand(0, "sub", function (src, command, commandData, tar, chan) {
