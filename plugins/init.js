@@ -195,7 +195,7 @@ module.exports = {
             "Welmsgs": "Welmsgs",
             "Emotetoggles": "Emotetoggles",
             "Emoteperms": "Emoteperms",
-            "Feedmons": "Feedmon-v2"
+            "Feedmons": Feedmon.TABLE
         };
         
         var i;

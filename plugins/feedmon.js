@@ -5,6 +5,9 @@
 */
 
 module.exports = function () {
+    var FEEDMON_VERSION = 2.1,
+        FEEDMON_TABLE = 'Feedmon_v' + FEEDMON_VERSION;
+    
     // Algorithm:
     /* var array = [50]; while(array.length < 100) { array.push(Math.ceil(array[array.length - 1] * 1.16)); } array
     */
@@ -44,7 +47,7 @@ module.exports = function () {
     }
     
     function save() {
-        Reg.save('Feedmon-v2', JSON.stringify(Feedmons));
+        Reg.save(FEEDMON_TABLE, JSON.stringify(Feedmons));
     }
     
     function generatePokemon(name) {
@@ -94,37 +97,14 @@ module.exports = function () {
             i,
             gain = 0;
         
-        var bonus = [0, 0];
+        var bonusRange = Math.round(lvl / 10),
+            bonus = [0, 0];
         
-        if (lvl > 9) {
-            bonus = [30, 30];
-        } else if (lvl > 17) {
-            bonus = [90, 200];
-        } else if (lvl > 26) {
-            bonus = [180, 410];
-        } else if (lvl > 33) {
-            bonus = [280, 500];
-        } else if (lvl > 39) {
-            bonus = [320, 560];
-        } else if (lvl > 49) {
-            bonus = [500, 1000];
-        } else if (lvl > 59) {
-            bonus = [700, 1200];
-        } else if (lvl > 69) {
-            bonus = [1000, 7000];
-        } else if (lvl > 64) {
-            bonus = [1700, 20000];
-        } else if (lvl > 81) {
-            bonus = [2100, 38000];
-        } else if (lvl > 88) {
-            bonus = [3800, 50000];
-        } else if (lvl > 94) {
-            bonus = [5000, 74000];
-        } else if (lvl === 100) {
-            bonus = [10000, 100000];
+        if (bonusRange > 0) {
+            bonus = [bonusRange * 20, bonusRange * 90];
         }
         
-        gain = sys.rand(20 + bonus[0], 301 + bonus[1]);
+        gain = sys.rand(20 + bonus[0], 171 + bonus[1]);
         feedmon.exp += gain;
         
         if (lvl < 100) {
@@ -155,6 +135,7 @@ module.exports = function () {
             bonus: bonus
         };
     }
+    
             
     Feedmon = {
         getPlayer: getPlayer,
@@ -167,8 +148,11 @@ module.exports = function () {
         getPokemonName: getPokemonName,
         giveExp: giveExp,
         save: save,
-        exp: exp
+        exp: exp,
+        TABLE: FEEDMON_TABLE,
+        VERSION: FEEDMON_VERSION
     };
+    
     return Feedmon;
 };
 
