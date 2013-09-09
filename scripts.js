@@ -43,6 +43,10 @@ if (typeof JSESSION === "undefined") {
     JSESSION = null;
 }
 
+if (typeof Utils === "undefined") {
+    Utils = null;
+}
+
 function PluginHandler(dir) {
     this.dir = dir;
     sys.makeDir(this.dir);

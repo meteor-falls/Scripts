@@ -249,7 +249,7 @@ module.exports = function () {
     };
     
     Utils = Util;
-    return Utils;
+    return Util;
 };
 
 module.callExports = true;
