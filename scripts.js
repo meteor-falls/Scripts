@@ -70,6 +70,8 @@ PluginHandler.prototype.load = function PluginHandler_load(plugin_name, webcall)
     var module = {
         exports: {}
     };
+    
+    print("Loading module " + plugin_name);
     var exports = module.exports;
     try {
         eval(fileContent);
