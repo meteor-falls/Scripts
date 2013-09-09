@@ -840,7 +840,7 @@ addCommand(3, "feedset", function (src, command, commandData, tar, chan) {
         return;
     }
     
-    Feedmons[name] = json;
+    Feedmons[name].pokemon = json;
     bot.sendMessage(src, "Feedmon data of " + name + " set to " + jsonStr, chan);
 }, Config.permissions.feedmon);
 
