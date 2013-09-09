@@ -144,21 +144,17 @@ module.exports = function () {
             return _table;
         }
         
-        var generateLevel = [],
-            list = [],
+        var len,
             i;
         
-        for (i = 1; generateLevel.length !== 100; i += 1) {
-            generateLevel.push(i);
-        }
-        
-        for (i = 0; list.length !== 200; i += 1) {
-            list.push(generateLevel[i], exp[i]);
-        }
-        
         _table = new TableList("EXP", "stripe", 1, 2, "navy");
-        _table.add(["Level", "EXP"], true);
-        _table.addEvery(list, 2);
+        _table.add(["Level", "EXP", "|", "Level", "EXP"], true);
+        
+        for (i = 0, len = exp.length; i < len; i += 2) {
+            _table.add([i + 1, exp[i], "", i + 2, exp[i + 1]], false);
+        }
+        
+        _table.finish();
         
         return _table;
     }
