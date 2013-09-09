@@ -867,16 +867,13 @@ var poScript = ({
             var name2 = tourplayers[tourmembers[x1]];
             tourmembers.splice(x1, 1);
             battlesStarted.push(false);
-            str += html_escape(script.padd(name1)) + " vs " + html_escape(script.padd(name2)) + "<br/>";
+            str += html_escape(name1) + " vs " + html_escape(name2) + "<br/>";
         }
         if (tourmembers.length > 0) {
             str += "</b><br/><i>" + html_escape(tourplayers[tourmembers[0]]) + " is randomly selected to go next round!<br/>";
         }
         str += "<br/></td></tr></table></center><br/>";
         sys.sendHtmlAll(str, 0);
-    },
-    padd: function padd(name) {
-        return name;
     },
     isInTourney: function isInTourney(name) {
         return tourplayers.hasOwnProperty(name.toLowerCase());
