@@ -4,19 +4,19 @@
     bot: true, Reg: true, Leaguemanager: true, Lists: true, CommandList: true, MathJS: true, format: true, JSESSION: true, emoteFormat: true, hasEmotesToggled: true, tourmode: true, tourmembers: true, getTier: true, tourtier: true, tourplayers: true, roundnumber: true, isFinals: true, battlesLost: true, tourbattlers: true, battlesStarted: true, hasEmotePerms: true, Emotetoggles: true, rouletteon: true, spinTypes: true, EmoteList: true, TableList: true, MegaUsers: true, FloodIgnore: true, Capsignore: true, Autoidle: true, Emoteperms: true, Feedmon: true, tournumber: true, prize: true, isTier: true, tournumber: true, Kickmsgs: true, Welmsgs: true, Banmsgs: true, Channeltopics: true, android: true, topicbot: true, Mutes: true, Rangebans: true, muteall: true, kick: true, tempBanTime: true, tempBan: true, pruneMutes: true, nightclub: true, supersilence: true, ev_name: true, getName: true, ban: true, Plugins: true, PHandler: true, reloadPlugin: true, htmlchatoff: true, bots: true, servername: true, isBanned: true, loginMessage: true, logoutMessage: true, floodIgnoreCheck: true, removeTag: true, randcolor: true, colormodemessage: true, lolmessage: true, pewpewpewmessage: true, hasBasicPermissions: true, hasDrizzleSwim: true, hasSandCloak: true, ChannelNames: true, staffchannel: true, testchan: true, watch: true, aliasKick: true, reconnectTrolls: true, nthNumber: true, ChannelLink: true, addChannelLinks: true, firstGen: true, randPoke: true, formatPoke: true, teamSpammers: true, Feedmons: true, addEmote: true, Bot: true, guard: true, watchbot: true, setbybot: true, lolmode: true, spacemode: true, reversemode: true, colormode: true, scramblemode: true, capsmode: true, pewpewpew: true, capsbot: true, poScript: true, flbot: true, Utils: true
 */
 
-module.exports = function () {
-    var Util = {};
+(function () {
+    var util = {};
     
-    Util.escapeHtml = function (str) {
+    util.escapeHtml = function (str) {
         return str.replace(/\&/g, "&amp;").replace(/</g, "&lt;").replace(/\>/g, "&gt;");
     };
 
-    Util.stripHtml = function (str) {
+    util.stripHtml = function (str) {
         return str.replace(/<\/?[^>]*>/g, "");
     };
     
     // http://bost.ocks.org/mike/shuffle/
-    Util.fisheryates = function fisheryates(array) {
+    util.fisheryates = function fisheryates(array) {
         var m = array.length, t, i;
         
         // While there remain elements to shuffle…
@@ -35,9 +35,9 @@ module.exports = function () {
         return array;
     };
     
-    Util.nightclub = {};
+    util.nightclub = {};
 
-    Util.nightclub.hsv2rgb = function (h, s, v) {
+    util.nightclub.hsv2rgb = function (h, s, v) {
         var r, g, b;
         var RGB = [];
         var var_r,
@@ -98,14 +98,14 @@ module.exports = function () {
         return "#" + RGB.join("");
     };
 
-    Util.nightclub.rainbowify = (function () {
+    util.nightclub.rainbowify = (function () {
         var numcolors = 360,
             colors = [],
             base = sys.rand(0, numcolors),
             i;
         
         for (i = 0; i < numcolors; i += 1) {
-            colors.push(Util.nightclub.hsv2rgb((i % 360) / 360, 1, 1));
+            colors.push(util.nightclub.hsv2rgb((i % 360) / 360, 1, 1));
         }
  
         return function (text) {
@@ -113,7 +113,7 @@ module.exports = function () {
             var step = sys.rand(0, 30);
             for (i = 0; i < text.length; i += 1) {
                 base += 1;
-                html += "<font color='" + colors[(base + step) % numcolors] + "'>" + Util.escapeHtml(text[i]) + "</font>";
+                html += "<font color='" + colors[(base + step) % numcolors] + "'>" + util.escapeHtml(text[i]) + "</font>";
             }
             return "<table cellpadding='12' cellspacing='0' width='100%' " +
                    "bgcolor='black' style='margin: -12'><tr><td><b>" + html +
@@ -121,7 +121,7 @@ module.exports = function () {
         };
     }());
 
-    Util.nameColor = function (src) {
+    util.nameColor = function (src) {
         var getColor = sys.getColor(src);
         if (getColor === '#000000') {
             var clist = ['#5811b1', '#399bcd', '#0474bb', '#f8760d', '#a00c9e', '#0d762b', '#5f4c00', '#9a4f6d', '#d0990f', '#1b1390', '#028678', '#0324b1'];
@@ -130,7 +130,7 @@ module.exports = function () {
         return getColor;
     };
     
-    Util.hasIllegalChars = function (m) {
+    util.hasIllegalChars = function (m) {
         if (m.indexOf(/[\u202E\u202D]/) !== -1) {
             return true;
         } else if (m.indexOf(/[\u0300-\u036F]/) !== -1) {
@@ -145,12 +145,12 @@ module.exports = function () {
         return false;
     };
 
-    Util.cut = function (array, entry, join) {
+    util.cut = function (array, entry, join) {
         join = join || "";
         return [].concat(array).splice(entry).join(join);
     };
 
-    Util.stringToTime = function (str, time) {
+    util.stringToTime = function (str, time) {
         if (typeof str !== 'string') {
             return 0;
         }
@@ -188,7 +188,7 @@ module.exports = function () {
         return units.m * time;
     };
 
-    Util.getAuth = function (id) {
+    util.getAuth = function (id) {
         if (typeof id === "number") {
             return sys.auth(id);
         } else {
@@ -196,7 +196,7 @@ module.exports = function () {
         }
     };
     
-    Util.getTimeString = function (sec) {
+    util.getTimeString = function (sec) {
         var s = [];
         var n;
         var d = [
@@ -228,10 +228,10 @@ module.exports = function () {
             return "1 second";
         }
 
-        return Util.fancyJoin(s);
+        return util.fancyJoin(s);
     };
 
-    Util.fancyJoin = function (array, separator) {
+    util.fancyJoin = function (array, separator) {
         var len = array.length;
         
         separator = separator || "and";
@@ -248,8 +248,5 @@ module.exports = function () {
         return array.join(", ");
     };
     
-    Utils = Util;
-    return Util;
-};
-
-module.callExports = true;
+    Utils = module.exports = util;
+}());
