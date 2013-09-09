@@ -1,5 +1,8 @@
+/*jslint continue: true, es5: true, evil: true, forin: true, sloppy: true, vars: true, regexp: true, newcap: true, nomen: true*/
 /*global sys, SESSION, script: true, Qt, print, gc, version,
-    global: false, Plugin: true, Config: true, module: true, exports: true*/
+    global: false, Plugin: true, Config: true, module: true, exports: true,
+    bot: true, Reg: true, Leaguemanager: true, Lists: true, html_escape: true, namecolor: true, CommandList: true, namecolor: true, MathJS: true, format: true, cut: true, JSESSION: true, emoteFormat: true, hasEmotesToggled: true, tourmode: true, tourmembers: true, getTier: true, tourtier: true, tourplayers: true, roundnumber: true, isFinals: true, battlesLost: true, tourbattlers: true, battlesStarted: true, hasEmotePerms: true, Emotetoggles: true, rouletteon: true, spinTypes: true, EmoteList: true, TableList: true, MegaUsers: true, FloodIgnore: true, Capsignore: true, Autoidle: true, Emoteperms: true, Feedmon: true, getTimeString: true, tournumber: true, prize: true, isTier: true, tournumber: true, Kickmsgs: true, Welmsgs: true, Banmsgs: true, Channeltopics: true, android: true, topicbot: true, Mutes: true, Rangebans: true, getAuth: true, muteall: true, andJoin: true, kick: true, tempBanTime: true, stringToTime: true, tempBan: true, pruneMutes: true, nightclub: true, Nightclub: true, supersilence: true, ev_name: true, getName: true, ban: true, Plugins: true, PHandler: true, reloadPlugin: true, htmlchatoff: true, bots: true, html_strip: true, fisherYates: true, servername: true, isBanned: true, loginMessage: true, logoutMessage: true, cmp: true, floodIgnoreCheck: true, removeTag: true, randcolor: true, colormodemessage: true, lolmessage: true, pewpewpewmessage: true, hasBasicPermissions: true, hasDrizzleSwim: true, hasSandCloak: true, ChannelNames: true, staffchannel: true, testchan: true, watch: true, aliasKick: true, reconnectTrolls: true, nthNumber: true, ChannelLink: true, addChannelLinks: true, firstGen: true, randPoke: true, formatPoke: true, hasIllegalChars: true, teamSpammers: true, Feedmons: true, addEmote: true, Bot: true
+*/
 
 /* Documentation for prototype CommandList:
    Create a command list. Example:
@@ -40,7 +43,7 @@ CommandList = function (title, bordercolor, help, listtype) {
     this.bordercolor = bordercolor;
     this.template = "<font color=" + this.bordercolor + " size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br><h2>" + title + "</h2><br>";
 
-    if ((help == undefined || help == null) && help != "") {
+    if (!help && help !== "") {
         help = "Type the following in the main chat in order to use them:";
     }
 
@@ -48,7 +51,7 @@ CommandList = function (title, bordercolor, help, listtype) {
         listtype = "ul";
     }
 
-    if (help != "") {
+    if (help !== "") {
         this.template += "<i>" + help + "</i><br/><" + listtype + ">";
     }
 
@@ -76,16 +79,16 @@ CommandList.prototype.display = function (player, channel) {
 // Default border: 2
 // Default padding: 5
 TableList = function (name, color, border, padding, borderColor) {
-   this.name = name;
-   this.color = color;
-   this.border = border;
-   this.padding = padding;
-   this.borderColor = borderColor;
-   
-   this.template = "<font color=" + borderColor + " size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br><h2>" + name + "</h2><br/>";
-   this.template += "<table border='" + border + "' cellpadding='" + padding + "'>";
-   
-   this.zebra = true;
+    this.name = name;
+    this.color = color;
+    this.border = border;
+    this.padding = padding;
+    this.borderColor = borderColor;
+    
+    this.template = "<font color=" + borderColor + " size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br><h2>" + name + "</h2><br/>";
+    this.template += "<table border='" + border + "' cellpadding='" + padding + "'>";
+    
+    this.zebra = true;
 };
 
 TableList.prototype.bgcolor = function () {
@@ -93,7 +96,7 @@ TableList.prototype.bgcolor = function () {
     
     if (color === "zebra" || color === "stripe") {
         if (this.zebra) {
-            color = "#eaeaea"; 
+            color = "#eaeaea";
         } else {
             color = "#f4f4f4";
         }
@@ -123,7 +126,7 @@ TableList.prototype.addEvery = function (elements, isBold, every, remainingIsBol
         len,
         element;
         
-    for (element = 0, len = elements.length; i < len; i += 1) {
+    for (element = 0, len = elements.length; element < len; element += 1) {
         out.push(elements[element]);
         
         if (out.length >= every) {
@@ -244,9 +247,12 @@ module.exports = {
             // return (b[1] - a[1]);
         // });
 
-        var emotesToAdd = [];
-        for (var i = 0, len = EmoteList["__display__"].length; i < len; i += 1) {
-            emotesToAdd.push(html_escape(EmoteList["__display__"][i][0]));
+        var emotesToAdd = [],
+            len,
+            i;
+        
+        for (i = 0, len = EmoteList.__display__.length; i < len; i += 1) {
+            emotesToAdd.push(html_escape(EmoteList.__display__[i][0]));
             
             if (emotesToAdd.length >= 8) {
                 Emotes.add(emotesToAdd, false);
@@ -255,7 +261,7 @@ module.exports = {
         }
         
         if (emotesToAdd.length) {
-           Emotes.add(emotesToAdd, false);
+            Emotes.add(emotesToAdd, false);
         }
 
         Emotes.finish();
