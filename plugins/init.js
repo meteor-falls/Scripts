@@ -196,7 +196,6 @@ module.exports = {
             "Welmsgs": "Welmsgs",
             "Emotetoggles": "Emotetoggles",
             "Emoteperms": "Emoteperms",
-            "Itemtoggles": "Itemtoggles",
             "Feedmons": "Feedmons"
         };
         
@@ -204,7 +203,7 @@ module.exports = {
 
         for (i in regVals) {
             Reg.init(regVals[i], "{}");
-
+            
             try {
                 global[i] = JSON.parse(Reg.get(regVals[i]));
             } catch (e) {
