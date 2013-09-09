@@ -158,7 +158,7 @@ module.exports = function () {
         
         _table = new TableList("EXP", "stripe", 1, 2, "navy");
         _table.add(["Level", "EXP"], true);
-        _table.addEvery(list, 10);
+        _table.addEvery(list, 2);
         
         return _table;
     }
