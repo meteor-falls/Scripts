@@ -757,7 +757,6 @@ addCommand(0, "feed", function (src, command, commandData, tar, chan) {
     Feedmon.save();
 });
 
-// TODO
 addCommand(0, "level", function (src, command, commandData, tar, chan) {
     var name = sys.name(src).toLowerCase(),
         player = Feedmon.getPlayer(name),
@@ -782,11 +781,11 @@ addCommand(0, "level", function (src, command, commandData, tar, chan) {
     
     feedname = Feedmon.getPokemonName(name);
     
-    // TODO: Use TableList
     if (commandData.toLowerCase() === "full") {
-        for (i = 1, len = table.length; i < len; i += 1) {
-            bot.sendMessage(src, "Level " + i + " requires " + table[i] + " exp.", chan);
-        }
+        //for (i = 1, len = table.length; i < len; i += 1) {
+            //bot.sendMessage(src, "Level " + i + " requires " + table[i] + " exp.", chan);
+        //}
+        Feedmon.expTableList().display(src, chan);
         return;
     }
     

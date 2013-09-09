@@ -8,6 +8,8 @@ module.exports = function () {
     var FEEDMON_VERSION = 2.3,
         FEEDMON_TABLE = 'Feedmon_v' + FEEDMON_VERSION;
     
+    var _table;
+    
     // Algorithm:
     /* var array = [25], last; while(array.length < 100) { last = array[array.length - 1]; array.push(Math.floor(last * 1.13) + last % 100); } array;
     */
@@ -136,6 +138,30 @@ module.exports = function () {
         };
     }
     
+    // Lazy generation.
+    function expTableList() {
+        if (_table) {
+            return _table;
+        }
+        
+        var generateLevel = [],
+            list,
+            i;
+        
+        for (i = 1; generateLevel.length !== 100; i += 1) {
+            generateLevel.push(i);
+        }
+        
+        for (i = 0; list.length !== 200; i += 1) {
+            list.push(generateLevel[i], exp[i]);
+        }
+        
+        _table = new TableList("EXP", "stripe", 1, 2, "navy");
+        _table.add(["Level", "EXP"], true);
+        _table.addEvery(list, 10);
+        
+        return _table;
+    }
             
     Feedmon = {
         getPlayer: getPlayer,
@@ -149,6 +175,7 @@ module.exports = function () {
         giveExp: giveExp,
         save: save,
         exp: exp,
+        expTableList: expTableList,
         TABLE: FEEDMON_TABLE,
         VERSION: FEEDMON_VERSION
     };
