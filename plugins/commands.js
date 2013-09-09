@@ -272,7 +272,7 @@ addCommand(0, ["calc", "calculate"], function (src, command, commandData, tar, c
         res = MathJS.eval(commandData);
         
         bot.sendMessage(src, Utils.escapeHtml("The result of '" + commandData + "' is:"), chan);
-        bot.sendMessage(src, Utils.escapeHtml(res), chan);
+        bot.sendMessage(src, Utils.escapeHtml(res.toString()), chan);
     } catch (ex) {
         bot.sendMessage(src, "Error in parsing your expression (" + Utils.escapeHtml(commandData) + ").", chan);
         bot.sendMessage(src, ex, chan);
