@@ -1,43 +1,9 @@
 /*jslint continue: true, es5: true, evil: true, forin: true, sloppy: true, vars: true, regexp: true, newcap: true, nomen: true*/
 /*global sys, SESSION, script: true, Qt, print, gc, version,
     global: false, Plugin: true, Config: true, module: true, exports: true,
-    bot: true, Reg: true, Leaguemanager: true, Lists: true, html_escape: true, namecolor: true, CommandList: true, namecolor: true, MathJS: true, format: true, cut: true, JSESSION: true, emoteFormat: true, hasEmotesToggled: true, tourmode: true, tourmembers: true, getTier: true, tourtier: true, tourplayers: true, roundnumber: true, isFinals: true, battlesLost: true, tourbattlers: true, battlesStarted: true, hasEmotePerms: true, Emotetoggles: true, rouletteon: true, spinTypes: true, EmoteList: true, TableList: true, MegaUsers: true, FloodIgnore: true, Capsignore: true, Autoidle: true, Emoteperms: true, Feedmon: true, getTimeString: true, tournumber: true, prize: true, isTier: true, tournumber: true, Kickmsgs: true, Welmsgs: true, Banmsgs: true, Channeltopics: true, android: true, topicbot: true, Mutes: true, Rangebans: true, getAuth: true, muteall: true, andJoin: true, kick: true, tempBanTime: true, stringToTime: true, tempBan: true, pruneMutes: true, nightclub: true, Nightclub: true, supersilence: true, ev_name: true, getName: true, ban: true, Plugins: true, PHandler: true, reloadPlugin: true, htmlchatoff: true, bots: true, html_strip: true, fisherYates: true, servername: true, isBanned: true, loginMessage: true, logoutMessage: true, cmp: true, floodIgnoreCheck: true, removeTag: true, randcolor: true, colormodemessage: true, lolmessage: true, pewpewpewmessage: true, hasBasicPermissions: true, hasDrizzleSwim: true, hasSandCloak: true, ChannelNames: true, staffchannel: true, testchan: true, watch: true, aliasKick: true, reconnectTrolls: true, nthNumber: true, ChannelLink: true, addChannelLinks: true, firstGen: true, randPoke: true, formatPoke: true, hasIllegalChars: true, teamSpammers: true, Feedmons: true, addEmote: true, Bot: true
+    bot: true, Reg: true, Leaguemanager: true, Lists: true, html_escape: true, namecolor: true, CommandList: true, namecolor: true, MathJS: true, format: true, cut: true, JSESSION: true, emoteFormat: true, hasEmotesToggled: true, tourmode: true, tourmembers: true, getTier: true, tourtier: true, tourplayers: true, roundnumber: true, isFinals: true, battlesLost: true, tourbattlers: true, battlesStarted: true, hasEmotePerms: true, Emotetoggles: true, rouletteon: true, spinTypes: true, EmoteList: true, TableList: true, MegaUsers: true, FloodIgnore: true, Capsignore: true, Autoidle: true, Emoteperms: true, Feedmon: true, getTimeString: true, tournumber: true, prize: true, isTier: true, tournumber: true, Kickmsgs: true, Welmsgs: true, Banmsgs: true, Channeltopics: true, android: true, topicbot: true, Mutes: true, Rangebans: true, getAuth: true, muteall: true, andJoin: true, kick: true, tempBanTime: true, stringToTime: true, tempBan: true, pruneMutes: true, nightclub: true, Nightclub: true, supersilence: true, ev_name: true, getName: true, ban: true, Plugins: true, PHandler: true, reloadPlugin: true, htmlchatoff: true, bots: true, html_strip: true, fisherYates: true, servername: true, isBanned: true, loginMessage: true, logoutMessage: true, cmp: true, floodIgnoreCheck: true, removeTag: true, randcolor: true, colormodemessage: true, lolmessage: true, pewpewpewmessage: true, hasBasicPermissions: true, hasDrizzleSwim: true, hasSandCloak: true, ChannelNames: true, staffchannel: true, testchan: true, watch: true, aliasKick: true, reconnectTrolls: true, nthNumber: true, ChannelLink: true, addChannelLinks: true, firstGen: true, randPoke: true, formatPoke: true, hasIllegalChars: true, teamSpammers: true, Feedmons: true, addEmote: true, Bot: true, guard: true, watchbot: true, setbybot: true, lolmode: true, spacemode: true, reversemode: true, colormode: true, scramblemode: true, capsmode: true, pewpewpew: true, capsbot: true, poScript: true, flbot: true
 */
 
-/* Documentation for prototype CommandList:
-   Create a command list. Example:
-   
-   var User = new CommandList("title commands", "blue");
-   User.add("cmd1", "desc for cmd1");
-   etc.
-   User.finish();
-   Lists.User = User;
-   
-   To display, use: 
-   Lists.User.display(src, chan);
-   
-   Function documentation:
-   new CommandList (title, bordercolor, help, list_type):
-   Creates a command list with title, title. The borders will be colored with bordercolor.
-   Help is the help message (default is "Type the following in the main chat in order to use them:")
-   list_type should be "ul" (unordered list) or "ol" (ordered list). Default is ul.
-   Example: var User = new CommandList("User Commands", "red", "This is the list of user commands:", "ol");
-   
-   CommandList.add (command, description):
-   Adds command with description to the command list.
-   description is useless if the title of the list did not contain "Commands" (for rules and other lists.)
-   Example: User.add("cmd1", "desc for cmd1");
-   
-   CommandList.finish ():
-   Needs to be called to finish the command list (adds final border).
-   Example: User.finish();
-   
-   CommandList.display (player, channel):
-   Displays the command list to id player in channel channel.
-   Example: User.display(1, 0);
-   
-   Note: Can also be used for rules and other lists.
-*/
 CommandList = function (title, bordercolor, help, listtype) {
     this.title = title;
     this.bordercolor = bordercolor;

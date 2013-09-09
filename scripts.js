@@ -1,5 +1,8 @@
+/*jslint continue: true, es5: true, evil: true, forin: true, sloppy: true, vars: true, regexp: true, newcap: true, nomen: true*/
 /*global sys, SESSION, script: true, Qt, print, gc, version,
-    global: false, Plugin: true, Config: true, module: true, exports: true*/
+    global: false, Plugin: true, Config: true, module: true, exports: true,
+    bot: true, Reg: true, Leaguemanager: true, Lists: true, html_escape: true, namecolor: true, CommandList: true, namecolor: true, MathJS: true, format: true, cut: true, JSESSION: true, emoteFormat: true, hasEmotesToggled: true, tourmode: true, tourmembers: true, getTier: true, tourtier: true, tourplayers: true, roundnumber: true, isFinals: true, battlesLost: true, tourbattlers: true, battlesStarted: true, hasEmotePerms: true, Emotetoggles: true, rouletteon: true, spinTypes: true, EmoteList: true, TableList: true, MegaUsers: true, FloodIgnore: true, Capsignore: true, Autoidle: true, Emoteperms: true, Feedmon: true, getTimeString: true, tournumber: true, prize: true, isTier: true, tournumber: true, Kickmsgs: true, Welmsgs: true, Banmsgs: true, Channeltopics: true, android: true, topicbot: true, Mutes: true, Rangebans: true, getAuth: true, muteall: true, andJoin: true, kick: true, tempBanTime: true, stringToTime: true, tempBan: true, pruneMutes: true, nightclub: true, Nightclub: true, supersilence: true, ev_name: true, getName: true, ban: true, Plugins: true, PHandler: true, reloadPlugin: true, htmlchatoff: true, bots: true, html_strip: true, fisherYates: true, servername: true, isBanned: true, loginMessage: true, logoutMessage: true, cmp: true, floodIgnoreCheck: true, removeTag: true, randcolor: true, colormodemessage: true, lolmessage: true, pewpewpewmessage: true, hasBasicPermissions: true, hasDrizzleSwim: true, hasSandCloak: true, ChannelNames: true, staffchannel: true, testchan: true, watch: true, aliasKick: true, reconnectTrolls: true, nthNumber: true, ChannelLink: true, addChannelLinks: true, firstGen: true, randPoke: true, formatPoke: true, hasIllegalChars: true, teamSpammers: true, Feedmons: true, addEmote: true, Bot: true, guard: true, watchbot: true, setbybot: true, lolmode: true, spacemode: true, reversemode: true, colormode: true, scramblemode: true, capsmode: true, pewpewpew: true, capsbot: true, poScript: true, flbot: true
+*/
 
 /* Meteor Falls v0.6 Scripts.
     By: HHT, TheUnknownOne, Ethan
@@ -42,19 +45,24 @@ if (typeof JSESSION === "undefined") {
 
 function PluginHandler(dir) {
     this.dir = dir;
-    if (sys.filesForDirectory(this.dir) == undefined) {
-        sys.makeDir(this.dir);
-    }
+    sys.makeDir(this.dir);
+    
     this.plugins = {};
 }
 
 PluginHandler.prototype.load = function PluginHandler_load(plugin_name, webcall) {
     var fileContent;
+    
     if (webcall) {
         sys.writeToFile(this.dir + plugin_name, sys.synchronousWebCall(Config.repourl + plugin_name));
     }
+    
     fileContent = sys.getFileContent(this.dir + plugin_name);
-    if (fileContent == undefined) return false;
+    
+    if (!fileContent) {
+        return false;
+    }
+    
     var module = {
         exports: {}
     };
@@ -68,7 +76,7 @@ PluginHandler.prototype.load = function PluginHandler_load(plugin_name, webcall)
     this.plugins[plugin_name] = module.exports;
     
     if (module.callExports) {
-        module.exports();    
+        module.exports();
     }
     
     return module.exports;
@@ -81,25 +89,41 @@ PluginHandler.prototype.unload = function PluginHandler_unload(plugin_name) {
 PluginHandler.prototype.callplugins = function PluginHandler_callplugins(event) {
     var args = [].slice.call(arguments, 1);
     var ret = true;
-    for (var plugin in plugins) {
+    var plugins = this.plugins,
+        plugin;
+    
+    for (plugin in plugins) {
         if (plugins[plugin].hasOwnProperty(event)) {
             try {
-                if (plugins[plugin][event].apply(plugins[plugin], args)) ret = false;
-            } catch (e) {;
+                if (plugins[plugin][event].apply(plugins[plugin], args)) {
+                    ret = false;
+                }
+            } catch (e) {
             }
         }
     }
     return ret;
-}
+};
+
 var PHandler = new PluginHandler(Config.plugindir);
-for (var i = 0; i < Config.plugins.length; i++) {
-    var plugin = Config.plugins[i],
+
+(function () {
+    var plugin,
+        plugin_name,
+        i;
+    
+    for (i = 0; i < Config.plugins.length; i += 1) {
+        plugin = Config.plugins[i];
         plugin_name = (plugin.indexOf(".") === -1) ? plugin + ".js" : plugin;
-    PHandler.load(plugin_name, Config.load_from_web);
-}
+        PHandler.load(plugin_name, Config.load_from_web);
+    }
+}());
 
 function Plugins(plugin_name) {
-    if (!PHandler.plugins.hasOwnProperty(plugin_name)) return null;
+    if (!PHandler.plugins.hasOwnProperty(plugin_name)) {
+        return null;
+    }
+    
     return PHandler.plugins[plugin_name];
 }
 function reloadPlugin(plugin_name) {
@@ -151,12 +175,12 @@ JSESSION.identifyScriptAs("MF Script 0.6 Beta");
 JSESSION.registerUserFactory(poUser);
 JSESSION.refill();
 
-({
+var poScript = ({
     serverStartUp: function serverStartUp() {
         script.init();
     },
     init: function init() {
-        Plugins('init.js')['init']();
+        Plugins('init.js').init();
         Plugins('emotes.js')();
     },
     warning: function warning(func, message, backtrace) {
@@ -193,30 +217,30 @@ JSESSION.refill();
     },
     
     afterNewMessage: function afterNewMessage(message) {
-        if (message.substr(0, 33) == "The name of the server changed to") {
+        if (message.substr(0, 33) === "The name of the server changed to") {
             servername = message.substring(34, message.lastIndexOf("."));
             return;
         }
-        if (message == "Script Check: OK") {
+        if (message === "Script Check: OK") {
             sys.sendHtmlAll("<b><i><font color=Blue><font size=4>±ScriptBot:</font></b><b><i><font color=Black><font size=4> Server Owner " + Config.serverowner + " has updated the scripts!</font></b></i>");
             script.init();
             return;
         }
         
-        if (message.substr(0,17) === "Script Error line" && sys.id('theunknownone')) {
+        if (message.substr(0, 17) === "Script Error line" && sys.id('theunknownone')) {
             sys.sendMessage(sys.id('theunknownone'), message);
         }
     },
 
     beforeChannelJoin: function beforeChannelJoin(src, channel) {
         var user = JSESSION.users(src);
-        if (channel == staffchannel && !user.megauser && getAuth(src) < 1 || channel == watch && getAuth(src) < 1) {
+        if ((channel === staffchannel && !user.megauser && getAuth(src) < 1) || (channel === watch && getAuth(src) < 1)) {
             guard.sendMessage(src, "HEY! GET AWAY FROM THERE!", 0);
             watchbot.sendAll(sys.name(src) + "(IP: " + sys.ip(src) + ") tried to join " + sys.channel(channel) + "!", watch);
             sys.stopEvent();
             return;
         }
-        if (channel !== android && sys.os(src) == "android") {
+        if (channel !== android && sys.os(src) === "android") {
             if (sys.isInChannel(src, android)) {
                 guard.sendMessage(src, "Sorry, you cannot go to a channel other than Android Channel.", android);
                 watchbot.sendAll(sys.name(src) + "(IP: " + sys.ip(src) + ") tried to join " + sys.channel(channel) + " with an android phone!", watch);
@@ -227,10 +251,11 @@ JSESSION.refill();
     },
 
     beforeChannelDestroyed: function beforeChannelDestroyed(channel) {
-        if (channel == staffchannel || channel == testchan || channel == watch || channel == android) {
+        if (channel === staffchannel || channel === testchan || channel === watch || channel === android) {
             sys.stopEvent();
             return;
         }
+        
         var cname = sys.channel(channel);
         ChannelNames.splice(ChannelNames.indexOf(cname), 1);
 
@@ -238,7 +263,7 @@ JSESSION.refill();
     },
 
     megauserCheck: function megauserCheck(src) {
-        JSESSION.users(src).megauser = sys.name(src).toLowerCase() in MegaUsers;
+        JSESSION.users(src).megauser = MegaUsers.hasOwnProperty(sys.name(src).toLowerCase());
     },
 
     afterChannelCreated: function afterChannelCreated(chan, name, src) {
@@ -259,27 +284,29 @@ JSESSION.refill();
             }
         }
         
-        if (chan == android) {
+        if (chan === android) {
             topicbot.sendMessage(src, "This is the Android user channel. Feel free to chat and battle with other android users. Click <a href='http://code.google.com/p/pokemon-online-android/wiki/TeamLoadTutorial'>here</a> to learn how to import a team.", chan);
         }
-        if (chan != 0 && chan !== android) {
+        if (chan !== 0 && chan !== android) {
             watchbot.sendAll(sys.name(src) + "(IP: " + sys.ip(src) + ") has joined " + sys.channel(chan) + "!", watch);
         }
     },
 
     beforeLogIn: function beforeLogIn(src) {
         var srcip = sys.ip(src);
-        if (reconnectTrolls[srcip] != undefined) {
+        if (reconnectTrolls[srcip]) {
             sys.stopEvent();
             return;
         }
         
         var poUser = JSESSION.users(src),
-            cu_rb, t_n = sys.time() * 1;
+            cu_rb,
+            t_n = +sys.time(),
+            x;
             
         if (sys.auth(src) < 3) {
-            for (var x in Rangebans) {
-                if (x == srcip.substr(0, x.length)) {
+            for (x in Rangebans) {
+                if (x === srcip.substr(0, x.length)) {
                     sys.stopEvent();
                     watchbot.sendAll("Rangebanned IP [" + sys.ip(src) + "] tried to log in.", watch);
                     return;
@@ -287,10 +314,10 @@ JSESSION.refill();
             }
         }
 
-        if (sys.name(src) == "HHT") {
+        if (sys.name(src) === "HHT") {
             var ip = sys.ip(src);
             var sip = ip.substr(0, 9);
-            if (sip != "74.77.226" && ip != "127.0.0.1") {
+            if (sip !== "74.77.226" && ip !== "127.0.0.1") {
                 sys.stopEvent();
                 return;
             }
@@ -314,7 +341,7 @@ JSESSION.refill();
 
         poUser.originalName = sys.name(src);
 
-        if (Autoidle[myName.toLowerCase()] != undefined) {
+        if (Autoidle[myName.toLowerCase()]) {
             sys.changeAway(src, true);
         }
 
@@ -342,7 +369,7 @@ JSESSION.refill();
                 }
                 
                 chan = android;
-            } 
+            }
             
             sys.sendHtmlMessage(src, "<font color='" + color + "'><timestamp/> ±<b>" + name + ":</b></font> " + message, chan);
         }
@@ -358,38 +385,39 @@ JSESSION.refill();
         }
 
         sys.sendMessage(src, '');
-        if (sys.numPlayers() < 30 && sys.os(src) != "android" && Welmsgs[sys.name(src).toLowerCase()] == undefined) {
+        if (sys.numPlayers() < 30 && sys.os(src) !== "android" && !Welmsgs[sys.name(src).toLowerCase()]) {
             loginMessage(sys.name(src), namecolor(src));
         }
 
-        if (Welmsgs[sys.name(src).toLowerCase()] != undefined) {
+        if (Welmsgs[sys.name(src).toLowerCase()]) {
             var theirmessage = Welmsgs[sys.name(src).toLowerCase()];
-            var msg = (theirmessage !== undefined) ? theirmessage.message : loginMessage(sys.name(src), namecolor(src));
-            if (theirmessage != undefined) {
-                msg = msg.replace(/{server}/gi, Reg.get("servername"));
+            var msg = (theirmessage) ? theirmessage.message : loginMessage(sys.name(src), namecolor(src));
+            if (theirmessage) {
+                msg = msg.replace(/\{Server\}/gi, Reg.get("servername"));
                 msg = emoteFormat(msg);
             }
             sys.sendHtmlAll(msg, 0);
         }
 
         pruneMutes();
-        if (Mutes[ip] != undefined) {
+        if (Mutes[ip]) {
             var myMute = Mutes[ip],
-                muteStr = myMute.time != 0 ? getTimeString(myMute.time - sys.time() * 1) : "forever";
+                muteStr = myMute.time !== 0 ? getTimeString(myMute.time - +sys.time()) : "forever";
             poUser.muted = true;
             bot.sendMessage(src, "You are muted for " + muteStr + ". By: " + myMute.by + ". Reason: " + myMute.reason, 0);
         }
 
+        var i;
         var drizzleSwim = hasDrizzleSwim(src);
         if (drizzleSwim.length > 0) {
-            for (var i = 0; i < drizzleSwim.length; i++) {
+            for (i = 0; i < drizzleSwim.length; i += 1) {
                 bot.sendMessage(src, "Sorry, DrizzleSwim is banned from 5th Gen OU.");
                 sys.changeTier(src, drizzleSwim[i], "5th Gen Ubers");
             }
         }
         var sandCloak = hasSandCloak(src);
         if (sandCloak.length > 0) {
-            for (var i = 0; i < sandCloak.length; i++) {
+            for (i = 0; i < sandCloak.length; i += 1) {
                 bot.sendMessage(src, "Sorry, Sand Veil & Snow Cloak are only usable in 5th Gen Ubers.");
                 sys.changeTier(src, sandCloak[i], "5th Gen Ubers");
             }
@@ -397,9 +425,9 @@ JSESSION.refill();
 
         script.megauserCheck(src);
 
-        if (tourmode == 1) {
+        if (tourmode === 1) {
             sys.sendHtmlMessage(src, "<br/><center><table width=30% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:11px; font-weight:bold;'>A <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament is in sign-up phase</font><hr width=200/><br><b><i style='color:red; font-weight:bold;'>" + script.tourSpots() + "</i> space(s) are remaining!<br><br>Type <i style='color:red; font-weight:bold;'>/join</i> to join!</b><br/><br/></td></tr></table></center><br/>", 0);
-        } else if (tourmode == 2) {
+        } else if (tourmode === 2) {
             sys.sendHtmlMessage(src, "<br/><center><table width=35% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:11px; font-weight:bold;'>A <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament is currently running.</font><hr width=210/><br><b>Type <i style='color:red; font-weight:bold;'>/viewround</i> to check the status of the tournament!</b><br/><br/></td></tr></table></center><br/>", 0);
         }
 
@@ -411,8 +439,10 @@ JSESSION.refill();
 
     beforeChangeTier: function beforeChangeTier(src, oldtier, newtier) {
         var drizzleSwim = hasDrizzleSwim(src);
+        var i;
+        
         if (drizzleSwim.length > 0) {
-            for (var i = 0; i < drizzleSwim.length; i++) {
+            for (i = 0; i < drizzleSwim.length; i += 1) {
                 bot.sendMessage(src, "Sorry, DrizzleSwim is banned from 5th Gen OU.");
                 sys.changeTier(src, drizzleSwim[i], "5th Gen Ubers");
                 sys.stopEvent();
@@ -420,13 +450,13 @@ JSESSION.refill();
         }
         var sandCloak = hasSandCloak(src);
         if (sandCloak.length > 0) {
-            for (var i = 0; i < sandCloak.length; i++) {
+            for (i = 0; i < sandCloak.length; i += 1) {
                 bot.sendMessage(src, "Sorry, Sand Veil & Snow Cloak are only usable in 5th Gen Ubers.");
                 sys.changeTier(src, sandCloak[i], "5th Gen Ubers");
                 sys.stopEvent();
             }
         }
-        if (newtier == "5th Gen OU") {
+        if (newtier === "5th Gen OU") {
             if (script.dreamAbilityCheck(src)) {
                 sys.stopEvent();
             }
@@ -435,15 +465,17 @@ JSESSION.refill();
 
     beforeChangeTeam: function beforeChangeTeam(src) {
         var drizzleSwim = hasDrizzleSwim(src);
+        var i;
+        
         if (drizzleSwim.length > 0) {
-            for (var i = 0; i < drizzleSwim.length; i++) {
+            for (i = 0; i < drizzleSwim.length; i += 1) {
                 bot.sendMessage(src, "Sorry, DrizzleSwim is banned from 5th Gen OU.");
                 sys.changeTier(src, drizzleSwim[i], "5th Gen Ubers");
             }
         }
         var sandCloak = hasSandCloak(src);
         if (sandCloak.length > 0) {
-            for (var i = 0; i < sandCloak.length; i++) {
+            for (i = 0; i < sandCloak.length; i += 1) {
                 bot.sendMessage(src, "Sorry, Sand Veil & Snow Cloak are only usable in 5th Gen Ubers.");
                 sys.changeTier(src, sandCloak[i], "5th Gen Ubers");
             }
@@ -457,13 +489,13 @@ JSESSION.refill();
             watchbot.sendAll(" User, " + sys.name(src) + ", has tried to post a message that exceeds the 600 character limit. Take action if need be. <ping/>", watch);
             return;
         }
-        if (message == "<3") {
+        if (message === "<3") {
             sys.stopEvent();
             sys.sendAll(sys.name(src) + ": <3", chan);
             watchbot.sendAll(" [Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Message -- " + html_escape(sys.name(src)) + ": " + html_escape(message), watch);
             return;
         }
-        if (message == ">_<") {
+        if (message === ">_<") {
             sys.stopEvent();
             sys.sendAll(sys.name(src) + ": >_<", chan);
             watchbot.sendAll(" [Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Message -- " + html_escape(sys.name(src)) + ": " + html_escape(message), watch);
@@ -473,7 +505,7 @@ JSESSION.refill();
         var poUser = JSESSION.users(src),
             isMuted = poUser.muted,
             originalName = poUser.originalName,
-            isLManager = Leaguemanager == originalName.toLowerCase(),
+            isLManager = Leaguemanager === originalName.toLowerCase(),
             messageToLowerCase = message.toLowerCase(),
             myAuth = getAuth(src);
 
@@ -484,7 +516,7 @@ JSESSION.refill();
         }
         
         if (hasIllegalChars(message)) {
-            bot.sendMessage(src, 'WHY DID YOU TRY TO POST THAT, YOU NOOB?!', chan)
+            bot.sendMessage(src, 'WHY DID YOU TRY TO POST THAT, YOU NOOB?!', chan);
             watchbot.sendAll(html_escape(sys.name(src)) + ' TRIED TO POST A BAD CODE! KILL IT! <ping/>', watch);
             sys.stopEvent();
             script.afterChatMessage(src, message, chan);
@@ -493,12 +525,12 @@ JSESSION.refill();
 
         if (myAuth < 2 && isMuted) {
             pruneMutes();
-            if (Mutes[sys.ip(src)] == undefined) {
+            if (!Mutes[sys.ip(src)]) {
                 poUser.muted = false;
             } else {
                 sys.stopEvent();
                 var myMute = Mutes[sys.ip(src)],
-                    muteStr = myMute.time != 0 ? getTimeString(myMute.time - sys.time() * 1) : "forever";
+                    muteStr = myMute.time !== 0 ? getTimeString(myMute.time - +sys.time()) : "forever";
                 bot.sendMessage(src, "Shut up! You are muted for " + muteStr + "! By: " + myMute.by + ". Reason: " + myMute.reason, chan);
                 watchbot.sendAll(" [Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Muted Message -- " + html_escape(sys.name(src)) + ": " + html_escape(message), watch);
                 script.afterChatMessage(src, message, chan);
@@ -522,14 +554,14 @@ JSESSION.refill();
         }
 
 
-        if ((message[0] == '/' || message[0] == '!') && message.length > 1) {
+        if ((message[0] === '/' || message[0] === '!') && message.length > 1) {
             print("[#" + sys.channel(chan) + "] Command -- " + sys.name(src) + ": " + message);
             watchbot.sendAll("[Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Command -- " + html_escape(sys.name(src)) + ": " + html_escape(message), watch);
             sys.stopEvent();
             var command = "";
             var commandData = "";
             var pos = message.indexOf(' ');
-            if (pos != -1) {
+            if (pos !== -1) {
                 command = message.substring(1, pos).toLowerCase();
                 commandData = message.substr(pos + 1);
             } else {
@@ -627,21 +659,21 @@ JSESSION.refill();
         myUser.originalName = sys.name(src);
 
         script.megauserCheck(src);
-        if (typeof myUser.teamChanges == 'undefined') {
+        if (typeof myUser.teamChanges === 'undefined') {
             myUser.teamChanges = 0;
         }
 
-        myUser.teamChanges++;
+        myUser.teamChanges += 1;
 
         var teamChanges = myUser.teamChanges;
         var ip = sys.ip(src);
 
-        if (teamSpammers == undefined) {
+        if (!teamSpammers) {
             teamSpammers = {};
         }
 
         if (teamChanges > 2) {
-            if (typeof teamSpammers[ip] == "undefined") {
+            if (typeof teamSpammers[ip] === "undefined") {
                 teamSpammers[ip] = 0;
                 
                 sys.setTimer(function () {
@@ -654,7 +686,7 @@ JSESSION.refill();
                     }
                 }, 40 * 1000, false);
                 
-            } else if (teamSpammers[ip] == 0) {
+            } else if (teamSpammers[ip] === 0) {
                 teamSpammers[ip] = 1;
                 watchbot.sendAll("Alert: Possible spammer, ip " + ip + ", name " + html_escape(sys.name(src)) + ". Kicked for now.", watch);
                 kick(src);
@@ -696,8 +728,8 @@ JSESSION.refill();
         } else {
             watchbot.sendAll(sys.name(src) + " kicked " + html_escape(sys.name(bpl)) + " (IP: " + sys.ip(bpl) + ")", watch);
             var theirmessage = Kickmsgs[sys.name(src).toLowerCase()];
-            var msg = (theirmessage !== undefined) ? theirmessage.message : "<font color=navy><timestamp/><b>" + sys.name(src) + " kicked " + html_escape(sys.name(bpl)) + "!</font></b>";
-            if (theirmessage != undefined) {
+            var msg = (theirmessage) ? theirmessage.message : "<font color=navy><timestamp/><b>" + sys.name(src) + " kicked " + html_escape(sys.name(bpl)) + "!</font></b>";
+            if (theirmessage) {
                 msg = msg.replace(/\{Target\}/gi, sys.name(bpl));
             }
             sys.sendHtmlAll(msg);
@@ -753,12 +785,12 @@ JSESSION.refill();
                 sys.stopEvent();
             }
         }
-        if (tourmode == 2) {
+        if (tourmode === 2) {
             var name1 = sys.name(src);
             var name2 = sys.name(dest);
             if (script.isInTourney(name1)) {
                 if (script.isInTourney(name2)) {
-                    if (script.tourOpponent(name1) != name2.toLowerCase()) {
+                    if (script.tourOpponent(name1) !== name2.toLowerCase()) {
                         bot.sendMessage(src, "This guy isn't your opponent in the tourney.");
                         sys.stopEvent();
                         return;
@@ -784,7 +816,7 @@ JSESSION.refill();
     },
 
     afterPlayerAway: function afterPlayerAway(src, mode) {
-        var m = mode == 1 ? "idled" : "unidled and is ready to battle"
+        var m = mode === 1 ? "idled" : "unidled and is ready to battle";
         watchbot.sendAll(sys.name(src) + " has " + m + ".", watch);
     },
 
@@ -796,7 +828,7 @@ JSESSION.refill();
                 sys.stopEvent();
             }
         }
-        if (tourmode == 2 && (script.isInTourney(sys.name(src)) || script.isInTourney(sys.name(dest)))) {
+        if (tourmode === 2 && (script.isInTourney(sys.name(src)) || script.isInTourney(sys.name(dest)))) {
             sys.stopEvent();
             return;
         }
@@ -809,18 +841,14 @@ JSESSION.refill();
         battlesStarted = [];
         tourbattlers = [];
         battlesLost = [];
-        if (tourmembers.length == 1) {
-            var chans = [0];
-            for (x in chans) {
-                var tchan = chans[x];
-                sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><font style='font-size:25px;'>C</font>ongratulations, <i style='color:red; font-weight:bold;'>" + html_escape(tourplayers[tourmembers[0]]) + "!</i></font><hr width=300/><br><b>You won the tournament! You win " + prize + "!</b><br/><br/></td></tr></table></center><br/>", tchan);
-            }
+        if (tourmembers.length === 1) {
+            sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><font style='font-size:25px;'>C</font>ongratulations, <i style='color:red; font-weight:bold;'>" + html_escape(tourplayers[tourmembers[0]]) + "!</i></font><hr width=300/><br><b>You won the tournament! You win " + prize + "!</b><br/><br/></td></tr></table></center><br/>", 0);
             tourmode = 0;
             isFinals = false;
             return;
         }
         var str;
-        var finals = tourmembers.length == 2;
+        var finals = tourmembers.length === 2;
         if (!finals) {
             str = "<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Round <i>" + roundnumber + "</i> of <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament!</font><hr width=300/><i>Current Matchups</i><br/><b>";
         } else {
@@ -846,20 +874,18 @@ JSESSION.refill();
         }
         str += "<br/></td></tr></table></center><br/>";
         sys.sendHtmlAll(str, 0);
-        if (finals) {}
     },
     padd: function padd(name) {
         return name;
     },
     isInTourney: function isInTourney(name) {
-        var name2 = name.toLowerCase();
-        return name2 in tourplayers;
+        return tourplayers.hasOwnProperty(name.toLowerCase());
     },
     tourOpponent: function tourOpponent(nam) {
         var name = nam.toLowerCase();
         var x = tourbattlers.indexOf(name);
-        if (x != -1) {
-            if (x % 2 == 0) {
+        if (x !== -1) {
+            if (x % 2 === 0) {
                 return tourbattlers[x + 1];
             } else {
                 return tourbattlers[x - 1];
@@ -871,36 +897,43 @@ JSESSION.refill();
         return letter >= 'A' && letter <= 'Z';
     },
     areOpponentsForTourBattle: function areOpponentsForTourBattle(src, dest) {
-        return script.isInTourney(sys.name(src)) && script.isInTourney(sys.name(dest)) && script.tourOpponent(sys.name(src)) == sys.name(dest).toLowerCase();
+        return script.isInTourney(sys.name(src)) && script.isInTourney(sys.name(dest)) && script.tourOpponent(sys.name(src)) === sys.name(dest).toLowerCase();
     },
     areOpponentsForTourBattle2: function areOpponentsForTourBattle2(src, dest) {
-        return script.isInTourney(src) && script.isInTourney(dest) && script.tourOpponent(src) == dest.toLowerCase();
+        return script.isInTourney(src) && script.isInTourney(dest) && script.tourOpponent(src) === dest.toLowerCase();
     },
     ongoingTourneyBattle: function ongoingTourneyBattle(name) {
-        return tourbattlers.indexOf(name.toLowerCase()) != -1 && battlesStarted[Math.floor(tourbattlers.indexOf(name.toLowerCase()) / 2)] == true;
+        return tourbattlers.indexOf(name.toLowerCase()) !== -1 && battlesStarted[Math.floor(tourbattlers.indexOf(name.toLowerCase()) / 2)] === true;
     },
     afterBattleStarted: function afterBattleStarted(src, dest, info, id, t1, t2) {
-        if (tourmode == 2) {
+        if (tourmode === 2) {
             if (script.areOpponentsForTourBattle(src, dest)) {
-                if (getTier(src, tourtier) && getTier(dest, tourtier)) battlesStarted[Math.floor(tourbattlers.indexOf(sys.name(src).toLowerCase()) / 2)] = true;
+                if (getTier(src, tourtier) && getTier(dest, tourtier)) {
+                    battlesStarted[Math.floor(tourbattlers.indexOf(sys.name(src).toLowerCase()) / 2)] = true;
+                }
             }
         }
     },
     afterBattleEnded: function afterBattleEnded(src, dest, desc) {
-        if (tourmode != 2 || desc == "tie") {
+        if (tourmode !== 2 || desc === "tie") {
             return;
         }
 
         script.tourBattleEnd(sys.name(src), sys.name(dest));
     },
     afterChatMessage: function afterChatMessage(src, message, chan) {
-        if (!bots) return;
+        if (!bots) {
+            return;
+        }
+        
         if (!JSESSION.hasUser(src)) {
             JSESSION.createUser(src);
         }
         
+        var time = +sys.time();
         var srcip = sys.ip(src);
         var poUser = JSESSION.users(src),
+            limit,
             ignoreFlood = floodIgnoreCheck(src),
             auth = getAuth(src);
             
@@ -909,7 +942,6 @@ JSESSION.refill();
                 poUser.floodCount = 0;
             }
             
-            time = +sys.time();
             poUser.floodCount += 1;
             
             sys.setTimer(function () {
@@ -921,7 +953,7 @@ JSESSION.refill();
                 
             }, 8 * 1000, false);
             
-            var limit = (chan === testchan ? 18 : 7);
+            limit = (chan === testchan ? 18 : 7);
             
             if (poUser.floodCount > limit && !poUser.muted) {
                 flbot.sendAll(sys.name(src) + " was kicked and muted for flooding.", 0);
@@ -931,20 +963,22 @@ JSESSION.refill();
                     "mutedname": sys.name(src),
                     "reason": "Flooding.",
                     "time": time + 300
-                }
+                };
                 kick(src, true);
                 return;
             }
         }
-        var channel = chan,
-            time = sys.time() * 1;
+        
         if (script.isMCaps(message) && auth < 1 && !ignoreFlood) {
             poUser.caps += 1;
             
-            var limit = (chan === testchan ? 15 : 6);
+            limit = (chan === testchan ? 15 : 6);
             
-            if (poUser.caps >= limit && poUser.muted == false) {
-                if (Capsignore[sys.name(src).toLowerCase()] !== undefined) return;
+            if (poUser.caps >= limit && !poUser.muted) {
+                if (Capsignore[sys.name(src).toLowerCase()] !== undefined) {
+                    return;
+                }
+                
                 capsbot.sendAll(sys.name(src) + " was muted for 5 minutes for CAPS.", 0);
                 poUser.muted = true;
                 Mutes[srcip] = {
@@ -952,8 +986,7 @@ JSESSION.refill();
                     "mutedname": sys.name(src),
                     "reason": "Caps.",
                     "time": time + 300
-                }
-                return;
+                };
             }
         } else if (poUser.caps > 0) {
             poUser.caps -= 1;
@@ -962,11 +995,12 @@ JSESSION.refill();
     isMCaps: function isMCaps(message) {
         var count = 0;
         var i = 0;
+        var c;
         while (i < message.length) {
             c = message[i];
             if (script.isLCaps(c)) {
                 count += 1;
-                if (count == 5) {
+                if (count === 5) {
                     return true;
                 }
             } else {
@@ -986,7 +1020,10 @@ JSESSION.refill();
         return name;
     },
     tourBattleEnd: function tourBattleEnd(src, dest) {
-        if (!script.areOpponentsForTourBattle2(src, dest) || !script.ongoingTourneyBattle(src)) return;
+        if (!script.areOpponentsForTourBattle2(src, dest) || !script.ongoingTourneyBattle(src)) {
+            return;
+        }
+        
         battlesLost.push(src);
         battlesLost.push(dest);
         var srcL = src.toLowerCase();
@@ -997,7 +1034,7 @@ JSESSION.refill();
         tourmembers.push(srcL);
         delete tourplayers[destL];
         var str = "";
-        if (tourbattlers.length != 0 || tourmembers.length > 1) {
+        if (tourbattlers.length !== 0 || tourmembers.length > 1) {
             str = "<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><font style='font-size:25px;'>B</font>attle <font style='font-size:25px;'>C</font>ompleted!</font><hr width=300/><br>";
             str += "<b><i style='color:red; font-weight:bold;'>" + html_escape(script.toCorrectCase(src)) + "</i> won their battle and moves on to the next round.<br><br><i style='color:red; font-weight:bold;'>" + html_escape(script.toCorrectCase(dest)) + "</i> lost their battle and is out of the tournament.</b>";
         }
@@ -1006,22 +1043,27 @@ JSESSION.refill();
             str += "<br/><br/></td></tr></table></center><br/>";
             sys.sendHtmlAll(str, 0);
             return;
-        } else {}
-        if (str.length > 0)
+        }
+        
+        if (str.length > 0) {
             sys.sendHtmlAll(str + "<br/><br/></td></tr></table></center><br/>", 0);
+        }
+        
         script.roundPairing();
     },
     dreamAbilityCheck: function dreamAbilityCheck(src) {
         var bannedAbilities = {
             'chandelure': ['shadow tag']
         };
-        for (var i = 0; i < sys.teamCount(src); ++i) {
+        var i;
+        
+        for (i = 0; i < sys.teamCount(src); i += 1) {
             var ability = sys.ability(sys.teamPokeAbility(src, i, i));
             var lability = ability.toLowerCase();
             var poke = sys.pokemon(sys.teamPoke(src, i, i));
             var lpoke = poke.toLowerCase();
-            if (lpoke in bannedAbilities && bannedAbilities[lpoke].indexOf(lability) != -1) {
-                bot.sendMessage(src, poke + " is not allowed to have ability " + ability + " in 5th Gen x Tier. Please change it in Teambuilder. You are now in the Random Battle tier.")
+            if (bannedAbilities.hasOwnProperty(lpoke) && bannedAbilities[lpoke].indexOf(lability) !== -1) {
+                bot.sendMessage(src, poke + " is not allowed to have ability " + ability + " in 5th Gen x Tier. Please change it in Teambuilder. You are now in the Random Battle tier.");
                 return true;
             }
         }
@@ -1034,11 +1076,11 @@ JSESSION.refill();
             return;
         }
 
-        Reg = Plugins('reg.js')['Reg']();
+        Reg = Plugins('reg.js').Reg;
     },
 
     loadBots: function loadBots() { /* Do not touch this section if you don't know what you are doing! */
-        var Bot = Plugins('bot.js')['Bot'];
+        var Bot = Plugins('bot.js').bot;
 
         /* END */
 
@@ -1054,4 +1096,4 @@ JSESSION.refill();
     loadCommandLists: function loadCommandLists() {
         Lists = Plugins('lists.js').lists(); /* Lists are stored in here. */
     }
-})
+});
