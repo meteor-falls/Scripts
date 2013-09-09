@@ -77,6 +77,9 @@ PluginHandler.prototype.load = function PluginHandler_load(plugin_name, webcall)
         sys.sendAll("Error loading plugin " + plugin_name + ": " + e + " on line " + e.lineNumber);
         return false;
     }
+    
+    print("Loaded module " + plugin_name);
+    
     this.plugins[plugin_name] = module.exports;
     
     if (module.callExports) {
