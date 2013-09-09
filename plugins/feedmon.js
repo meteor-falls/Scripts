@@ -145,7 +145,7 @@ module.exports = function () {
         }
         
         var generateLevel = [],
-            list,
+            list = [],
             i;
         
         for (i = 1; generateLevel.length !== 100; i += 1) {
