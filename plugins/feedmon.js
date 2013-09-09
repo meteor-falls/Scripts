@@ -148,10 +148,10 @@ module.exports = function () {
             i;
         
         _table = new TableList("EXP", "stripe", 1, 2, "navy");
-        _table.add(["Level", "EXP", "", "Level", "EXP", "", "Level", "EXP", "", "Level", "EXP", "", "Level", "EXP"], true);
+        _table.add(["Level", "EXP", "Level", "EXP", "Level", "EXP", "Level", "EXP", "Level", "EXP", "Level", "EXP", "Level", "EXP", "Level", "EXP", "Level", "EXP", "Level", "EXP"], true);
         
-        for (i = 0, len = exp.length; i < len; i += 5) {
-            _table.add([i + 1, exp[i], "", i + 2, exp[i + 1], "", i + 3, exp[i + 2], "", i + 4, exp[i + 3], "", i + 5, exp[i + 4]], false);
+        for (i = 0, len = exp.length; i < len; i += 10) {
+            _table.add([i + 1, exp[i], i + 2, exp[i + 1], i + 3, exp[i + 2], i + 4, exp[i + 3], i + 5, exp[i + 4], i + 6, exp[i + 5], i + 7, exp[i + 6], i + 8, exp[i + 7], i + 9, exp[i + 8], i + 10, exp[i + 9]], false);
         }
         
         _table.finish();
