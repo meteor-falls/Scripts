@@ -30,7 +30,7 @@ var Config = {
     },
 
     // Do not touch unless you are adding a new plugin.
-    plugins: ['jsession', 'bot', 'utils', 'emotes', 'feedmon', 'init', 'lists', 'mathjs', 'commands'], // Plugins to load on script load.
+    plugins: ['jsession', 'bot', 'reg', 'utils', 'emotes', 'feedmon', 'init', 'lists', 'mathjs', 'commands'], // Plugins to load on script load.
     
     load_from_web: true, // Whether or not to load plugins from repourl. If set to false, they will load locally.
     stripHtmlFromChannelMessages: true, // If HTML should be stripped from channel messages outputted onto the server window.
@@ -71,7 +71,6 @@ PluginHandler.prototype.load = function PluginHandler_load(plugin_name, webcall)
         exports: {}
     };
     
-    print("Loading module " + plugin_name);
     var exports = module.exports;
     try {
         eval(fileContent);
@@ -182,7 +181,9 @@ JSESSION.identifyScriptAs("MF Script 0.6 Beta");
 JSESSION.registerUserFactory(poUser);
 JSESSION.refill();
 
-var poScript = ({
+var poScript;
+
+poScript = ({
     serverStartUp: function serverStartUp() {
         script.init();
     },
@@ -236,6 +237,24 @@ var poScript = ({
         
         if (message.substr(0, 17) === "Script Error line" && sys.id('theunknownone')) {
             sys.sendMessage(sys.id('theunknownone'), message);
+        }
+    },
+    
+    beforeServerMessage: function (message) {
+        var isEval = message.substr(0, 2) === ">>",
+            evalCode;
+        
+        if (isEval) {
+            sys.stopEvent();
+            
+            evalCode = message.substr(2);
+            print(message);
+            try {
+                print(eval(evalCode));
+            } catch (ex) {
+                print(ex);
+                print(ex.backtracetext);
+            }
         }
     },
 
@@ -1082,11 +1101,9 @@ var poScript = ({
 
         Reg = Plugins('reg.js').Reg();
     },
-
-    loadBots: function loadBots() { /* Do not touch this section if you don't know what you are doing! */
-        var Bot = Plugins('bot.js').bot;
-
-        /* END */
+    
+    loadBots: function loadBots() {
+        var Bot = Plugins('bot.js').Bot;
 
         bot = new Bot("Bot", "blue");
         guard = new Bot("Guard", "darkred");
@@ -1096,8 +1113,8 @@ var poScript = ({
         capsbot = new Bot("CAPSBot", "mediumseagreen");
         flbot = new Bot("FloodBot", "mediumseagreen");
     },
-
+    
     loadCommandLists: function loadCommandLists() {
-        Lists = Plugins('lists.js').lists(); /* Lists are stored in here. */
+        Lists = Plugins('lists.js').lists();
     }
 });

@@ -58,7 +58,6 @@ module.exports = {
 
         script.loadRegHelper();
         script.loadBots();
-        print("Registry has been loaded.");
 
         var configFile = sys.getFileContent("config").split("\n"),
             x,
@@ -498,7 +497,6 @@ module.exports = {
         };
 
         script.loadCommandLists();
-        print("Command lists loaded into memory.");
 
         nthNumber = function (num) {
             var nthNum = {
