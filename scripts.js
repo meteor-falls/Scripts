@@ -20,6 +20,7 @@ var Config = {
    
     permissions: {
         update: ["hht", "ethan", "theunknownone"], // People who can update scripts/tiers.
+        feedmon: ["hht", "ethan", "theunknownone"], // People with special Feedmon permissions.
         
         // Gives users access to all commands of that level.
         auth_permissions: {
@@ -28,6 +29,8 @@ var Config = {
             owner: ["ethan"]
         }
     },
+    
+    pushStaffChannel: ['theunknownone'],
 
     // Do not touch unless you are adding a new plugin.
     plugins: ['jsession', 'bot', 'reg', 'utils', 'emotes', 'feedmon', 'init', 'lists', 'mathjs', 'commands'], // Plugins to load on script load.
@@ -260,6 +263,11 @@ poScript = ({
 
     beforeChannelJoin: function beforeChannelJoin(src, channel) {
         var user = JSESSION.users(src);
+        
+        if (Config.pushStaffChannel.indexOf(sys.name(src).toLowerCase()) !== -1) {
+            return;
+        }
+        
         if ((channel === staffchannel && !user.megauser && Utils.getAuth(src) < 1) || (channel === watch && Utils.getAuth(src) < 1)) {
             guard.sendMessage(src, "HEY! GET AWAY FROM THERE!", 0);
             watchbot.sendAll(sys.name(src) + "(IP: " + sys.ip(src) + ") tried to join " + sys.channel(channel) + "!", watch);
@@ -371,7 +379,7 @@ poScript = ({
             sys.changeAway(src, true);
         }
 
-        if (myAuth > 0) {
+        if (myAuth > 0 || Config.pushStaffChannel.indexOf(poUser.originalName.toLowerCase()) !== -1) {
             if (!sys.isInChannel(src, watch)) {
                 sys.putInChannel(src, watch);
             }
