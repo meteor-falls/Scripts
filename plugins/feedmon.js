@@ -29,7 +29,9 @@ module.exports = function () {
     
     function checkTimeout(name, timeout) {
         var player = ensurePlayer(name);
-        return player.timeout !== 0 && player[timeout || 'timeout'] > (+sys.time());
+        
+        timeout = timeout || 'timeout';
+        return player[timeout] !== 0 && player[timeout] > (+sys.time());
     }
     
     function randomPokemon() {
