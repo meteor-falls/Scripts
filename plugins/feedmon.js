@@ -14,8 +14,9 @@
 
 
 module.exports = function () {
-    var FEEDMON_VERSION = 3,
-        FEEDMON_TABLE = 'Feedmon_v' + FEEDMON_VERSION;
+    var FEEDMON_VERSION = 3.1,
+        FEEDMON_TABLE = 'Feedmon_v' + FEEDMON_VERSION,
+        HAPPINESS_GAIN = 0.07;
     
     var attackingMoves = ["Pound", "Karate Chop", "DoubleSlap", "Comet Punch", "Mega Punch", "Pay Day", "Fire Punch", "Ice Punch", "ThunderPunch", "Scratch", "ViceGrip", "Guillotine", "Razor Wind", "Cut", "Gust", "Wing Attack", "Fly", "Bind", "Slam", "Vine Whip", "Stomp", "Double Kick", "Mega Kick", "Jump Kick", "Rolling Kick", "Headbutt", "Horn Attack", "Fury Attack", "Horn Drill", "Tackle", "Body Slam", "Wrap", "Take Down", "Thrash", "Double-Edge", "Poison Sting", "Twineedle", "Pin Missile", "Bite", "SonicBoom", "Acid", "Ember", "Flamethrower", "Water Gun", "Hydro Pump", "Surf", "Ice Beam", "Blizzard", "Psybeam", "BubbleBeam", "Aurora Beam", "Hyper Beam", "Peck", "Drill Peck", "Submission", "Low Kick", "Counter", "Seismic Toss", "Strength", "Absorb", "Mega Drain", "Razor Leaf", "SolarBeam", "Petal Dance", "Dragon Rage", "Fire Spin", "ThunderShock", "Thunderbolt", "Thunder", "Rock Throw", "Earthquake", "Fissure", "Dig", "Confusion", "Psychic", "Quick Attack", "Rage", "Night Shade", "Bide", "Selfdestruct", "Egg Bomb", "Lick", "Smog", "Sludge", "Bone Club", "Fire Blast", "Waterfall", "Clamp", "Swift", "Skull Bash", "Spike Cannon", "Constrict", "Hi Jump Kick", "Dream Eater", "Barrage", "Leech Life", "Sky Attack", "Bubble", "Dizzy Punch", "Psywave", "Crabhammer", "Explosion", "Fury Swipes", "Bonemerang", "Rock Slide", "Hyper Fang", "Tri Attack", "Super Fang", "Slash", "Struggle", "Triple Kick", "Thief", "Flame Wheel", "Snore", "Flail", "Aeroblast", "Reversal", "Powder Snow", "Mach Punch", "Faint Attack", "Sludge Bomb", "Mud-Slap", "Octazooka", "Zap Cannon", "Icy Wind", "Bone Rush", "Outrage", "Giga Drain", "Rollout", "False Swipe", "Spark", "Fury Cutter", "Steel Wing", "Return", "Present", "Frustration", "Sacred Fire", "Magnitude", "DynamicPunch", "Megahorn", "DragonBreath", "Pursuit", "Rapid Spin", "Iron Tail", "Metal Claw", "Vital Throw", "Hidden Power", "Cross Chop", "Twister", "Crunch", "Mirror Coat", "ExtremeSpeed", "AncientPower", "Shadow Ball", "Future Sight", "Rock Smash", "Whirlpool", "Beat Up", "Fake Out", "Uproar", "Spit Up", "Heat Wave", "Facade", "Focus Punch", "SmellingSalt", "Superpower", "Revenge", "Brick Break", "Knock Off", "Endeavor", "Eruption", "Secret Power", "Dive", "Arm Thrust", "Luster Purge", "Mist Ball", "Blaze Kick", "Ice Ball", "Needle Arm", "Hyper Voice", "Poison Fang", "Crush Claw", "Blast Burn", "Hydro Cannon", "Meteor Mash", "Astonish", "Weather Ball", "Air Cutter", "Overheat", "Rock Tomb", "Silver Wind", "Water Spout", "Signal Beam", "Shadow Punch", "Extrasensory", "Sky Uppercut", "Sand Tomb", "Sheer Cold", "Muddy Water", "Bullet Seed", "Aerial Ace", "Icicle Spear", "Dragon Claw", "Frenzy Plant", "Bounce", "Mud Shot", "Poison Tail", "Covet", "Volt Tackle", "Magical Leaf", "Leaf Blade", "Rock Blast", "Shock Wave", "Water Pulse", "Doom Desire", "Psycho Boost", "Wake-Up Slap", "Hammer Arm", "Gyro Ball", "Brine", "Natural Gift", "Feint", "Pluck", "Metal Burst", "U-turn", "Close Combat", "Payback", "Assurance", "Fling", "Trump Card", "Wring Out", "Punishment", "Last Resort", "Sucker Punch", "Flare Blitz", "Force Palm", "Aura Sphere", "Poison Jab", "Dark Pulse", "Night Slash", "Aqua Tail", "Seed Bomb", "Air Slash", "X-Scissor", "Bug Buzz", "Dragon Pulse", "Dragon Rush", "Power Gem", "Drain Punch", "Vacuum Wave", "Focus Blast", "Energy Ball", "Brave Bird", "Earth Power", "Giga Impact", "Bullet Punch", "Avalanche", "Ice Shard", "Shadow Claw", "Thunder Fang", "Ice Fang", "Fire Fang", "Shadow Sneak", "Mud Bomb", "Psycho Cut", "Zen Headbutt", "Mirror Shot", "Flash Cannon", "Rock Climb", "Draco Meteor", "Discharge", "Lava Plume", "Leaf Storm", "Power Whip", "Rock Wrecker", "Cross Poison", "Gunk Shot", "Iron Head", "Magnet Bomb", "Stone Edge", "Grass Knot", "Chatter", "Judgment", "Bug Bite", "Charge Beam", "Wood Hammer", "Aqua Jet", "Attack Order", "Head Smash", "Double Hit", "Roar of Time", "Spacial Rend", "Crush Grip", "Magma Storm", "Seed Flare", "Ominous Wind", "Shadow Force", "Psyshock", "Venoshock", "Smack Down", "Storm Throw", "Flame Burst", "Sludge Wave", "Heavy Slam", "Synchronoise", "Electro Ball", "Flame Charge", "Low Sweep", "Acid Spray", "Foul Play", "Round", "Echoed Voice", "Chip Away", "Clear Smog", "Stored Power", "Scald", "Hex", "Sky Drop", "Circle Throw", "Incinerate", "Acrobatics", "Retaliate", "Final Gambit", "Inferno", "Water Pledge", "Fire Pledge", "Grass Pledge", "Volt Switch", "Struggle Bug", "Bulldoze", "Frost Breath", "Dragon Tail", "Electroweb", "Wild Charge", "Drill Run", "Dual Chop", "Heart Stamp", "Horn Leech", "Sacred Sword", "Razor Shell", "Heat Crash", "Leaf Tornado", "Steamroller", "Night Daze", "Psystrike", "Tail Slap", "Hurricane", "Head Charge", "Gear Grind", "Searing Shot", "Techno Blast", "Relic Song", "Secret Sword", "Glaciate", "Bolt Strike", "Blue Flare", "Fiery Dance", "Freeze Shock", "Ice Burn", "Snarl", "Icicle Crash", "V-create", "Fusion Flare", "Fusion Bolt"];
     
@@ -39,6 +40,7 @@ module.exports = function () {
             Feedmons[name] = {
                 'timeout': 0,
                 'feedtimeout': 0,
+                'turnInfo': {},
                 'pokemon': false
             };
         }
@@ -87,6 +89,8 @@ module.exports = function () {
             moves: randomMoves(),
             nature: sys.nature(nature),
             natureId: nature,
+            happiness: 0,
+            
             level: 1,
             fed: 0,
             exp: exp[0]
@@ -117,16 +121,21 @@ module.exports = function () {
         return getPlayer(name).pokemon;
     }
     
+    // IMPORTANT: When displaying to players, Math.floor feedmon.happiness
+    
     function giveExp(name) {
-        var player = getPlayer(name),
+        var happinessGain = 0,
+            oldHappiness,
             feedmon = getPokemon(name),
-            lvl = feedmon.level,
+            player = getPlayer(name),
             lvlGain = 0,
-            looplvl,
+            gain = 0,
+            lvl = feedmon.level;
+        
+        var looplvl,
             lvlexp,
             len,
             i,
-            gain = 0;
         
         var bonusRange = Math.round(lvl / 10),
             bonus = [0, 0];
@@ -137,6 +146,10 @@ module.exports = function () {
         
         gain = sys.rand((10 * lvl) + bonus[0], (24 * lvl) + bonus[1] + 1);
         feedmon.exp += gain;
+        
+        oldHappiness = Math.floor(feedmon.happiness);
+        feedmon.happiness += HAPPINESS_GAIN;
+        happinessGain = Math.floor(feedmon.happiness) - oldHappiness;
         
         if (lvl < 100) {
             for (i = lvl - 2, len = exp.length; i < len; i += 1) {
@@ -161,6 +174,7 @@ module.exports = function () {
         
         return {
             gain: gain,
+            happinessGain: happinessGain,
             levelGain: lvlGain,
             now: feedmon.exp,
             bonus: bonus
@@ -207,7 +221,8 @@ module.exports = function () {
         movePower: movePower,
         expTableList: expTableList,
         TABLE: FEEDMON_TABLE,
-        VERSION: FEEDMON_VERSION
+        VERSION: FEEDMON_VERSION,
+        HAPPINESS_GAIN: HAPPINESS_GAIN
     };
     
     return Feedmon;

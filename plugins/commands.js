@@ -137,10 +137,10 @@ addCommand(0, "feed", function (src, command, commandData, tar, chan) {
     
     feedexp = Feedmon.giveExp(name);
     
-    bot.sendMessage(src, "Your " + feedname + " gained " + feedexp.gain + " EXP! It now has " + feedexp.now + " EXP and it was fed " + feedmon.fed + " times. Its level is " + feedmon.level + ".", chan);
+    bot.sendMessage(src, "Your " + feedname + " gained " + feedexp.gain + " EXP" + (feedexp.happinessGain ? " and " + feedexp.happinessGain + " happiness" : "") + "!", chan);
     
     if (feedexp.levelGain) {
-        bot.sendMessage(src, 'Your ' + feedname + ' gained ' + feedexp.levelGain + ' level(s)! Its level is now ' + feedmon.level + '!', chan);
+        bot.sendMessage(src, feedname + " leveled up " + feedexp.levelGain + " time(s)! It's now level " + feedmon.level + "!", chan);
     }
     
     Feedmon.save();
@@ -177,11 +177,11 @@ addCommand(0, "level", function (src, command, commandData, tar, chan) {
     var name = sys.name(src).toLowerCase(),
         player = Feedmon.getPlayer(name),
         table = Feedmon.exp,
-        len,
-        i,
         nextlvl,
         feedmon,
-        feedname;
+        feedname,
+        len,
+        i;
     
     if (!player) {
         bot.sendMessage(src, "First catch a Feedmon!", chan);
@@ -208,6 +208,7 @@ addCommand(0, "level", function (src, command, commandData, tar, chan) {
     }
     
     nextlvl = feedmon.level + 1;
+    
     // Arrays start 0-index, so don't increment 1 if we want to know the exact level requirement.
     bot.sendMessage(src, "Next level (" + (nextlvl) + ") requires " + table[feedmon.level] + " EXP. Your " + feedname + " has " + feedmon.exp + " EXP, an additional " + (table[feedmon.level] - feedmon.exp) + " is required for level " + nextlvl + ".", chan);
 });
