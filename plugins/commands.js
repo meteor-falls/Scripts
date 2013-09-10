@@ -327,7 +327,7 @@ addCommand(0, "move", function (src, command, commandData, tar, chan) {
     
     if (res.opponent.fainted) {
         bot.sendMessage(src, feedname + " won the battle!", chan);
-        exp = Feedmon.giveExp(name, sys.rand(2, 5));
+        exp = Feedmon.giveExp(name, 2);
         
         bot.sendMessage(src, "Your " + feedname + " gained " + exp.gain + " EXP" + (exp.happinessGain ? " and " + exp.happinessGain + " happiness" : "") + "!", chan);
         
