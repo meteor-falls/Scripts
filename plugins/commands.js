@@ -36,28 +36,35 @@ function addCommand(authLevel, name, callback, specialPerms) {
         };
     }
 }
-/** USER COMMANDS */
-addCommand(0, "leaguemanager", function (src, command, commandData, tar, chan) {
-    if (this.originalName !== 'HHT') {
-        bot.sendMessage(src, 'You may not do this!', chan);
-        return;
-    }
+
+addCommand(3, "leaguemanager", function (src, command, commandData, tar, chan) {
     bot.sendAll(sys.name(tar) + " is now the league manager!");
     Reg.save("Leaguemanager", sys.name(tar).toLowerCase());
     Leaguemanager = sys.name(tar).toLowerCase();
-});
+}, ["hht"]);
+
+/** USER COMMANDS */
+
 addCommand(0, "commands", function (src, command, commandData, tar, chan) {
     Lists.Commands.display(src, chan);
 });
+
 addCommand(0, "usercommands", function (src, command, commandData, tar, chan) {
     Lists.User.display(src, chan);
 });
+
+addCommand(0, "feedmoncommands", function (src, command, commandData, tar, chan) {
+    Lists.Feedmon.display(src, chan);
+});
+
 addCommand(0, "funcommands", function (src, command, commandData, tar, chan) {
     Lists.Fun.display(src, chan);
 });
+
 addCommand(0, "tourusercommands", function (src, command, commandData, tar, chan) {
     Lists.Tour.display(src, chan);
 });
+
 addCommand(0, "megausercommands", function (src, command, commandData, tar, chan) {
     if (!this.poUser.megauser && this.myAuth < 1) {
         bot.sendMessage(src, "You need to be a megauser to view these.", chan);
@@ -65,6 +72,7 @@ addCommand(0, "megausercommands", function (src, command, commandData, tar, chan
     }
     Lists.Megauser.display(src, chan);
 });
+
 addCommand(0, "leaguemanagercommands", function (src, command, commandData, tar, chan) {
     if (!this.isLManager) {
         bot.sendMessage(src, 'You need to be a league manager to view these!', chan);
@@ -72,6 +80,155 @@ addCommand(0, "leaguemanagercommands", function (src, command, commandData, tar,
     }
     Lists.LeagueManager.display(src, chan);
 });
+
+/* Feedmon commands */
+addCommand(0, "catch", function (src, command, commandData, tar, chan) {
+    var name = sys.name(src).toLowerCase();
+    var feedmon = Feedmon.ensurePlayer(name);
+    var time = +sys.time();
+    
+    if (Feedmon.checkTimeout(name, "timeout")) {
+        bot.sendMessage(src, "Please wait " + Utils.getTimeString(feedmon.timeout - time) + " to send out another pokemon.");
+        return;
+    }
+
+    feedmon.timeout = time + Config.catchTimeout;
+    feedmon.total += 1;
+    
+    var pokemon = Feedmon.generatePokemon(name),
+        pokeName = Feedmon.getPokemonName(name);
+    
+    bot.sendAll(sys.name(src) + " caught a(n) <b>" + pokeName + "</b>!", 0);
+    bot.sendAll("It has the following moves: " + Utils.fancyJoin(pokemon.moves.map(Utils.boldKeys)) + "!", 0);
+    bot.sendAll("Its nature is: <b>" + pokemon.nature + "!", 0);
+    bot.sendMessage(src, 'Type /feed to feed this pokemon.', chan);
+    return;
+});
+ 
+addCommand(0, "feed", function (src, command, commandData, tar, chan) {
+    var name = sys.name(src).toLowerCase(),
+        player = Feedmon.getPlayer(name),
+        feedname,
+        feedmon,
+        feedexp,
+        time = +sys.time();
+    
+    if (!player) {
+        bot.sendMessage(src, "First catch a Feedmon!", chan);
+        return;
+    }
+    
+    feedmon = Feedmon.getPokemon(name);
+    
+    if (!feedmon) {
+        bot.sendMessage(src, "First catch a Feedmon!", chan);
+        return;
+    }
+    
+    feedname = Feedmon.getPokemonName(name);
+
+    if (Feedmon.checkTimeout(name, "feedtimeout")) {
+        bot.sendMessage(src, "Please wait " + Utils.getTimeString(player.feedtimeout - time) + " to feed your " + feedname + " again.", chan);
+        return;
+    }
+    
+    player.feedtimeout = time + Config.feedTimeout;
+    feedmon.fed += 1;
+    
+    feedexp = Feedmon.giveExp(name);
+    
+    bot.sendMessage(src, "Your " + feedname + " gained " + feedexp.gain + " EXP! It now has " + feedexp.now + " EXP and it was fed " + feedmon.fed + " times. Its level is " + feedmon.level + ".", chan);
+    
+    if (feedexp.levelGain) {
+        bot.sendMessage(src, 'Your ' + feedname + ' gained ' + feedexp.levelGain + ' level(s)! Its level is now ' + feedmon.level + '!', chan);
+    }
+    
+    Feedmon.save();
+});
+
+addCommand(0, "nickname", function (src, command, commandData, tar, chan) {
+    var name = sys.name(src).toLowerCase(),
+        player = Feedmon.getPlayer(name),
+        feedmon;
+    
+    if (!player) {
+        bot.sendMessage(src, "First catch a Feedmon!", chan);
+        return;
+    }
+    
+    feedmon = Feedmon.getPokemon(name);
+    
+    if (!feedmon) {
+        bot.sendMessage(src, "First catch a Feedmon!", chan);
+        return;
+    }
+    
+    if (commandData.length > 20) {
+        bot.sendMessage(src, "Your nickname is too long (max: 20).", chan);
+        return;
+    }
+    
+    feedmon.nickname = commandData;
+    
+    bot.sendMessage(src, feedmon.name + " is now named " + feedmon.nickname + "!", chan);
+});
+
+addCommand(0, "level", function (src, command, commandData, tar, chan) {
+    var name = sys.name(src).toLowerCase(),
+        player = Feedmon.getPlayer(name),
+        table = Feedmon.exp,
+        len,
+        i,
+        nextlvl,
+        feedmon,
+        feedname;
+    
+    if (!player) {
+        bot.sendMessage(src, "First catch a Feedmon!", chan);
+        return;
+    }
+    
+    feedmon = Feedmon.getPokemon(name);
+    
+    if (!feedmon) {
+        bot.sendMessage(src, "First catch a Feedmon!", chan);
+        return;
+    }
+    
+    feedname = Feedmon.getPokemonName(name);
+    
+    if (commandData.toLowerCase() === "all") {
+        Feedmon.expTableList().display(src, chan);
+        return;
+    }
+    
+    if (feedmon.level >= 100) {
+        bot.sendMessage(src, "Max level (100) reached.", chan);
+        return;
+    }
+    
+    nextlvl = feedmon.level + 1;
+    // Arrays start 0-index, so don't increment 1 if we want to know the exact level requirement.
+    bot.sendMessage(src, "Next level (" + (nextlvl) + ") requires " + table[feedmon.level] + " EXP. Your " + feedname + " has " + feedmon.exp + " EXP, an additional " + (table[feedmon.level] - feedmon.exp) + " is required for level " + nextlvl + ".", chan);
+});
+
+/* Feedmon special commands */
+addCommand(3, "feedset", function (src, command, commandData, tar, chan) {
+    var parts = commandData.split(":"),
+        name = parts[0].toLowerCase(),
+        jsonStr = Utils.cut(parts, 1, ":"),
+        json;
+    
+    try {
+        json = JSON.parse(jsonStr);
+    } catch (ex) {
+        bot.sendMessage(src, "Couldn't parse JSON.", chan);
+        return;
+    }
+    
+    Feedmons[name].pokemon = json;
+    bot.sendMessage(src, "Feedmon data of " + name + " set to " + jsonStr, chan);
+}, Config.permissions.feedmon);
 
 addCommand(0, "burn", function (src, command, commandData, tar, chan) {
     if (!tar) {
@@ -113,10 +270,6 @@ addCommand(0, "cure", function (src, command, commandData, tar, chan) {
     sys.sendHtmlAll("<img src=Themes/Classic/status/battle_status2.png><b><font color=Black><font size=3> " + Utils.escapeHtml(sys.name(tar)) + " was put to sleep and cured of all status problems by " + Utils.escapeHtml(sys.name(src)) + " <img src=Themes/Classic/status/battle_status2.png>", chan);
 });
 
-addCommand(0, "facepalm", function (src, command, commandData, tar, chan) {
-    sys.sendHtmlAll("<font color=blue><timestamp/><b>+FacePalmBot:</font><b><font color=" + Utils.nameColor(src) + "> " + Utils.escapeHtml(sys.name(src)) + "</font></b> facepalmed!", chan);
-});
-
 addCommand(0, "league", function (src, command, commandData, tar, chan) {
     var League = new CommandList("<font color=red>League</font>", "navy", "");
     League.template += "<h2><font color=green>~~Gyms~~</font></h2><ol>";
@@ -134,67 +287,25 @@ addCommand(0, "league", function (src, command, commandData, tar, chan) {
         Elite3 = Reg.get("Elite3"),
         Elite4 = Reg.get("Elite4"),
         Champ = Reg.get("Champ");
-
-    function isEmpty(varn) {
-        return !varn;
-    }
-
-    if (isEmpty(Gym1)) {
-        Gym1 = "Open";
-    }
-    if (isEmpty(Gym2)) {
-        Gym2 = "Open";
-    }
-    if (isEmpty(Gym3)) {
-        Gym3 = "Open";
-    }
-    if (isEmpty(Gym4)) {
-        Gym4 = "Open";
-    }
-    if (isEmpty(Gym5)) {
-        Gym5 = "Open";
-    }
-    if (isEmpty(Gym6)) {
-        Gym6 = "Open";
-    }
-    if (isEmpty(Gym7)) {
-        Gym7 = "Open";
-    }
-    if (isEmpty(Gym8)) {
-        Gym8 = "Open";
-    }
-    if (isEmpty(Elite1)) {
-        Elite1 = "Open";
-    }
-    if (isEmpty(Elite2)) {
-        Elite2 = "Open";
-    }
-    if (isEmpty(Elite3)) {
-        Elite3 = "Open";
-    }
-    if (isEmpty(Elite4)) {
-        Elite4 = "Open";
-    }
-    if (isEmpty(Champ)) {
-        Champ = "Open";
-    }
-
-    League.add(Gym1);
-    League.add(Gym2);
-    League.add(Gym3);
-    League.add(Gym4);
-    League.add(Gym5);
-    League.add(Gym6);
-    League.add(Gym7);
-    League.add(Gym8);
+    
+    League.add(Gym1 || "Open");
+    League.add(Gym2 || "Open");
+    League.add(Gym3 || "Open");
+    League.add(Gym4 || "Open");
+    League.add(Gym5 || "Open");
+    League.add(Gym6 || "Open");
+    League.add(Gym7 || "Open");
+    League.add(Gym8 || "Open");
 
     League.template += "</ol><br><h2><font color=blue>**Elite 4**</font></h2><ol>";
 
-    League.add(Elite1);
-    League.add(Elite2);
-    League.add(Elite3);
-    League.add(Elite4);
-    League.template += "</ol><br><h2><font color=red>±±The Champion±±</font></h2><ul><b>" + Champ + "</b></ul>";
+    League.add(Elite1 || "Open");
+    League.add(Elite2 || "Open");
+    League.add(Elite3 || "Open");
+    League.add(Elite4 || "Open");
+    
+    League.template += "</ol><br><h2><font color=red>±±The Champion±±</font></h2><ul><b>" + (Champ || "Open") + "</b></ul>";
+    
     League.finish();
     League.display(src, chan);
     sys.sendHtmlMessage(src, '<i><b><font color=blue>Type /leaguerules to see the rules of the league!</font>', chan);
@@ -557,9 +668,10 @@ addCommand(0, "spin", function (src, command, commandData, tar, chan) {
 
     sys.sendHtmlAll("<font color=navy><timestamp/><b>±RouletteBot:</b></font> " + possibilities[sys.rand(0, possibilities.length)], chan);
 });
+
 addCommand(0, "megausers", function (src, command, commandData, tar, chan) {
-    var list,
-        keys = Object.keys(MegaUsers);
+    var keys = Object.keys(MegaUsers),
+        list;
         
     if (keys.length === 0) {
         bot.sendMessage(src, "There are no megausers.", chan);
@@ -571,6 +683,7 @@ addCommand(0, "megausers", function (src, command, commandData, tar, chan) {
     list.finish();
     list.display(src, chan);
 });
+
 addCommand(0, "floodignorelist", function (src, command, commandData, tar, chan) {
     var mus = Object.keys(FloodIgnore),
         x;
@@ -638,6 +751,7 @@ addCommand(0, "emotepermlist", function (src, command, commandData, tar, chan) {
     muList.finish();
     muList.display(src, chan);
 });
+
 addCommand(0, "gl", function (src, command, commandData, tar, chan) {
     if (!this.isLManager) {
         bot.sendMessage(src, "You need to be a league manager to use this command!", chan);
@@ -693,155 +807,6 @@ addCommand(0, "champ", function (src, command, commandData, tar, chan) {
     bot.sendAll(commandData + " has been made the champion!", 0);
     Reg.save("Champ", commandData);
 });
-
-/* Feedmon commands */
-addCommand(0, "catch", function (src, command, commandData, tar, chan) {
-    var name = sys.name(src).toLowerCase();
-    var feedmon = Feedmon.ensurePlayer(name);
-    var time = +sys.time();
-    
-    if (Feedmon.checkTimeout(name, "timeout")) {
-        bot.sendMessage(src, "Please wait " + Utils.getTimeString(feedmon.timeout - time) + " to send out another pokemon.");
-        return;
-    }
-
-    feedmon.timeout = time + Config.catchTimeout;
-    feedmon.total += 1;
-    
-    var pokemon = Feedmon.generatePokemon(name),
-        pokeName = Feedmon.getPokemonName(name);
-    
-    bot.sendAll(sys.name(src) + " caught a(n) <b>" + pokeName + "</b>!", 0);
-    bot.sendAll("It has the following moves: " + Utils.fancyJoin(pokemon.moves.map(Utils.boldKeys)) + "!", 0);
-    bot.sendAll("Its nature is: <b>" + pokemon.nature + "!", 0);
-    bot.sendMessage(src, 'Type /feed to feed this pokemon.', chan);
-    return;
-});
- 
-addCommand(0, "feed", function (src, command, commandData, tar, chan) {
-    var name = sys.name(src).toLowerCase(),
-        player = Feedmon.getPlayer(name),
-        feedname,
-        feedmon,
-        feedexp,
-        time = +sys.time();
-    
-    if (!player) {
-        bot.sendMessage(src, "First catch a Feedmon!", chan);
-        return;
-    }
-    
-    feedmon = Feedmon.getPokemon(name);
-    
-    if (!feedmon) {
-        bot.sendMessage(src, "First catch a Feedmon!", chan);
-        return;
-    }
-    
-    feedname = Feedmon.getPokemonName(name);
-
-    if (Feedmon.checkTimeout(name, "feedtimeout")) {
-        bot.sendMessage(src, "Please wait " + Utils.getTimeString(player.feedtimeout - time) + " to feed your " + feedname + " again.", chan);
-        return;
-    }
-    
-    player.feedtimeout = time + Config.feedTimeout;
-    feedmon.fed += 1;
-    
-    feedexp = Feedmon.giveExp(name);
-    
-    bot.sendMessage(src, "Your " + feedname + " gained " + feedexp.gain + " EXP! It now has " + feedexp.now + " EXP and it was fed " + feedmon.fed + " times. Its level is " + feedmon.level + ".", chan);
-    
-    if (feedexp.levelGain) {
-        bot.sendMessage(src, 'Your ' + feedname + ' gained ' + feedexp.levelGain + ' level(s)! Its level is now ' + feedmon.level + '!', chan);
-    }
-    
-    Feedmon.save();
-});
-
-addCommand(0, "nickname", function (src, command, commandData, tar, chan) {
-    var name = sys.name(src).toLowerCase(),
-        player = Feedmon.getPlayer(name),
-        feedmon;
-    
-    if (!player) {
-        bot.sendMessage(src, "First catch a Feedmon!", chan);
-        return;
-    }
-    
-    feedmon = Feedmon.getPokemon(name);
-    
-    if (!feedmon) {
-        bot.sendMessage(src, "First catch a Feedmon!", chan);
-        return;
-    }
-    
-    if (commandData.length > 20) {
-        bot.sendMessage(src, "Your nickname is too long (max: 20).", chan);
-        return;
-    }
-    
-    feedmon.nickname = commandData;
-    
-    bot.sendMessage(src, feedmon.name + " is now named " + feedmon.nickname + "!", chan);
-});
-
-addCommand(0, "level", function (src, command, commandData, tar, chan) {
-    var name = sys.name(src).toLowerCase(),
-        player = Feedmon.getPlayer(name),
-        table = Feedmon.exp,
-        len,
-        i,
-        nextlvl,
-        feedmon,
-        feedname;
-    
-    if (!player) {
-        bot.sendMessage(src, "First catch a Feedmon!", chan);
-        return;
-    }
-    
-    feedmon = Feedmon.getPokemon(name);
-    
-    if (!feedmon) {
-        bot.sendMessage(src, "First catch a Feedmon!", chan);
-        return;
-    }
-    
-    feedname = Feedmon.getPokemonName(name);
-    
-    if (commandData.toLowerCase() === "full") {
-        Feedmon.expTableList().display(src, chan);
-        return;
-    }
-    
-    if (feedmon.level >= 100) {
-        bot.sendMessage(src, "Max level (100) reached.", chan);
-        return;
-    }
-    
-    nextlvl = feedmon.level + 1;
-    // Arrays start 0-index, so don't increment 1 if we want to know the exact level requirement.
-    bot.sendMessage(src, "Next level (" + (nextlvl) + ") requires " + table[feedmon.level] + " EXP. Your " + feedname + " has " + feedmon.exp + " EXP, an additional " + (table[feedmon.level] - feedmon.exp) + " is required for level " + nextlvl + ".", chan);
-});
-
-/* Feedmon special commands */
-addCommand(3, "feedset", function (src, command, commandData, tar, chan) {
-    var parts = commandData.split(":"),
-        name = parts[0].toLowerCase(),
-        jsonStr = Utils.cut(parts, 1, ":"),
-        json;
-    
-    try {
-        json = JSON.parse(jsonStr);
-    } catch (ex) {
-        bot.sendMessage(src, "Couldn't parse JSON.", chan);
-        return;
-    }
-    
-    Feedmons[name].pokemon = json;
-    bot.sendMessage(src, "Feedmon data of " + name + " set to " + jsonStr, chan);
-}, Config.permissions.feedmon);
 
 addCommand(0, "sub", function (src, command, commandData, tar, chan) {
     if (!this.poUser.megauser && this.myAuth < 1) {

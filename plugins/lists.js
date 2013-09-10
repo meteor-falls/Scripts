@@ -120,6 +120,7 @@ module.exports = {
 
         var Commands = new CommandList("Commands", "navy");
         Commands.add("usercommands", "To view the commands for <b>users</b>.");
+        Commands.add("feedmoncommands", "To view the commands related to <b>feedmon</b>.");
         Commands.add("megausercommands", "To view the commands for <b>megausers</b>.");
         Commands.add("leaguemanagercommands", "To view the commands for <b>leaguemanagers</b>.");
         Commands.add("modcommands", "To view the commands for <b>moderators</b>.");
@@ -148,7 +149,7 @@ module.exports = {
         User.add("emotetoggle", "To toggle emotes on or off for you.");
         User.add("bbcode", "To view a list of bbcodes.");
         User.add("selfkick", "Kicks all the ghosts on your ip.");
-        User.add("calc <font color=red><b>[expression]</b></font>", "Evaluates a mathematical expression (10 / 2 * 4 ^ pi). Full documentation <a href='https://github.com/josdejong/mathjs/blob/master/README.md'>here</a>.");
+        User.add("calc <font color=red><b>[expression]</b></font>", "Evaluates a mathematical expression (10 / 2 * 4 ^ pi!). Full documentation <a href='https://github.com/josdejong/mathjs/blob/master/README.md'>here</a>.");
         User.finish();
 
         Lists.User = User;
@@ -170,17 +171,23 @@ module.exports = {
         Fun.add("poison <font color=red><b>[player]</b></font>", "To burn someone.");
         Fun.add("cure <font color=red><b>[player]</b></font>", "To cure someone.");
         Fun.add("me <font color=red><b>[message]</b></font>", "To post a message with *** around it.");
-        Fun.add("facepalm", "To facepalm.");
         Fun.add("spin", "To play roulette if a game is going on.");
         Fun.add("attack <font color=red><b>[player]</b></font>", "To use a pokemon attack on someone.");
         Fun.add("superimp <font color=red><b>[name]</b></font>", "To superimp a name (<font size=2>Wraps your name in '~~'</font>)");
         Fun.add("impoff", "To stop imping.");
-        Fun.add("send", "Sends a random pokemon into the chat.");
-        Fun.add("feed", "Feeds your last caught pokemon.");
-        Fun.add("level <font color=red><b>[option]</b></font>", "If option is full, displays requirements for all levels. Else (even if none specified) displays how many EXP you still need for another level.");
         Fun.finish();
 
         Lists.Fun = Fun;
+        
+        /** FEEDMON **/
+        var FeedmonList = new CommandList("Feedmon Commands", "navy");
+        FeedmonList.add("catch", "Catches a random pokemon.");
+        FeedmonList.add("feed", "Feeds your caught pokemon.");
+        FeedmonList.add("nickname <font color=red><b>[name]</b></font>", "Gives your caught pokemon a nickname.");
+        FeedmonList.add("level <font color=red><b>[option]</b></font>", "If option is all, displays requirements for all levels. Otherwise, displays how many EXP you still need for the next level.");
+        FeedmonList.finish();
+        
+        Lists.Feedmon = FeedmonList;
 
         /** MEGAUSER **/
         var Megauser = new CommandList("Megauser Commands", "navy");
