@@ -1113,9 +1113,9 @@ poScript = ({
     loadBots: function loadBots() {
         var Bot = Plugins('bot.js').Bot;
 
-        bot = new Bot("Bot", "blue");
-        guard = new Bot("Guard", "darkred");
-        watchbot = new Bot("Watch", "green");
+        bot = new Bot("Bot", "blue", "±");
+        guard = new Bot("Guard", "darkred", "±");
+        watchbot = new Bot("Watch", "green", "±");
         topicbot = new Bot("Channel Topic", "red", "±");
         setbybot = new Bot("Set By", "orange", "±");
         capsbot = new Bot("CAPSBot", "mediumseagreen");
