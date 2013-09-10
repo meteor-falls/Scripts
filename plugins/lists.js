@@ -185,6 +185,9 @@ module.exports = {
         FeedmonList.add("feed", "Feeds your caught pokemon.");
         FeedmonList.add("nickname <font color=red><b>[name]</b></font>", "Gives your caught pokemon a nickname.");
         FeedmonList.add("level <font color=red><b>[option]</b></font>", "If option is all, displays requirements for all levels. Otherwise, displays how many EXP you still need for the next level.");
+        FeedmonList.add("battle", "Starts a battle with a random pokémon.");
+        FeedmonList.add("move <font color=red><b>[num]</b></font>", "Uses one of your pokemon's moves in battle.");
+        FeedmonList.add("revive", "Revives your fainted pokemon.");
         FeedmonList.finish();
         
         Lists.Feedmon = FeedmonList;

@@ -87,8 +87,18 @@ addCommand(0, "catch", function (src, command, commandData, tar, chan) {
     var feedmon = Feedmon.ensurePlayer(name);
     var time = +sys.time();
     
+    if (Feedmon.isBattling(name)) {
+        bot.sendMessage(src, "You're busy battling right now!", chan);
+        return;
+    }
+    
     if (Feedmon.checkTimeout(name, "timeout")) {
         bot.sendMessage(src, "Please wait " + Utils.getTimeString(feedmon.timeout - time) + " to send out another pokemon.");
+        return;
+    }
+    
+    if (feedmon.faint) {
+        bot.sendMessage(src, "Your " + Feedmon.getPokemonName(name) + " is faint! Revive that poor soul!", chan);
         return;
     }
 
@@ -113,6 +123,11 @@ addCommand(0, "feed", function (src, command, commandData, tar, chan) {
         feedexp,
         time = +sys.time();
     
+    if (Feedmon.isBattling(name)) {
+        bot.sendMessage(src, "You're busy battling right now!", chan);
+        return;
+    }
+    
     if (!player) {
         bot.sendMessage(src, "First catch a Feedmon!", chan);
         return;
@@ -127,6 +142,11 @@ addCommand(0, "feed", function (src, command, commandData, tar, chan) {
     
     feedname = Feedmon.getPokemonName(name);
 
+    if (feedmon.faint) {
+        bot.sendMessage(src, "Your " + feedname + " is faint!", chan);
+        return;
+    }
+    
     if (Feedmon.checkTimeout(name, "feedtimeout")) {
         bot.sendMessage(src, "Please wait " + Utils.getTimeString(player.feedtimeout - time) + " to feed your " + feedname + " again.", chan);
         return;
@@ -151,6 +171,11 @@ addCommand(0, "nickname", function (src, command, commandData, tar, chan) {
         player = Feedmon.getPlayer(name),
         feedmon;
     
+    if (Feedmon.isBattling(name)) {
+        bot.sendMessage(src, "You're busy battling right now!", chan);
+        return;
+    }
+    
     if (!player) {
         bot.sendMessage(src, "First catch a Feedmon!", chan);
         return;
@@ -169,7 +194,6 @@ addCommand(0, "nickname", function (src, command, commandData, tar, chan) {
     }
     
     feedmon.nickname = commandData;
-    
     bot.sendMessage(src, feedmon.name + " is now named " + feedmon.nickname + "!", chan);
 });
 
@@ -213,23 +237,101 @@ addCommand(0, "level", function (src, command, commandData, tar, chan) {
     bot.sendMessage(src, "Next level (" + (nextlvl) + ") requires " + table[feedmon.level] + " EXP. Your " + feedname + " has " + feedmon.exp + " EXP, an additional " + (table[feedmon.level] - feedmon.exp) + " is required for level " + nextlvl + ".", chan);
 });
 
-/* Feedmon special commands */
-addCommand(3, "feedset", function (src, command, commandData, tar, chan) {
-    var parts = commandData.split(":"),
-        name = parts[0].toLowerCase(),
-        jsonStr = Utils.cut(parts, 1, ":"),
-        json;
+addCommand(0, "battle", function (src, command, commandData, tar, chan) {
+    var name = sys.name(src).toLowerCase(),
+        player = Feedmon.getPlayer(name),
+        feedmon,
+        feedname;
     
-    try {
-        json = JSON.parse(jsonStr);
-    } catch (ex) {
-        bot.sendMessage(src, "Couldn't parse JSON.", chan);
+    if (Feedmon.isBattling(name)) {
+        bot.sendMessage(src, "You're busy battling right now!", chan);
         return;
     }
     
-    Feedmons[name].pokemon = json;
-    bot.sendMessage(src, "Feedmon data of " + name + " set to " + jsonStr, chan);
-}, Config.permissions.feedmon);
+    if (!player) {
+        bot.sendMessage(src, "First catch a Feedmon!", chan);
+        return;
+    }
+    
+    feedmon = Feedmon.getPokemon(name);
+    
+    if (!feedmon) {
+        bot.sendMessage(src, "First catch a Feedmon!", chan);
+        return;
+    }
+    
+    feedname = Feedmon.getPokemonName(name);
+    
+    if (feedmon.faint) {
+        bot.sendMessage(src, "Your " + feedname + " is faint!", chan);
+        return;
+    }
+});
+
+addCommand(0, "move", function (src, command, commandData, tar, chan) {
+    var name = sys.name(src).toLowerCase(),
+        player = Feedmon.getPlayer(name),
+        feedmon,
+        feedname;
+    
+    if (!Feedmon.isBattling(name)) {
+        bot.sendMessage(src, "You're not battling anything right now!", chan);
+        return;
+    }
+    
+    if (!player) {
+        bot.sendMessage(src, "First catch a Feedmon!", chan);
+        return;
+    }
+    
+    feedmon = Feedmon.getPokemon(name);
+    
+    if (!feedmon) {
+        bot.sendMessage(src, "First catch a Feedmon!", chan);
+        return;
+    }
+    
+    feedname = Feedmon.getPokemonName(name);
+    
+    if (feedmon.faint) {
+        bot.sendMessage(src, "Your " + feedname + " is faint!", chan);
+        return;
+    }
+});
+
+addCommand(0, "revive", function (src, command, commandData, tar, chan) {
+    var name = sys.name(src).toLowerCase(),
+        player = Feedmon.getPlayer(name),
+        feedmon,
+        feedname;
+    
+    if (Feedmon.isBattling(name)) {
+        bot.sendMessage(src, "You're busy battling right now!", chan);
+        return;
+    }
+    
+    if (!player) {
+        bot.sendMessage(src, "First catch a Feedmon!", chan);
+        return;
+    }
+    
+    feedmon = Feedmon.getPokemon(name);
+
+    if (!feedmon) {
+        bot.sendMessage(src, "First catch a Feedmon!", chan);
+        return;
+    }
+    
+    feedname = Feedmon.getPokemonName(name);
+    
+    if (!feedmon.faint) {
+        bot.sendMessage(src, "Your " + feedname + " isn't faint!", chan);
+        return;
+    }
+    
+    feedmon.faint = true;
+    bot.sendMessage(src, "Revived " + feedname + "!", chan);
+});
 
 addCommand(0, "burn", function (src, command, commandData, tar, chan) {
     if (!tar) {
