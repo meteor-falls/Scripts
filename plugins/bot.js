@@ -22,6 +22,7 @@ Bot.prototype.sendAll = function (message, channel) {
     }
 
     if (message === "") {
+        sys.sendAll(message, channel);
         return;
     }
     
@@ -42,6 +43,7 @@ Bot.prototype.sendMessage = function (player, message, channel) {
     }
     
     if (message === "") {
+        sys.sendMessage(player, message, channel);
         return;
     }
     
