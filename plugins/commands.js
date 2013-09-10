@@ -317,7 +317,7 @@ addCommand(0, "move", function (src, command, commandData, tar, chan) {
         return;
     }
     
-    res = Feedmon.battleTurn(name, move);
+    res = Feedmon.battleTurn(name, move - 1);
     
     bot.sendMessage(src, "Turn #" + res.turn, chan);
     sys.sendMessage(src, "", chan);

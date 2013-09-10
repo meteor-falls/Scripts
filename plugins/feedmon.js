@@ -279,8 +279,8 @@ module.exports = function () {
             feedname = getPokemonName(name),
             battle = battles[name];
         
-        sendMessage("Start of turn #" + (battle.turn + 1));
-        sendMessage("Moves: " + feedmon.moves.map(function (name, index) {
+        sendMessage("Start of turn #" + (battle.turn + 1) + " vs. " + battle.opponent.pokemon);
+        sendMessage(feedmon.moves.map(function (name, index) {
             return "<b>" + name + "</b> (" + (index + 1) + ")";
         }).join(" | "));
         sendMessage("To use a move, type /move [num] (/move 1)");
