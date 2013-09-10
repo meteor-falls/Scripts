@@ -242,8 +242,11 @@ module.exports = function () {
             selfMoveName = feedmon.moves[move],
             selfMoveDamage = Math.floor(getMoveDamage(selfMoveName) * (feedmon.level / 80)),
             opponentMoveName = opponent.moves[sys.rand(0, opponent.moves.length)],
-            opponentMoveDamage = Math.floor(getMoveDamage(opponentMoveName) * (opponent.level / 80));
+            opponentMoveDamage = Math.floor(getMoveDamage(opponentMoveName) * (opponent.level / 80)),
+            selfNum = sys.pokeNum(feedmon.pokemon),
+            oppNum = sys.pokeNum(opponent.pokemon);
         
+        // TODO: Types
         var result = {self: {}, opponent: {}};
         
         battle.turn += 1;
