@@ -109,8 +109,8 @@ addCommand(0, "catch", function (src, command, commandData, tar, chan) {
         pokeName = Feedmon.getPokemonName(name);
     
     bot.sendAll(sys.name(src) + " caught a(n) <b>" + pokeName + "</b>!", 0);
-    bot.sendAll("It has the following moves: " + Utils.fancyJoin(pokemon.moves.map(Utils.boldKeys)) + "!", 0);
-    bot.sendAll("Its nature is: <b>" + pokemon.nature + "</b>!", 0);
+    bot.sendMessage(src, "It has the following moves: " + Utils.fancyJoin(pokemon.moves.map(Utils.boldKeys)) + "!", chan);
+    bot.sendMessage(src, "Its nature is: <b>" + pokemon.nature + "</b>!", chan);
     bot.sendMessage(src, 'Type /feed to feed this pokemon.', chan);
     return;
 });
@@ -266,11 +266,20 @@ addCommand(0, "battle", function (src, command, commandData, tar, chan) {
         bot.sendMessage(src, "Your " + feedname + " is faint!", chan);
         return;
     }
+    
+    Feedmon.turnMessage(name, function (str) {
+        bot.sendMessage(src, str, chan);
+    });
 });
 
 addCommand(0, "move", function (src, command, commandData, tar, chan) {
     var name = sys.name(src).toLowerCase(),
         player = Feedmon.getPlayer(name),
+        move = parseInt(commandData, 10),
+        battle,
+        opponent,
+        res,
+        exp,
         feedmon,
         feedname;
     
@@ -297,9 +306,58 @@ addCommand(0, "move", function (src, command, commandData, tar, chan) {
         bot.sendMessage(src, "Your " + feedname + " is faint!", chan);
         return;
     }
+    
+    battle = Feedmon.battles[name];
+    opponent = battle.opponent;
+    
+    if (move <= 0 || move >= 5) {
+        bot.sendMessage(src, "The move num needs to be 1-4.", chan);
+        return;
+    }
+    
+    res = Feedmon.battleTurn(name, move);
+    
+    bot.sendMessage(src, "Turn #" + res.turn, chan);
+    sys.sendMessage(src, "", chan);
+    
+    bot.sendMessage(src, feedname + " attacked <b>" + opponent.pokemon + "</b> with " + res.self.move + "!", chan);
+    bot.sendMessage(src, "Ouch! <b>" + opponent.pokemon + "</b> -" + res.self.damage + " (HP: " + opponent.hp + ")", chan);
+    
+    if (res.opponent.fainted) {
+        bot.sendMessage(src, feedname + " won the battle!", chan);
+        exp = Feedmon.giveExp(name);
+        
+        bot.sendMessage(src, "Your " + feedname + " gained " + exp.gain + " EXP" + (exp.happinessGain ? " and " + exp.happinessGain + " happiness" : "") + "!", chan);
+        
+        if (exp.levelGain) {
+            bot.sendMessage(src, feedname + " leveled up " + exp.levelGain + " time(s)! It's now level " + feedmon.level + "!", chan);
+        }
+        
+        delete Feedmon.battles[name];
+        return;
+    }
+    
+    sys.sendMessage(src, "", chan);
+    
+    bot.sendMessage(src, "<b>" + opponent.pokemon + "</b> attacked " + feedname + " with " + res.opponent.move + "!", chan);
+    bot.sendMessage(src, "Ouch! " + feedname + " -" + res.opponent.damage + " (HP: " + feedmon.hp + ")", chan);
+    
+    if (res.self.fainted) {
+        bot.sendMessage(src, feedname + " lost the battle!", chan);
+        // TODO: Happiness loss.
+        delete Feedmon.battles[name];
+        return;
+    }
+    
+    sys.sendMessage(src, "", chan);
+    
+    // Re-send turn message.
+    Feedmon.turnMessage(name, function (str) {
+        bot.sendMessage(src, str, chan);
+    });
 });
 
-addCommand(0, "revive", function (src, command, commandData, tar, chan) {
+addCommand(0, "heal", function (src, command, commandData, tar, chan) {
     var name = sys.name(src).toLowerCase(),
         player = Feedmon.getPlayer(name),
         feedmon,
@@ -324,13 +382,9 @@ addCommand(0, "revive", function (src, command, commandData, tar, chan) {
     
     feedname = Feedmon.getPokemonName(name);
     
-    if (!feedmon.faint) {
-        bot.sendMessage(src, "Your " + feedname + " isn't faint!", chan);
-        return;
-    }
-    
-    feedmon.faint = true;
-    bot.sendMessage(src, "Revived " + feedname + "!", chan);
+    feedmon.faint = false;
+    feedmon.hp = Feedmon.getHp(feedmon.level);
+    bot.sendMessage(src, "Healed " + feedname + " to full HP!", chan);
 });
 
 addCommand(0, "burn", function (src, command, commandData, tar, chan) {

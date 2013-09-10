@@ -14,7 +14,7 @@
 
 
 module.exports = function () {
-    var FEEDMON_VERSION = 3.1,
+    var FEEDMON_VERSION = 3.2,
         FEEDMON_TABLE = 'Feedmon_v' + FEEDMON_VERSION,
         HAPPINESS_GAIN = 0.07;
     
@@ -218,7 +218,7 @@ module.exports = function () {
         lvl = sys.rand(feedmon.level - 2, feedmon.level + 5);
         
         battles[name] = {
-            active: true,
+            turn: 0,
             opponent: {
                 pokemon: randomPokemon(),
                 level: lvl,
@@ -230,6 +230,60 @@ module.exports = function () {
         };
         
         return battles[name];
+    }
+    
+    // TODO: Natures, stats
+    function battleTurn(name, move) {
+        var player = getPlayer(name),
+            feedmon = getPokemon(name),
+            feedname = getPokemonName(name),
+            battle = battles[name],
+            opponent = battle.opponent,
+            selfMoveName = feedmon.moves[move],
+            selfMoveDamage = Math.floor(getMoveDamage(selfMoveName) * (feedmon.level / 100)),
+            opponentMoveName = opponent.moves[sys.rand(0, opponent.moves.length)],
+            opponentMoveDamage = Math.floor(getMoveDamage(opponentMoveName) * (opponent.level / 100));
+        
+        var result = {self: {}, opponent: {}};
+        
+        battle.turn += 1;
+        
+        result.turn = battle.turn;
+        result.self.damage = selfMoveDamage;
+        result.self.move = selfMoveName;
+        result.opponent.move = opponentMoveName;
+        result.opponent.damage = opponentMoveDamage;
+        
+        opponent.hp -= selfMoveDamage;
+        result.opponent.hp = opponent.hp;
+        if (opponent.hp <= 0) {
+            result.opponent.fainted = opponent.faint = true;
+            result.end = true;
+            return result;
+        }
+        
+        feedmon.hp -= opponentMoveDamage;
+        result.self.hp = feedmon.hp;
+        if (feedmon.hp <= 0) {
+            result.self.fainted = feedmon.faint = true;
+            result.end = true;
+            return result;
+        }
+        
+        return result;
+    }
+    
+    function turnMessage(name, sendMessage) {
+        var player = getPlayer(name),
+            feedmon = getPokemon(name),
+            feedname = getPokemonName(name),
+            battle = battles[name];
+        
+        sendMessage("Start of turn #" + (battle.turn + 1));
+        sendMessage("Moves: " + feedmon.moves.map(function (name, index) {
+            return "<b>" + name + "</b> (" + (index + 1) + ")";
+        }).join(" | "));
+        sendMessage("To use a move, type /move [num] (/move 1)");
     }
     
     // Lazy generation.
@@ -274,6 +328,8 @@ module.exports = function () {
         
         generatePokemon: generatePokemon,
         generateBattle: generateBattle,
+        battleTurn: battleTurn,
+        turnMessage: turnMessage,
         
         save: save,
         exp: exp,
