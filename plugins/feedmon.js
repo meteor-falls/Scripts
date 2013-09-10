@@ -240,9 +240,9 @@ module.exports = function () {
             battle = battles[name],
             opponent = battle.opponent,
             selfMoveName = feedmon.moves[move],
-            selfMoveDamage = Math.floor(getMoveDamage(selfMoveName) * (feedmon.level / 100)),
+            selfMoveDamage = Math.floor(getMoveDamage(selfMoveName) * (feedmon.level / 50)),
             opponentMoveName = opponent.moves[sys.rand(0, opponent.moves.length)],
-            opponentMoveDamage = Math.floor(getMoveDamage(opponentMoveName) * (opponent.level / 100));
+            opponentMoveDamage = Math.floor(getMoveDamage(opponentMoveName) * (opponent.level / 50));
         
         var result = {self: {}, opponent: {}};
         
@@ -255,6 +255,11 @@ module.exports = function () {
         result.opponent.damage = opponentMoveDamage;
         
         opponent.hp -= selfMoveDamage;
+        
+        if (opponent.hp < 0) {
+            opponent.hp = 0;
+        }
+        
         result.opponent.hp = opponent.hp;
         if (opponent.hp <= 0) {
             result.opponent.fainted = opponent.faint = true;
@@ -263,6 +268,11 @@ module.exports = function () {
         }
         
         feedmon.hp -= opponentMoveDamage;
+        
+        if (feedmon.hp < 0) {
+            feedmon.hp = 0;
+        }
+        
         result.self.hp = feedmon.hp;
         if (feedmon.hp <= 0) {
             result.self.fainted = feedmon.faint = true;

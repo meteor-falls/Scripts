@@ -386,7 +386,7 @@ addCommand(0, "heal", function (src, command, commandData, tar, chan) {
     
     feedmon.faint = false;
     feedmon.hp = Feedmon.getHp(feedmon.level);
-    bot.sendMessage(src, "Healed " + feedname + " to full HP!", chan);
+    bot.sendMessage(src, "Healed " + feedname + " to " + feedmon.hp + " (full) HP!", chan);
 });
 
 addCommand(0, "burn", function (src, command, commandData, tar, chan) {
