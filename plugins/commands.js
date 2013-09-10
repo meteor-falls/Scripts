@@ -323,7 +323,7 @@ addCommand(0, "move", function (src, command, commandData, tar, chan) {
     sys.sendMessage(src, "", chan);
     
     bot.sendMessage(src, feedname + " attacked <b>" + opponent.pokemon + "</b> with " + res.self.move + "!", chan);
-    bot.sendMessage(src, "Ouch! <b>" + opponent.pokemon + "</b> -" + res.self.damage + " (HP: " + opponent.hp + ")", chan);
+    bot.sendMessage(src, "Ouch! <b>" + opponent.pokemon + "</b> -" + res.self.damage + " HP (HP: " + opponent.hp + ")", chan);
     
     if (res.opponent.fainted) {
         bot.sendMessage(src, feedname + " won the battle!", chan);
@@ -342,7 +342,7 @@ addCommand(0, "move", function (src, command, commandData, tar, chan) {
     sys.sendMessage(src, "", chan);
     
     bot.sendMessage(src, "<b>" + opponent.pokemon + "</b> attacked " + feedname + " with " + res.opponent.move + "!", chan);
-    bot.sendMessage(src, "Ouch! " + feedname + " -" + res.opponent.damage + " (HP: " + feedmon.hp + ")", chan);
+    bot.sendMessage(src, "Ouch! " + feedname + " -" + res.opponent.damage + " HP (HP: " + feedmon.hp + ")", chan);
     
     if (res.self.fainted) {
         bot.sendMessage(src, feedname + " lost the battle!", chan);

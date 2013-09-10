@@ -215,7 +215,7 @@ module.exports = function () {
         
         player = getPlayer(name);
         feedmon = getPokemon(name);
-        lvl = sys.rand(feedmon.level - 2, feedmon.level + 5);
+        lvl = sys.rand(feedmon.level - 2, feedmon.level + 3);
         
         battles[name] = {
             turn: 0,
@@ -240,9 +240,9 @@ module.exports = function () {
             battle = battles[name],
             opponent = battle.opponent,
             selfMoveName = feedmon.moves[move],
-            selfMoveDamage = Math.floor(getMoveDamage(selfMoveName) * (feedmon.level / 50)),
+            selfMoveDamage = Math.floor(getMoveDamage(selfMoveName) * (feedmon.level / 80)),
             opponentMoveName = opponent.moves[sys.rand(0, opponent.moves.length)],
-            opponentMoveDamage = Math.floor(getMoveDamage(opponentMoveName) * (opponent.level / 50));
+            opponentMoveDamage = Math.floor(getMoveDamage(opponentMoveName) * (opponent.level / 80));
         
         var result = {self: {}, opponent: {}};
         
@@ -289,11 +289,12 @@ module.exports = function () {
             feedname = getPokemonName(name),
             battle = battles[name];
         
-        sendMessage("Start of turn #" + (battle.turn + 1) + " vs. " + battle.opponent.pokemon);
+        sendMessage("Start of turn #" + (battle.turn + 1) + " vs. <b>" + battle.opponent.pokemon + "</b>");
         sendMessage(feedmon.moves.map(function (name, index) {
             return "<b>" + name + "</b> (" + (index + 1) + ")";
         }).join(" | "));
         sendMessage("To use a move, type /move [num] (/move 1)");
+        sendMessage("");
     }
     
     // Lazy generation.
