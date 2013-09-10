@@ -123,7 +123,7 @@ module.exports = function () {
     
     // IMPORTANT: When displaying to players, Math.floor feedmon.happiness
     
-    function giveExp(name) {
+    function giveExp(name, multiplier) {
         var happinessGain = 0,
             oldHappiness,
             feedmon = getPokemon(name),
@@ -131,20 +131,22 @@ module.exports = function () {
             lvlGain = 0,
             gain = 0,
             lvl = feedmon.level;
-        
+
         var looplvl,
             lvlexp,
             len,
-            i,
+            i;
         
         var bonusRange = Math.round(lvl / 10),
             bonus = [0, 0];
+        
+        multiplier = multiplier || 1;
         
         if (bonusRange > 0) {
             bonus = [bonusRange * (Math.round(lvl / 2)), bonusRange * lvl];
         }
         
-        gain = sys.rand((10 * lvl) + bonus[0], (24 * lvl) + bonus[1] + 1);
+        gain = sys.rand((10 * lvl) + bonus[0], ((24 * lvl) + bonus[1]) + 1) * multiplier;
         feedmon.exp += gain;
         
         oldHappiness = Math.floor(feedmon.happiness);
