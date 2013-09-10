@@ -309,6 +309,7 @@ module.exports = function () {
             
     Feedmon = {
         battles: battles,
+        isBattling: isBattling,
         
         randomMove: randomMove,
         randomMoves: randomMoves,
