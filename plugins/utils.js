@@ -248,5 +248,10 @@
         return array.join(", ");
     };
     
+    // For use in map
+    util.boldKeys = function (val) {
+        return "<b>" + val + "</b>";
+    };
+    
     Utils = module.exports = util;
 }());

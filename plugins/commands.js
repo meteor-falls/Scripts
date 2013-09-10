@@ -695,7 +695,7 @@ addCommand(0, "champ", function (src, command, commandData, tar, chan) {
 });
 
 /* Feedmon commands */
-addCommand(0, "send", function (src, command, commandData, tar, chan) {
+addCommand(0, "catch", function (src, command, commandData, tar, chan) {
     var name = sys.name(src).toLowerCase();
     var feedmon = Feedmon.ensurePlayer(name);
     var time = +sys.time();
@@ -705,13 +705,15 @@ addCommand(0, "send", function (src, command, commandData, tar, chan) {
         return;
     }
 
-    feedmon.timeout = time + Config.sendTimeout;
+    feedmon.timeout = time + Config.catchTimeout;
     feedmon.total += 1;
     
     var pokemon = Feedmon.generatePokemon(name),
         pokeName = Feedmon.getPokemonName(name);
     
-    bot.sendAll(sys.name(src) + " sent out <b>" + pokeName + "</b>!", 0);
+    bot.sendAll(sys.name(src) + " caught a(n) <b>" + pokeName + "</b>!", 0);
+    bot.sendAll("It has the following moves: " + Utils.fancyJoin(pokemon.moves.map(Utils.boldKeys)) + "!", 0);
+    bot.sendAll("Its nature is: <b>" + pokemon.nature + "!", 0);
     bot.sendMessage(src, 'Type /feed to feed this pokemon.', chan);
     return;
 });
@@ -725,14 +727,14 @@ addCommand(0, "feed", function (src, command, commandData, tar, chan) {
         time = +sys.time();
     
     if (!player) {
-        bot.sendMessage(src, "First send out a Feedmon!", chan);
+        bot.sendMessage(src, "First catch a Feedmon!", chan);
         return;
     }
     
     feedmon = Feedmon.getPokemon(name);
     
     if (!feedmon) {
-        bot.sendMessage(src, "First send out a Feedmon!", chan);
+        bot.sendMessage(src, "First catch a Feedmon!", chan);
         return;
     }
     
@@ -763,14 +765,14 @@ addCommand(0, "nickname", function (src, command, commandData, tar, chan) {
         feedmon;
     
     if (!player) {
-        bot.sendMessage(src, "First send out a pokemon!", chan);
+        bot.sendMessage(src, "First catch a Feedmon!", chan);
         return;
     }
     
     feedmon = Feedmon.getPokemon(name);
     
     if (!feedmon) {
-        bot.sendMessage(src, "First send out a Feedmon!", chan);
+        bot.sendMessage(src, "First catch a Feedmon!", chan);
         return;
     }
     
@@ -795,23 +797,20 @@ addCommand(0, "level", function (src, command, commandData, tar, chan) {
         feedname;
     
     if (!player) {
-        bot.sendMessage(src, "First send out a pokemon!", chan);
+        bot.sendMessage(src, "First catch a Feedmon!", chan);
         return;
     }
     
     feedmon = Feedmon.getPokemon(name);
     
     if (!feedmon) {
-        bot.sendMessage(src, "First send out a Feedmon!", chan);
+        bot.sendMessage(src, "First catch a Feedmon!", chan);
         return;
     }
     
     feedname = Feedmon.getPokemonName(name);
     
     if (commandData.toLowerCase() === "full") {
-        //for (i = 1, len = table.length; i < len; i += 1) {
-            //bot.sendMessage(src, "Level " + i + " requires " + table[i] + " exp.", chan);
-        //}
         Feedmon.expTableList().display(src, chan);
         return;
     }
