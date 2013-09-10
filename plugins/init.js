@@ -454,7 +454,6 @@ module.exports = {
             time = Math.round(time);
             
             sys.tempBan(name, time);
-            
             aliasKick(sys.ip(name));
         };
     

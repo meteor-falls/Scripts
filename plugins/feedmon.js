@@ -93,6 +93,7 @@ module.exports = function () {
         };
         
         save();
+        return player.pokemon;
     }
     
     function getPokemonName(name) {

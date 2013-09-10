@@ -405,6 +405,10 @@ poScript = ({
                 chan = android;
             }
             
+            if (!sys.isInChannel(src, chan)) {
+                sys.putInChannel(src, chan);
+            }
+            
             sys.sendHtmlMessage(src, "<font color='" + color + "'><timestamp/> ±<b>" + name + ":</b></font> " + message, chan);
         }
 
