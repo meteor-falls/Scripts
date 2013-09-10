@@ -243,7 +243,7 @@
         }
         
         // The last element.
-        array[len] = separator + " " + array[len];
+        array[len - 1] = separator + " " + array[len - 1];
         return array.join(", ");
     };
     
