@@ -238,13 +238,12 @@
         
         if (len <= 1) {
             return array;
-        } else if (len) {
+        } else if (len === 2) {
             return array[0] + " " + separator + " " + array[1];
         }
         
         // The last element.
         array[len] = separator + " " + array[len];
-        
         return array.join(", ");
     };
     

@@ -100,7 +100,7 @@ addCommand(0, "catch", function (src, command, commandData, tar, chan) {
     
     bot.sendAll(sys.name(src) + " caught a(n) <b>" + pokeName + "</b>!", 0);
     bot.sendAll("It has the following moves: " + Utils.fancyJoin(pokemon.moves.map(Utils.boldKeys)) + "!", 0);
-    bot.sendAll("Its nature is: <b>" + pokemon.nature + "!", 0);
+    bot.sendAll("Its nature is: <b>" + pokemon.nature + "</b>!", 0);
     bot.sendMessage(src, 'Type /feed to feed this pokemon.', chan);
     return;
 });
