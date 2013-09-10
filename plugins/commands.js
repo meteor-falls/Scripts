@@ -685,71 +685,62 @@ addCommand(0, "megausers", function (src, command, commandData, tar, chan) {
 });
 
 addCommand(0, "floodignorelist", function (src, command, commandData, tar, chan) {
-    var mus = Object.keys(FloodIgnore),
-        x;
-    
-    if (mus.length === 0) {
-        bot.sendMessage(src, "No flood ignore users yet!", chan);
+    var keys = Object.keys(FloodIgnore),
+        list;
+        
+    if (keys.length === 0) {
+        bot.sendMessage(src, "There are no flood ignores.", chan);
         return;
     }
-    mus = FloodIgnore;
-    var muList = new CommandList("<font color='goldenrod'>Flood Ignore Users</font>", "navy", "");
-    for (x in mus) {
-        muList.add(x);
-    }
-
-    muList.finish();
-    muList.display(src, chan);
+    
+    list = new TableList("Flood Ignores", "cornflowerblue", 2, 5, "navy");
+    list.addEvery(keys, false, 10);
+    list.finish();
+    list.display(src, chan);
 });
 addCommand(0, "capsignorelist", function (src, command, commandData, tar, chan) {
-    var mus = Object.keys(Capsignore),
-        x;
-    
-    if (mus.length === 0) {
-        bot.sendMessage(src, "No caps ignore users yet!", chan);
+    var keys = Object.keys(Capsignore),
+        list;
+        
+    if (keys.length === 0) {
+        bot.sendMessage(src, "There are no caps ignores.", chan);
         return;
     }
-    mus = Capsignore;
-    var muList = new CommandList("<font color='goldenrod'>Caps Ignore Users</font>", "navy", "");
-    for (x in mus) {
-        muList.add(x);
-    }
-
-    muList.finish();
-    muList.display(src, chan);
+    
+    list = new TableList("Caps Ignores", "cornflowerblue", 2, 5, "navy");
+    list.addEvery(keys, false, 10);
+    list.finish();
+    list.display(src, chan);
 });
+
 addCommand(0, "autoidlelist", function (src, command, commandData, tar, chan) {
-    var mus = Object.keys(Autoidle),
-        x;
-    
-    if (mus.length === 0) {
-        bot.sendMessage(src, "No Auto idle users yet!", chan);
+    var keys = Object.keys(Autoidle),
+        list;
+        
+    if (keys.length === 0) {
+        bot.sendMessage(src, "There are no auto idles.", chan);
         return;
     }
-    mus = Autoidle;
-    var muList = new CommandList("<font color='goldenrod'>Auto Idle Users</font>", "navy", false);
-    for (x in mus) {
-        muList.add(x);
-    }
-
-    muList.finish();
-    muList.display(src, chan);
+    
+    list = new TableList("Auto Idles", "cornflowerblue", 2, 5, "navy");
+    list.addEvery(keys, false, 10);
+    list.finish();
+    list.display(src, chan);
 });
+
 addCommand(0, "emotepermlist", function (src, command, commandData, tar, chan) {
-    var mus = Object.keys(Emoteperms),
-        x;
-    
-    if (mus.length === 0) {
-        bot.sendMessage(src, "No Emote privilege users yet!", chan);
+    var keys = Object.keys(Emoteperms),
+        list;
+        
+    if (keys.length === 0) {
+        bot.sendMessage(src, "There are no emote perm users.", chan);
         return;
     }
-    mus = Emoteperms;
-    var muList = new CommandList("<font color='goldenrod'>Emote Perm Users</font>", "navy", false);
-    for (x in mus) {
-        muList.add(x);
-    }
-    muList.finish();
-    muList.display(src, chan);
+    
+    list = new TableList("Emote Permission", "cornflowerblue", 2, 5, "navy");
+    list.addEvery(keys, false, 10);
+    list.finish();
+    list.display(src, chan);
 });
 
 addCommand(0, "gl", function (src, command, commandData, tar, chan) {
@@ -773,6 +764,7 @@ addCommand(0, "gl", function (src, command, commandData, tar, chan) {
     bot.sendAll(player + " has been made gym leader " + spot + "!", 0);
     Reg.save("Gym" + spot, player);
 });
+
 addCommand(0, "el", function (src, command, commandData, tar, chan) {
     if (!this.isLManager) {
         bot.sendMessage(src, "You need to be a league manager to use this command!", chan);
@@ -794,6 +786,7 @@ addCommand(0, "el", function (src, command, commandData, tar, chan) {
     bot.sendAll(player + " has been made elite " + spot + "!", 0);
     Reg.save("Elite" + spot, player);
 });
+
 addCommand(0, "champ", function (src, command, commandData, tar, chan) {
     if (!this.isLManager) {
         bot.sendMessage(src, "You need to be a league manager to use this command!", chan);
@@ -851,6 +844,7 @@ addCommand(0, "sub", function (src, command, commandData, tar, chan) {
         delete tourplayers[p1];
     }
 });
+
 addCommand(0, "restart", function (src, command, commandData, tar, chan) {
     if (!this.poUser.megauser && this.myAuth < 1) {
         bot.sendMessage(src, "You need to be a higher auth to use this command!", chan);
@@ -866,6 +860,7 @@ addCommand(0, "restart", function (src, command, commandData, tar, chan) {
         sys.sendHtmlAll("<font color=green><timestamp/><b>" + Utils.escapeHtml(sys.name(tar)) + "'s match was restarted by " + Utils.escapeHtml(sys.name(src)) + "!</b></font>", 0);
     }
 });
+
 addCommand(0, "tour", function (src, command, commandData, tar, chan) {
     if (!this.poUser.megauser && this.myAuth < 1) {
         bot.sendMessage(src, "You need to be a higher auth to use this command!", chan);
@@ -913,6 +908,7 @@ addCommand(0, "tour", function (src, command, commandData, tar, chan) {
     
     sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Tournament Started by <i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(sys.name(src)) + "!</i></font><hr width=300/><table cellspacing=2 cellpadding=2><tr><td><b>Tier: <font style='color:red; font-weight:bold;'>" + tourtier + "</i></td></tr><tr><td><b>Players: <font style='color:red; font-weight:bold;'>" + tournumber + "</i></td></tr><tr><td><b>Prize: <font style='color:red; font-weight:bold;'>" + Utils.escapeHtml(prize) + "</i></td></tr></table><hr width=300/><center style='margin-right: 7px;'><b>Type <font color=red>/join</font> to join!<br/></td></tr></table></center><br/>", 0);
 });
+
 addCommand(0, "dq", function (src, command, commandData, tar, chan) {
     if (!this.poUser.megauser && this.myAuth < 1) {
         bot.sendMessage(src, "You need to be a higher auth to use this command!", chan);
@@ -935,6 +931,7 @@ addCommand(0, "dq", function (src, command, commandData, tar, chan) {
         script.tourBattleEnd(script.tourOpponent(name2), name2);
     }
 });
+
 addCommand(0, "push", function (src, command, commandData, tar, chan) {
     if (!this.poUser.megauser && this.myAuth < 1) {
         bot.sendMessage(src, "You need to be a higher auth to use this command!", chan);
@@ -970,6 +967,7 @@ addCommand(0, "push", function (src, command, commandData, tar, chan) {
         script.roundPairing();
     }
 });
+
 addCommand(0, "changecount", function (src, command, commandData, tar, chan) {
     if (!this.poUser.megauser && this.myAuth < 1) {
         bot.sendMessage(src, "You need to be a higher auth to use this command!", chan);
@@ -1340,67 +1338,77 @@ addCommand(1, "removeautoidle", function (src, command, commandData, tar, chan) 
     delete Autoidle[playerName];
     Reg.save("Autoidle", JSON.stringify(Autoidle));
 }, Config.permissions.auth_permissions.mod);
+
 addCommand(1, "mutes", function (src, command, commandData, tar, chan) {
-    var mutes = Object.keys(Mutes);
-    if (mutes.length === 0) {
-        bot.sendMessage(src, "No one is muted.", chan);
+    var keys = Object.keys(Mutes),
+        timeNow = +sys.time(),
+        list,
+        now,
+        key;
+        
+    if (keys.length === 0) {
+        bot.sendMessage(src, "There are no mutes.", chan);
         return;
     }
-    mutes = Mutes;
-    var muteList = new CommandList("Muted Players", "navy", ""),
-        c_mute,
-        time_now = +sys.time(),
-        x;
     
-    for (x in mutes) {
-        c_mute = mutes[x];
-        muteList.add("IP: " + x + ". Muted on " + c_mute.mutedname + " by " + c_mute.by + ". Muted " + (c_mute.time === 0 ? "forever" : "for " + Utils.getTimeString(c_mute.time - time_now)));
+    list = new TableList("Mutes", "cornflowerblue", 2, 5, "navy");
+    list.add(["IP", "Muted Name", "By", "Length"], true);
+    
+    for (key in Mutes) {
+        now = Mutes[key];
+        list.add([key, now.mutedname, now.by, (now.time === 0 ? "forever" : "for " + Utils.getTimeString(now.time - timeNow))], false);
     }
-
-    muteList.finish();
-    muteList.display(src, chan);
+    
+    list.finish();
+    list.display(src, chan);
 }, Config.permissions.auth_permissions.mod);
-
-/*
-addCommand(1, "tempbans", function (src, command, commandData, tar, chan) {
-    var mutes = Object.keys(Tempbans);
-    if (mutes.length == 0) {
-        bot.sendMessage(src, "No one is temp banned.", chan);
-        return;
-    }
-    mutes = Tempbans;
-    var muteList = new CommandList("Temporarily Banned Players", "navy", ""),
-        c_mute, time_now = sys.time() * 1;
-    for (var x in mutes) {
-        c_mute = mutes[x];
-        muteList.add("IP: " + x + ". Banned on " + c_mute.bannedname + " by " + c_mute.by + ". Banned " + (c_mute.time === 0 ? "forever" : "for " + getTimeString(c_mute.time - time_now)));
-    }
-
-    muteList.finish();
-    muteList.display(src, chan);
-}, Config.permissions.auth_permissions.mod);
-*/
 
 addCommand(1, "rangebans", function (src, command, commandData, tar, chan) {
-    var mutes = Object.keys(Rangebans);
-    if (mutes.length === 0) {
-        bot.sendMessage(src, "No one is rangebanned.", chan);
+    var keys = Object.keys(Rangebans),
+        timeNow = +sys.time(),
+        list,
+        now,
+        key;
+        
+    if (keys.length === 0) {
+        bot.sendMessage(src, "There are no rangebans.", chan);
         return;
     }
-    mutes = Rangebans;
-    var muteList = new CommandList("IPs banned by range", "navy", ""),
-        c_mute,
-        time_now = +sys.time(),
-        x;
     
-    for (x in mutes) {
-        c_mute = mutes[x];
-        muteList.add("IP: " + x + ". Banned by " + c_mute.by + ". Reason: " + c_mute.reason);
+    list = new TableList("Rangebans", "cornflowerblue", 2, 5, "navy");
+    list.add(["IP", "By", "Reason"], true);
+    
+    for (key in Rangebans) {
+        now = Rangebans[key];
+        list.add([key, now.by, now.reason], false);
     }
-
-    muteList.finish();
-    muteList.display(src, chan);
+    
+    list.finish();
+    list.display(src, chan);
 }, Config.permissions.auth_permissions.mod);
+
+addCommand(1, "bans", function (src, command, commandData, tar, chan) {
+    var keys = sys.banList(),
+        len,
+        i,
+        list;
+        
+    if (keys.length === 0) {
+        bot.sendMessage(src, "There are no bans.", chan);
+        return;
+    }
+    
+    list = new TableList("Bans", "cornflowerblue", 2, 5, "navy");
+    list.add(["IP", "Aliases"], true);
+    
+    for (i = 0, len = keys.length; i < len; i += 1) {
+        list.add([keys[i], sys.aliases(keys[i])], false);
+    }
+    
+    list.finish();
+    list.display(src, chan);
+}, Config.permissions.auth_permissions.mod);
+
 addCommand(1, "info", function (src, command, commandData, tar, chan) {
     if (!sys.dbIp(commandData)) {
         bot.sendMessage(src, 'You need to put a real person!', chan);
