@@ -267,6 +267,8 @@ addCommand(0, "battle", function (src, command, commandData, tar, chan) {
         return;
     }
     
+    Feedmon.generateBattle(name);
+    
     Feedmon.turnMessage(name, function (str) {
         bot.sendMessage(src, str, chan);
     });
