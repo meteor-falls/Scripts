@@ -29,42 +29,25 @@ module.exports = function () {
     */
     var exp = [25, 53, 112, 138, 193, 311, 362, 471, 603, 684, 856, 1023, 1178, 1409, 1601, 1810, 2055, 2377, 2763, 3185, 3684, 4246, 4843, 5515, 6246, 7103, 8029, 9101, 10285, 11707, 13235, 14990, 17028, 19269, 21842, 24723, 27959, 31652, 35818, 40492, 45847, 51854, 58649, 66322, 74965, 84775, 95870, 108403, 122498, 138520, 156547, 176945, 199992, 226082, 255554, 288830, 326407, 368846, 416841, 471071, 532381, 601671, 679959, 768412, 868317, 981215, 1108787, 1253016, 1415924, 1600018, 1808038, 2043120, 2308745, 2608926, 2948112, 3331378, 3764535, 4253959, 4807032, 5431978, 6138213, 6936193, 7837991, 8857020, 10008452, 11309602, 12779852, 14441284, 16318734, 18440203, 20837432, 23546330, 26607382, 30066423, 33975080, 38391920, 43382889, 49022753, 55395763, 62597275];
     
-    function getPlayer(name) {
-        return Feedmons[name.toLowerCase()];
+    /* var array = [11], add, last; while(array.length < 100) { last = array[array.length - 1]; add = Math.floor(Math.sqrt(last % 9)); array.push(last + (1 + last % 2 + add)); } array; */
+    var hpTable = [11, 14, 17, 21, 24, 27, 29, 32, 35, 39, 42, 45, 47, 50, 53, 57, 60, 63, 65, 68, 71, 75, 78, 81, 83, 86, 89, 93, 96, 99, 101, 104, 107, 111, 114, 117, 119, 122, 125, 129, 132, 135, 137, 140, 143, 147, 150, 153, 155, 158, 161, 165, 168, 171, 173, 176, 179, 183, 186, 189, 191, 194, 197, 201, 204, 207, 209, 212, 215, 219, 222, 225, 227, 230, 233, 237, 240, 243, 245, 248, 251, 255, 258, 261, 263, 266, 269, 273, 276, 279, 281, 284, 287, 291, 294, 297, 299, 302, 305, 309];
+
+    var battles = {};
+    
+    function getHp(level) {
+        return hpTable[level - 1];
     }
     
-    function ensurePlayer(name) {
-        name = name.toLowerCase();
-            
-        if (!Feedmons[name]) {
-            Feedmons[name] = {
-                'timeout': 0,
-                'feedtimeout': 0,
-                'turnInfo': {},
-                'pokemon': false
-            };
-        }
-        
-        return Feedmons[name];
+    function getExp(level) {
+        return exp[level - 1];
     }
     
-    function has(name) {
-        return !!getPlayer(name);
-    }
-    
-    function checkTimeout(name, timeout) {
-        var player = ensurePlayer(name);
-        
-        timeout = timeout || 'timeout';
-        return player[timeout] !== 0 && player[timeout] > (+sys.time());
+    function getMoveDamage(move) {
+        return movePower[attackingMoves.indexOf(move)];
     }
     
     function randomPokemon() {
         return sys.pokemon(sys.rand(1, 650));
-    }
-    
-    function save() {
-        Reg.save(FEEDMON_TABLE, JSON.stringify(Feedmons));
     }
     
     function randomMove() {
@@ -76,20 +59,57 @@ module.exports = function () {
     }
     
     function randomNature() {
-        return sys.rand(0, 25);
+        return sys.nature(sys.rand(0, 25));
+    }
+    
+    function save() {
+        Reg.save(FEEDMON_TABLE, JSON.stringify(Feedmons));
+    }
+    
+    function getPlayer(name) {
+        return Feedmons[name.toLowerCase()];
+    }
+    
+    function ensurePlayer(name) {
+        name = name.toLowerCase();
+            
+        if (!Feedmons[name]) {
+            Feedmons[name] = {
+                'timeout': 0,
+                'feedtimeout': 0,
+                'pokemon': false
+            };
+        }
+        
+        return Feedmons[name];
+    }
+    
+    function has(name) {
+        return !!getPlayer(name);
+    }
+    
+    function isBattling(name) {
+        return !!battles[name];
+    }
+    
+    function checkTimeout(name, timeout) {
+        var player = ensurePlayer(name);
+        
+        timeout = timeout || 'timeout';
+        return player[timeout] !== 0 && player[timeout] > (+sys.time());
     }
     
     function generatePokemon(name) {
-        var player = getPlayer(name),
-            nature = randomNature();
+        var player = getPlayer(name);
         
         player.pokemon = {
             name: randomPokemon(),
             nickname: '',
             moves: randomMoves(),
-            nature: sys.nature(nature),
-            natureId: nature,
+            nature: randomNature(),
             happiness: 0,
+            hp: hpTable[0],
+            faint: false,
             
             level: 1,
             fed: 0,
@@ -172,6 +192,7 @@ module.exports = function () {
         
         if (lvlGain) {
             feedmon.level += lvlGain;
+            feedmon.hp = getHp(feedmon.level);
         }
         
         return {
@@ -181,6 +202,34 @@ module.exports = function () {
             now: feedmon.exp,
             bonus: bonus
         };
+    }
+    
+    function generateBattle(name) {
+        var player,
+            feedmon,
+            lvl;
+        
+        if (battles[name]) {
+            return false;
+        }
+        
+        player = getPlayer(name);
+        feedmon = getPokemon(name);
+        lvl = sys.rand(feedmon.level - 2, feedmon.level + 5);
+        
+        battles[name] = {
+            active: true,
+            opponent: {
+                pokemon: randomPokemon(),
+                level: lvl,
+                hp: getHp(lvl),
+                nature: randomNature(),
+                moves: randomMoves(),
+                faint: false
+            }
+        };
+        
+        return battles[name];
     }
     
     // Lazy generation.
@@ -205,23 +254,35 @@ module.exports = function () {
     }
             
     Feedmon = {
-        getPlayer: getPlayer,
-        ensurePlayer: ensurePlayer,
-        checkTimeout: checkTimeout,
-        randomPokemon: randomPokemon,
-        has: has,
-        getPokemon: getPokemon,
-        generatePokemon: generatePokemon,
-        getPokemonName: getPokemonName,
-        giveExp: giveExp,
+        battles: battles,
+        
         randomMove: randomMove,
         randomMoves: randomMoves,
         randomNature: randomNature,
+        randomPokemon: randomPokemon,
+        
+        getPlayer: getPlayer,
+        getPokemonName: getPokemonName,
+        getPokemon: getPokemon,
+        getMoveDamage: getMoveDamage,
+        getExp: getExp,
+        getHp: getHp,
+        
+        ensurePlayer: ensurePlayer,
+        checkTimeout: checkTimeout,
+        has: has,
+        
+        generatePokemon: generatePokemon,
+        generateBattle: generateBattle,
+        
         save: save,
         exp: exp,
         attackingMoves: attackingMoves,
         movePower: movePower,
+        
+        giveExp: giveExp,
         expTableList: expTableList,
+        
         TABLE: FEEDMON_TABLE,
         VERSION: FEEDMON_VERSION,
         HAPPINESS_GAIN: HAPPINESS_GAIN
