@@ -6,7 +6,7 @@
 
 Bot = function (name, color, prefix, italics) {
     italics = italics || false;
-    prefix = prefix || italics ? "+" : "±";
+    prefix = prefix || (italics === true ? "+" : "±");
     color = color || "red";
 
     this.name = name;
