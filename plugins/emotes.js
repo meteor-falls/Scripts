@@ -67,7 +67,7 @@ module.exports = function () {
                     uobj.lastEmote.push(i);
                 }
                 
-                return code;
+                return EmoteList.mseller1;//code;
             };
         }
         
