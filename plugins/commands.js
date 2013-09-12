@@ -2067,7 +2067,7 @@ addCommand(2, "megauseroff", function (src, command, commandData, tar, chan) {
 }, Config.permissions.auth_permissions.admin);
 addCommand(2, "clearchat", function (src, command, commandData, tar, chan) {
     chan = sys.channelId(commandData);
-    if (chan == undefined) {
+    if (chan === undefined) {
         bot.sendMessage(src, "Please specify a valid channel.", chan);
         return;
     }
