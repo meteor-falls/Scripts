@@ -19,8 +19,8 @@ var Config = {
     serverowner: "HHT", // The server owner.
    
     permissions: {
-        update: ["hht", "ethan", "theunknownone"], // People who can update scripts/tiers.
-        feedmon: ["hht", "ethan", "theunknownone"], // People with special Feedmon permissions.
+        update: [/*"theunknownone"*/], // People who can update scripts/tiers.
+        feedmon: [/*"theunknownone"*/], // People with special Feedmon permissions.
         
         // Gives users access to all commands of that level.
         auth_permissions: {
@@ -30,7 +30,7 @@ var Config = {
         }
     },
     
-    pushStaffChannel: ['theunknownone'],
+    pushStaffChannel: [/*'theunknownone'*/],
 
     // Do not touch unless you are adding a new plugin.
     plugins: ['jsession', 'bot', 'reg', 'utils', 'emotes', 'feedmon', 'init', 'item-cup', 'lists', 'mathjs', 'commands'], // Plugins to load on script load.
