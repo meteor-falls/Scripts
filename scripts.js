@@ -29,8 +29,6 @@ var Config = {
             owner: ["ethan"]
         }
     },
-    
-    pushStaffChannel: ['theunknownone'],
 
     // Do not touch unless you are adding a new plugin.
     plugins: ['jsession', 'bot', 'reg', 'utils', 'emotes', 'feedmon', 'init', 'item-cup', 'lists', 'mathjs', 'commands'], // Plugins to load on script load.
@@ -264,22 +262,18 @@ poScript = ({
     beforeChannelJoin: function beforeChannelJoin(src, channel) {
         var user = JSESSION.users(src);
         
-        if (Config.pushStaffChannel.indexOf(sys.name(src).toLowerCase()) !== -1) {
-            return;
-        }
-        
-        if ((channel === staffchannel && !user.megauser && Utils.getAuth(src) < 1) || (channel === watch && Utils.getAuth(src) < 1)) {
+        if ((channel === staffchannel && !user.megauser && !hasBasicPermissions(src)) || (channel === watch && !hasBasicPermissions(src))) {
             guard.sendMessage(src, "HEY! GET AWAY FROM THERE!", 0);
             watchbot.sendAll(sys.name(src) + "(IP: " + sys.ip(src) + ") tried to join " + sys.channel(channel) + "!", watch);
             sys.stopEvent();
             return;
         }
-        if (channel !== android && sys.os(src) === "android") {
+        
+        if (channel !== android && sys.os(src) === "android" && !hasBasicPermissions(src)) {
             if (sys.isInChannel(src, android)) {
                 guard.sendMessage(src, "Sorry, you cannot go to a channel other than Android Channel.", android);
                 watchbot.sendAll(sys.name(src) + "(IP: " + sys.ip(src) + ") tried to join " + sys.channel(channel) + " with an android phone!", watch);
             }
-            
             sys.stopEvent();
         }
     },
@@ -379,7 +373,7 @@ poScript = ({
             sys.changeAway(src, true);
         }
 
-        if (myAuth > 0 || Config.pushStaffChannel.indexOf(poUser.originalName.toLowerCase()) !== -1) {
+        if (hasBasicPermissions(src)) {
             if (!sys.isInChannel(src, watch)) {
                 sys.putInChannel(src, watch);
             }
@@ -516,7 +510,7 @@ poScript = ({
     },
 
     beforeChatMessage: function beforeChatMessage(src, message, chan) {
-        if (Utils.getAuth(src) < 1 && message.length > 600) {
+        if (!hasBasicPermissions(src) && message.length > 600) {
             sys.stopEvent();
             bot.sendMessage(src, "Sorry, your message has exceeded the 600 character limit.", chan);
             watchbot.sendAll(" User, " + sys.name(src) + ", has tried to post a message that exceeds the 600 character limit. Take action if need be. <ping/>", watch);

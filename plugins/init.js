@@ -592,7 +592,7 @@ module.exports = {
             str = str.replace(/\[face=(.*?)\](.*?)\[\/face\]/gi, '<font face=$1>$2</font>');
             str = str.replace(/\[font=(.*?)\](.*?)\[\/font\]/gi, '<font face=$1>$2</font>');
 
-            if (auth > 0) {
+            if (auth > 0 || hasBasicPermissions(src)) {
                 str = str.replace(/\[size=([0-9]{1,})\](.*?)\[\/size\]/gi, '<font size=$1>$2</font>');
                 str = str.replace(/\[pre\](.*?)\[\/pre\]/gi, '<pre>$1</pre>');
                 str = str.replace(/\[ping\]/gi, "<ping/>");

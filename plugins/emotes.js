@@ -45,8 +45,7 @@ module.exports = function () {
             i;
             
         if (src && uobj) {
-            //perm = hasBasicPermissions(src);
-            perm = sys.auth(src) > 0;
+            perm = hasBasicPermissions(src);
             timeout = perm ? 4 : 7;
             if (uobj.lastEmoteTime && uobj.lastEmoteTime + timeout > time) {
                 lastEmote = uobj.lastEmote || [];
