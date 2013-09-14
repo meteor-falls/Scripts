@@ -4,8 +4,8 @@
     bot: true, Reg: true, Leaguemanager: true, Lists: true, CommandList: true, MathJS: true, format: true, JSESSION: true, emoteFormat: true, hasEmotesToggled: true, tourmode: true, tourmembers: true, getTier: true, tourtier: true, tourplayers: true, roundnumber: true, isFinals: true, battlesLost: true, tourbattlers: true, battlesStarted: true, hasEmotePerms: true, Emotetoggles: true, rouletteon: true, spinTypes: true, EmoteList: true, TableList: true, MegaUsers: true, FloodIgnore: true, Capsignore: true, Autoidle: true, Emoteperms: true, Feedmon: true, tournumber: true, prize: true, isTier: true, tournumber: true, Kickmsgs: true, Welmsgs: true, Banmsgs: true, Channeltopics: true, android: true, topicbot: true, Mutes: true, Rangebans: true, muteall: true, kick: true, tempBanTime: true, tempBan: true, pruneMutes: true, nightclub: true, supersilence: true, ev_name: true, getName: true, ban: true, Plugins: true, PHandler: true, reloadPlugin: true, htmlchatoff: true, bots: true, servername: true, isBanned: true, loginMessage: true, logoutMessage: true, floodIgnoreCheck: true, removeTag: true, randcolor: true, colormodemessage: true, lolmessage: true, pewpewpewmessage: true, hasBasicPermissions: true, hasDrizzleSwim: true, hasSandCloak: true, ChannelNames: true, staffchannel: true, testchan: true, watch: true, aliasKick: true, reconnectTrolls: true, nthNumber: true, ChannelLink: true, addChannelLinks: true, firstGen: true, teamSpammers: true, Feedmons: true, addEmote: true, Bot: true, guard: true, watchbot: true, setbybot: true, lolmode: true, spacemode: true, reversemode: true, colormode: true, scramblemode: true, capsmode: true, pewpewpew: true, capsbot: true, poScript: true, flbot: true, Utils: true
 */
 
-commands = {},
-disabledCmds = [];
+var commands = {};
+var disabledCmds = [];
 function addCommand(authLevel, name, callback, specialPerms) {
     // Proper checks
     if (typeof authLevel !== "number") {
@@ -708,7 +708,7 @@ addCommand(0, "viewround", function (src, command, commandData, tar, chan) {
             myStr += "<br><b><u>Ongoing battles:</u></b><br>";
             for (i = 0; i < tourbattlers.length; i += 2) {
                 if (battlesStarted[i / 2] === true) {
-                    myStr += script.padd(tourplayers[tourbattlers[i]]) + " VS " + tourplayers[tourbattlers[i + 1]] + "<br>";
+                    myStr += tourplayers[tourbattlers[i]] + " VS " + tourplayers[tourbattlers[i + 1]] + "<br>";
                 }
             }
             myStr += "<br>";
@@ -1921,42 +1921,42 @@ addCommand(1, "nightclub", function (src, command, commandData, tar, chan) {
     }
 }, Config.permissions.auth_permissions.mod);
 addCommand(1, "disable", function (src, command, commandData, tar, chan) {
-    if (commandData == undefined) {
+    if (commandData === undefined) {
         bot.sendMessage(src, "You must disable something!", chan);
         return;
     }
     var cmdToLower = commandData.toLowerCase();
     if (!commands.hasOwnProperty(cmdToLower)) {
-        bot.sendMessage(src, "The command "+commandData+" doesn't exist!", chan);
+        bot.sendMessage(src, "The command " + commandData + " doesn't exist!", chan);
         return;
     }
     if (disabledCmds.indexOf(cmdToLower) > -1) {
-        bot.sendMessage(src, "The command "+command+" is already disabled!", chan);
+        bot.sendMessage(src, "The command " + command + " is already disabled!", chan);
         return;
     }
     if (["disable", "enable"].indexOf(cmdToLower) > -1) {
-        bot.sendMessage(src, "Sorry, you may not disable the "+commandData+" command.", chan);
+        bot.sendMessage(src, "Sorry, you may not disable the " + commandData + " command.", chan);
         return;
     }
     disabledCmds.push(cmdToLower);
-    bot.sendAll(sys.name(src)+" disabled '"+cmdToLower+"'!");
+    bot.sendAll(sys.name(src) + " disabled '" + cmdToLower + "'!");
 }, Config.permissions.auth_permissions.mod);
 addCommand(1, "enable", function (src, command, commandData, tar, chan) {
-    if (commandData == undefined) {
+    if (commandData === undefined) {
         bot.sendMessage(src, "You must enable something!", chan);
         return;
     }
     var cmdToLower = commandData.toLowerCase();
     if (!commands.hasOwnProperty(cmdToLower)) {
-        bot.sendMessage(src, "The command "+commandData+" doesn't exist!", chan);
+        bot.sendMessage(src, "The command " + commandData + " doesn't exist!", chan);
         return;
     }
-    if (disabledCmds.indexOf(cmdToLower) == -1) {
-        bot.sendMessage(src, "The command "+commandData+" is already enabled!", chan);
+    if (disabledCmds.indexOf(cmdToLower) === -1) {
+        bot.sendMessage(src, "The command " + commandData + " is already enabled!", chan);
         return;
     }
     disabledCmds.splice(disabledCmds.indexOf(cmdToLower), 1);
-    bot.sendAll(sys.name(src)+" re-enabled '"+cmdToLower+"'!");
+    bot.sendAll(sys.name(src) + " re-enabled '" + cmdToLower + "'!");
 }, Config.permissions.auth_permissions.mod);
 
 /** ADMIN COMMANDS */
@@ -2415,18 +2415,17 @@ addCommand(3, "resetladder", function (src, command, commandData, tar, chan) {
 addCommand(3, "authoptions", function (src, command, commandData, tar, chan) {
     Lists.Auth.display(src, chan);
 }, Config.permissions.auth_permissions.owner);
+
 module.exports = {
     can_use_command: function (src, command) {
         if (!commands.hasOwnProperty(command)) {
-            throw "The command "+command+" doesn't exist.";
-            return false;
+            throw "The command " + command + " doesn't exist.";
         }
         var srcauth = Utils.getAuth(src),
             name = JSESSION.users(src).originalName,
             cmd = commands[command];
         if (disabledCmds.indexOf(command.toLowerCase()) > -1 && srcauth < 3) {
-            throw "The command "+command+" has been disabled.";
-            return false;
+            throw "The command " + command + " has been disabled.";
         }
         if (cmd.specialPerms) {
             var list = [].concat(cmd.specialPerms);
@@ -2436,7 +2435,6 @@ module.exports = {
         }
         if (cmd.authLevel && cmd.authLevel > srcauth) {
             throw "You need to be a higher auth to use this command.";
-            return false;
         }
         return true;
     },
