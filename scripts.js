@@ -393,23 +393,17 @@ poScript = ({
             Reg.save("maxPlayersOnline", numPlayers);
             newRecord = true;
         }
-
+        
+        if (sys.os(src) === "android") {
+            defaultChan = android;
+        }
+        
+        if (!sys.isInChannel(src, defaultChan)) {
+            sys.putInChannel(src, defaultChan);
+        }
+        
         function displayBot(name, message, color) {
-            var chan = defaultChan;
-            
-            if (sys.os(src) === "android") {
-                if (!sys.isInChannel(src, android)) {
-                    sys.putInChannel(src, android);
-                }
-                
-                chan = android;
-            }
-            
-            if (!sys.isInChannel(src, chan)) {
-                sys.putInChannel(src, chan);
-            }
-            
-            sys.sendHtmlMessage(src, "<font color='" + color + "'><timestamp/> ±<b>" + name + ":</b></font> " + message, chan);
+            sys.sendHtmlMessage(src, "<font color='" + color + "'><timestamp/> ±<b>" + name + ":</b></font> " + message, defaultChan);
         }
 
         displayBot("ServerBot", "Hey, <b><font color='" + Utils.nameColor(src) + "'>" + sys.name(src) + "</font></b>!", "purple");
@@ -443,21 +437,21 @@ poScript = ({
             var myMute = Mutes[ip],
                 muteStr = myMute.time !== 0 ? Utils.getTimeString(myMute.time - +sys.time()) : "forever";
             poUser.muted = true;
-            bot.sendMessage(src, "You are muted for " + muteStr + ". By: " + myMute.by + ". Reason: " + myMute.reason, 0);
+            bot.sendMessage(src, "You are muted for " + muteStr + ". By: " + myMute.by + ". Reason: " + myMute.reason, defaultChan);
         }
 
         var i;
         var drizzleSwim = hasDrizzleSwim(src);
         if (drizzleSwim.length > 0) {
             for (i = 0; i < drizzleSwim.length; i += 1) {
-                bot.sendMessage(src, "Sorry, DrizzleSwim is banned from 5th Gen OU.");
+                bot.sendMessage(src, "Sorry, DrizzleSwim is banned from 5th Gen OU.", defaultChan);
                 sys.changeTier(src, drizzleSwim[i], "5th Gen Ubers");
             }
         }
         var sandCloak = hasSandCloak(src);
         if (sandCloak.length > 0) {
             for (i = 0; i < sandCloak.length; i += 1) {
-                bot.sendMessage(src, "Sorry, Sand Veil & Snow Cloak are only usable in 5th Gen Ubers.");
+                bot.sendMessage(src, "Sorry, Sand Veil & Snow Cloak are only usable in 5th Gen Ubers.", defaultChan);
                 sys.changeTier(src, sandCloak[i], "5th Gen Ubers");
             }
         }
@@ -465,9 +459,9 @@ poScript = ({
         script.megauserCheck(src);
 
         if (tourmode === 1) {
-            sys.sendHtmlMessage(src, "<br/><center><table width=30% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:11px; font-weight:bold;'>A <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament is in sign-up phase</font><hr width=200/><br><b><i style='color:red; font-weight:bold;'>" + script.tourSpots() + "</i> space(s) are remaining!<br><br>Type <i style='color:red; font-weight:bold;'>/join</i> to join!</b><br/><br/></td></tr></table></center><br/>", 0);
+            sys.sendHtmlMessage(src, "<br/><center><table width=30% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:11px; font-weight:bold;'>A <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament is in sign-up phase</font><hr width=200/><br><b><i style='color:red; font-weight:bold;'>" + script.tourSpots() + "</i> space(s) are remaining!<br><br>Type <i style='color:red; font-weight:bold;'>/join</i> to join!</b><br/><br/></td></tr></table></center><br/>", defaultChan);
         } else if (tourmode === 2) {
-            sys.sendHtmlMessage(src, "<br/><center><table width=35% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:11px; font-weight:bold;'>A <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament is currently running.</font><hr width=210/><br><b>Type <i style='color:red; font-weight:bold;'>/viewround</i> to check the status of the tournament!</b><br/><br/></td></tr></table></center><br/>", 0);
+            sys.sendHtmlMessage(src, "<br/><center><table width=35% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:11px; font-weight:bold;'>A <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament is currently running.</font><hr width=210/><br><b>Type <i style='color:red; font-weight:bold;'>/viewround</i> to check the status of the tournament!</b><br/><br/></td></tr></table></center><br/>", defaultChan);
         }
 
         var tier = getTier(src, "5th Gen OU");
