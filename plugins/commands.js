@@ -4,8 +4,8 @@
     bot: true, Reg: true, Leaguemanager: true, Lists: true, CommandList: true, MathJS: true, format: true, JSESSION: true, emoteFormat: true, hasEmotesToggled: true, tourmode: true, tourmembers: true, getTier: true, tourtier: true, tourplayers: true, roundnumber: true, isFinals: true, battlesLost: true, tourbattlers: true, battlesStarted: true, hasEmotePerms: true, Emotetoggles: true, rouletteon: true, spinTypes: true, EmoteList: true, TableList: true, MegaUsers: true, FloodIgnore: true, Capsignore: true, Autoidle: true, Emoteperms: true, Feedmon: true, tournumber: true, prize: true, isTier: true, tournumber: true, Kickmsgs: true, Welmsgs: true, Banmsgs: true, Channeltopics: true, android: true, topicbot: true, Mutes: true, Rangebans: true, muteall: true, kick: true, tempBanTime: true, tempBan: true, pruneMutes: true, nightclub: true, supersilence: true, ev_name: true, getName: true, ban: true, Plugins: true, PHandler: true, reloadPlugin: true, htmlchatoff: true, bots: true, servername: true, isBanned: true, loginMessage: true, logoutMessage: true, floodIgnoreCheck: true, removeTag: true, randcolor: true, colormodemessage: true, lolmessage: true, pewpewpewmessage: true, hasBasicPermissions: true, hasDrizzleSwim: true, hasSandCloak: true, ChannelNames: true, staffchannel: true, testchan: true, watch: true, aliasKick: true, reconnectTrolls: true, nthNumber: true, ChannelLink: true, addChannelLinks: true, firstGen: true, teamSpammers: true, Feedmons: true, addEmote: true, Bot: true, guard: true, watchbot: true, setbybot: true, lolmode: true, spacemode: true, reversemode: true, colormode: true, scramblemode: true, capsmode: true, pewpewpew: true, capsbot: true, poScript: true, flbot: true, Utils: true
 */
 
-var commands = {},
-    disabledCmds = [];
+commands = {},
+disabledCmds = [];
 function addCommand(authLevel, name, callback, specialPerms) {
     // Proper checks
     if (typeof authLevel !== "number") {
@@ -36,12 +36,6 @@ function addCommand(authLevel, name, callback, specialPerms) {
         };
     }
 }
-
-addCommand(3, "leaguemanager", function (src, command, commandData, tar, chan) {
-    bot.sendAll(sys.name(tar) + " is now the league manager!");
-    Reg.save("Leaguemanager", sys.name(tar).toLowerCase());
-    Leaguemanager = sys.name(tar).toLowerCase();
-}, ["hht"]);
 
 /** USER COMMANDS */
 
@@ -1926,6 +1920,44 @@ addCommand(1, "nightclub", function (src, command, commandData, tar, chan) {
         sys.sendHtmlAll(Utils.nightclub.rainbowify("Kay, Night Club times are over...") + "<br/>", chan);
     }
 }, Config.permissions.auth_permissions.mod);
+addCommand(1, "disable", function (src, command, commandData, tar, chan) {
+    if (commandData == undefined) {
+        bot.sendMessage(src, "You must disable something!", chan);
+        return;
+    }
+    var cmdToLower = commandData.toLowerCase();
+    if (!commands.hasOwnProperty(cmdToLower)) {
+        bot.sendMessage(src, "The command "+commandData+" doesn't exist!", chan);
+        return;
+    }
+    if (disabledCmds.indexOf(cmdToLower) > -1) {
+        bot.sendMessage(src, "The command "+command+" is already disabled!", chan);
+        return;
+    }
+    if (["disable", "enable"].indexOf(cmdToLower) > -1) {
+        bot.sendMessage(src, "Sorry, you may not disable the "+commandData+" command.", chan);
+        return;
+    }
+    disabledCmds.push(cmdToLower);
+    bot.sendAll(sys.name(src)+" disabled `"+cmdToLower+"`!", 0);
+}, Config.permissions.auth_permissions.mod);
+addCommand(1, "enable", function (src, command, commandData, tar, chan) {
+    if (commandData == undefined) {
+        bot.sendMessage(src, "You must enable something!", chan);
+        return;
+    }
+    var cmdToLower = commandData.toLowerCase();
+    if (!commands.hasOwnProperty(cmdToLower)) {
+        bot.sendMessage(src, "The command "+commandData+" doesn't exist!", chan);
+        return;
+    }
+    if (disabledCmds.indexOf(cmdToLower) == -1) {
+        bot.sendMessage(src, "The command "+commandData+" is already enabled!", chan);
+        return;
+    }
+    disabledCmds.splice(disabledCmds.indexOf(cmdToLower), 1);
+    bot.sendAll(sys.name(src)+" re-enabled `"+cmdToLower+"`!", 0);
+}, Config.permissions.auth_permissions.mod);
 
 /** ADMIN COMMANDS */
 addCommand(2, "admincommands", function (src, command, commandData, tar, chan) {
@@ -2300,6 +2332,11 @@ addCommand(3, "bots", function (src, command, commandData, tar, chan) {
     var word = bots ? "on" : "off";
     bot.sendAll(sys.name(src) + " turned all bots " + word + "!", 0);
 }, Config.permissions.auth_permissions.owner);
+addCommand(3, "leaguemanager", function (src, command, commandData, tar, chan) {
+    bot.sendAll(sys.name(tar) + " is now the league manager!");
+    Reg.save("Leaguemanager", sys.name(tar).toLowerCase());
+    Leaguemanager = sys.name(tar).toLowerCase();
+});
 addCommand(3, "changeauth", function (src, command, commandData, tar, chan) {
     var cmdData = commandData.split(":");
     if (cmdData.length < 2) {
@@ -2381,15 +2418,16 @@ addCommand(3, "authoptions", function (src, command, commandData, tar, chan) {
 module.exports = {
     can_use_command: function (src, command) {
         if (!commands.hasOwnProperty(command)) {
+            throw "The command "+command+" doesn't exist.";
             return false;
         }
-        if (disabledCmds.indexOf(command.toLowerCase()) > -1) {
-            return false;
-        }
-        
         var srcauth = Utils.getAuth(src),
             name = JSESSION.users(src).originalName,
             cmd = commands[command];
+        if (disabledCmds.indexOf(command.toLowerCase()) > -1 && srcauth < 3) {
+            throw "The command "+command+" has been disabled.";
+            return false;
+        }
         if (cmd.specialPerms) {
             var list = [].concat(cmd.specialPerms);
             if (list.indexOf(name.toLowerCase()) > -1) {
@@ -2397,9 +2435,9 @@ module.exports = {
             }
         }
         if (cmd.authLevel && cmd.authLevel > srcauth) {
-            return false; // Normal check
+            throw "You need to be a higher auth to use this command.";
+            return false;
         }
-        
         return true;
     },
     handle_command: function (src, message, command, commandData, tar, chan) {

@@ -608,12 +608,15 @@ poScript = ({
             }
             var tar = sys.id(commandData);
             
-            if (!Plugins('commands.js').can_use_command(src, command)) {
-                bot.sendMessage(src, "The command " + command + " doesn't exist.", chan);
+            try {
+                if (Plugins('commands.js').can_use_command(src, command)) {
+                    Plugins('commands.js').handle_command(src, message, command, commandData, tar, chan);
+                    return;
+                }
+            } catch(err) {
+                bot.sendMessage(src, err, chan);
                 return;
             }
-            Plugins('commands.js').handle_command(src, message, command, commandData, tar, chan);
-            return;
         }
         
         var originalMessage = message;
