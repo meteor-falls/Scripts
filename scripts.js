@@ -613,7 +613,7 @@ poScript = ({
                     Plugins('commands.js').handle_command(src, message, command, commandData, tar, chan);
                     return;
                 }
-            } catch(err) {
+            } catch (err) {
                 bot.sendMessage(src, err, chan);
                 return;
             }
@@ -862,9 +862,9 @@ poScript = ({
         watchbot.sendAll(sys.name(src) + " has " + m + ".", watch);
     },
 
-    beforeBattleMatchup: function beforeBattleMatchup(src, dest) {
-        var tier = getTier(src, tourtier),
-            desttier = getTier(dest, tourtier);
+    beforeBattleMatchup: function beforeBattleMatchup(src, dest, clauses, rated, mode, team1, team2) {
+        var tier = getTier(src, sys.tier(team1)),
+            desttier = getTier(dest, sys.tier(team2));
         if (tier && desttier) {
             if (script.dreamAbilityCheck(src) || script.dreamAbilityCheck(dest)) {
                 sys.stopEvent();

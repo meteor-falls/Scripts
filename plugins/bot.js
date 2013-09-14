@@ -57,4 +57,20 @@ Bot.prototype.sendMessage = function (player, message, channel) {
     sys.sendHtmlMessage(player, message_format, channel);
 };
 
+Bot.prototype.line = function (src, channel) {
+    if (channel !== undefined) {
+        sys.sendMessage(src, "", channel);
+    } else {
+        sys.sendMessage(src, "");
+    }
+};
+
+Bot.prototype.lineAll = function (channel) {
+    if (channel !== undefined) {
+        sys.sendAll("", channel);
+    } else {
+        sys.sendAll("");
+    }
+};
+
 module.exports.Bot = Bot;
