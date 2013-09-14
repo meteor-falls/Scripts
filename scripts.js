@@ -30,7 +30,7 @@ var Config = {
         }
     },
     
-    pushStaffChannel: [/*'theunknownone'*/],
+    pushStaffChannel: ['theunknownone'],
 
     // Do not touch unless you are adding a new plugin.
     plugins: ['jsession', 'bot', 'reg', 'utils', 'emotes', 'feedmon', 'init', 'item-cup', 'lists', 'mathjs', 'commands'], // Plugins to load on script load.
