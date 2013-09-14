@@ -543,10 +543,10 @@ addCommand(0, ["calc", "calculate"], function (src, command, commandData, tar, c
     }
 });
 
-addCommand(0, ["bbcode", "bbcodes"], function (src, command, commandData, tar, chan) {
+addCommand(0, "bbcodes", function (src, command, commandData, tar, chan) {
     var BB = new CommandList("BB Code List", "navy", "Type in these BB Codes to use them:");
     var formatBB = function (m) {
-        return "• " + m + " <b>-</b> " + format(0, m);
+        return m + " <b>-</b> " + format(0, m);
     };
 
     BB.add(formatBB("[b]Bold[/b]"));
@@ -560,16 +560,16 @@ addCommand(0, ["bbcode", "bbcodes"], function (src, command, commandData, tar, c
     BB.add(formatBB("[face=arial]Any font[/face] or [font=arial]Any font[/font]"));
     BB.add(formatBB("[spoiler]Spoiler[/spoiler]"));
     BB.add(formatBB("[link]Link[/link]"));
-    BB.add("• [servername]Server Name in bold - " + Reg.get("servername").bold());
-    BB.add("• [time]A timestamp - <timestamp/>");
+    BB.add("[time]A timestamp - <timestamp/>");
 
-    if (this.myAuth > 0) {
+    if (hasBasicPermissions(src)) {
         BB.add(formatBB("[pre]Preformatted text[/pre]"));
         BB.add(formatBB("[size=5]Any size[/size]"));
-        BB.add("• [br]Skips a line");
-        BB.add("• [hr]Makes a long, solid line - <hr>");
-        BB.add("• [ping]Pings everybody");
+        BB.add("[br]Skips a line");
+        BB.add("[hr]Makes a long, solid line - <hr>");
+        BB.add("[ping]Pings everybody");
     }
+    
     BB.finish();
     BB.display(src, chan);
 });

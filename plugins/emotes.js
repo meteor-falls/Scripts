@@ -28,7 +28,7 @@ module.exports = function () {
             EmoteList[alts[i]] = code;
         }
         
-        EmoteList.__display__.push([alts.join(" | "), (priority || 0)]);
+        EmoteList.__display__.push(alts.join(" | "));
     };
     
     emoteFormat = function (message, src) {

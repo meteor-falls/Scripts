@@ -582,12 +582,13 @@ module.exports = {
             str = str.replace(/\[sub\](.*?)\[\/sub\]/gi, '<sub>$1</sub>');
             str = str.replace(/\[code\](.*?)\[\/code\]/gi, '<code>$1</code>');
             str = str.replace(/\[link\](.*?)\[\/link\]/gi, '<a href="$1">$1</a>');
-            str = str.replace(/\[servername\]/gi, "Meteor Falls".bold());
             str = str.replace(/\[spoiler\](.*?)\[\/spoiler\]/gi, '<a style="color: black; background-color:black;">$1</a>');
             str = str.replace(/\[time\]/gi, "<timestamp/>");
+            
             if (auth !== 3 && !htmlchatoff) {
-                str = str.replace(/[a-z]{3,}:\/\/[^ ]+/i, atag);
+                str = str.replace(/[a-z]{3,}:\/\/[^ ]+/gi, atag);
             }
+            
             str = str.replace(/\[color=(.*?)\](.*?)\[\/color\]/gi, '<font color=$1>$2</font>');
             str = str.replace(/\[face=(.*?)\](.*?)\[\/face\]/gi, '<font face=$1>$2</font>');
             str = str.replace(/\[font=(.*?)\](.*?)\[\/font\]/gi, '<font face=$1>$2</font>');
@@ -598,6 +599,11 @@ module.exports = {
                 str = str.replace(/\[ping\]/gi, "<ping/>");
                 str = str.replace(/\[br\]/gi, "<br/>");
                 str = str.replace(/\[hr\]/gi, "<hr/>");
+                str = str.replace(/\[announce\](.*?)\[\/announce\]/gi, function ($1) {
+                    return "<br><font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>"
+                        + "<br/><font color=" + Utils.nameColor(src) + "><timestamp/>+<b><i>" + sys.name(src) + ":</b><font color=black> " + $1 + "<br>"
+                        + "<br/><font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>";
+                });
             }
 
             str = addChannelLinks(str); // do this late for other bbcodes to work properly

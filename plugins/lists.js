@@ -217,18 +217,13 @@ module.exports = {
 
         /** EMOTES **/
         var Emotes = new TableList("Emotes", "stripe", 1, 2, "navy");
-        // var Emotes = new CommandList("Emote List", "navy", "If you have emote permissions, type these emotes in the main chat of a channel to use them:");
-
-        // EmoteList["__display__"].sort(function (a, b) {
-            // return (b[1] - a[1]);
-        // });
 
         var emotesToAdd = [],
             len,
             i;
         
         for (i = 0, len = EmoteList.__display__.length; i < len; i += 1) {
-            emotesToAdd.push(Utils.escapeHtml(EmoteList.__display__[i][0]));
+            emotesToAdd.push(Utils.escapeHtml(EmoteList.__display__[i]));
             
             if (emotesToAdd.length >= 8) {
                 Emotes.add(emotesToAdd, false);
