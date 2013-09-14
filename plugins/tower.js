@@ -18,6 +18,7 @@
     };
     
     var Bot = Plugins('bot.js').Bot,
+        border = "<font color=orange><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</b></font>",
         tbot;
     Tower.bot = tbot = new Bot("Meteor Giant", "#0f4a4c", "+", true);
     
@@ -27,6 +28,10 @@
     
     Tower.count = function (type) {
         return Object.keys(Tower[type]).length;
+    };
+    
+    Tower.name = function (name) {
+        return sys.name(sys.id(name));
     };
     
     Tower.find = function (name) {
@@ -41,9 +46,18 @@
     Tower.joinChannel = function (name, chan) {
         name = name.toLowerCase();
         
-        if (Tower.players[name] && Tower.mode === "playing" && Tower.checkChannel(chan)) {
-            Tower.players[name].channels.push(chan);
+        if (Tower.checkChannel(chan)) {
+            if (Tower.players[name] && Tower.mode === "playing") {
+                Tower.players[name].channels.push(chan);
+                return true;
+            } else if (Tower.seekers[name]) {
+                return true;
+            } else {
+                return false;
+            }
         }
+        
+        return true;
     };
     
     Tower.tick = function () {
@@ -73,11 +87,33 @@
         }
     };
     
+    Tower.clearVariables = function () {
+        Tower.signups = {};
+        Tower.players = {};
+        Tower.seekers = {};
+        Tower.found = {};
+        Tower.mode = 'none';
+        Tower.time = 0;
+    };
+    
+    Tower.createPlayer = function (name) {
+        var id = sys.id(name);
+        
+        Tower.players[name] = {
+            channels: []
+        };
+        
+        tbot.sendMessage(id, border, 0);
+        tbot.line(id, 0);
+        tbot.sendMessage(id, "You are a Hider. Go to one of the Floor (xxx) channels to hide yourself!");
+    };
+    
     Tower.onSignupsStart = function () {
     };
     
     Tower.onGameEnd = function () {
         Tower.mode = 'none';
+        Tower.clearVariables();
     };
     
     Tower.onSignupsEnd = function () {
@@ -85,6 +121,7 @@
             i;
         
         if (count < Tower.MIN_PLAYERS) {
+            tbot.sendAll(
             tbot.lineAll(0);
             tbot.sendAll("Tough luck!", 0);
             tbot.lineAll(0);
@@ -93,6 +130,14 @@
             
             Tower.mode = 'none';
             return;
+        }
+        
+        for (i in Tower.signups) {
+            if (i === count - 1) {
+                Tower.createSeeker(i);
+            } else {
+                Tower.createPlayer(i);
+            }
         }
     };
     
