@@ -432,6 +432,7 @@ poScript = ({
             var msg = (theirmessage) ? theirmessage.message : loginMessage(sys.name(src), Utils.nameColor(src));
             if (theirmessage) {
                 msg = msg.replace(/\{Server\}/gi, Reg.get("servername"));
+                msg = msg.replace(/\{Color\}/gi, Utils.nameColor(src));
                 msg = emoteFormat(msg);
             }
             sys.sendHtmlAll(msg, 0);
