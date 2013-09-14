@@ -1939,7 +1939,7 @@ addCommand(1, "disable", function (src, command, commandData, tar, chan) {
         return;
     }
     disabledCmds.push(cmdToLower);
-    bot.sendAll(sys.name(src)+" disabled `"+cmdToLower+"`!", 0);
+    bot.sendAll(sys.name(src)+" disabled '"+cmdToLower+"'!");
 }, Config.permissions.auth_permissions.mod);
 addCommand(1, "enable", function (src, command, commandData, tar, chan) {
     if (commandData == undefined) {
@@ -1956,7 +1956,7 @@ addCommand(1, "enable", function (src, command, commandData, tar, chan) {
         return;
     }
     disabledCmds.splice(disabledCmds.indexOf(cmdToLower), 1);
-    bot.sendAll(sys.name(src)+" re-enabled `"+cmdToLower+"`!", 0);
+    bot.sendAll(sys.name(src)+" re-enabled '"+cmdToLower+"'!");
 }, Config.permissions.auth_permissions.mod);
 
 /** ADMIN COMMANDS */
