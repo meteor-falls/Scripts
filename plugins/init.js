@@ -599,9 +599,9 @@ module.exports = {
                 str = str.replace(/\[ping\]/gi, "<ping/>");
                 str = str.replace(/\[br\]/gi, "<br/>");
                 str = str.replace(/\[hr\]/gi, "<hr/>");
-                str = str.replace(/\[announce\](.*?)\[\/announce\]/gi, function ($1) {
+                str = str.replace(/\[announce\](.*?)\[\/announce\]/gi, function ($1, $2) {
                     return "<br><font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>"
-                        + "<br/><font color=" + Utils.nameColor(src) + "><timestamp/>+<b><i>" + sys.name(src) + ":</b><font color=black> " + $1 + "<br>"
+                        + "<br/><font color=" + Utils.nameColor(src) + "><timestamp/><b>" + sys.name(src) + ":</b><font color=black> " + $2 + "<br>"
                         + "<br/><font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>";
                 });
             }
