@@ -413,10 +413,10 @@ module.exports = {
         getName = function (name) {
             var pId = sys.id(name);
             if (pId) {
-                return name;
+                return sys.name(pId);
             }
 
-            return sys.name(pId);
+            return name;
         };
 
         kick = function (src, floodBot) {
