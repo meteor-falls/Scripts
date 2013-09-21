@@ -50,9 +50,9 @@ if (typeof Utils === "undefined") {
 
 function PluginHandler(dir) {
     this.dir = dir;
-    sys.makeDir(this.dir);
-    
     this.plugins = {};
+    
+    sys.makeDir(this.dir);
 }
 
 PluginHandler.prototype.load = function PluginHandler_load(plugin_name, webcall) {
@@ -168,11 +168,9 @@ function poUser(id) {
     this.floodCount = 0;
     this.caps = 0;
     this.muted = false;
-    //Mutes.hasOwnProperty(ip);
 
     this.originalName = sys.name(id);
     this.megauser = false;
-    //MegaUsers.hasOwnProperty(this.originalName.toLowerCase());
     
     // This is an array so we can track multiple emotes in their last message.
     this.lastEmote = [];
@@ -670,7 +668,7 @@ poScript = ({
         sys.stopEvent();
         sys.sendHtmlAll(sendStr, chan);
 
-        watchbot.sendAll(" [Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Message -- " + Utils.escapeHtml(sys.name(src)) + ": " + Utils.escapeHtml(originalMessage), watch);
+        watchbot.sendAll("[Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Message -- " + Utils.escapeHtml(sys.name(src)) + ": " + Utils.escapeHtml(originalMessage), watch);
 
         script.afterChatMessage(src, originalMessage, chan);
     },
