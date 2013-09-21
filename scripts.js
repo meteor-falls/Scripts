@@ -1,7 +1,7 @@
 /*jslint continue: true, es5: true, evil: true, forin: true, sloppy: true, vars: true, regexp: true, newcap: true, nomen: true*/
 /*global sys, SESSION, script: true, Qt, print, gc, version,
     global: false, Plugin: true, Config: true, module: true, exports: true,
-    bot: true, Reg: true, Leaguemanager: true, Lists: true, CommandList: true, MathJS: true, format: true, JSESSION: true, emoteFormat: true, hasEmotesToggled: true, tourmode: true, tourmembers: true, getTier: true, tourtier: true, tourplayers: true, roundnumber: true, isFinals: true, battlesLost: true, tourbattlers: true, battlesStarted: true, hasEmotePerms: true, Emotetoggles: true, rouletteon: true, spinTypes: true, EmoteList: true, TableList: true, MegaUsers: true, FloodIgnore: true, Capsignore: true, Autoidle: true, Emoteperms: true, Feedmon: true, tournumber: true, prize: true, isTier: true, tournumber: true, Kickmsgs: true, Welmsgs: true, Banmsgs: true, Channeltopics: true, android: true, topicbot: true, Mutes: true, Rangebans: true, muteall: true, kick: true, tempBanTime: true, tempBan: true, pruneMutes: true, nightclub: true, supersilence: true, ev_name: true, getName: true, ban: true, Plugins: true, PHandler: true, reloadPlugin: true, htmlchatoff: true, bots: true, servername: true, isBanned: true, loginMessage: true, logoutMessage: true, floodIgnoreCheck: true, removeTag: true, randcolor: true, colormodemessage: true, lolmessage: true, pewpewpewmessage: true, hasBasicPermissions: true, hasDrizzleSwim: true, hasSandCloak: true, ChannelNames: true, staffchannel: true, testchan: true, watch: true, aliasKick: true, reconnectTrolls: true, nthNumber: true, ChannelLink: true, addChannelLinks: true, firstGen: true, teamSpammers: true, Feedmons: true, addEmote: true, Bot: true, guard: true, watchbot: true, setbybot: true, lolmode: true, spacemode: true, reversemode: true, colormode: true, scramblemode: true, capsmode: true, pewpewpew: true, capsbot: true, poScript: true, flbot: true, Utils: true
+    bot: true, Reg: true, Leaguemanager: true, Lists: true, CommandList: true, MathJS: true, format: true, JSESSION: true, emoteFormat: true, hasEmotesToggled: true, tourmode: true, tourmembers: true, getTier: true, tourtier: true, tourplayers: true, roundnumber: true, isFinals: true, battlesLost: true, tourbattlers: true, battlesStarted: true, hasEmotePerms: true, Emotetoggles: true, rouletteon: true, spinTypes: true, EmoteList: true, TableList: true, MegaUsers: true, FloodIgnore: true, Capsignore: true, Autoidle: true, Emoteperms: true, Feedmon: true, tournumber: true, prize: true, isTier: true, tournumber: true, Kickmsgs: true, Welmsgs: true, Banmsgs: true, Channeltopics: true, android: true, topicbot: true, Mutes: true, Rangebans: true, muteall: true, kick: true, tempBanTime: true, tempBan: true, pruneMutes: true, nightclub: true, supersilence: true, ev_name: true, getName: true, ban: true, Plugins: true, PHandler: true, reloadPlugin: true, htmlchatoff: true, bots: true, servername: true, isBanned: true, loginMessage: true, logoutMessage: true, floodIgnoreCheck: true, removeTag: true, randcolor: true, colormodemessage: true, lolmessage: true, pewpewpewmessage: true, hasBasicPermissions: true, hasDrizzleSwim: true, hasSandCloak: true, ChannelNames: true, staffchannel: true, testchan: true, watch: true, aliasKick: true, nthNumber: true, ChannelLink: true, addChannelLinks: true, firstGen: true, Feedmons: true, addEmote: true, Bot: true, guard: true, watchbot: true, setbybot: true, lolmode: true, spacemode: true, reversemode: true, colormode: true, scramblemode: true, capsmode: true, pewpewpew: true, capsbot: true, poScript: true, flbot: true, Utils: true
 */
 
 /* Meteor Falls v0.7 Scripts.
@@ -14,28 +14,29 @@ var Config = {
     repourl: "https://raw.github.com/meteor-falls/Scripts/master/plugins/", // Repo to load plugins from.
     dataurl: "https://raw.github.com/meteor-falls/Server-Shit/master/", // Repo to load data (announcement/description + tiers) from.
     
-    plugindir: "plugins/", // Plugin directory.
+    // Plugin directory.
+    plugindir: "plugins/",
     
-    serverowner: "HHT", // The server owner.
+    // The server owner.
+    serverowner: "HHT",
    
     permissions: {
-        update: ["ethan"], // People who can update scripts/tiers.
-        feedmon: ["theunknownone"], // People with special Feedmon permissions.
-        
-        // Gives users access to all commands of that level.
-        auth_permissions: {
-            mod: [],
-            admin: [],
-            owner: []
-        }
+        // People who can update scripts/tiers.
+        update: ["ethan"],
+         // People with special Feedmon permissions.
+        feedmon: ["theunknownone"]
     },
 
     // Do not touch unless you are adding a new plugin.
-    plugins: ['jsession', 'bot', 'reg', 'utils', 'emotes', 'feedmon', 'init', 'lists', 'mathjs', 'commands'], // Plugins to load on script load.
+    // Plugins to load on script load.
+    plugins: ['jsession', 'bot', 'reg', 'utils', 'emotes', 'feedmon', 'init', 'lists', 'commands'],
     
-    load_from_web: true, // Whether or not to load plugins from repourl. If set to false, they will load locally.
-    stripHtmlFromChannelMessages: true, // If HTML should be stripped from channel messages outputted onto the server window.
-    emotesEnabled: true, // If emotes are enabled
+    // Whether or not to load plugins from repourl. If set to false, they will load locally.
+    load_from_web: true, 
+    // If HTML should be stripped from channel messages outputted onto the server window.
+    stripHtmlFromChannelMessages: true,
+    // If emotes are enabled.
+    emotesEnabled: true,
     catchTimeout: 5,
     feedTimeout: 2
 };
@@ -56,10 +57,12 @@ function PluginHandler(dir) {
 }
 
 PluginHandler.prototype.load = function PluginHandler_load(plugin_name, webcall) {
-    var fileContent;
+    var fileContent,
+        resp;
     
     if (webcall) {
-        sys.writeToFile(this.dir + plugin_name, sys.synchronousWebCall(Config.repourl + plugin_name));
+        resp = sys.synchronousWebCall(Config.repourl + plugin_name);
+        sys.writeToFile(this.dir + plugin_name, resp);
     }
     
     fileContent = sys.getFileContent(this.dir + plugin_name);
@@ -95,7 +98,8 @@ PluginHandler.prototype.unload = function PluginHandler_unload(plugin_name) {
     return (delete this.plugins[plugin_name]);
 };
 
-PluginHandler.prototype.callplugins = function PluginHandler_callplugins(event) {
+// Never used
+/*PluginHandler.prototype.callplugins = function PluginHandler_callplugins(event) {
     var args = [].slice.call(arguments, 1);
     var ret = true;
     var plugins = this.plugins,
@@ -112,7 +116,7 @@ PluginHandler.prototype.callplugins = function PluginHandler_callplugins(event) 
         }
     }
     return ret;
-};
+};*/
 
 var PHandler = new PluginHandler(Config.plugindir);
 
@@ -320,10 +324,6 @@ poScript = ({
 
     beforeLogIn: function beforeLogIn(src) {
         var srcip = sys.ip(src);
-        if (reconnectTrolls[srcip]) {
-            sys.stopEvent();
-            return;
-        }
         
         var poUser = JSESSION.users(src),
             cu_rb,
@@ -463,8 +463,8 @@ poScript = ({
     },
 
     beforeChangeTier: function beforeChangeTier(src, oldtier, newtier) {
-        var drizzleSwim = hasDrizzleSwim(src);
-        var i;
+        var drizzleSwim = hasDrizzleSwim(src),
+            i;
         
         if (drizzleSwim.length > 0) {
             for (i = 0; i < drizzleSwim.length; i += 1) {
@@ -489,8 +489,8 @@ poScript = ({
     },
 
     beforeChangeTeam: function beforeChangeTeam(src) {
-        var drizzleSwim = hasDrizzleSwim(src);
-        var i;
+        var drizzleSwim = hasDrizzleSwim(src),
+            i;
         
         if (drizzleSwim.length > 0) {
             for (i = 0; i < drizzleSwim.length; i += 1) {
@@ -533,14 +533,8 @@ poScript = ({
             isLManager = Leaguemanager === originalName.toLowerCase(),
             messageToLowerCase = message.toLowerCase(),
             myAuth = Utils.getAuth(src);
-
-        if (originalName === "Ian" && (messageToLowerCase === "ok" || messageToLowerCase === "ok!")) {
-            sys.stopEvent();
-            sys.sendHtmlAll("<timestamp/> <b>Ian Check:</b> <font color='green'>OK!</font>", chan);
-            return;
-        }
         
-        if (Utils.hasIllegalChars(message)) {
+        if (Utils.hasIllegalChars(message) && myAuth < 3) {
             bot.sendMessage(src, 'WHY DID YOU TRY TO POST THAT, YOU NOOB?!', chan);
             watchbot.sendAll(Utils.escapeHtml(sys.name(src)) + ' TRIED TO POST A BAD CODE! KILL IT! <ping/>', watch);
             sys.stopEvent();
@@ -563,21 +557,13 @@ poScript = ({
             }
         }
         
-        if (myAuth < 1 && muteall) {
+        if (myAuth < 1 && muteall || myAuth < 2 && supersilence) {
             sys.stopEvent();
             bot.sendMessage(src, "Shut up! Silence is on!", chan);
             watchbot.sendAll(" [Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Silence Message -- " + Utils.escapeHtml(sys.name(src)) + ": " + Utils.escapeHtml(message), watch);
             script.afterChatMessage(src, message, chan);
             return;
         }
-        if (myAuth < 2 && supersilence) {
-            sys.stopEvent();
-            bot.sendMessage(src, "Shut up! Super Silence is on!", chan);
-            watchbot.sendAll(" [Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Silence Message -- " + Utils.escapeHtml(sys.name(src)) + ": " + Utils.escapeHtml(message), watch);
-            script.afterChatMessage(src, message, chan);
-            return;
-        }
-
 
         if ((message[0] === '/' || message[0] === '!') && message.length > 1) {
             print("[#" + sys.channel(chan) + "] Command -- " + sys.name(src) + ": " + message);
@@ -687,64 +673,6 @@ poScript = ({
         myUser.originalName = sys.name(src);
 
         script.megauserCheck(src);
-        if (typeof myUser.teamChanges === 'undefined') {
-            myUser.teamChanges = 0;
-        }
-
-        myUser.teamChanges += 1;
-
-        var teamChanges = myUser.teamChanges;
-        var ip = sys.ip(src);
-
-        if (!teamSpammers) {
-            teamSpammers = {};
-        }
-
-        if (teamChanges > 2) {
-            if (typeof teamSpammers[ip] === "undefined") {
-                teamSpammers[ip] = 0;
-                
-                sys.setTimer(function () {
-                    if (typeof teamSpammers[ip] !== "undefined") {
-                        teamSpammers[ip] -= 1;
-                        
-                        if (teamSpammers[ip] <= 0) {
-                            delete teamSpammers[ip];
-                        }
-                    }
-                }, 40 * 1000, false);
-                
-            } else if (teamSpammers[ip] === 0) {
-                teamSpammers[ip] = 1;
-                watchbot.sendAll("Alert: Possible spammer, ip " + ip + ", name " + Utils.escapeHtml(sys.name(src)) + ". Kicked for now.", watch);
-                kick(src);
-                
-                sys.setTimer(function () {
-                    if (typeof teamSpammers[ip] !== "undefined") {
-                        teamSpammers[ip] -= 1;
-                        
-                        if (teamSpammers[ip] <= 0) {
-                            delete teamSpammers[ip];
-                        }
-                    }
-                }, 180 * 1000, false);
-                
-                return;
-            } else {
-                watchbot.sendAll("Spammer: ip " + ip + ", name " + Utils.escapeHtml(sys.name(src)) + ". Banning.", watch);
-                ban(sys.name(src));
-                delete teamSpammers[ip];
-                return;
-            }
-        }
-
-        sys.setTimer(function () {
-            var user = JSESSION.users(src);
-            
-            if (user) {
-                user.teamChanges -= 1;
-            }
-        }, 5 * 1000, false);
         
         watchbot.sendAll(sys.name(src) + " changed teams.", watch);
     },
