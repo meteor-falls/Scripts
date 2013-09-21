@@ -19,7 +19,7 @@ var Config = {
     serverowner: "HHT", // The server owner.
    
     permissions: {
-        update: ["max","ethan","theunknownone"], // People who can update scripts/tiers.
+        update: ["max"], // People who can update scripts/tiers.
         feedmon: ["theunknownone"], // People with special Feedmon permissions.
         
         // Gives users access to all commands of that level.
