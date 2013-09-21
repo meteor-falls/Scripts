@@ -249,7 +249,7 @@ module.exports = {
                 name = uobj.originalName;
             }
             
-            return Utils.getAuth(src) > 0 || Config.permissions.update.indexOf(name.toLowerCase()) > -1;
+            return Utils.getAuth(src) > 0;
         };
 
         hasEmotesToggled = function (src) {

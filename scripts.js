@@ -21,8 +21,6 @@ var Config = {
     serverowner: "HHT",
    
     permissions: {
-        // People who can update scripts/tiers.
-        update: ["ethan"],
          // People with special Feedmon permissions.
         feedmon: ["theunknownone"]
     },
