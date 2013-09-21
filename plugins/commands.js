@@ -2273,7 +2273,7 @@ addCommand(3, "update", function (src, command, commandData, tar, chan) {
         reloadPlugin(commandData);
         bot.sendMessage(src, "Plugin " + commandData + " updated!", chan);
     });
-});
+}, Config.permissions.update);
 addCommand(3, ["webcall", "updatescript"], function (src, command, commandData, tar, chan) {
     sys.sendHtmlAll('<font color=blue><timestamp/><b>±ScriptBot: </b></font>The scripts were webcalled by ' + sys.name(src) + '!', 0);
     if (!commandData) {
@@ -2291,7 +2291,7 @@ addCommand(3, ["webcall", "updatescript"], function (src, command, commandData, 
             bot.sendMessage(src, "The error was " + e + " on line " + e.lineNumber, chan);
         }
     });
-});
+}, Config.permissions.update);
 addCommand(3, ["updatetiers"], function (src, command, commandData, tar, chan) {
     if (!commandData || (commandData.substr(0, 7) !== 'http://' && commandData.substr(0, 8) !== 'https://')) {
         commandData = Config.dataurl + "tiers.xml";
@@ -2306,7 +2306,7 @@ addCommand(3, ["updatetiers"], function (src, command, commandData, tar, chan) {
             return;
         }
     });
-});
+}, Config.permissions.update);
 addCommand(3, ["testann", "updateann"], function (src, command, commandData, tar, chan) {
     if (!commandData || (commandData.substr(0, 7) !== 'http://' && commandData.substr(0, 8) !== 'https://')) {
         commandData = Config.dataurl + "announcement.html";
@@ -2326,7 +2326,7 @@ addCommand(3, ["testann", "updateann"], function (src, command, commandData, tar
             sys.changeAnnouncement(resp);
         }
     });
-});
+}, Config.permissions.update);
 addCommand(3, ["toggleemotes"], function (src, command, commandData, tar, chan) {
     Config.emotesEnabled = !Config.emotesEnabled;
     bot.sendAll("Emotes were " + (Config.emotesEnabled ? "enabled!" : "disabled."), chan);
