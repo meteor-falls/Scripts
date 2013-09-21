@@ -530,7 +530,7 @@ addCommand(0, "emotes", function (src, command, commandData, tar, chan) {
 });
 
 addCommand(0, ["calc", "calculate"], function (src, command, commandData, tar, chan) {
-    if (typeof(MathJS) === "undefined") {
+    if (MathJS === null) {
         bot.sendMessage(src, "Sorry, MathJS needs to be loaded in order to use this command.", chan);
         return;
     }
@@ -2262,12 +2262,11 @@ addCommand(3, "update", function (src, command, commandData, tar, chan) {
         bot.sendMessage(src, "Specify a plugin!", chan);
         return;
     }
-    if (!Plugins(commandData)) {
-        bot.sendMessage(src, "Plugin " + commandData + " not found.", chan);
-        return;
-    }
-    bot.sendMessage(src, "Updating plugin " + commandData + "..", chan);
+    bot.sendMessage(src, "Updating plugin " + commandData, chan);
     sys.webCall(Config.repourl + commandData, function (resp) {
+        if (resp === "" || resp.length < 1) { 
+            return;
+        }
         sys.writeToFile(Config.plugindir + commandData, resp);
         PHandler.load(commandData, false);
         reloadPlugin(commandData);
