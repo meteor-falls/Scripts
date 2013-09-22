@@ -671,6 +671,64 @@ poScript = ({
         myUser.originalName = sys.name(src);
 
         script.megauserCheck(src);
+        if (typeof myUser.teamChanges === 'undefined') {
+            myUser.teamChanges = 0;
+        }
+
+        myUser.teamChanges += 1;
+
+        var teamChanges = myUser.teamChanges;
+        var ip = sys.ip(src);
+
+        if (!teamSpammers) {
+            teamSpammers = {};
+        }
+
+        if (teamChanges > 2) {
+            if (typeof teamSpammers[ip] === "undefined") {
+                teamSpammers[ip] = 0;
+                
+                sys.setTimer(function () {
+                    if (typeof teamSpammers[ip] !== "undefined") {
+                        teamSpammers[ip] = 1;
+                        
+                        if (teamSpammers[ip] <= 0) {
+                            delete teamSpammers[ip];
+                        }
+                    }
+                }, 40 * 1000, false);
+                
+            } else if (teamSpammers[ip] === 0) {
+                teamSpammers[ip] = 1;
+                watchbot.sendAll("Alert: Possible spammer, ip " + ip + ", name " + Utils.escapeHtml(sys.name(src)) + ". Kicked for now.", watch);
+                kick(src);
+                
+                sys.setTimer(function () {
+                    if (typeof teamSpammers[ip] !== "undefined") {
+                        teamSpammers[ip] = 1;
+                        
+                        if (teamSpammers[ip] <= 0) {
+                            delete teamSpammers[ip];
+                        }
+                    }
+                }, 180 * 1000, false);
+                
+                return;
+            } else {
+                watchbot.sendAll("Spammer: ip " + ip + ", name " + Utils.escapeHtml(sys.name(src)) + ". Banning.", watch);
+                ban(sys.name(src));
+                delete teamSpammers[ip];
+                return;
+            }
+        }
+
+        sys.setTimer(function () {
+            var user = JSESSION.users(src);
+            
+            if (user) {
+                user.teamChanges -= 1;
+            }
+        }, 5 * 1000, false);
         
         watchbot.sendAll(sys.name(src) + " changed teams.", watch);
     },
