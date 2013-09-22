@@ -131,17 +131,15 @@
     };
     
     util.hasIllegalChars = function (m) {
-        if (m.indexOf(/[\u202E\u202D]/) !== -1) {
+        if (m.indexOf(/[\u202E\u202D]/) !== -1)
             return true;
-        } else if (m.indexOf(/[\u0300-\u036F]/) !== -1) {
+        if (m.indexOf(/[\u0300-\u036F]/) !== -1)
             return true;
-        } else if (m.indexOf(/[\u0430-\u044f\u2000-\u200d]/) !== -1) {
+        if (m.indexOf(/[\u0430-\u044f\u2000-\u200d]/) !== -1)
             return true;
-        } else if (m.indexOf("&#8") !== -1) {
+        if (/[\u0458\u0489\u202a-\u202e\u0300-\u036F\u1dc8\u1dc9\ufffc\u1dc4-\u1dc7\u20d0\u20d1\u0415\u0421]/.test(m))
             return true;
-        }
             
-        //if (/\u2061|\u2062|\u2063|\u2064|\u200B|\xAD/.test(m)) return true;
         return false;
     };
 
