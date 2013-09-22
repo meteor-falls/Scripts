@@ -1421,7 +1421,7 @@ addCommand(1, "removecapsignore", function (src, command, commandData, tar, chan
         return;
     }
     var playerName = commandData.toLowerCase();
-    if (Capsignore.hasOwnProperty(playerName)) {
+    if (!Capsignore.hasOwnProperty(playerName)) {
         bot.sendMessage(src, "This person doesn't have caps ignore!", chan);
         return;
     }
@@ -1435,7 +1435,7 @@ addCommand(1, "removefloodignore", function (src, command, commandData, tar, cha
         return;
     }
     var playerName = commandData.toLowerCase();
-    if (FloodIgnore.hasOwnProperty(playerName)) {
+    if (!FloodIgnore.hasOwnProperty(playerName)) {
         bot.sendMessage(src, "This person doesn't have flood ignore!", chan);
         return;
     }
