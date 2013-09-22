@@ -539,7 +539,8 @@ poScript = ({
         
         if (Utils.hasIllegalChars(message) && myAuth < 3) {
             bot.sendMessage(src, 'WHY DID YOU TRY TO POST THAT, YOU NOOB?!', chan);
-            watchbot.sendAll(Utils.escapeHtml(sys.name(src)) + ' TRIED TO POST A BAD CODE! KILL IT! <ping/>', watch);
+            watchbot.sendAll(Utils.escapeHtml(sys.name(src).toUpperCase()) + ' TRIED TO POST A BAD CODE! KILL IT! <ping/>', watch);
+            watchbot.sendAll("Message: "+Utils.escapeHtml(message), watch);
             sys.stopEvent();
             script.afterChatMessage(src, message, chan);
             return;
