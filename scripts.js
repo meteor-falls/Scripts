@@ -337,6 +337,11 @@ poScript = ({
                 }
             }
         }
+        
+        if (Utils.hasIllegalChars(sys.name(src))) {
+            sys.stopEvent();
+            return;
+        }
 
         if (sys.name(src) === "HHT") {
             var ip = sys.ip(src);
@@ -666,6 +671,10 @@ poScript = ({
         JSESSION.destroyUser(src);
     },
     afterChangeTeam: function afterChangeTeam(src) {
+        if (Utils.hasIllegalChars(sys.name(src))) {
+            aliasKick(sys.ip(src));
+            return;
+        }
         var myUser = JSESSION.users(src);
 
         myUser.originalName = sys.name(src);
