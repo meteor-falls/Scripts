@@ -263,7 +263,9 @@ poScript = ({
         var user = JSESSION.users(src);
         
         if ((channel === staffchannel && !user.megauser && !hasBasicPermissions(src)) || (channel === watch && !hasBasicPermissions(src))) {
-            guard.sendMessage(src, "HEY! GET AWAY FROM THERE!", 0);
+            if (sys.isInChannel(src, 0)) {
+                guard.sendMessage(src, "HEY! GET AWAY FROM THERE!", 0);
+            }
             watchbot.sendAll(sys.name(src) + "(IP: " + sys.ip(src) + ") tried to join " + sys.channel(channel) + "!", watch);
             sys.stopEvent();
             return;
