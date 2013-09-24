@@ -56,7 +56,7 @@ module.exports = function () {
         
         function assignEmote(code) {
             return function ($1) {
-                if (emotes > 3 || lastEmote.indexOf(i) !== -1) {
+                if (emotes > 4 || lastEmote.indexOf(i) !== -1) {
                     return $1;
                 }
                 
@@ -72,7 +72,7 @@ module.exports = function () {
         
         for (i in EmoteList) {
             // Skip for performance
-            if (emotes > 3) {
+            if (emotes > 4) {
                 break;
             }
             
