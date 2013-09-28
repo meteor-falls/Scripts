@@ -176,6 +176,9 @@ function poUser(id) {
     
     // This is an array so we can track multiple emotes in their last message.
     this.lastEmote = [];
+    
+    // Channels this user has created
+    this.createdChannels = [];
 }
 
 JSESSION.identifyScriptAs("MF Script 0.7 Beta");
@@ -291,12 +294,35 @@ poScript = ({
 
         JSESSION.destroyChannel(channel);
     },
+    
+    afterChannelDestroyed: function afterChannelDestroyed(channel) {
+        // Ugly, but I'm not sure how to do this a better way
+        var onlinePlayers = sys.playerIds().filter(function(id) { return sys.loggedIn(id); }),
+            x,
+            c;
+        for (x in onlinePlayers) {
+            c = JSESSION.users(onlinePlayers[x]).createdChannels;
+            if (c.indexOf(channel) > -1) {
+                JSESSION.users(onlinePlayers[x]).createdChannels.splice(c.indexOf(channel), 1);
+                break; // Only 1 person should have been able to create the channel
+            }
+        }
+    },
 
     megauserCheck: function megauserCheck(src) {
         JSESSION.users(src).megauser = MegaUsers.hasOwnProperty(sys.name(src).toLowerCase());
     },
+    
+    beforeChannelCreated: function beforeChannelCreated(chan, name, src) {
+        var createdChannels = JSESSION.users(src).createdChannels;
+        
+        if (createdChannels.length >= 2) {
+            sys.stopEvent();
+        }
+    },
 
     afterChannelCreated: function afterChannelCreated(chan, name, src) {
+        JSESSION.users(src).createdChannels.push(chan);
         ChannelNames.push(name);
         JSESSION.createChannel(chan);
     },
@@ -538,6 +564,12 @@ poScript = ({
             isLManager = Leaguemanager === originalName.toLowerCase(),
             messageToLowerCase = message.toLowerCase(),
             myAuth = Utils.getAuth(src);
+            
+        if (originalName === "Ian" && (messageToLowerCase === "ok" || messageToLowerCase === "ok!")) {
+            sys.stopEvent();
+            sys.sendHtmlAll("<timestamp/> <b>Ian Check:</b> <font color='green'>OK!</font>", chan);
+            return;
+        }
         
         if (Utils.hasIllegalChars(message) && myAuth < 3) {
             /*bot.sendMessage(src, 'WHY DID YOU TRY TO POST THAT, YOU NOOB?!', chan);
