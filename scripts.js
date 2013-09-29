@@ -539,7 +539,9 @@ poScript = ({
     },
 
     beforeChatMessage: function beforeChatMessage(src, message, chan) {
-        if (!hasBasicPermissions(src) && message.length > 600) {
+        var lname = sys.name(src).toLowerCase(),
+            messageLimit = (lname === "tuobot" && sys.dbRegistered(lname)) ? 800 : 600;
+        if (!hasBasicPermissions(src) && message.length > messageLimit) {
             sys.stopEvent();
             bot.sendMessage(src, "Sorry, your message has exceeded the 600 character limit.", chan);
             watchbot.sendAll(" User, " + sys.name(src) + ", has tried to post a message that exceeds the 600 character limit. Take action if need be. <ping/>", watch);
