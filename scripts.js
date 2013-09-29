@@ -1,7 +1,7 @@
 /*jslint continue: true, es5: true, evil: true, forin: true, sloppy: true, vars: true, regexp: true, newcap: true, nomen: true*/
 /*global sys, SESSION, script: true, Qt, print, gc, version,
     global: false, Plugin: true, Config: true, module: true, exports: true,
-    bot: true, Reg: true, Leaguemanager: true, Lists: true, CommandList: true, MathJS: true, format: true, JSESSION: true, emoteFormat: true, hasEmotesToggled: true, tourmode: true, tourmembers: true, getTier: true, tourtier: true, tourplayers: true, roundnumber: true, isFinals: true, battlesLost: true, tourbattlers: true, battlesStarted: true, hasEmotePerms: true, Emotetoggles: true, rouletteon: true, spinTypes: true, EmoteList: true, TableList: true, MegaUsers: true, FloodIgnore: true, Capsignore: true, Autoidle: true, Emoteperms: true, Feedmon: true, tournumber: true, prize: true, isTier: true, tournumber: true, Kickmsgs: true, Welmsgs: true, Banmsgs: true, Channeltopics: true, android: true, topicbot: true, Mutes: true, Rangebans: true, muteall: true, kick: true, tempBanTime: true, tempBan: true, pruneMutes: true, nightclub: true, supersilence: true, ev_name: true, getName: true, ban: true, Plugins: true, PHandler: true, reloadPlugin: true, htmlchatoff: true, bots: true, servername: true, isBanned: true, loginMessage: true, logoutMessage: true, floodIgnoreCheck: true, removeTag: true, randcolor: true, colormodemessage: true, lolmessage: true, pewpewpewmessage: true, hasBasicPermissions: true, hasDrizzleSwim: true, hasSandCloak: true, ChannelNames: true, staffchannel: true, testchan: true, watch: true, aliasKick: true, nthNumber: true, ChannelLink: true, addChannelLinks: true, firstGen: true, Feedmons: true, addEmote: true, Bot: true, guard: true, watchbot: true, setbybot: true, lolmode: true, spacemode: true, reversemode: true, colormode: true, scramblemode: true, capsmode: true, pewpewpew: true, capsbot: true, poScript: true, flbot: true, Utils: true
+    bot: true, Reg: true, Leaguemanager: true, Lists: true, CommandList: true, MathJS: true, format: true, JSESSION: true, emoteFormat: true, hasEmotesToggled: true, tourmode: true, tourmembers: true, getTier: true, tourtier: true, tourplayers: true, roundnumber: true, isFinals: true, battlesLost: true, tourbattlers: true, battlesStarted: true, hasEmotePerms: true, Emotetoggles: true, rouletteon: true, spinTypes: true, EmoteList: true, TableList: true, MegaUsers: true, FloodIgnore: true, Capsignore: true, Autoidle: true, Emoteperms: true, Feedmon: true, tournumber: true, prize: true, isTier: true, tournumber: true, Kickmsgs: true, Welmsgs: true, Banmsgs: true, Channeltopics: true, android: true, topicbot: true, Mutes: true, Rangebans: true, muteall: true, kick: true, tempBanTime: true, tempBan: true, pruneMutes: true, nightclub: true, supersilence: true, ev_name: true, getName: true, ban: true, Plugins: true, PHandler: true, reloadPlugin: true, htmlchatoff: true, bots: true, servername: true, isBanned: true, loginMessage: true, logoutMessage: true, floodIgnoreCheck: true, removeTag: true, randcolor: true, colormodemessage: true, lolmessage: true, pewpewpewmessage: true, hasBasicPermissions: true, hasDrizzleSwim: true, hasSandCloak: true, staffchannel: true, testchan: true, watch: true, aliasKick: true, nthNumber: true, ChannelLink: true, addChannelLinks: true, firstGen: true, Feedmons: true, addEmote: true, Bot: true, guard: true, watchbot: true, setbybot: true, lolmode: true, spacemode: true, reversemode: true, colormode: true, scramblemode: true, capsmode: true, pewpewpew: true, capsbot: true, poScript: true, flbot: true, Utils: true
 */
 
 /* Meteor Falls v0.7 Scripts.
@@ -11,8 +11,11 @@
 
 var Config = {
     // Configuration for the script.
-    repourl: "https://raw.github.com/meteor-falls/Scripts/master/plugins/", // Repo to load plugins from.
-    dataurl: "https://raw.github.com/meteor-falls/Server-Shit/master/", // Repo to load data (announcement/description + tiers) from.
+    
+     // Repo to load plugins from.
+    repourl: "https://raw.github.com/meteor-falls/Scripts/master/plugins/",
+     // Repo to load data (announcement/description + tiers) from.
+    dataurl: "https://raw.github.com/meteor-falls/Server-Shit/master/",
     
     // Plugin directory.
     plugindir: "plugins/",
@@ -176,9 +179,6 @@ function poUser(id) {
     
     // This is an array so we can track multiple emotes in their last message.
     this.lastEmote = [];
-    
-    // Channels this user has created
-    this.createdChannels = [];
 }
 
 JSESSION.identifyScriptAs("MF Script 0.7 Beta");
@@ -289,41 +289,18 @@ poScript = ({
             return;
         }
         
-        var cname = sys.channel(channel);
-        ChannelNames.splice(ChannelNames.indexOf(cname), 1);
-
         JSESSION.destroyChannel(channel);
     },
     
-    afterChannelDestroyed: function afterChannelDestroyed(channel) {
-        // Ugly, but I'm not sure how to do this a better way
-        var onlinePlayers = sys.playerIds().filter(function(id) { return sys.loggedIn(id); }),
-            x,
-            c;
-        for (x in onlinePlayers) {
-            c = JSESSION.users(onlinePlayers[x]).createdChannels;
-            if (c.indexOf(channel) > -1) {
-                JSESSION.users(onlinePlayers[x]).createdChannels.splice(c.indexOf(channel), 1);
-                break; // Only 1 person should have been able to create the channel
-            }
-        }
-    },
+    afterChannelDestroyed: function afterChannelDestroyed(channel) {},
 
     megauserCheck: function megauserCheck(src) {
         JSESSION.users(src).megauser = MegaUsers.hasOwnProperty(sys.name(src).toLowerCase());
     },
     
-    beforeChannelCreated: function beforeChannelCreated(chan, name, src) {
-        var createdChannels = JSESSION.users(src).createdChannels;
-        
-        if (createdChannels.length >= 2) {
-            sys.stopEvent();
-        }
-    },
+    beforeChannelCreated: function beforeChannelCreated(chan, name, src) {},
 
     afterChannelCreated: function afterChannelCreated(chan, name, src) {
-        JSESSION.users(src).createdChannels.push(chan);
-        ChannelNames.push(name);
         JSESSION.createChannel(chan);
     },
 
