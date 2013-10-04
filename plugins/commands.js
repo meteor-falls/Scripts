@@ -478,7 +478,7 @@ addCommand(0, "superimp", function (src, command, commandData, tar, chan) {
         return;
     }
 
-    sys.sendHtmlAll('<font color=#8A2BE2><timestamp/><b>' + Utils.escapeHtml(sys.name(src)) + ' has super-impersonated ' + Utils.escapeHtml(commandData) + '!</font></b>');
+    sys.sendHtmlAll('<font color=#8A2BE2><timestamp/><b>' + Utils.escapeHtml(sys.name(src)) + ' has super-impersonated ' + Utils.escapeHtml(commandData) + '!</font></b>', chan);
     sys.changeName(src, '~~' + commandData + '~~');
 });
 
