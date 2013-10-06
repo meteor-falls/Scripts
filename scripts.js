@@ -1,7 +1,7 @@
 /*jslint continue: true, es5: true, evil: true, forin: true, sloppy: true, vars: true, regexp: true, newcap: true, nomen: true*/
 /*global sys, SESSION, script: true, Qt, print, gc, version,
     global: false, Plugin: true, Config: true, module: true, exports: true,
-    bot: true, Reg: true, Leaguemanager: true, Lists: true, CommandList: true, MathJS: true, format: true, JSESSION: true, emoteFormat: true, hasEmotesToggled: true, tourmode: true, tourmembers: true, getTier: true, tourtier: true, tourplayers: true, roundnumber: true, isFinals: true, battlesLost: true, tourbattlers: true, battlesStarted: true, hasEmotePerms: true, Emotetoggles: true, rouletteon: true, spinTypes: true, EmoteList: true, TableList: true, MegaUsers: true, FloodIgnore: true, Capsignore: true, Autoidle: true, Emoteperms: true, Feedmon: true, tournumber: true, prize: true, isTier: true, tournumber: true, Kickmsgs: true, Welmsgs: true, Banmsgs: true, Channeltopics: true, android: true, topicbot: true, Mutes: true, Rangebans: true, muteall: true, kick: true, tempBanTime: true, tempBan: true, pruneMutes: true, nightclub: true, supersilence: true, ev_name: true, getName: true, ban: true, Plugins: true, PHandler: true, reloadPlugin: true, htmlchatoff: true, bots: true, servername: true, isBanned: true, loginMessage: true, logoutMessage: true, floodIgnoreCheck: true, removeTag: true, randcolor: true, colormodemessage: true, lolmessage: true, pewpewpewmessage: true, hasBasicPermissions: true, hasDrizzleSwim: true, hasSandCloak: true, staffchannel: true, testchan: true, watch: true, aliasKick: true, nthNumber: true, ChannelLink: true, addChannelLinks: true, firstGen: true, Feedmons: true, addEmote: true, Bot: true, guard: true, watchbot: true, setbybot: true, lolmode: true, spacemode: true, reversemode: true, colormode: true, scramblemode: true, capsmode: true, pewpewpew: true, capsbot: true, poScript: true, flbot: true, Utils: true
+    bot: true, Reg: true, Leaguemanager: true, Lists: true, CommandList: true, MathJS: true, format: true, JSESSION: true, emoteFormat: true, hasEmotesToggled: true, tourmode: true, tourmembers: true, getTier: true, tourtier: true, tourplayers: true, roundnumber: true, isFinals: true, battlesLost: true, tourbattlers: true, battlesStarted: true, hasEmotePerms: true, Emotetoggles: true, rouletteon: true, spinTypes: true, EmoteList: true, TableList: true, MegaUsers: true, FloodIgnore: true, Capsignore: true, Autoidle: true, Emoteperms: true, Feedmon: true, tournumber: true, prize: true, isTier: true, tournumber: true, Kickmsgs: true, Welmsgs: true, Banmsgs: true, Channeltopics: true, android: true, topicbot: true, Mutes: true, Rangebans: true, muteall: true, kick: true, tempBanTime: true, tempBan: true, pruneMutes: true, nightclub: true, supersilence: true, ev_name: true, getName: true, ban: true, Plugins: true, PluginHandler: true, reloadPlugin: true, htmlchatoff: true, bots: true, servername: true, isBanned: true, loginMessage: true, logoutMessage: true, floodIgnoreCheck: true, removeTag: true, randcolor: true, colormodemessage: true, lolmessage: true, pewpewpewmessage: true, hasBasicPermissions: true, hasDrizzleSwim: true, hasSandCloak: true, staffchannel: true, testchan: true, watch: true, aliasKick: true, nthNumber: true, ChannelLink: true, addChannelLinks: true, firstGen: true, Feedmons: true, addEmote: true, Bot: true, guard: true, watchbot: true, setbybot: true, lolmode: true, spacemode: true, reversemode: true, colormode: true, scramblemode: true, capsmode: true, pewpewpew: true, capsbot: true, poScript: true, flbot: true, Utils: true
 */
 
 /* Meteor Falls v0.7 Scripts.
@@ -19,14 +19,6 @@ var Config = {
     
     // Plugin directory.
     plugindir: "plugins/",
-    
-    // The server owner.
-    serverowner: "HHT",
-   
-    permissions: {
-         // People with special Feedmon permissions.
-        feedmon: ["theunknownone"]
-    },
 
     // Do not touch unless you are adding a new plugin.
     // Plugins to load on script load.
@@ -37,91 +29,78 @@ var Config = {
     // If HTML should be stripped from channel messages outputted onto the server window.
     stripHtmlFromChannelMessages: true,
     // If emotes are enabled.
-    emotesEnabled: true,
-    catchTimeout: 5,
-    feedTimeout: 2
+    emotesEnabled: true
 };
 
-if (typeof JSESSION === "undefined") {
-    JSESSION = null;
-}
+(function() {
+    var PluginHandler = global.PluginHandler = {};
+    PluginHandler.plugins = {};
+    dir = Config.plugindir;
+    
+    sys.makeDir(dir);
+    
+    PluginHandler.load = function PluginHandler_load(plugin_name, webcall) {
+        var fileContent,
+            resp;
+        
+        if (webcall) {
+            resp = sys.synchronousWebCall(Config.repourl + plugin_name);
+            sys.writeToFile(dir + plugin_name, resp);
+        }
+        
+        fileContent = sys.getFileContent(dir + plugin_name);
+        
+        if (!fileContent) {
+            return false;
+        }
+        
+        var module = {
+            exports: {}
+        };
+        
+        var exports = module.exports;
+        try {
+            eval(fileContent);
+        } catch (e) {
+            sys.sendAll("Error loading plugin " + plugin_name + ": " + e + " on line " + e.lineNumber);
+            return false;
+        }
+        
+        print("Loaded module " + plugin_name);
+        
+        this.plugins[plugin_name] = module.exports;
+        
+        if (module.callExports) {
+            module.exports();
+        }
+        
+        return module.exports;
+    };
 
-if (typeof Utils === "undefined") {
-    Utils = null;
-}
-
-function PluginHandler(dir) {
-    this.dir = dir;
-    this.plugins = {};
-    
-    sys.makeDir(this.dir);
-}
-
-PluginHandler.prototype.load = function PluginHandler_load(plugin_name, webcall) {
-    var fileContent,
-        resp;
-    
-    if (webcall) {
-        resp = sys.synchronousWebCall(Config.repourl + plugin_name);
-        sys.writeToFile(this.dir + plugin_name, resp);
-    }
-    
-    fileContent = sys.getFileContent(this.dir + plugin_name);
-    
-    if (!fileContent) {
-        return false;
-    }
-    
-    var module = {
-        exports: {}
+    PluginHandler.unload = function PluginHandler_unload(plugin_name) {
+        return (delete this.plugins[plugin_name]);
     };
     
-    var exports = module.exports;
-    try {
-        eval(fileContent);
-    } catch (e) {
-        sys.sendAll("Error loading plugin " + plugin_name + ": " + e + " on line " + e.lineNumber);
-        return false;
-    }
-    
-    print("Loaded module " + plugin_name);
-    
-    this.plugins[plugin_name] = module.exports;
-    
-    if (module.callExports) {
-        module.exports();
-    }
-    
-    return module.exports;
-};
-
-PluginHandler.prototype.unload = function PluginHandler_unload(plugin_name) {
-    return (delete this.plugins[plugin_name]);
-};
-
-// Never used
-/*PluginHandler.prototype.callplugins = function PluginHandler_callplugins(event) {
-    var args = [].slice.call(arguments, 1);
-    var ret = true;
-    var plugins = this.plugins,
-        plugin;
-    
-    for (plugin in plugins) {
-        if (plugins[plugin].hasOwnProperty(event)) {
-            try {
-                if (plugins[plugin][event].apply(plugins[plugin], args)) {
-                    ret = false;
+    // Never used
+    /*PluginHandler.callplugins = function PluginHandler_callplugins(event) {
+        var args = [].slice.call(arguments, 1);
+        var ret = true;
+        var plugins = this.plugins,
+            plugin;
+        
+        for (plugin in plugins) {
+            if (plugins[plugin].hasOwnProperty(event)) {
+                try {
+                    if (!plugins[plugin][event].apply(plugins[plugin], args)) {
+                        ret = false;
+                    }
+                } catch (e) {
                 }
-            } catch (e) {
             }
         }
-    }
-    return ret;
-};*/
+        return ret;
+    };*/
 
-var PHandler = new PluginHandler(Config.plugindir);
-
-(function () {
     var plugin,
         plugin_name,
         i;
@@ -129,17 +108,18 @@ var PHandler = new PluginHandler(Config.plugindir);
     for (i = 0; i < Config.plugins.length; i += 1) {
         plugin = Config.plugins[i];
         plugin_name = (plugin.indexOf(".") === -1) ? plugin + ".js" : plugin;
-        PHandler.load(plugin_name, Config.load_from_web);
+        PluginHandler.load(plugin_name, Config.load_from_web);
     }
-}());
+})();
 
 function Plugins(plugin_name) {
-    if (!PHandler.plugins.hasOwnProperty(plugin_name)) {
+    if (!PluginHandler.plugins.hasOwnProperty(plugin_name)) {
         return null;
     }
     
-    return PHandler.plugins[plugin_name];
+    return PluginHandler.plugins[plugin_name];
 }
+
 function reloadPlugin(plugin_name) {
     if (plugin_name === "init.js") {
         script.init();
@@ -181,7 +161,7 @@ function poUser(id) {
     this.lastEmote = [];
 }
 
-JSESSION.identifyScriptAs("MF Script 0.7 Beta");
+JSESSION.identifyScriptAs("Meteor Falls Script");
 JSESSION.registerUserFactory(poUser);
 JSESSION.refill();
 
@@ -234,7 +214,7 @@ poScript = ({
             return;
         }
         if (message === "Script Check: OK") {
-            sys.sendHtmlAll("<b><i><font color=Blue><font size=4>±ScriptBot:</font></b><b><i><font color=Black><font size=4> Server Owner " + Config.serverowner + " has updated the scripts!</font></b></i>");
+            sys.sendHtmlAll("<b><i><font color=Blue><font size=4>±ScriptBot:</font></b><b><i><font color=Black><font size=4> Scripts were updated!</font></b></i>");
             script.init();
             return;
         }
@@ -291,14 +271,10 @@ poScript = ({
         
         JSESSION.destroyChannel(channel);
     },
-    
-    afterChannelDestroyed: function afterChannelDestroyed(channel) {},
 
     megauserCheck: function megauserCheck(src) {
         JSESSION.users(src).megauser = MegaUsers.hasOwnProperty(sys.name(src).toLowerCase());
     },
-    
-    beforeChannelCreated: function beforeChannelCreated(chan, name, src) {},
 
     afterChannelCreated: function afterChannelCreated(chan, name, src) {
         JSESSION.createChannel(chan);
@@ -408,7 +384,7 @@ poScript = ({
 
         displayBot("ServerBot", "Hey, <b><font color='" + Utils.nameColor(src) + "'>" + sys.name(src) + "</font></b>!", "purple");
         displayBot("CommandBot", "Type <b>/commands</b> for a list of commands, <b>/rules</b> for a list of rules, and <b>/league</b> for the league.", "green");
-        displayBot("ForumBot", "Get in touch with the community by joining the <b><a href='http://meteorfalls.icyboards.net/'>Meteor Falls Forums</a></b>!", "blue");
+        displayBot("ForumBot", "Get in touch with the community by joining the <b><a href='http://meteorfallspo.icyboards.net/'>Meteor Falls Forums</a></b>!", "blue");
         displayBot("StatsBot", "There are <b>" + numPlayers + "</b> players online. You are the <b>" + nthNumber(src) + "</b> player to join. At most, there were <b>" + Reg.get("maxPlayersOnline") + "</b> players online" + (newRecord ? " (new record!)" : "") + ".", "goldenrod");
 
         var MOTD = Reg.get("MOTD");
@@ -516,9 +492,7 @@ poScript = ({
     },
 
     beforeChatMessage: function beforeChatMessage(src, message, chan) {
-        var lname = sys.name(src).toLowerCase(),
-            messageLimit = (lname === "tuobot" && sys.dbRegistered(lname)) ? 800 : 600;
-        if (!hasBasicPermissions(src) && message.length > messageLimit) {
+        if (!hasBasicPermissions(src) && message.length > 600) {
             sys.stopEvent();
             bot.sendMessage(src, "Sorry, your message has exceeded the 600 character limit.", chan);
             watchbot.sendAll(" User, " + sys.name(src) + ", has tried to post a message that exceeds the 600 character limit. Take action if need be. <ping/>", watch);
@@ -597,9 +571,11 @@ poScript = ({
             }
             var tar = sys.id(commandData);
             
+            var commands = Plugins('commands.js');
+            
             try {
-                if (Plugins('commands.js').can_use_command(src, command)) {
-                    Plugins('commands.js').handle_command(src, message, command, commandData, tar, chan);
+                if (commands.can_use_command(src, command)) {
+                    commands.handle_command(src, message, command, commandData, tar, chan);
                     return;
                 }
             } catch (err) {
@@ -689,6 +665,7 @@ poScript = ({
             aliasKick(sys.ip(src));
             return;
         }
+        
         var myUser = JSESSION.users(src);
 
         myUser.originalName = sys.name(src);

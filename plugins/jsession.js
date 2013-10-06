@@ -222,7 +222,7 @@
     // export jSession
     module.exports = jSession;
 
-    if (JSESSION === null) {
-        JSESSION = jSession;
+    if (global.JSESSION === undefined) {
+        global.JSESSION = jSession;
     }
 }());
