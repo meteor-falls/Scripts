@@ -384,12 +384,6 @@ module.exports = {
         }
 
         Leaguemanager = Reg.get("Leaguemanager");
-
-        var channelIds = sys.channelIds();
-        ChannelNames = [];
-        for (x in channelIds) {
-            ChannelNames.push(sys.channel(channelIds[x]));
-        }
         
         var makeChan = function (cname) {
             sys.createChannel(cname);
@@ -533,7 +527,8 @@ module.exports = {
                 longestChannelName = "",
                 html = "",
                 channelName = "",
-                res;
+                res,
+                ChannelNames = sys.channelIds().map(function(channelId) {return sys.channel(channelId);});
             
             function sort(name) {
                 channelName = String(line.midRef(pos, name.length));
