@@ -32,6 +32,8 @@ var Config = {
     emotesEnabled: true
 };
 
+var global = this;
+
 (function() {
     var PluginHandler = global.PluginHandler = {};
     PluginHandler.plugins = {};
@@ -140,7 +142,6 @@ function reloadPlugin(plugin_name) {
     }
 }
 
-var global = this;
 var ignoreNextChanMsg = false,
     // Lookups are slow. Cache this as NewMessage is called many, many times.
     stripHtmlFromChannelMessages = Config.stripHtmlFromChannelMessages;
