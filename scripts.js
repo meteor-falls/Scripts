@@ -161,7 +161,7 @@ function poUser(id) {
     this.lastEmote = [];
 }
 
-JSESSION.identifyScriptAs("Meteor Falls Script");
+JSESSION.identifyScriptAs("Meteor Falls Script v0.8");
 JSESSION.registerUserFactory(poUser);
 JSESSION.refill();
 
