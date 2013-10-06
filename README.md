@@ -1,7 +1,7 @@
 Meteor Falls
 =======
 
-Scripts for Meteor Falls v0.7
+Scripts for Meteor Falls v0.8
 Includes ---
 
 * A simple script to install the entire script onto your server (webcall.js)!
