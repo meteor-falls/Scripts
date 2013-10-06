@@ -110,7 +110,7 @@ var Config = {
         plugin_name = (plugin.indexOf(".") === -1) ? plugin + ".js" : plugin;
         PluginHandler.load(plugin_name, Config.load_from_web);
     }
-})();
+}());
 
 function Plugins(plugin_name) {
     if (!PluginHandler.plugins.hasOwnProperty(plugin_name)) {
