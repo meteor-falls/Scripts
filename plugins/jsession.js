@@ -221,8 +221,4 @@
 
     // export jSession
     module.exports = jSession;
-
-    if (typeof(JSESSION) === "undefined") {
-        JSESSION = jSession;
-    }
 }());

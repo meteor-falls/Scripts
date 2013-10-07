@@ -205,9 +205,9 @@ module.exports = {
             Reg.init(regVals[i], "{}");
             
             try {
-                global[i] = JSON.parse(Reg.get(regVals[i]));
+                GLOBAL[i] = JSON.parse(Reg.get(regVals[i]));
             } catch (e) {
-                global[i] = {};
+                GLOBAL[i] = {};
             }
         }
 

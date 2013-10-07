@@ -32,10 +32,10 @@ var Config = {
     emotesEnabled: true
 };
 
-var global = this;
+var GLOBAL = this;
 
 (function() {
-    var PluginHandler = global.PluginHandler = {};
+    var PluginHandler = GLOBAL.PluginHandler = {};
     PluginHandler.plugins = {};
     dir = Config.plugindir;
     
@@ -156,6 +156,7 @@ function poUser(id) {
     this.lastEmote = [];
 }
 
+JSESSION = Plugins('jsession.js');
 JSESSION.identifyScriptAs("Meteor Falls Script v0.8");
 JSESSION.registerUserFactory(poUser);
 JSESSION.refill();
