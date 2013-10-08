@@ -1711,9 +1711,10 @@ addCommand(1, "public", function (src, command, commandData, tar, chan) {
 addCommand(1, ["warn", "warning"], function (src, command, commandData, tar, chan) {
     var parts = commandData.split(":"),
         player = parts[0],
-        mess = parts[1];
+        mess = parts[1],
+        playerId = sys.id(player);
 
-    if (!sys.id(player)) {
+    if (!playerId) {
         bot.sendMessage(src, "That player isn't online.", chan);
         return;
     }
@@ -1724,8 +1725,8 @@ addCommand(1, ["warn", "warning"], function (src, command, commandData, tar, cha
     }
 
     bot.sendMessage(src, "Warning sent.", chan);
-    sys.sendHtmlMessage(tar, "<font color=red><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + " warned you!", 0);
-    sys.sendHtmlMessage(tar, "<font color=green><timestamp/><b>Reason:</b></font> " + Utils.escapeHtml(Utils.cut(parts, 1, ':')), 0);
+    sys.sendHtmlMessage(playerId, "<font color=red><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + " warned you!", 0);
+    sys.sendHtmlMessage(playerId, "<font color=green><timestamp/><b>Reason:</b></font> " + Utils.escapeHtml(Utils.cut(parts, 1, ':')), 0);
 });
 
 addCommand(1, ["tempban", "tb"], function (src, command, commandData, tar, chan) {
