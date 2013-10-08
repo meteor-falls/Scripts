@@ -91,7 +91,7 @@ module.exports = {
 
         JSESSION.destroyChannel(channel);
     },
-    afterChannelJoin: function (src, channel) {
+    afterChannelJoin: function (src, chan) {
         var channelToLower = sys.channel(chan).toLowerCase();
         var topic = Channeltopics[channelToLower] || {
             topic: "No channel topic has been set.",
