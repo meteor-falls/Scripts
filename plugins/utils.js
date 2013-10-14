@@ -279,5 +279,39 @@
         return "<img src='pokemon:" + pokenum + "&shiny=" + shiny + "&back=" + back + "&gender=" + gender + "&gen=" + gan + "'>";
     };
     
+    util.isLCaps = function isLCaps(letter) {
+        return letter >= 'A' && letter <= 'Z';
+    };
+    
+    util.isMCaps = function(message) {
+        var count = 0;
+        var i = 0;
+        var c;
+        while (i < message.length) {
+            c = message[i];
+            if (this.isLCaps(c)) {
+                count += 1;
+                if (count === 5) {
+                    return true;
+                }
+            } else {
+                count -= 2;
+                if (count < 0) {
+                    count = 0;
+                }
+            }
+            i += 1;
+        }
+        return false;
+    };
+    
+    util.toCorrectCase = function (name) {
+        var id = sys.id(name);
+        if (id !== undefined) {
+            return sys.name(id);
+        }
+        return name;
+    };
+    
     Utils = module.exports = util;
 }());
