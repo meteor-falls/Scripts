@@ -560,7 +560,7 @@ module.exports = {
             kick(bpl);
         }
     },
-    beforePlayerBan: function (src, bpl) {
+    beforePlayerBan: function (src, bpl, time) {
         sys.stopEvent();
 
         if (Utils.getAuth(bpl) >= Utils.getAuth(src)) {
