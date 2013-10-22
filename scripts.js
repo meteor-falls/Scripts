@@ -5,7 +5,7 @@
 */
 
 /* Meteor Falls v0.8 Scripts.
-    By: HHT, TheUnknownOne, Ethan
+    By: [VP]Blade, TheUnknownOne, Ethan
     Credit to: Max, Lutra
 */
 
