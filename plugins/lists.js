@@ -248,7 +248,7 @@ module.exports = {
         Rules.add("Do not spam or flood the chat. FloodBot will kick you and/or an auth will mute you.");
         Rules.add("No sexual or harmful content whatsoever. This includes: porn sites, viruses, sexual ASCIIs, etc.. You will be punished.");
         Rules.add("Listen to the auth. If an auth tells you to stop misbehaving, you must listen or your punishment is their choice.");
-        Rules.add("No sexism shall be exercised by any persons whatsoever. Exhibiting this action will grant a heavy level of punishment to whomever is responsible.");
+        Rules.add("No racism or sexism shall be exercised by any persons whatsoever. Exhibiting this action will grant a heavy level of punishment to whomever is responsible.");
 
         Rules.template += "</ol>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Follow all the rules above and you will have no problem having a good time at " + Reg.get("servername") + "!<br>";
         Rules.finish();
