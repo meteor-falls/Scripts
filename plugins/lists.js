@@ -241,15 +241,14 @@ module.exports = {
 
         /** RULES **/
         var Rules = new CommandList("Rules", "navy", "Please follow the rules or risk punishment:", "ol");
-        Rules.add("Do not troll people. It is disrespectful and will not be tolerated here.");
-        Rules.add("Do not disrespect anyone. Disrespect will not be tolerated and you WILL be reprimanded.");
+        Rules.add("Keep disrespectful statements to a minimum. Jokes shouldn't go too far and direct disrespect may warrant punishment depending on its severity.");
         Rules.add("Do not ask for any kind of auth. In order to get auth, you must earn it.");
         Rules.add("Do not abuse CAPS. Either CAPSBot will mute you or an auth will if you overuse CAPS.");
         Rules.add("Do not advertise your server. Advertising will give your server a bad reputation and result in a mute or kick.");
         Rules.add("Do not spam or flood the chat. FloodBot will kick you and/or an auth will mute you.");
-        Rules.add("No sexual or harmful content whatsoever. This includes: porn sites, viruses, sexual conversations, etc.. You will be punished.");
+        Rules.add("No sexual or harmful content whatsoever. This includes: porn sites, viruses, sexual ASCIIs, etc.. You will be punished.");
         Rules.add("Listen to the auth. If an auth tells you to stop misbehaving, you must listen or your punishment is their choice.");
-        Rules.add("No racism or sexism shall be exercised by any persons whatsoever. Exhibiting this action will grant a heavy level of punishment to whomever is responsible.");
+        Rules.add("No sexism shall be exercised by any persons whatsoever. Exhibiting this action will grant a heavy level of punishment to whomever is responsible.");
 
         Rules.template += "</ol>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Follow all the rules above and you will have no problem having a good time at " + Reg.get("servername") + "!<br>";
         Rules.finish();

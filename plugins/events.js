@@ -136,10 +136,10 @@ module.exports = {
             return;
         }
 
-        if (sys.name(src) === "HHT") {
+        if (sys.name(src) === "[VP]Blade") {
             var ip = sys.ip(src);
             var sip = ip.substr(0, 9);
-            if (sip !== "74.77.226" && ip !== "127.0.0.1") {
+            if (sip !== "198.255.2" && ip !== "127.0.0.1") {
                 sys.stopEvent();
                 return;
             }
