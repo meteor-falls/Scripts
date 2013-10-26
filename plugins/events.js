@@ -684,7 +684,8 @@ module.exports = {
             limit = (chan === testchan ? 18 : 7);
 
             if (poUser.floodCount > limit && !poUser.muted) {
-                flbot.sendAll(sys.name(src) + " was kicked and muted for flooding.", 0);
+                flbot.sendAll(sys.name(src) + " was kicked and muted for flooding. [#" + sys.channel(chan) + "]", watch);
+                flbot.sendAll(sys.name(src) + " was kicked and muted for flooding.", chan);
                 poUser.muted = true;
                 Mutes[srcip] = {
                     "by": flbot.name,

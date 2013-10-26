@@ -1860,14 +1860,13 @@ addCommand(1, "unmute", function (src, command, commandData, tar, chan) {
         bot.sendMessage(src, 'This person is not muted.', chan);
         return;
     }
-    sys.sendHtmlAll("<font color=green><timestamp/><b>" + commandData + " was unmuted by " + Utils.escapeHtml(sys.name(src)) + "!</b></font>", 0);
+    sys.sendHtmlAll("<font color=green><timestamp/><b>" + commandData + " was unmuted by " + Utils.escapeHtml(sys.name(src)) + "!</b></font>");
     delete Mutes[ip];
     Reg.save("Mutes", JSON.stringify(Mutes));
 
     if (tar !== undefined) {
         JSESSION.users(tar).muted = false;
     }
-
 });
 addCommand(1, ["moderationcommands", "moderatecommands"], function (src, command, commandData, tar, chan) {
     Lists.Moderate.display(src, chan);
