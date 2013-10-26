@@ -355,7 +355,6 @@ module.exports = {
             colormode: false,
             pewpewpew: false,
             nightclub: false,
-            bots: true,
             uniqueVisitors: {
                 ips: {},
                 count: 0,
