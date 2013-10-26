@@ -2331,9 +2331,9 @@ addCommand(3, ["toggleemotes"], function (src, command, commandData, tar, chan) 
     bot.sendAll("Emotes were " + (Config.emotesEnabled ? "enabled!" : "disabled."), chan);
 });
 addCommand(3, "bots", function (src, command, commandData, tar, chan) {
-    bots = !bots;
-    var word = bots ? "on" : "off";
-    bot.sendAll(sys.name(src) + " turned all bots " + word + "!", 0);
+    JSESSION.channels(chan).bots = !JSESSION.channels(chan).bots;
+    var word = JSESSION.channels(chan).bots ? "on" : "off";
+    bot.sendAll(sys.name(src) + " turned bots " + word + " in this channel!", chan);
 });
 addCommand(3, "leaguemanager", function (src, command, commandData, tar, chan) {
     bot.sendAll(sys.name(tar) + " is now the league manager!");

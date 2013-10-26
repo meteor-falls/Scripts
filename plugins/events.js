@@ -83,6 +83,9 @@ module.exports = {
             sys.stopEvent();
         }
     },
+    afterChannelCreated: function (channel) {
+        JSESSION.createChannel(channel);
+    },
     beforeChannelDestroyed: function (channel) {
         if (channel === staffchannel || channel === testchan || channel === watch || channel === android) {
             sys.stopEvent();
@@ -650,7 +653,7 @@ module.exports = {
         }
     },
     afterChatMessage: function (src, message, chan) {
-        if (!bots) {
+        if (!JSESSION.channels(chan).bots) {
             return;
         }
 

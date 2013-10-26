@@ -156,9 +156,17 @@ function poUser(id) {
     this.lastEmote = [];
 }
 
+function poChannel(chanId) {
+    this.id = chanId;
+    this.name = sys.channel(chanId);
+    
+    this.bots = true;
+}
+
 JSESSION = Plugins('jsession.js');
 JSESSION.identifyScriptAs("Meteor Falls Script v0.8");
 JSESSION.registerUserFactory(poUser);
+JSESSION.registerChannelFactory(poChannel);
 JSESSION.refill();
 
 var poScript;
