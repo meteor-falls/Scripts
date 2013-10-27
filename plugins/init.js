@@ -287,6 +287,20 @@ module.exports = {
             
             return false;
         };
+        
+        hasOneUsablePoke = function(src, team) {
+            var fine = false;
+            for (var i = 0; i < 6; i += 1) {
+                if (sys.teamPoke(src, team, i) !== 0) {
+                    for (var j = 0; j < 4; j += 1) {
+                        if (sys.teamPokeMove(src, team, i, j) !== 0) {
+                            fine = true;
+                        }
+                    }
+                }
+            }
+            return fine;
+        }
 
         hasDrizzleSwim = function (src) {
             var swiftswim,

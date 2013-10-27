@@ -286,7 +286,15 @@ module.exports = {
             }
         }
     },
-    beforeChangeTeam: function (src) {
+    afterChangeTeam: function (src) {
+        for (var team = 0; team < sys.teamCount(src); team++) {
+            if (!hasOneUsablePoke(src, team)) {
+                bot.sendMessage(src, "Sorry, you do not have a valid team for the " + sys.tier(src, team) + " tier.");
+                bot.sendMessage(src, "You have been placed into 'Challenge Cup.'");
+                sys.changeTier(src, team, "Challenge Cup");
+            }
+        }
+        
         var drizzleSwim = hasDrizzleSwim(src),
             i;
 
