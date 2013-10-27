@@ -220,7 +220,7 @@ poScript = ({
     afterLogIn: function afterLogIn(src, defaultChan) {
         PluginHandler.callplugins("afterLogIn", src, defaultChan);
     },
-    beforeChangeTier: function(src, oldtier, newtier) {
+    beforeChangeTier: function(src, team, oldtier, newtier) {
         PluginHandler.callplugins("beforeChangeTier", src, oldtier, newtier);
     },
 
