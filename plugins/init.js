@@ -288,6 +288,10 @@ module.exports = {
             return false;
         };
         
+        challengeCupCheck = function(tier) {
+            return ["CC 1v1", "Wifi CC 1v1", "Challenge Cup"].indexOf(tier) > -1;
+        }
+        
         hasOneUsablePoke = function(src, team) {
             var fine = false;
             for (var i = 0; i < 6; i += 1) {
