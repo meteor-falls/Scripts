@@ -270,12 +270,6 @@ module.exports = {
     },
 
     beforeChangeTier: function (src, team, oldtier, newtier) {
-        if (!hasOneUsablePoke(src, team)) {
-            bot.sendMessage(src, "Sorry, you do not have a valid team for the " + sys.tier(src, team) + " tier.");
-            bot.sendMessage(src, "You have been placed into 'Challenge Cup.'");
-            sys.changeTier(src, team, "Challenge Cup");
-        }
-    
         var drizzleSwim = hasDrizzleSwim(src),
             i;
 
@@ -298,6 +292,13 @@ module.exports = {
             if (script.dreamAbilityCheck(src)) {
                 sys.stopEvent();
             }
+        }
+    },
+    afterChangeTier: function(src, team, oldtier, newtier) {
+        if (!hasOneUsablePoke(src, team)) {
+            bot.sendMessage(src, "Sorry, you do not have a valid team for the " + sys.tier(src, team) + " tier.");
+            bot.sendMessage(src, "You have been placed into 'Challenge Cup.'");
+            sys.changeTier(src, team, "Challenge Cup");
         }
     },
     beforeChatMessage: function (src, message, chan) {
