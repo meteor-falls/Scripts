@@ -261,16 +261,7 @@ module.exports = {
         }
     },
 
-    beforeChangeTier: function (src, oldtier, newtier) {
-        for (team = 0; team < sys.teamCount(src); team += 1) {
-            if (!sys.hasLegalTeamForTier(src, team, newtier)) {
-                sys.stopEvent();
-                bot.sendMessage(src, "You do not have a valid team for the tier " + newtier + ".");
-                bot.sendMessage(src, "You have been transferred to the 'Challenge Cup' tier.");
-                sys.changeTier(src, team, "Challenge Cup");
-            }
-        }
-        
+    beforeChangeTier: function (src, oldtier, newtier) {        
         var drizzleSwim = hasDrizzleSwim(src),
             i;
 
