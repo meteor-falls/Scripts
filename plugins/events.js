@@ -286,32 +286,6 @@ module.exports = {
             }
         }
     },
-    afterChangeTeam: function (src) {
-        for (var team = 0; team < sys.teamCount(src); team++) {
-            if (!hasOneUsablePoke(src, team)) {
-                bot.sendMessage(src, "Sorry, you do not have a valid team for the " + sys.tier(src, team) + " tier.");
-                bot.sendMessage(src, "You have been placed into 'Challenge Cup.'");
-                sys.changeTier(src, team, "Challenge Cup");
-            }
-        }
-        
-        var drizzleSwim = hasDrizzleSwim(src),
-            i;
-
-        if (drizzleSwim.length > 0) {
-            for (i = 0; i < drizzleSwim.length; i += 1) {
-                bot.sendMessage(src, "Sorry, DrizzleSwim is banned from 5th Gen OU.");
-                sys.changeTier(src, drizzleSwim[i], "5th Gen Ubers");
-            }
-        }
-        var sandCloak = hasSandCloak(src);
-        if (sandCloak.length > 0) {
-            for (i = 0; i < sandCloak.length; i += 1) {
-                bot.sendMessage(src, "Sorry, Sand Veil & Snow Cloak are only usable in 5th Gen Ubers.");
-                sys.changeTier(src, sandCloak[i], "5th Gen Ubers");
-            }
-        }
-    },
     beforeChatMessage: function (src, message, chan) {
         var channelLink = addChannelLinks("#" + sys.channel(chan));
     
@@ -488,6 +462,31 @@ module.exports = {
         if (Utils.hasIllegalChars(sys.name(src))) {
             aliasKick(sys.ip(src));
             return;
+        }
+        
+        for (var team = 0; team < sys.teamCount(src); team++) {
+            if (!hasOneUsablePoke(src, team)) {
+                bot.sendMessage(src, "Sorry, you do not have a valid team for the " + sys.tier(src, team) + " tier.");
+                bot.sendMessage(src, "You have been placed into 'Challenge Cup.'");
+                sys.changeTier(src, team, "Challenge Cup");
+            }
+        }
+        
+        var drizzleSwim = hasDrizzleSwim(src),
+            i;
+
+        if (drizzleSwim.length > 0) {
+            for (i = 0; i < drizzleSwim.length; i += 1) {
+                bot.sendMessage(src, "Sorry, DrizzleSwim is banned from 5th Gen OU.");
+                sys.changeTier(src, drizzleSwim[i], "5th Gen Ubers");
+            }
+        }
+        var sandCloak = hasSandCloak(src);
+        if (sandCloak.length > 0) {
+            for (i = 0; i < sandCloak.length; i += 1) {
+                bot.sendMessage(src, "Sorry, Sand Veil & Snow Cloak are only usable in 5th Gen Ubers.");
+                sys.changeTier(src, sandCloak[i], "5th Gen Ubers");
+            }
         }
 
         var myUser = JSESSION.users(src);
