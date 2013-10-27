@@ -289,8 +289,8 @@ module.exports = {
         };
 
         hasDrizzleSwim = function (src) {
-            var swiftswim = false,
-                drizzle = false,
+            var swiftswim,
+                drizzle,
                 ability,
                 teams_banned = [],
                 team,
@@ -301,6 +301,8 @@ module.exports = {
                     if (sys.tier(src, team) !== "5th Gen OU") {
                         continue;
                     }
+                    swiftswim = false,
+                    drizzle = false;
                     for (i = 0; i < 6; i += 1) {
                         ability = sys.ability(sys.teamPokeAbility(src, team, i));
                         if (ability === "Swift Swim") {

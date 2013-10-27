@@ -262,6 +262,15 @@ module.exports = {
     },
 
     beforeChangeTier: function (src, oldtier, newtier) {
+        for (team = 0; team < sys.teamCount(src); team += 1) {
+            if (!sys.hasLegalTeamForTier(src, team, newtier)) {
+                sys.stopEvent();
+                bot.sendMessage(src, "You do not have a valid team for the tier " + newtier + ".");
+                bot.sendMessage(src, "You have been transferred to the 'Challenge Cup' tier.");
+                sys.changeTier(src, team, "Challenge Cup");
+            }
+        }
+        
         var drizzleSwim = hasDrizzleSwim(src),
             i;
 
@@ -305,7 +314,8 @@ module.exports = {
         }
     },
     beforeChatMessage: function (src, message, chan) {
-
+        var channelLink = addChannelLinks("#" + sys.channel(chan));
+    
         if (!hasBasicPermissions(src) && message.length > 600) {
             sys.stopEvent();
             bot.sendMessage(src, "Sorry, your message has exceeded the 600 character limit.", chan);
@@ -315,13 +325,13 @@ module.exports = {
         if (message === "<3") {
             sys.stopEvent();
             sys.sendAll(sys.name(src) + ": <3", chan);
-            watchbot.sendAll(" [Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Message -- " + Utils.escapeHtml(sys.name(src)) + ": " + Utils.escapeHtml(message), watch);
+            watchbot.sendAll(" [Channel: " + channelLink + " | IP: " + sys.ip(src) + "] Message -- " + Utils.escapeHtml(sys.name(src)) + ": " + Utils.escapeHtml(message), watch);
             return;
         }
         if (message === ">_<") {
             sys.stopEvent();
             sys.sendAll(sys.name(src) + ": >_<", chan);
-            watchbot.sendAll(" [Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Message -- " + Utils.escapeHtml(sys.name(src)) + ": " + Utils.escapeHtml(message), watch);
+            watchbot.sendAll(" [Channel: " + channelLink + " | IP: " + sys.ip(src) + "] Message -- " + Utils.escapeHtml(sys.name(src)) + ": " + Utils.escapeHtml(message), watch);
             return;
         }
 
@@ -356,7 +366,7 @@ module.exports = {
                 var myMute = Mutes[sys.ip(src)],
                     muteStr = myMute.time !== 0 ? Utils.getTimeString(myMute.time - +sys.time()) : "forever";
                 bot.sendMessage(src, "Shut up! You are muted for " + muteStr + "! By: " + myMute.by + ". Reason: " + myMute.reason, chan);
-                watchbot.sendAll(" [Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Muted Message -- " + Utils.escapeHtml(sys.name(src)) + ": " + Utils.escapeHtml(message), watch);
+                watchbot.sendAll(" [Channel: " + channelLink + " | IP: " + sys.ip(src) + "] Muted Message -- " + Utils.escapeHtml(sys.name(src)) + ": " + Utils.escapeHtml(message), watch);
                 script.afterChatMessage(src, message, chan);
                 return;
             }
@@ -365,14 +375,14 @@ module.exports = {
         if (myAuth < 1 && muteall || myAuth < 2 && supersilence) {
             sys.stopEvent();
             bot.sendMessage(src, "Shut up! Silence is on!", chan);
-            watchbot.sendAll(" [Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Silence Message -- " + Utils.escapeHtml(sys.name(src)) + ": " + Utils.escapeHtml(message), watch);
+            watchbot.sendAll(" [Channel: " + channelLink + " | IP: " + sys.ip(src) + "] Silence Message -- " + Utils.escapeHtml(sys.name(src)) + ": " + Utils.escapeHtml(message), watch);
             script.afterChatMessage(src, message, chan);
             return;
         }
 
         if ((message[0] === '/' || message[0] === '!') && message.length > 1) {
             print("[#" + sys.channel(chan) + "] Command -- " + sys.name(src) + ": " + message);
-            watchbot.sendAll("[Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Command -- " + Utils.escapeHtml(sys.name(src)) + ": " + Utils.escapeHtml(message), watch);
+            watchbot.sendAll("[Channel: " + channelLink + " | IP: " + sys.ip(src) + "] Command -- " + Utils.escapeHtml(sys.name(src)) + ": " + Utils.escapeHtml(message), watch);
             sys.stopEvent();
             var command = "";
             var commandData = "";
@@ -461,7 +471,7 @@ module.exports = {
         sys.stopEvent();
         sys.sendHtmlAll(sendStr, chan);
 
-        watchbot.sendAll("[Channel: #" + sys.channel(chan) + " | IP: " + sys.ip(src) + "] Message -- " + Utils.escapeHtml(sys.name(src)) + ": " + Utils.escapeHtml(originalMessage), watch);
+        watchbot.sendAll("[Channel: " + channelLink + " | IP: " + sys.ip(src) + "] Message -- " + Utils.escapeHtml(sys.name(src)) + ": " + Utils.escapeHtml(originalMessage), watch);
 
         script.afterChatMessage(src, originalMessage, chan);
     },
