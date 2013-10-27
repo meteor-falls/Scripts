@@ -221,7 +221,7 @@ poScript = ({
         PluginHandler.callplugins("afterLogIn", src, defaultChan);
     },
     beforeChangeTier: function(src, team, oldtier, newtier) {
-        PluginHandler.callplugins("beforeChangeTier", src, oldtier, newtier);
+        PluginHandler.callplugins("beforeChangeTier", src, team, oldtier, newtier);
     },
 
     beforeChangeTeam: function beforeChangeTeam(src) {
