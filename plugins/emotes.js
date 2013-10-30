@@ -31,7 +31,7 @@ module.exports = function () {
         EmoteList.__display__.push(alts.join(" | "));
     };
     
-    emoteFormat = function (message, src) {
+    emoteFormat = function (limit, message, src) {
         if (!Config.emotesEnabled) {
             return message;
         }
@@ -56,7 +56,7 @@ module.exports = function () {
         
         function assignEmote(code) {
             return function ($1) {
-                if (emotes > 4 || lastEmote.indexOf(i) !== -1) {
+                if (limit && (emotes > 4 || lastEmote.indexOf(i) !== -1)) {
                     return $1;
                 }
                 
@@ -72,7 +72,7 @@ module.exports = function () {
         
         for (i in EmoteList) {
             // Skip for performance
-            if (emotes > 4) {
+            if (limit && emotes > 4) {
                 break;
             }
             

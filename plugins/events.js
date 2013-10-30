@@ -218,7 +218,7 @@ module.exports = {
             if (theirmessage) {
                 msg = msg.replace(/\{Server\}/gi, Reg.get("servername"));
                 msg = msg.replace(/\{Color\}/gi, Utils.nameColor(src));
-                msg = emoteFormat(msg);
+                msg = emoteFormat(true, msg);
             }
             sys.sendHtmlAll(msg, 0);
         }
@@ -408,7 +408,7 @@ module.exports = {
         }
 
         if (hasEmotesToggled(src)) {
-            emoteMessage = emoteFormat(simpleMessage, src);
+            emoteMessage = emoteFormat(true, simpleMessage, src);
 
             if (simpleMessage !== emoteMessage) {
                 emotes = true;
