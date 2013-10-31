@@ -196,6 +196,7 @@ module.exports = {
             "Welmsgs": "Welmsgs",
             "Emotetoggles": "Emotetoggles",
             "Emoteperms": "Emoteperms",
+            "EmoteCounter": "EmoteCounter",
             "Feedmons": Feedmon.TABLE
         };
         

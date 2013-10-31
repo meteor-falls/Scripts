@@ -5,6 +5,11 @@
 */
 
 module.exports = function () {
+    var updateCount = function(emote) {
+        var count = EmoteCounter[emote];
+        EmoteCounter[emote] = parseInt(count) + 1;
+    }
+    
     EmoteList = {
         __display__: []
     };
@@ -65,6 +70,8 @@ module.exports = function () {
                 if (uobj && uobj.lastEmote) {
                     uobj.lastEmote.push(i);
                 }
+                
+                updateCount(i);
                 
                 return code;
             };
