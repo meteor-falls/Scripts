@@ -904,7 +904,8 @@ addCommand(0, "emoteusage", function (src, command, commandData, tar, chan) {
     var keys = Object.keys(EmoteCounter),
         list,
         sorted = [],
-        x;
+        x,
+        y;
         
     if (EmoteCounter.length === 0) {
         bot.sendMessage(src, "There is no data.", chan);
@@ -921,10 +922,10 @@ addCommand(0, "emoteusage", function (src, command, commandData, tar, chan) {
         sorted.pop();
     }
     
-    list = new TableList("Emote Usage", "cornflowerblue", 2, 5, "navy");
-    list.addEvery(sorted, false, 10);
-    list.finish();
-    list.display(src, chan);
+    sys.sendMessage(src, "*** EMOTE USAGE ***", chan);
+    for (y = 0; y < sorted.length; y += 1) {
+        sys.sendMessage(src, y + ": " + sorted[y][0] + " " + sorted[y][1], chan);
+    }
 });
 
 addCommand(0, "gl", function (src, command, commandData, tar, chan) {

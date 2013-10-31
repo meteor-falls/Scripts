@@ -6,8 +6,8 @@
 
 module.exports = function () {
     var updateCount = function(emote) {
-        var count = EmoteCounter[emote];
-        EmoteCounter[emote] = parseInt(count) + 1;
+        var add = (!EmoteCounter.hasOwnProperty(emote) || isNaN(EmoteCounter[emote])) ? 0 : EmoteCounter[emote];
+        EmoteCounter[emote] = add + 1;
     }
     
     EmoteList = {
