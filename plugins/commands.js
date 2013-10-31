@@ -1637,7 +1637,7 @@ addCommand(1, "logwarn", function (src, command, commandData, tar, chan) {
     var warning = "@" + commandData + ": If you have a log over (or at) 5 lines, please use http://pastebin.com to show the log. Otherwise, you might be kicked by the Flood Bot, or muted by a Moderator/or you may be temporarily banned. This is your last warning.";
     sys.sendAll(sys.name(src) + ": " + warning, chan);
 });
-addCommand(1, "tellupdate", function (src, command, commandData, tar, chan) {
+/*addCommand(1, "tellupdate", function (src, command, commandData, tar, chan) {
     if (!tar) {
         bot.sendMessage(src, "This person doesn't exist.", chan);
         return;
@@ -1648,7 +1648,7 @@ addCommand(1, "tellupdate", function (src, command, commandData, tar, chan) {
     }
     sys.sendAll(sys.name(src) + ": Hello " + commandData + ", you have to update to version 2.1.0 to be able to battle on this server.", chan);
     sys.sendAll(sys.name(src) + ": You can download it here: https://github.com/po-devs/pokemon-online/releases/download/2.1.0/Pokemon-Online-v2.1.0-Setup.exe . Close PO before running the installer, then come back when it's done.", chan);
-});
+});*/
 addCommand(1, "tellemotes", function (src, command, commandData, tar, chan) {
     if (!tar) {
         bot.sendMessage(src, "This person doesn't exist.", chan);
