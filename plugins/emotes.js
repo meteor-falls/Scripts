@@ -41,7 +41,7 @@ module.exports = function () {
             return message;
         }
         
-        var emotes = 0,
+        var emotes = [],
             uobj = JSESSION.users(src),
             perm,
             timeout,
@@ -61,17 +61,18 @@ module.exports = function () {
         
         function assignEmote(code) {
             return function ($1) {
-                if (limit && (emotes > 4 || lastEmote.indexOf(i) !== -1)) {
+                if (limit && (emotes.length > 4 || lastEmote.indexOf(i) !== -1)) {
                     return $1;
                 }
                 
-                emotes += 1;
+                if (emotes.indexOf(i) === -1)
+                    updateCount(i);
+                
+                emotes.push(i);
                 
                 if (uobj && uobj.lastEmote) {
                     uobj.lastEmote.push(i);
                 }
-                
-                updateCount(i);
                 
                 return code;
             };
@@ -79,7 +80,7 @@ module.exports = function () {
         
         for (i in EmoteList) {
             // Skip for performance
-            if (limit && emotes > 4) {
+            if (limit && emotes.length > 4) {
                 break;
             }
             
