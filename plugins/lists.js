@@ -286,7 +286,7 @@ module.exports = {
         Mod.add("sendall <font color=red><b>[message]</b></font>", "To send a message to everyone.");
         Mod.add("sendhtmlall <font color=red><b>[message]</b></font>", "To send a HTML message to everyone.");
         Mod.add("warn <font color=red><b>[player]</b></font>:<font color=red><b>[reason]</b></font>", "To send a warning to [player] with reason [reason].");
-        Mod.add("tellupdate <font color=red><b>[player]</b></font>", "To tell [player] how to update to the latest version.");
+        // Mod.add("tellupdate <font color=red><b>[player]</b></font>", "To tell [player] how to update to the latest version.");
         Mod.add("getmotd", "To get the MOTD (including HTML).");
         Mod.add("moderationcommands", "To display a list of commands that moderate the chat.");
         Mod.add("partycommands", "To display a list of party commands.");
