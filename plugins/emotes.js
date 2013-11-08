@@ -87,9 +87,8 @@ module.exports = function () {
             if (i === "__display__") {
                 continue;
             }
-            if (typeof(message) === "string") {
-                message = message.replace(new RegExp(RegExp.quote(i), "g"), assignEmote(EmoteList[i]));
-            }
+            
+            message = message.replace(new RegExp(RegExp.quote(i), "g"), assignEmote(EmoteList[i]));
         }
         
         // Misc "emotes". Pokemons (basic only), icons, items, and avatars.

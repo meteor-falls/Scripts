@@ -595,9 +595,9 @@ addCommand(0, ["sendto", "ping"], function (src, command, commandData, tar, chan
     }
     
     if (this.myAuth > 0 && hasEmotesToggled(src)) {
-        mess = emoteFormat(mess);
+        mess = emoteFormat(true, mess);
     } else {
-        mess = Utils.escapeHtml(mess);
+        mess = Utils.escapeHtml(true, mess);
     }
     
     bot.sendMessage(src, "Your message was sent!", chan);
@@ -1378,7 +1378,7 @@ addCommand(1, ["wall", "cwall"], function (src, command, commandData, tar, chan)
     var wallmessage = Utils.escapeHtml(commandData);
 
     if (hasEmotesToggled(src)) {
-        wallmessage = emoteFormat(wallmessage);
+        wallmessage = emoteFormat(true, wallmessage);
     }
 
     sys.sendHtmlAll("<br><font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>", wallchan);
