@@ -391,7 +391,7 @@ module.exports = {
                     return;
                 }
             } catch (err) {
-                bot.sendMessage(src, err, chan);
+                bot.sendMessage(src, err + (e.lineNumber ? " on line " + e.lineNumber : ""), chan);
                 return;
             }
         }
