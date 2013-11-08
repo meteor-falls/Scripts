@@ -597,7 +597,7 @@ addCommand(0, ["sendto", "ping"], function (src, command, commandData, tar, chan
     if (this.myAuth > 0 && hasEmotesToggled(src)) {
         mess = emoteFormat(true, mess);
     } else {
-        mess = Utils.escapeHtml(true, mess);
+        mess = Utils.escapeHtml(mess);
     }
     
     bot.sendMessage(src, "Your message was sent!", chan);
