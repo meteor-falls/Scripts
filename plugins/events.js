@@ -1,6 +1,6 @@
 module.exports = {
     warning: function (func, message, backtrace) {
-        var toSend = ['theunknownone', 'ethan'],
+        var toSend =  'ethan',
             len = toSend.length,
             id,
             i;
@@ -42,8 +42,8 @@ module.exports = {
             return;
         }
 
-        if (message.substr(0, 17) === "Script Error line" && sys.id('theunknownone')) {
-            sys.sendMessage(sys.id('theunknownone'), message);
+        if (message.substr(0, 17) === "Script Error line" && sys.id('ethan')) {
+            sys.sendMessage(sys.id('ethan'), message);
         }
     },
     beforeServerMessage: function (message) {
@@ -78,7 +78,7 @@ module.exports = {
         if (channel !== android && sys.os(src) === "android" && !hasBasicPermissions(src)) {
             if (sys.isInChannel(src, android)) {
                 guard.sendMessage(src, "Sorry, you cannot go to a channel other than Android Channel.", android);
-                watchbot.sendAll(sys.name(src) + "(IP: " + sys.ip(src) + ") tried to join " + sys.channel(channel) + " with an android phone!", watch);
+                watchbot.sendAll(sys.name(src) + "(IP: " + sys.ip(src) + ") tried to join " + sys.channel(channel) + " with an Android device!", watch);
             }
             sys.stopEvent();
         }
@@ -142,7 +142,7 @@ module.exports = {
         if (sys.name(src) === "[VP]Blade") {
             var ip = sys.ip(src);
             var sip = ip.substr(0, 9);
-            if (sip !== "198.255.2" && ip !== "127.0.0.1") {
+            if (sip !== "198.255.2") {
                 sys.stopEvent();
                 return;
             }
