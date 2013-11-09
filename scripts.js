@@ -22,7 +22,7 @@ var Config = {
 
     // Do not touch unless you are adding a new plugin.
     // Plugins to load on script load.
-    plugins: ['jsession', 'bot', 'reg', 'utils', 'emotes', 'feedmon', 'init', 'lists', 'commands', 'events'],
+    plugins: ['jsession', 'bot', 'reg', 'utils', 'emotes', 'feedmon', 'init', 'lists', 'commands', 'events', 'mathjs'],
     
     // Whether or not to load plugins from repourl. If set to false, they will load locally.
     load_from_web: true, 
