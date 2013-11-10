@@ -2461,10 +2461,10 @@ addCommand(3, "setwelcomemessage", function(src, command, commandData, tar, chan
         return;
     }
     
-    Welmsgs[r[0]] = {message: mess};
-    Reg.save("Welmsgs", JSON.stringify(Welmsgs));
-    
     bot.sendMessage(src, "Set welcome message of " + name + " to: " + Utils.escapeHtml(mess), chan);
+    
+    Welmsgs[name] = {message: mess};
+    Reg.save("Welmsgs", JSON.stringify(Welmsgs));
 });
 
 module.exports = {
