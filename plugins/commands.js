@@ -924,7 +924,7 @@ addCommand(0, "emoteusage", function (src, command, commandData, tar, chan) {
     
     sys.sendMessage(src, "*** EMOTE USAGE ***", chan);
     for (y = 0; y < sorted.length; y += 1) {
-        sys.sendMessage(src, (y + 1) + ": " + sorted[y][0] + " " + sorted[y][1], chan);
+        sys.sendMessage(src, "#" + (y + 1) + ": " + sorted[y][0] + " " + sorted[y][1], chan);
     }
 });
 
