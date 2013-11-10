@@ -1,6 +1,6 @@
 module.exports = {
     warning: function (func, message, backtrace) {
-        var toSend = 'ethan',
+        var toSend = ['ethan'],
             len = toSend.length,
             id,
             i;
