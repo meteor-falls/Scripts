@@ -2446,6 +2446,26 @@ addCommand(3, "resetladder", function (src, command, commandData, tar, chan) {
 addCommand(3, "authoptions", function (src, command, commandData, tar, chan) {
     Lists.Auth.display(src, chan);
 });
+addCommand(3, "setwelcomemessage", function(src, command, commandData, tar, chan) {
+    var r = commandData.split(':'),
+        mess = Utils.cut(r, 1, ':'),
+        name = r[0];
+        
+    if (r.length != 2) {
+        bot.sendMessage(src, "Usage of this command is Name:Message", chan);
+        return;
+    }
+    
+    if (sys.dbIp(name) === undefined) {
+        bot.sendMessage(src, "You must set the welcome message of a real person!", chan);
+        return;
+    }
+    
+    Welmsgs[r[0]] = {message: mess};
+    Reg.save("Welmsgs", JSON.stringify(Welmsgs));
+    
+    bot.sendMessage(src, "Set welcome message of " + name + " to: " + Utils.escapeHtml(mess), chan);
+});
 
 module.exports = {
     can_use_command: function (src, command) {
