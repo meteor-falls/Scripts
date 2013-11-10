@@ -2458,7 +2458,6 @@ module.exports = {
         if (disabledCmds.indexOf(command.toLowerCase()) > -1 && srcauth < 3) {
             throw "The command " + command + " has been disabled.";
         }
-        if (name.toLowerCase() === "ethan") return true; // Hardcoded bcoz lazy ;(
         if (cmd.authLevel && cmd.authLevel > srcauth) {
             throw "You need to be a higher auth to use this command.";
         }
