@@ -665,7 +665,7 @@ addCommand(0, "join", function (src, command, commandData, tar, chan) {
         return;
     }
     var name = sys.name(src).toLowerCase();
-    if (tourmembers.indexOf(name.toLowerCase()) !== -1) {
+    if (tourips.indexOf(sys.ip(src)) !== -1) {
         bot.sendMessage(src, "Sorry, you are already in the tournament. You are not able to join more than once.", chan);
         return;
     }
@@ -676,6 +676,7 @@ addCommand(0, "join", function (src, command, commandData, tar, chan) {
     }
     if (script.tourSpots() > 0) {
         tourmembers.push(name);
+        tourips.push(sys.ip(src));
         tourplayers[name] = sys.name(src);
         sys.sendHtmlAll("<font color=blue><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + " joined the tournament! " + script.tourSpots() + " more spot(s) left!</b></font>", 0);
         if (script.tourSpots() === 0) {
@@ -745,6 +746,7 @@ addCommand(0, "unjoin", function (src, command, commandData, tar, chan) {
     var name2 = sys.name(src).toLowerCase();
     if (tourmembers.indexOf(name2) !== -1) {
         tourmembers.splice(tourmembers.indexOf(name2), 1);
+        tourips.splice(tourips.indexOf(sys.ip(src)), 1);
         delete tourplayers[name2];
         sys.sendHtmlAll("<font color=red><timestamp/><b>" + this.originalName + " left the tournament!</b></font>", 0);
         return;
@@ -1081,6 +1083,7 @@ addCommand(0, "tour", function (src, command, commandData, tar, chan) {
     tourtier = commandpart[0];
     tourmode = 1;
     tourmembers = [];
+    tourips = [];
     tourbattlers = [];
     tourplayers = [];
     battlesStarted = [];
@@ -1106,6 +1109,7 @@ addCommand(0, "dq", function (src, command, commandData, tar, chan) {
     var name2 = commandData.toLowerCase();
     if (tourmembers.indexOf(name2) !== -1) {
         tourmembers.splice(tourmembers.indexOf(name2), 1);
+        tourips.splice(tourips.indexOf(sys.ip(src)), 1);
         delete tourplayers[name2];
         sys.sendHtmlAll("<font color=red><timestamp/><b>" + Utils.escapeHtml(commandData) + " was disqualified by " + Utils.escapeHtml(sys.name(src)) + "!</b></font>", 0);
         return;
@@ -1139,9 +1143,11 @@ addCommand(0, "push", function (src, command, commandData, tar, chan) {
         sys.sendHtmlAll("<font color=blue><timestamp/><b>" + Utils.escapeHtml(commandData) + " was added to the tournament by " + Utils.escapeHtml(sys.name(src)) + ".</b></font>", 0);
 
         tourmembers.push(commandData.toLowerCase());
+        tourips.push(sys.dbIp(commandData));
         tourplayers[commandData.toLowerCase()] = commandData;
     } else if (tourmode === 1) {
         tourmembers.push(commandData.toLowerCase());
+        tourips.push(sys.dbIp(commandData));
         tourplayers[commandData.toLowerCase()] = commandData;
         sys.sendHtmlAll("<font color=blue><timestamp/><b>" + Utils.escapeHtml(commandData) + " was added to the tournament by " + Utils.escapeHtml(sys.name(src)) + ".</b></font>", 0);
     }
