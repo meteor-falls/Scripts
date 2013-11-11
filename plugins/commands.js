@@ -1109,7 +1109,7 @@ addCommand(0, "dq", function (src, command, commandData, tar, chan) {
     var name2 = commandData.toLowerCase();
     if (tourmembers.indexOf(name2) !== -1) {
         tourmembers.splice(tourmembers.indexOf(name2), 1);
-        tourips.splice(tourips.indexOf(sys.ip(src)), 1);
+        tourips.splice(tourips.indexOf(sys.dbIp(name2)), 1);
         delete tourplayers[name2];
         sys.sendHtmlAll("<font color=red><timestamp/><b>" + Utils.escapeHtml(commandData) + " was disqualified by " + Utils.escapeHtml(sys.name(src)) + "!</b></font>", 0);
         return;
