@@ -902,7 +902,7 @@ addCommand(0, "emotepermlist", function (src, command, commandData, tar, chan) {
     list.display(src, chan);
 });
 
-addCommand(0, "emoteusage", function (src, command, commandData, tar, chan) {
+/*addCommand(0, "emoteusage", function (src, command, commandData, tar, chan) {
     var keys = Object.keys(EmoteCounter),
         list,
         sorted = [],
@@ -928,7 +928,7 @@ addCommand(0, "emoteusage", function (src, command, commandData, tar, chan) {
     for (y = 0; y < sorted.length; y += 1) {
         sys.sendMessage(src, "#" + (y + 1) + ": " + sorted[y][0] + " " + sorted[y][1], chan);
     }
-});
+});*/
 
 addCommand(0, "gl", function (src, command, commandData, tar, chan) {
     if (!this.isLManager) {
