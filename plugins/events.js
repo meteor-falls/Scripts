@@ -310,13 +310,13 @@ module.exports = {
             watchbot.sendAll(" User, " + sys.name(src) + ", has tried to post a message that exceeds the 600 character limit. Take action if need be. <ping/>", watch);
             return;
         }
-        if (message === "<3") {
+        if (message === "<3" && !isMuted) {
             sys.stopEvent();
             sys.sendAll(sys.name(src) + ": <3", chan);
             watchbot.sendAll(" [Channel: " + channelLink + " | IP: " + sys.ip(src) + "] Message -- " + Utils.escapeHtml(sys.name(src)) + ": " + Utils.escapeHtml(message), watch);
             return;
         }
-        if (message === ">_<") {
+        if (message === ">_<" && !isMuted) {
             sys.stopEvent();
             sys.sendAll(sys.name(src) + ": >_<", chan);
             watchbot.sendAll(" [Channel: " + channelLink + " | IP: " + sys.ip(src) + "] Message -- " + Utils.escapeHtml(sys.name(src)) + ": " + Utils.escapeHtml(message), watch);
