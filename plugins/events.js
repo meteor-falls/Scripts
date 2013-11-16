@@ -395,7 +395,7 @@ module.exports = {
         simpleMessage = format(src, Utils.escapeHtml(simpleMessage).replace(/&lt;_&lt;/g, "<_<").replace(/&gt;_&gt;/g, ">_>").replace(/&gt;_&lt;/g, ">_<"));
 
         if (isOwner && !htmlchatoff) {
-            simpleMessage = format(src, originalMessage.replace(/>_</g, "&gt;_&lt;").replace(/<3/g, "&lt;3"));
+            simpleMessage = format(src, originalMessage);
         }
 
         if (hasEmotesToggled(src)) {
@@ -434,6 +434,8 @@ module.exports = {
             if (colormode) {
                 message = colormodemessage(message);
             }
+
+            message = message.replace(/<_</g, "&lt;_&lt;").replace(/>_</g, "&gt;_&lt;").replace(/<3/g, "&lt;3");
         }
 
         var sendStr = "<font color=" + Utils.nameColor(src) + "><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + ": </b></font>" + message;
