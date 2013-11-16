@@ -317,26 +317,12 @@ module.exports = {
             originalName = poUser.originalName,
             isLManager = Leaguemanager === originalName.toLowerCase(),
             messageToLowerCase = message.toLowerCase(),
-            myAuth = Utils.getAuth(src);
+            myAuth = Utils.getAuth(src),
+            isOwner = myAuth === 3;
 
         if (originalName === "Ian" && (messageToLowerCase === "ok" || messageToLowerCase === "ok!")) {
             sys.stopEvent();
             sys.sendHtmlAll("<timestamp/> <b>Ian Check:</b> <font color='green'>OK!</font>", chan);
-            script.afterChatMessage(src, message, chan);
-            return;
-        }
-        
-        if (message === "<3" && !isMuted) {
-            sys.stopEvent();
-            sys.sendAll(sys.name(src) + ": <3", chan);
-            watchbot.sendAll(" [Channel: " + channelLink + " | IP: " + sys.ip(src) + "] Message -- " + Utils.escapeHtml(sys.name(src)) + ": " + Utils.escapeHtml(message), watch);
-            script.afterChatMessage(src, message, chan);
-            return;
-        }
-        if (message === ">_<" && !isMuted) {
-            sys.stopEvent();
-            sys.sendAll(sys.name(src) + ": >_<", chan);
-            watchbot.sendAll(" [Channel: " + channelLink + " | IP: " + sys.ip(src) + "] Message -- " + Utils.escapeHtml(sys.name(src)) + ": " + Utils.escapeHtml(message), watch);
             script.afterChatMessage(src, message, chan);
             return;
         }
@@ -408,8 +394,8 @@ module.exports = {
         var emotes = false;
         simpleMessage = format(src, Utils.escapeHtml(simpleMessage).replace(/&lt;_&lt;/g, "<_<").replace(/&gt;_&gt;/g, ">_>").replace(/&gt;_&lt;/g, ">_<"));
 
-        if (myAuth === 3 && !htmlchatoff) {
-            simpleMessage = format(src, originalMessage);
+        if (isOwner && !htmlchatoff) {
+            simpleMessage = format(src, originalMessage.replace(/>_</g, "&gt;_&lt;").replace(/<3/g, "&lt;3"));
         }
 
         if (hasEmotesToggled(src)) {
