@@ -1859,7 +1859,12 @@ addCommand(1, ["mute", "m"], function (src, command, commandData, tar, chan) {
         return;
     }
     
-    reason = Utils.escapeHtml(reason || "No reason.");
+    if (!reason) {
+        bot.sendMessage(src, "A reason must be specified.", chan);
+        return;
+    }
+    
+    reason = Utils.escapeHtml(reason);
 
     var time = Utils.stringToTime(timeunit, Number(mutetime)),
         time_now = +sys.time(),
