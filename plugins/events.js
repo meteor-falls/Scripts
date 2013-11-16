@@ -325,6 +325,21 @@ module.exports = {
             script.afterChatMessage(src, message, chan);
             return;
         }
+        
+        if (message === "<3" && !isMuted) {
+            sys.stopEvent();
+            sys.sendAll(sys.name(src) + ": <3", chan);
+            watchbot.sendAll(" [Channel: " + channelLink + " | IP: " + sys.ip(src) + "] Message -- " + Utils.escapeHtml(sys.name(src)) + ": " + Utils.escapeHtml(message), watch);
+            script.afterChatMessage(src, message, chan);
+            return;
+        }
+        if (message === ">_<" && !isMuted) {
+            sys.stopEvent();
+            sys.sendAll(sys.name(src) + ": >_<", chan);
+            watchbot.sendAll(" [Channel: " + channelLink + " | IP: " + sys.ip(src) + "] Message -- " + Utils.escapeHtml(sys.name(src)) + ": " + Utils.escapeHtml(message), watch);
+            script.afterChatMessage(src, message, chan);
+            return;
+        }
 
         if (Utils.hasIllegalChars(message) && myAuth < 3) {
             /*bot.sendMessage(src, 'WHY DID YOU TRY TO POST THAT, YOU NOOB?!', chan);
@@ -354,21 +369,6 @@ module.exports = {
             sys.stopEvent();
             bot.sendMessage(src, "Shut up! Silence is on!", chan);
             watchbot.sendAll(" [Channel: " + channelLink + " | IP: " + sys.ip(src) + "] Silence Message -- " + Utils.escapeHtml(sys.name(src)) + ": " + Utils.escapeHtml(message), watch);
-            script.afterChatMessage(src, message, chan);
-            return;
-        }
-
-        if (message === "<3" && !isMuted) {
-            sys.stopEvent();
-            sys.sendAll(sys.name(src) + ": <3", chan);
-            watchbot.sendAll(" [Channel: " + channelLink + " | IP: " + sys.ip(src) + "] Message -- " + Utils.escapeHtml(sys.name(src)) + ": " + Utils.escapeHtml(message), watch);
-            script.afterChatMessage(src, message, chan);
-            return;
-        }
-        if (message === ">_<" && !isMuted) {
-            sys.stopEvent();
-            sys.sendAll(sys.name(src) + ": >_<", chan);
-            watchbot.sendAll(" [Channel: " + channelLink + " | IP: " + sys.ip(src) + "] Message -- " + Utils.escapeHtml(sys.name(src)) + ": " + Utils.escapeHtml(message), watch);
             script.afterChatMessage(src, message, chan);
             return;
         }
@@ -408,9 +408,7 @@ module.exports = {
         var emotes = false;
         simpleMessage = format(src, Utils.escapeHtml(simpleMessage).replace(/&lt;_&lt;/g, "<_<").replace(/&gt;_&gt;/g, ">_>").replace(/&gt;_&lt;/g, ">_<"));
 
-        var can_use_html = myAuth === 3 && !htmlchatoff;
-
-        if (can_use_html) {
+        if (myAuth === 3 && !htmlchatoff) {
             simpleMessage = format(src, originalMessage);
         }
 
@@ -449,10 +447,6 @@ module.exports = {
 
             if (colormode) {
                 message = colormodemessage(message);
-            }
-
-            if (!can_use_html) {
-                message = Utils.escapeHtml(message);
             }
         }
 

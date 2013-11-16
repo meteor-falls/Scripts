@@ -62,7 +62,7 @@ module.exports = function () {
         function assignEmote(code) {
             return function ($1) {
                 if (limit && (emotes.length > 4 || lastEmote.indexOf(i) !== -1)) {
-                    return Utils.escapeHtml($1);
+                    return $1;
                 }
                 
                 if (emotes.indexOf(i) === -1)
