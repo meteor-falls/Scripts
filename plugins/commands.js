@@ -1543,11 +1543,17 @@ addCommand(1, "mutes", function (src, command, commandData, tar, chan) {
     }
     
     list = new TableList("Mutes", "cornflowerblue", 2, 5, "navy");
-    list.add(["IP", "Muted Name", "By", "Length"], true);
+    list.add(["IP", "Muted Name", "By", "Length", "Reason"], true);
     
     for (key in Mutes) {
         now = Mutes[key];
-        list.add([key, now.mutedname, now.by, (now.time === 0 ? "forever" : "for " + Utils.getTimeString(now.time - timeNow))], false);
+        var mutedname = now.mutedname,
+            by = now.by,
+            time = now.time,
+            timeString = (time === 0 ? "forever" : "for " + Utils.getTimeString(time - timeNow)),
+            reason = now.reason ? now.reason : "none";
+            
+        list.add([key, mutedname, by, timeString, reason], false);
     }
     
     list.finish();
