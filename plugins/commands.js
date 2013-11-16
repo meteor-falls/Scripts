@@ -1551,7 +1551,7 @@ addCommand(1, "mutes", function (src, command, commandData, tar, chan) {
             by = now.by,
             time = now.time,
             timeString = (time === 0 ? "forever" : "for " + Utils.getTimeString(time - timeNow)),
-            reason = now.reason ? now.reason : "none";
+            reason = now.reason;
             
         list.add([key, mutedname, by, timeString, reason], false);
     }
