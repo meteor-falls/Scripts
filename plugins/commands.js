@@ -902,34 +902,6 @@ addCommand(0, "emotepermlist", function (src, command, commandData, tar, chan) {
     list.display(src, chan);
 });
 
-/*addCommand(0, "emoteusage", function (src, command, commandData, tar, chan) {
-    var keys = Object.keys(EmoteCounter),
-        list,
-        sorted = [],
-        x,
-        y;
-        
-    if (keys.length === 0) {
-        bot.sendMessage(src, "There is no data.", chan);
-        return;
-    }
-    
-    for (var x in EmoteCounter) {
-        sorted.push([x, EmoteCounter[x]]);
-    }
-    
-    sorted.sort(function(a, b) {return b[1] - a[1]});
-    
-    while (sorted.length > 5) {
-        sorted.pop();
-    }
-    
-    sys.sendMessage(src, "*** EMOTE USAGE ***", chan);
-    for (y = 0; y < sorted.length; y += 1) {
-        sys.sendMessage(src, "#" + (y + 1) + ": " + sorted[y][0] + " " + sorted[y][1], chan);
-    }
-});*/
-
 addCommand(0, "gl", function (src, command, commandData, tar, chan) {
     if (!this.isLManager) {
         bot.sendMessage(src, "You need to be a league manager to use this command!", chan);

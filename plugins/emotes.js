@@ -5,11 +5,6 @@
 */
 
 module.exports = function () {
-    var updateCount = function(emote) {
-        var add = (!EmoteCounter.hasOwnProperty(emote) || isNaN(EmoteCounter[emote])) ? 0 : EmoteCounter[emote];
-        EmoteCounter[emote] = add + 1;
-    }
-    
     EmoteList = {
         __display__: []
     };
@@ -64,9 +59,6 @@ module.exports = function () {
                 if (limit && (emotes.length > 4 || lastEmote.indexOf(i) !== -1)) {
                     return Utils.escapeHtml($1);
                 }
-                
-                if (emotes.indexOf(i) === -1)
-                    updateCount(i);
                 
                 emotes.push(i);
                 
