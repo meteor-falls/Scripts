@@ -518,7 +518,7 @@ module.exports = {
                 3: "rd"
             };
 
-            return num + (nthNum[parseInt(num.toString().slice(-1))] || "th");
+            return num + (nthNum[num] || "th");
         };
 
         function atag(s) {
