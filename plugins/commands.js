@@ -1896,9 +1896,7 @@ addCommand(1, ["mute"], function (src, command, commandData, tar, chan) {
 });
 addCommand(1, "m", function (src, command, commandData, tar, chan) {
     // Reuse code
-    if (commands.hasOwnProperty("mute")) {
-        commands["mute"].callback.call(null, src, "mute", commandData + ":5:minutes:No reason.", tar, chan);
-    }
+    commands["mute"].callback.call({myAuth: this.myAuth}, src, "mute", commandData + ":5:minutes:No reason.", tar, chan);
 });
 addCommand(1, "unmute", function (src, command, commandData, tar, chan) {
     var ip = sys.dbIp(commandData);
