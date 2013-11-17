@@ -1836,7 +1836,7 @@ addCommand(1, "untempban", function (src, command, commandData, tar, chan) {
     sys.sendHtmlAll("<font color=blue><timestamp/><b> " + commandData + "'s tempban has been removed by " + Utils.escapeHtml(sys.name(src)) + "!</font></b>", 0);
     sys.unban(commandData);
 });
-addCommand(1, ["mute", "m"], function (src, command, commandData, tar, chan) {
+addCommand(1, ["mute"], function (src, command, commandData, tar, chan) {
     var v = commandData.split(':'),
         reason = Utils.cut(v, 3, ":"),
         mutetime = v[1],
@@ -1893,6 +1893,12 @@ addCommand(1, ["mute", "m"], function (src, command, commandData, tar, chan) {
 
     sys.sendHtmlAll("<font color=blue><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + " muted " + v[0] + " " + timeString + "!</b></font>");
     sys.sendHtmlAll("<font color=green><timestamp/><b>Reason:</b></font> " + reason);
+});
+addCommand(1, "m", function (src, command, commandData, tar, chan) {
+    // Reuse code
+    if (commands.hasOwnProperty("mute")) {
+        commands["mute"].callback.call(null, src, "mute", commandData + ":5:minutes:No reason.", tar, chan);
+    }
 });
 addCommand(1, "unmute", function (src, command, commandData, tar, chan) {
     var ip = sys.dbIp(commandData);
