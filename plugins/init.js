@@ -520,7 +520,7 @@ module.exports = {
                 3: "rd"
             };
 
-            return num + (nthNum[num] || "th");
+            return num + (nthNum[parseInt(num.toString().slice(-1))] || "th");
         };
 
         function atag(s) {
