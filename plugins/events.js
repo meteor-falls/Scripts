@@ -74,20 +74,12 @@ module.exports = {
             sys.stopEvent();
             return;
         }
-
-        if (channel !== android && sys.os(src) === "android" && !hasBasicPermissions(src)) {
-            if (sys.isInChannel(src, android)) {
-                guard.sendMessage(src, "Sorry, you cannot go to a channel other than Android Channel.", android);
-                watchbot.sendAll(sys.name(src) + "(IP: " + sys.ip(src) + ") tried to join " + sys.channel(channel) + " with an Android device!", watch);
-            }
-            sys.stopEvent();
-        }
     },
     afterChannelCreated: function (channel) {
         JSESSION.createChannel(channel);
     },
     beforeChannelDestroyed: function (channel) {
-        if (channel === staffchannel || channel === testchan || channel === watch || channel === android) {
+        if (channel === staffchannel || channel === testchan || channel === watch) {
             sys.stopEvent();
             return;
         }
@@ -101,7 +93,7 @@ module.exports = {
             by: null
         };
 
-        if (chan !== 0 && chan !== android) {
+        if (chan !== 0) {
             topicbot.sendMessage(src, topic.topic, chan);
 
             if (topic.by) {
@@ -109,10 +101,7 @@ module.exports = {
             }
         }
 
-        if (chan === android) {
-            topicbot.sendMessage(src, "This is the Android user channel. Feel free to chat and battle with other android users. Click <a href='http://code.google.com/p/pokemon-online-android/wiki/TeamLoadTutorial'>here</a> to learn how to import a team.", chan);
-        }
-        if (chan !== 0 && chan !== android) {
+        if (chan !== 0) {
             watchbot.sendAll(sys.name(src) + "(IP: " + sys.ip(src) + ") has joined " + sys.channel(chan) + "!", watch);
         }
     },
@@ -148,12 +137,6 @@ module.exports = {
             }
         }
 
-        if (sys.os(src) === "android") {
-            sys.kick(src, 0);
-            sys.putInChannel(src, android);
-            watchbot.sendAll("Android user, " + sys.name(src) + ", was kicked out of " + sys.channel(0) + " and placed in the Android Channel.", watch);
-        }
-
         JSESSION.createUser(src);
     },
     afterLogIn: function (src, defaultChan) {
@@ -185,10 +168,6 @@ module.exports = {
             newRecord = true;
         }
 
-        if (sys.os(src) === "android") {
-            defaultChan = android;
-        }
-
         if (!sys.isInChannel(src, defaultChan)) {
             sys.putInChannel(src, defaultChan);
         }
@@ -208,7 +187,7 @@ module.exports = {
         }
 
         sys.sendMessage(src, '');
-        if (sys.numPlayers() < 30 && sys.os(src) !== "android" && !Welmsgs[sys.name(src).toLowerCase()]) {
+        if (sys.numPlayers() < 30 && !Welmsgs[sys.name(src).toLowerCase()]) {
             loginMessage(sys.name(src), Utils.nameColor(src));
         }
 
@@ -460,7 +439,7 @@ module.exports = {
     beforeLogOut: function (src) {
         var user = JSESSION.users(src);
 
-        if (sys.numPlayers() < 30 && !user.autokick && sys.os(src) !== "android") {
+        if (sys.numPlayers() < 30 && !user.autokick) {
             logoutMessage(Utils.escapeHtml(sys.name(src)), Utils.nameColor(src));
         }
 
