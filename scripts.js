@@ -173,6 +173,7 @@ var poScript;
 
 poScript = ({
     serverStartUp: function serverStartUp() {
+        script.startUpTime = +sys.time();
         script.init();
     },
     init: function init() {

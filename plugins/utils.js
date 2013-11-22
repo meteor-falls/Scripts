@@ -316,6 +316,22 @@
     util.placeCommas = function (number) {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
+
+    util.uptime = function () {
+        var uptime = script.startUpTime;
+
+        var diff = parseInt(sys.time(), 10) - uptime,
+            days = parseInt(diff / (60*60*24), 10),
+            hours = parseInt((diff % (60*60*24)) / (60*60), 10),
+            minutes = parseInt((diff % (60*60)) / 60, 10),
+            seconds = (diff % 60);
+
+        var format = function(num, type) {
+            return num > 0 && num !== 1 ? num + " " + type + "s" : num === 1 ? num + " " + type : "";
+        }
+
+        return format(days, "day") + format(hours, "hour") + format(minutes, "minute") + format(seconds, "second");
+    }
     
     Utils = module.exports = util;
 }());
