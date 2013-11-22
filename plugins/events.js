@@ -180,7 +180,7 @@ module.exports = {
         displayBot("CommandBot", "Type <b>/commands</b> for a list of commands, <b>/rules</b> for a list of rules, and <b>/league</b> for the league.", "green");
         displayBot("ForumBot", "Get in touch with the community by joining the <b><a href='http://meteor-falls.com/forums'>Meteor Falls Forums</a></b>!", "blue");
         displayBot("StatsBot", "There are <b>" + numPlayers + "</b> players online. You are the <b>" + nthNumber(Utils.placeCommas(src)) + "</b> player to join. At most, there were <b>" + Reg.get("maxPlayersOnline") + "</b> players online" + (newRecord ? " (new record!)" : "") + ".", "goldenrod");
-        displayBot("UptimeBot", "The server has been up for " + Utils.uptime());
+        displayBot("UptimeBot", "The server has been up for " + Utils.uptime(), "orange");
 
         var MOTD = Reg.get("MOTD");
         if (MOTD !== "") {

@@ -327,7 +327,7 @@
             seconds = (diff % 60);
 
         var format = function(num, type) {
-            return num > 0 && num !== 1 ? num + " " + type + "s" : num === 1 ? num + " " + type : "";
+            return (num > 0 && num !== 1) ? (num + " " + type + "s") : (num === 1) ? (num + " " + type) : "";
         }
 
         return format(days, "day") + format(hours, "hour") + format(minutes, "minute") + format(seconds, "second");
