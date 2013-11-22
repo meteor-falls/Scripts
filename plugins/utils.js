@@ -330,7 +330,11 @@
             return (num > 0 && num !== 1) ? (num + " " + type + "s") : (num === 1) ? (num + " " + type) : "";
         }
 
-        return [format(days, "day"), format(hours, "hour"), format(minutes, "minute"), format(seconds, "second")];
+        return [format(days, "day"), format(hours, "hour"), format(minutes, "minute"), format(seconds, "second")].filter(function(key) {
+            if (key === "")
+                return false;
+            return true;
+        });
     }
     
     Utils = module.exports = util;
