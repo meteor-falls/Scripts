@@ -413,6 +413,30 @@ module.exports = {
         testchan = makeChan("Ground Zero");
         watch = makeChan("Watch");
 
+        andJoin = function (array) {
+            var x, retstr = '',
+                arrlen = array.length;
+
+            if (arrlen === 0 || arrlen === 1) {
+                return array.join("");
+            }
+
+            arrlen--;
+
+            for (x in array) {
+                if (Number(x) === arrlen) {
+                    retstr = retstr.substr(0, retstr.lastIndexOf(","));
+                    retstr += " and " + array[x];
+
+                    return retstr;
+                }
+
+                retstr += array[x] + ", ";
+            }
+
+            return "";
+        }
+
         ban = function (name) {
             sys.ban(name);
             if (sys.id(name)) {
