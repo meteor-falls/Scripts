@@ -249,6 +249,14 @@
     util.boldKeys = function (val) {
         return "<b>" + val + "</b>";
     };
+
+    // For use in filter
+    util.stripEmpty = function (val) {
+        if (val === "") {
+            return false;
+        }
+        return true;
+    };
     
     // TODO: Remove these unused functions.
     util.randPoke = function () {
@@ -330,11 +338,7 @@
             return (num > 0 && num !== 1) ? (num + " " + type + "s") : (num === 1) ? (num + " " + type) : "";
         }
 
-        return [format(days, "day"), format(hours, "hour"), format(minutes, "minute"), format(seconds, "second")].filter(function(key) {
-            if (key === "")
-                return false;
-            return true;
-        });
+        return [format(days, "day"), format(hours, "hour"), format(minutes, "minute"), format(seconds, "second")].filter(this.stripEmpty);
     }
     
     Utils = module.exports = util;
