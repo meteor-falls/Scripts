@@ -188,11 +188,13 @@ module.exports = {
         }
 
         sys.sendMessage(src, '');
-        if (sys.numPlayers() < 30 && !Welmsgs[sys.name(src).toLowerCase()]) {
+
+        var hasWelcomeMessage = Welmsgs.hasOwnProperty(sys.name(src).toLowerCase());
+        if (sys.numPlayers() < 30 && !hasWelcomeMessage) {
             loginMessage(sys.name(src), Utils.nameColor(src));
         }
 
-        if (Welmsgs[sys.name(src).toLowerCase()]) {
+        if (hasWelcomeMessage) {
             var theirmessage = Welmsgs[sys.name(src).toLowerCase()];
             var msg = (theirmessage) ? theirmessage.message : loginMessage(sys.name(src), Utils.nameColor(src));
             if (theirmessage) {
@@ -204,7 +206,7 @@ module.exports = {
         }
 
         pruneMutes();
-        if (Mutes[ip]) {
+        if (Mutes.hasOwnProperty(ip)) {
             var myMute = Mutes[ip],
                 muteStr = myMute.time !== 0 ? Utils.getTimeString(myMute.time - +sys.time()) : "forever";
             poUser.muted = true;
@@ -308,9 +310,8 @@ module.exports = {
         }
 
         if (Utils.hasIllegalChars(message) && myAuth < 3) {
-            /*bot.sendMessage(src, 'WHY DID YOU TRY TO POST THAT, YOU NOOB?!', chan);
-            watchbot.sendAll(Utils.escapeHtml(sys.name(src).toUpperCase()) + ' TRIED TO POST A BAD CODE! KILL IT! <ping/>', watch);
-            watchbot.sendAll("Message: "+Utils.escapeHtml(message), watch);*/
+            bot.sendMessage(src, 'WHY DID YOU TRY TO POST THAT, YOU NOOB?!', chan);
+            watchbot.sendAll(Utils.escapeHtml(sys.name(src)) + ' TRIED TO POST A BAD CODE! KILL IT!', watch);
             sys.stopEvent();
             script.afterChatMessage(src, message, chan);
             return;
