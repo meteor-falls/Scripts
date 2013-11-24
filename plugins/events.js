@@ -420,7 +420,7 @@ module.exports = {
         }
 
         // Strip empty character
-        message = message.replace(/ufffc/gi, "");
+        message = message.replace(/\ufffc/gi, "");
 
         if (message.length === 0) {
             bot.sendMessage(src, "Sorry, your message was empty.", chan);
