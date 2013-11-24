@@ -423,6 +423,7 @@ module.exports = {
         message = message.replace(/\ufffc/gi, "");
 
         if (message.length === 0) {
+            sys.stopEvent();
             bot.sendMessage(src, "Sorry, your message was empty.", chan);
             return;
         }
