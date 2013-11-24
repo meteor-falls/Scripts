@@ -419,6 +419,14 @@ module.exports = {
             message = message.replace(/<_</g, "&lt;_&lt;").replace(/>_</g, "&gt;_&lt;").replace(/<3/g, "&lt;3");
         }
 
+        // Strip empty character
+        message = message.replace(/ufffc/gi, "");
+
+        if (message.length === 0) {
+            bot.sendMessage(src, "Sorry, your message was empty.", chan);
+            return;
+        }
+
         var sendStr = "<font color=" + Utils.nameColor(src) + "><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + ": </b></font>" + message;
         if (sys.auth(src) > 0 && sys.auth(src) < 4) {
             sendStr = "<font color=" + Utils.nameColor(src) + "><timestamp/>+<i><b>" + Utils.escapeHtml(sys.name(src)) + ": </b></i></font>" + message;
