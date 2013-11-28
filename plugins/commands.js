@@ -1458,10 +1458,10 @@ addCommand(1, "removetopic", function (src, command, commandData, tar, chan) {
     bot.sendMessage(src, "Channel topic was removed!", chan);
 });
 addCommand(1, "changetopic", function (src, command, commandData, tar, chan) {
-    if (chan === android) {
+    /*if (chan === android) {
         topicbot.sendMessage(src, "Can't change the topic of the android channel!", chan);
         return;
-    }
+    }*/
     topicbot.sendAll(sys.name(src) + " has the changed the topic of this channel to: " + commandData, chan);
     var channelToLower = sys.channel(chan).toLowerCase();
     Channeltopics[channelToLower] = {
