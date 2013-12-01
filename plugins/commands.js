@@ -1654,8 +1654,7 @@ addCommand(1, "closepoll", function (src, command, commandData, tar, chan) {
     
     var self = sys.name(src);
     bot.sendAll(self + " closed the poll (started by " + Poll.by + ")!", chan);
-    bot.sendAll(Poll.subject, chan);
-    bot.sendAll("Results:", chan);
+    bot.sendAll("'" + Poll.subject + "' - Results:", chan);
     for (i in results) {
         bot.sendAll("Option #" + (parseInt(i, 10) + 1) + " (" + Poll.options[i] + "): " + results[i] + " votes", chan);
     }
