@@ -1637,7 +1637,7 @@ addCommand(1, "closepoll", function (src, command, commandData, tar, chan) {
         return bot.sendMessage(src, "There isn't a poll. Start one with /poll [subject]:[option1]*[option..].", chan);
     }
     
-    var results = {}, choice, i, winner, most = 0;
+    var results = {}, choice, i, total, winner, most = 0;
     for (i in Poll.votes) {
         choice = Poll.votes[i];
         if (!(choice in results)) {
@@ -1653,13 +1653,19 @@ addCommand(1, "closepoll", function (src, command, commandData, tar, chan) {
     }
     
     var self = sys.name(src);
+    var msgs = {};
     bot.sendAll(self + " closed the poll (started by " + Poll.by + ")!", chan);
     bot.sendAll("'" + Poll.subject + "' - Results:", chan);
     for (i in results) {
-        bot.sendAll("Option #" + (parseInt(i, 10) + 1) + " (" + Poll.options[i] + "): " + results[i] + " votes", chan);
+        msgs[i] = "Option #" + (parseInt(i, 10) + 1) + " (" + Poll.options[i] + "): " + results[i] + " vote" + (results[i] === 1 ? '' : 's');
     }
     
-    bot.sendAll("Winner: Option #" + (winner + 1) + " (" + Poll.options[winner] + ") with " + results[winner] + " votes.", chan);
+    for (i = 0, total = Poll.options.length; i < total; i += 1) {
+        bot.sendAll(msgs[i], chan);
+    }
+    
+    sys.sendAll("", chan);
+    bot.sendAll("Winner: Option #" + (winner + 1) + " (" + Poll.options[winner] + ") with " + results[winner] + " vote" + (results.winner === 1 ? '' : 's') + ".", chan);
     
     Poll.active = false;
     Poll.subject = '';
