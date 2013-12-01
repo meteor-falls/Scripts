@@ -364,7 +364,6 @@ addCommand(0, "vote", function (src, command, commandData, tar, chan) {
     }
     
     var ip = sys.ip(src);
-    Poll.votes[ip] = option;
     bot.sendMessage(src, "You voted for option #" + (option + 1) + ": " + Poll.options[option], chan);
     
     if (ip in Poll.votes) {
@@ -372,6 +371,8 @@ addCommand(0, "vote", function (src, command, commandData, tar, chan) {
     } else {
         bot.sendAll(sys.name(src) + " voted!", chan);
     }
+    
+    Poll.votes[ip] = option;
 });
 
 addCommand(0, "heal", function (src, command, commandData, tar, chan) {
@@ -1623,6 +1624,7 @@ addCommand(1, "poll", function (src, command, commandData, tar, chan) {
 
     var self = sys.name(src), len, i;
     bot.sendAll(self + " started a poll!", chan);
+    bot.sendAll(subject);
     bot.sendAll("Options:", chan);
     for (i = 0, len = options.length; i < len; i += 1) {
         bot.sendAll((i + 1) + ". " + options[i], chan);
