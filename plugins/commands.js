@@ -1617,12 +1617,12 @@ addCommand(1, "poll", function (src, command, commandData, tar, chan) {
         return bot.sendMessage(src, "You need at least 2 options.", chan);
     }
     
+    var self = sys.name(src), len, i;
     Poll.active = true;
     Poll.subject = subject;
     Poll.by = self;
     Poll.options = options;
 
-    var self = sys.name(src), len, i;
     bot.sendAll(self + " started a poll!", chan);
     bot.sendAll(subject);
     bot.sendAll("Options:", chan);
@@ -1654,6 +1654,7 @@ addCommand(1, "closepoll", function (src, command, commandData, tar, chan) {
     
     var self = sys.name(src);
     bot.sendAll(self + " closed the poll (started by " + Poll.by + ")!", chan);
+    bot.sendAll(Poll.subject, chan);
     bot.sendAll("Results:", chan);
     for (i in results) {
         bot.sendAll("Option #" + (parseInt(i, 10) + 1) + " (" + Poll.options[i] + "): " + results[i] + " votes", chan);
