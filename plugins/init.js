@@ -379,6 +379,13 @@ module.exports = {
                 ips: {},
                 count: 0,
                 total: 0
+            },
+            Poll: {
+                active: false,
+                subject: '',
+                by: '',
+                options: [],
+                votes: {}
             }
         };
 

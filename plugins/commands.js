@@ -353,6 +353,27 @@ addCommand(0, "move", function (src, command, commandData, tar, chan) {
     });
 });
 
+addCommand(0, "vote", function (src, command, commandData, tar, chan) {
+    if (!Poll.active) {
+        return bot.sendMessage(src, "There is no poll right now.", chan);
+    }
+    
+    var option = parseInt(commandData, 10) - 1;
+    if (!Poll.options[option]) {
+        return bot.sendMessage(src, "There is no such option as " + (option + 1) + " available.", chan);
+    }
+    
+    var ip = sys.ip(src);
+    Poll.votes[ip] = option;
+    bot.sendMessage(src, "You voted for option #" + (option + 1) + ": " + Poll.options[option], chan);
+    
+    if (ip in Poll.votes) {
+        bot.sendAll(sys.name(src) + " changed their vote!", chan);
+    } else {
+        bot.sendAll(sys.name(src) + " voted!", chan);
+    }
+});
+
 addCommand(0, "heal", function (src, command, commandData, tar, chan) {
     var name = sys.name(src).toLowerCase(),
         player = Feedmon.getPlayer(name),
@@ -1576,6 +1597,73 @@ addCommand(1, "bans", function (src, command, commandData, tar, chan) {
     
     list.finish();
     list.display(src, chan);
+});
+
+addCommand(1, "poll", function (src, command, commandData, tar, chan) {
+    if (Poll.active) {
+        return bot.sendMessage(src, "There is already a poll. Close it with /closepoll.", chan);
+    }
+    
+    var parts = commandData.split(':');
+    var subject = parts[0];
+    var options = Util.cut(parts, 1, ':').split('*');
+    
+    if (!subject) {
+        return bot.sendMessage(src, "You need to give a subject!", chan);
+    }
+    
+    if (!options || options.length < 2) {
+        return bot.sendMessage(src, "You need at least 2 options.", chan);
+    }
+    
+    Poll.active = true;
+    Poll.subject = subject;
+    Poll.by = self;
+    Poll.options = options;
+
+    var self = sys.name(src), len, i;
+    bot.sendAll(self + " started a poll!", chan);
+    bot.sendAll("Options:", chan);
+    for (i = 0, len = options.length; i < len; i += 1) {
+        bot.sendAll((i + 1) + ". " + options[i], chan);
+    }
+    bot.sendAll("Vote with /vote [option]!", chan);
+});
+
+addCommand(1, "closepoll", function (src, command, commandData, tar, chan) {
+    if (!Poll.active) {
+        return bot.sendMessage(src, "There isn't a poll. Start one with /poll [subject]:[option1]*[option..].", chan);
+    }
+    
+    var results = {}, choice, i, winner, most = 0;
+    for (i in Poll.votes) {
+        choice = Poll.votes[i];
+        if (!(choice in results)) {
+            results[choice] = 1;
+        } else {
+            results[choice] += 1;
+        }
+        
+        if (results[choice] > most) {
+            winner = choice;
+            most = results[choice];
+        }
+    }
+    
+    var self = sys.name(src);
+    bot.sendAll(self + " closed the poll (started by " + Poll.by + ")!", chan);
+    bot.sendAll("Results:", chan);
+    for (i in results) {
+        bot.sendAll("Option #" + (i + 1) + " (" + Poll.options[i] + "): " + results[i] + " votes", chan);
+    }
+    
+    bot.sendAll("Winner: Option #" + (winner + 1) + " (" + Poll.options[winner] + ") with " + results[winner] + " votes.", chan);
+    
+    Poll.active = false;
+    Poll.subject = '';
+    Poll.by = '';
+    Poll.options = [];
+    Poll.votes = {};
 });
 
 addCommand(1, "info", function (src, command, commandData, tar, chan) {

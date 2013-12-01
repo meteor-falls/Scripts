@@ -149,6 +149,7 @@ module.exports = {
         User.add("emotetoggle", "To toggle emotes on or off for you.");
         User.add("bbcode", "To view a list of bbcodes.");
         User.add("selfkick", "Kicks all the ghosts on your ip.");
+        User.add("vote <font color=red><b>[option]</b></font>", "To vote on a poll option.");
         User.add("calc <font color=red><b>[expression]</b></font>", "Evaluates a mathematical expression (10 / 2 * 4 ^ pi!). Full documentation <a href='https://github.com/josdejong/mathjs/blob/master/README.md'>here</a>.");
         User.finish();
 
@@ -294,6 +295,8 @@ module.exports = {
         Mod.add("unsilence", "To cancel the silence.");
         Mod.add("silenceoff", "Same as unsilence.");
         Mod.add("public", "To make the server public.");
+        Mod.add("poll <font color=red><b>[subject]</b></font>:<font color=red><b>[option1]*[option2]*[option..]</b></font>", "To start a poll. You must specify at least 2 options.");
+        Mod.add("closepoll", "To close the poll.");
         Mod.finish();
 
         Lists.Mod = Mod;
