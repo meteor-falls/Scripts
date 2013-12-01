@@ -252,10 +252,7 @@
 
     // For use in filter
     util.stripEmpty = function (val) {
-        if (val === "") {
-            return false;
-        }
-        return true;
+        return !!val;
     };
     
     // TODO: Remove these unused functions.

@@ -1606,7 +1606,7 @@ addCommand(1, "poll", function (src, command, commandData, tar, chan) {
     
     var parts = commandData.split(':');
     var subject = parts[0];
-    var options = Util.cut(parts, 1, ':').split('*');
+    var options = Utils.cut(parts, 1, ':').split('*');
     
     if (!subject) {
         return bot.sendMessage(src, "You need to give a subject!", chan);
