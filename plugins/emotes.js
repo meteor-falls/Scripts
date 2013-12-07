@@ -83,8 +83,11 @@ module.exports = function () {
             message = message.replace(new RegExp(RegExp.quote(i), "g"), assignEmote(EmoteList[i]));
         }
         
-        // Misc "emotes". Pokemons (basic only), icons, items, and avatars.
-        message = message.replace(/(trainer|icon|item|pokemon):(\d+)/gi, "<img src='$1:$2'>");
+        // Misc "emotes". Pokemons, icons, items, and avatars.
+        // pokemon:subtitute also works.
+        // pokemon:30&cropped=true
+        // etc
+        message = message.replace(/(trainer|icon|item|pokemon):([\d&=(gen|shiny|gender|back|cropped|num|substitute|true|false)]+)/gi, "<img src='$1:$2'>");
         
         message = message.replace(/:\(/g, "<img src='item:177'>");
         
