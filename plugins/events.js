@@ -304,13 +304,6 @@ module.exports = {
             myAuth = Utils.getAuth(src),
             isOwner = myAuth === 3;
 
-        if (originalName === "Ian" && (messageToLowerCase === "ok" || messageToLowerCase === "ok!")) {
-            sys.stopEvent();
-            sys.sendHtmlAll("<timestamp/> <b>Ian Check:</b> <font color='green'>OK!</font>", chan);
-            script.afterChatMessage(src, message, chan);
-            return;
-        }
-
         if (Utils.hasIllegalChars(message) && myAuth < 3) {
             bot.sendMessage(src, 'WHY DID YOU TRY TO POST THAT, YOU NOOB?!', chan);
             watchbot.sendAll(Utils.escapeHtml(sys.name(src)) + ' TRIED TO POST A BAD CODE! KILL IT!', watch);
@@ -341,8 +334,9 @@ module.exports = {
             script.afterChatMessage(src, message, chan);
             return;
         }
-
-        if ((message[0] === '/' || message[0] === '!') && message.length > 1) {
+        
+        var secondchar = message[1].toLowerCase();
+        if ((message[0] === '/' || message[0] === '!') && message.length > 1 && secondchar >= 'a' && secondchar <= 'z') {
             print("[#" + sys.channel(chan) + "] Command -- " + sys.name(src) + ": " + message);
             watchbot.sendAll("[Channel: " + channelLink + " | IP: " + sys.ip(src) + "] Command -- " + Utils.escapeHtml(sys.name(src)) + ": " + Utils.escapeHtml(message), watch);
             sys.stopEvent();
