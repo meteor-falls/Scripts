@@ -628,10 +628,9 @@ addCommand(0, ["sendto", "ping"], function (src, command, commandData, tar, chan
         return;
     }
     
+    mess = Utils.escapeHtml(mess);
     if (this.myAuth > 0 && hasEmotesToggled(src)) {
         mess = emoteFormat(true, mess);
-    } else {
-        mess = Utils.escapeHtml(mess);
     }
     
     bot.sendMessage(src, "Your message was sent!", chan);
@@ -825,7 +824,7 @@ addCommand(0, "emotetoggle", function (src, command, commandData, tar, chan) {
     if (hasEmotesToggled(src)) {
         delete Emotetoggles[sys.name(src).toLowerCase()];
     } else {
-        Emotetoggles[sys.name(src).toLowerCase()] = {};
+        Emotetoggles[sys.name(src).toLowerCase()] = true;
     }
     Reg.save("Emotetoggles", JSON.stringify(Emotetoggles));
 });

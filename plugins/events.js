@@ -200,8 +200,7 @@ module.exports = {
             var theirmessage = Welmsgs[sys.name(src).toLowerCase()];
             var msg = (theirmessage) ? theirmessage.message : loginMessage(sys.name(src), Utils.nameColor(src));
             if (theirmessage) {
-                msg = msg.replace(/\{Server\}/gi, Reg.get("servername"));
-                msg = msg.replace(/\{Color\}/gi, Utils.nameColor(src));
+                msg = msg.replace(/\{Server\}/gi, Reg.get("servername")).replace(/\{Color\}/gi, Utils.nameColor(src));
                 msg = emoteFormat(true, msg);
             }
             sys.sendHtmlAll(msg, 0);
@@ -365,27 +364,20 @@ module.exports = {
         }
 
         var originalMessage = message;
-        var simpleMessage = message;
-        var emoteMessage = message;
-
+        var sentMessage = ((isOwner && !htmlchatoff) ? originalMessage : Utils.escapeHtml(originalMessage));
         var emotes = false;
-        simpleMessage = format(src, Utils.escapeHtml(simpleMessage).replace(/&lt;_&lt;/g, "<_<").replace(/&gt;_&gt;/g, ">_>").replace(/&gt;_&lt;/g, ">_<"));
-
-        if (isOwner && !htmlchatoff) {
-            simpleMessage = format(src, originalMessage);
-        }
+        sentMessage = format(src, sentMessage);
 
         if (hasEmotesToggled(src)) {
-            emoteMessage = emoteFormat(true, simpleMessage, src);
+            var simpleMessage = sentMessage;
+            sentMessage = emoteFormat(true, sentMessage, src);
 
-            if (simpleMessage !== emoteMessage) {
+            if (simpleMessage !== sentMessage) {
                 emotes = true;
             }
-
-            simpleMessage = emoteMessage;
         }
 
-        message = simpleMessage;
+        message = sentMessage;
 
         if (!emotes) {
             if (lolmode) {
@@ -419,9 +411,7 @@ module.exports = {
         message = message.replace(/\ufffc/gi, "");
 
         if (message.length === 0) {
-            sys.stopEvent();
-            bot.sendMessage(src, "Sorry, your message was empty.", chan);
-            return;
+            return sys.stopEvent();
         }
 
         var sendStr = "<font color=" + Utils.nameColor(src) + "><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + ": </b></font>" + message;
