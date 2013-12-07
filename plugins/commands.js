@@ -1697,6 +1697,7 @@ addCommand(1, "info", function (src, command, commandData, tar, chan) {
     var registered = sys.dbRegistered(commandData) ? "yes" : "no";
     var loggedon = sys.loggedIn(tar) ? "yes" : "no";
     sys.sendMessage(src, "", chan);
+    
     sys.sendHtmlMessage(src, "<timestamp/><b><font color=black>±Bot:</font></b> Information of player <font color=" + Utils.nameColor(tar) + "><b>" + commandData + ":</font></b>", chan);
     sys.sendHtmlMessage(src, "<timestamp/><font color=purple><b>IP:</b></font> " + tarip, chan);
     sys.sendHtmlMessage(src, "<timestamp/><font color=black><b>Auth Level:</b></font> " + tarauth, chan);
@@ -1704,10 +1705,8 @@ addCommand(1, "info", function (src, command, commandData, tar, chan) {
     sys.sendHtmlMessage(src, "<timestamp/><font color=black><b>Number of aliases:</b></font> " + aliases.length, chan);
     sys.sendHtmlMessage(src, "<timestamp/><font color=purple><b>Registered:</b></font> " + registered, chan);
     sys.sendHtmlMessage(src, "<timestamp/><font color=black><b>Logged In:</b></font> " + loggedon, chan);
-    if (loggedon === "no") {
-        sys.sendMessage(src, "", chan);
-        return;
-    } else if (loggedon === "yes") {
+    
+    if (loggedon === "yes") {
         var lengths;
         var arrays = [];
         var channelU = sys.channelsOfPlayer(tar);
@@ -1715,8 +1714,11 @@ addCommand(1, "info", function (src, command, commandData, tar, chan) {
             arrays.push(sys.channel(channelU[lengths]));
         }
         sys.sendHtmlMessage(src, "<timestamp/><font color=purple><b>Channels of Player:</b></font> " + arrays.join(", "), chan);
-        sys.sendMessage(src, "", chan);
+    } else {
+        sys.sendHtmlMessage(src, "<timestamp/><font color=purple><b>Last On:</b></font> " + sys.dbLastOn(commandData), chan);
     }
+    
+    sys.sendMessage(src, "", chan);
 });
 addCommand(1, "logwarn", function (src, command, commandData, tar, chan) {
     if (!tar) {
