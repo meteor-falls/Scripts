@@ -365,24 +365,19 @@ module.exports = {
         
         var debug = src === sys.id('TheUnknownOne');
         var originalMessage = message;
-        var sentMessage = ((isOwner && !htmlchatoff) ? originalMessage : Utils.escapeHtml(originalMessage));
-        if (debug) sys.sendMessage(src, originalMessage), sys.sendMessage(src, sentMessage);
+        var sentMessage = ((isOwner && !htmlchatoff) ? originalMessage : Utils.escapeHtml(originalMessage, true)); // no amp
         var emotes = false;
         sentMessage = format(src, sentMessage);
-        if (debug) sys.sendMessage(src, sentMessage);
 
         if (hasEmotesToggled(src)) {
             var simpleMessage = sentMessage;
             sentMessage = emoteFormat(true, sentMessage, src);
-            if (debug) sys.sendMessage(src, 'w/ emotes:'), sys.sendMessage(src, sentMessage);
             if (simpleMessage !== sentMessage) {
                 emotes = true;
-                if (debug) sys.sendMessage(src, 'emotes');
             }
         }
 
         message = sentMessage;
-        if (debug) sys.sendMessage(src, message);
 
         if (!emotes) {
             if (lolmode) {

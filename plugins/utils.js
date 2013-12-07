@@ -7,8 +7,12 @@
 (function () {
     var util = {};
     
-    util.escapeHtml = function (str) {
-        return str.replace(/\&/g, "&amp;").replace(/</g, "&lt;").replace(/\>/g, "&gt;");
+    util.escapeHtml = function (str, noAmp) {
+        if (!noAmp) {
+            str = str.replace(/\&/g, "&amp;");
+        }
+        
+        return str.replace(/</g, "&lt;").replace(/\>/g, "&gt;");
     };
 
     util.stripHtml = function (str) {
