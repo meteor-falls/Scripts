@@ -87,7 +87,7 @@ module.exports = function () {
         // pokemon:subtitute also works.
         // pokemon:30&cropped=true
         // etc
-        message = message.replace(/(trainer|icon|item|pokemon):([\d&=(gen|shiny|gender|back|cropped|num|substitute|true|false)]+)/gi, "<img src='$1:$2'>");
+        message = message.replace(/((trainer|icon|item|pokemon):([\d&=(gen|shiny|gender|back|cropped|num|substitute|true|false)]+))/g, "<img src='$1'>");
         
         message = message.replace(/:\(/g, "<img src='item:177'>");
         
