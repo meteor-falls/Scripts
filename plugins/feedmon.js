@@ -130,7 +130,7 @@ module.exports = function () {
             pname = "<b>" + Utils.escapeHtml(player.pokemon.nickname) + "</b> (" + player.pokemon.name + ")";
         }
         
-        return pname;
+        return pname + " <img src='icon:" + sys.pokeNum(player.pokemon.name) + "'>";
     }
     
     function getPokemon(name) {
@@ -294,7 +294,7 @@ module.exports = function () {
             feedname = getPokemonName(name),
             battle = battles[name];
         
-        sendMessage("Start of turn #" + (battle.turn + 1) + " vs. <b>" + battle.opponent.pokemon + "</b>");
+        sendMessage("Start of turn #" + (battle.turn + 1) + " vs. <b>" + battle.opponent.pokemon + "</b> <img src='icon:" + sys.pokeNum(battle.opponent.pokemon) + "'>");
         sendMessage(feedmon.moves.map(function (name, index) {
             return "<b>" + name + "</b> (" + (index + 1) + ")";
         }).join(" | "));
