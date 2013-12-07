@@ -132,7 +132,7 @@ function reloadPlugin(plugin_name) {
         // otherwise /emotes won't be updated
         script.loadCommandLists();
     } else if (plugin_name === "mathjs.js") {
-        MathJS = Plugins('mathjs.js');
+        mathjs = Plugins('mathjs.js')();
     }
 }
 

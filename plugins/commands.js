@@ -564,14 +564,14 @@ addCommand(0, "emotes", function (src, command, commandData, tar, chan) {
 });
 
 addCommand(0, ["calc", "calculate"], function (src, command, commandData, tar, chan) {
-    if (MathJS === null) {
+    if (!mathjs) {
         bot.sendMessage(src, "Sorry, MathJS needs to be loaded in order to use this command.", chan);
         return;
     }
     
     var res;
     try {
-        res = MathJS.eval(commandData);
+        res = mathjs.eval(commandData);
         
         bot.sendMessage(src, Utils.escapeHtml("The result of '" + commandData + "' is:"), chan);
         bot.sendMessage(src, Utils.escapeHtml(res.toString()), chan);
