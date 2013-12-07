@@ -361,13 +361,13 @@ addCommand(0, "vote", function (src, command, commandData, tar, chan) {
     var lc = commandData.toLowerCase();
     var option;
     if (lc === "yes") {
-        option = 1;
+        option = 0;
     } else if (lc === "no") {
-        option = 2;
+        option = 1;
     } else {
         option = parseInt(commandData, 10) - 1;
     }
-    
+
     if (isNaN(option)) {
         return bot.sendMessage(src, "Sorry, you must specify `yes` or `no`.", chan);
     }
