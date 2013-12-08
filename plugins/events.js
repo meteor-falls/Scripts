@@ -364,7 +364,7 @@ module.exports = {
         }
         
         var originalMessage = message;
-        var sentMessage = ((isOwner && !htmlchatoff) ? originalMessage : Utils.escapeHtml(originalMessage, true).replace(/<_</g, "&lt;_&lt;").replace(/>_</g, "&gt;_&lt;").replace(/<3/g, "&lt;3")); // no amp
+        var sentMessage = ((isOwner && !htmlchatoff) ? originalMessage : Utils.escapeHtml(originalMessage, true).replace(/&lt;_&lt;/g, "<_<").replace(/&gt;_&lt;/g, ">_<").replace(/&gt;_&gt;/g, ">_>").replace(/&lt;3/g, "<3")); // no amp
         var emotes = false;
         sentMessage = format(src, sentMessage);
 
@@ -374,8 +374,8 @@ module.exports = {
             if (simpleMessage !== sentMessage) {
                 emotes = true;
             }
+            sentMessage = sentMessage.replace(/<_</g, "&lt;_&lt;").replace(/>_</g, "&gt;_&lt;").replace(/<3/g, "&lt;3");
         }
-
         message = sentMessage;
 
         if (!emotes) {
