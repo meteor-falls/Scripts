@@ -363,9 +363,8 @@ module.exports = {
             }
         }
         
-        var debug = src === sys.id('TheUnknownOne');
         var originalMessage = message;
-        var sentMessage = ((isOwner && !htmlchatoff) ? originalMessage : Utils.escapeHtml(originalMessage, true)); // no amp
+        var sentMessage = ((isOwner && !htmlchatoff) ? originalMessage : Utils.escapeHtml(originalMessage, true).replace(/<_</g, "&lt;_&lt;").replace(/>_</g, "&gt;_&lt;").replace(/<3/g, "&lt;3")); // no amp
         var emotes = false;
         sentMessage = format(src, sentMessage);
 
@@ -403,8 +402,6 @@ module.exports = {
             if (colormode) {
                 message = colormodemessage(message);
             }
-
-            message = message.replace(/<_</g, "&lt;_&lt;").replace(/>_</g, "&gt;_&lt;").replace(/<3/g, "&lt;3");
         }
 
         // Strip empty character
