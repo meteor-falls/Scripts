@@ -366,7 +366,7 @@ module.exports = {
             muteall: false,
             supersilence: false,
             rouletteon: false,
-            htmlchatoff: false,
+            htmlchatoff: true,
             lolmode: false,
             spacemode: false,
             capsmode: false,
