@@ -935,6 +935,42 @@ addCommand(0, "emotepermlist", function (src, command, commandData, tar, chan) {
     list.display(src, chan);
 });
 
+    if (command == "players") {
+        if (commandData) {
+            commandData = commandData.toLowerCase();
+        }
+        if (["windows", "linux", "android", "mac", "webclient"].indexOf(commandData) !== -1) {
+            var android = 0;
+            sys.playerIds().forEach(function (id) {
+                if (sys.os(id) === commandData) {
+                    android += 1;
+                }
+            });
+            countbot.sendMessage(src, "There are  " + android + " " + commandData + " players online", channel);
+            return;
+        }
+        countbot.sendMessage(src, "There are " + sys.numPlayers() + " players online.", channel);
+        return;
+    }
+addCommand(0, "players", function (src, command, commandData, tar, chan) {
+    if (commandData) {
+        commandData = commandData.toLowerCase();
+    }
+    
+    if (["windows", "linux", "android", "mac", "webclient"].indexOf(commandData) !== -1) {
+        var count = 0;
+        sys.playerIds().forEach(function (id) {
+            if (sys.os(id) === commandData) {
+                count += 1;
+            }
+        });
+        bot.sendMessage(src, "There are  " + count + " " + commandData + " players online.", chan);
+        return;
+    }
+    
+    bot.sendMessage(src, "There are " + sys.numPlayers() + " players online.", chan);
+});
+
 addCommand(0, "gl", function (src, command, commandData, tar, chan) {
     if (!this.isLManager) {
         bot.sendMessage(src, "You need to be a league manager to use this command!", chan);

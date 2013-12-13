@@ -151,6 +151,7 @@ module.exports = {
         User.add("selfkick", "Kicks all the ghosts on your ip.");
         User.add("vote <font color=red><b>[option]</b></font>", "To vote on a poll option.");
         User.add("calc <font color=red><b>[expression]</b></font>", "Evaluates a mathematical expression (10 / 2 * 4 ^ pi!). Full documentation <a href='https://github.com/josdejong/mathjs/blob/master/README.md'>here</a>.");
+        User.add("players <font color=red><b>[os]</b></font>", "Tells you how many players there are online on the given [os] (windows, mac, linux, android, webclient). If not specified, tells you how many players there are online regardless of OS.");
         User.finish();
 
         Lists.User = User;
