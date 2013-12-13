@@ -1672,7 +1672,9 @@ addCommand(1, "closepoll", function (src, command, commandData, tar, chan) {
     }
     
     for (i = 0, total = Poll.options.length; i < total; i += 1) {
-        bot.sendAll(msgs[i], chan);
+        if (msgs[i]) {
+            bot.sendAll(msgs[i], chan);
+        }
     }
     
     sys.sendAll("", chan);
