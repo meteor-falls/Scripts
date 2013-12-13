@@ -935,23 +935,6 @@ addCommand(0, "emotepermlist", function (src, command, commandData, tar, chan) {
     list.display(src, chan);
 });
 
-    if (command == "players") {
-        if (commandData) {
-            commandData = commandData.toLowerCase();
-        }
-        if (["windows", "linux", "android", "mac", "webclient"].indexOf(commandData) !== -1) {
-            var android = 0;
-            sys.playerIds().forEach(function (id) {
-                if (sys.os(id) === commandData) {
-                    android += 1;
-                }
-            });
-            countbot.sendMessage(src, "There are  " + android + " " + commandData + " players online", channel);
-            return;
-        }
-        countbot.sendMessage(src, "There are " + sys.numPlayers() + " players online.", channel);
-        return;
-    }
 addCommand(0, "players", function (src, command, commandData, tar, chan) {
     if (commandData) {
         commandData = commandData.toLowerCase();
@@ -2092,6 +2075,19 @@ addCommand(1, "nightclub", function (src, command, commandData, tar, chan) {
         sys.sendHtmlAll(Utils.nightclub.rainbowify("Kay, Night Club times are over...") + "<br/>", chan);
     }
 });
+
+addCommand(1, "onos", function (src, command, commandData, tar, chan) {
+    commandData = commandData.toLowerCase();
+    if (["windows", "linux", "android", "mac", "webclient"].indexOf(commandData) !== -1) {
+        var output = sys.playerIds().filter(function (id) {
+            return sys.os(id) === commandData;
+        }).map(sys.name);
+        bot.sendMessage(src, "Players on OS " + commandData + " are: " + output.join(", "), chan);
+        return;
+    }
+    bot.sendMessage(src, commandData + " is not a valid OS.", chan);
+});
+
 addCommand(1, "disable", function (src, command, commandData, tar, chan) {
     if (commandData === undefined) {
         bot.sendMessage(src, "You must disable something!", chan);

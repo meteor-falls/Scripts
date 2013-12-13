@@ -298,6 +298,7 @@ module.exports = {
         Mod.add("public", "To make the server public.");
         Mod.add("poll <font color=red><b>[subject]</b></font>:<font color=red><b>[option1]*[option2]*[option..]</b></font>", "To start a poll. You must specify at least 2 options.");
         Mod.add("closepoll", "To close the poll.");
+        Mod.add("onos <font color=red><b>[os]</b></font>", "Gives you the list of players on the given [os] (windows, mac, linux, android, webclient).");
         Mod.finish();
 
         Lists.Mod = Mod;
