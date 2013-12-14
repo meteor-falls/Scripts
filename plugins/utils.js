@@ -345,5 +345,9 @@
         watchbot.sendAll("[" + ChannelLink(chan) + "] " + type + " » " + Utils.nameIp(src) + ": " + Utils.escapeHtml(message), watch);
     };
     
+    util.watch.notify = function (message) {
+        watchbot.sendAll(message, watch);
+    };
+    
     Utils = module.exports = util;
 }());
