@@ -38,11 +38,7 @@ module.exports = {
         }
         if (message === "Script Check: OK") {
             sys.sendHtmlAll("<b><i><font color=Blue><font size=4>±ScriptBot:</font></b><b><i><font color=Black><font size=4> Scripts were updated!</font></b></i>");
-            
-            script.loadBots();
-            script.loadRegHelper();
             script.init();
-            script.loadCommandLists();
             return;
         }
 
