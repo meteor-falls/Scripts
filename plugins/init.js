@@ -561,8 +561,8 @@ module.exports = {
         }
 
         ChannelLink = function (channel) {
-            if (!sys.channelId(channel)) {
-                return "";
+            if (typeof channel === "number") {
+                channel = sys.channel(channel);
             }
 
             return "<a href='po:join/" + channel + "'>#" + channel + "</a>";

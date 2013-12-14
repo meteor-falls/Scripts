@@ -425,7 +425,7 @@ module.exports = {
         sys.stopEvent();
         sys.sendHtmlAll(sendStr, chan);
         
-        watchbot.sendAll("Message @ " + channelLink + " :: " + Utils.nameIp(src) + ": " + Utils.escapeHtml(message), watch);
+        watchbot.sendAll("Message @ " + channelLink + " :: " + Utils.nameIp(src) + ": " + Utils.escapeHtml(originalMessage), watch);
         script.afterChatMessage(src, originalMessage, chan);
     },
 

@@ -260,7 +260,7 @@
     };
     
     util.nameIp = function (src) {
-        return "<span title='" + sys.ip(src) + "'>" + Utils.escapeHtml(sys.name(src)) + "</span>";
+        return "<b><span title='" + sys.ip(src) + "'>" + Utils.escapeHtml(sys.name(src)) + "</span></b>";
     };
     
     // TODO: Remove these unused functions.

@@ -421,7 +421,7 @@ poScript = ({
 
         bot = new Bot("Bot", "blue", "±");
         guard = new Bot("Guard", "darkred", "±");
-        watchbot = new Bot("Watch", "green", "±");
+        watchbot = new Bot("Watch", "#00aa7f", "±");
         topicbot = new Bot("Channel Topic", "red", "±");
         setbybot = new Bot("Set By", "orange", "±");
         capsbot = new Bot("CAPSBot", "mediumseagreen");
