@@ -254,8 +254,6 @@ poScript = ({
     },
 
     afterPlayerAway: function afterPlayerAway(src, mode) {
-        var m = mode === 1 ? "idled" : "unidled and is ready to battle";
-        watchbot.sendAll(sys.name(src) + " has " + m + ".", watch);
     },
 
     beforeBattleMatchup: function beforeBattleMatchup(src, dest, clauses, rated, mode, team1, team2) {

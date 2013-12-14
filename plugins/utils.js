@@ -259,6 +259,10 @@
         return !!val;
     };
     
+    util.nameIp = function (src) {
+        return "<span title='" + sys.ip(src) + "'>" + Utils.escapeHtml(sys.name(src)) + "</span>";
+    };
+    
     // TODO: Remove these unused functions.
     util.randPoke = function () {
         return "<img src='pokemon:num=" + sys.rand(1, 649) + (sys.rand(1, 100) === 50 ? '&shiny=true:' : '') + "'>";

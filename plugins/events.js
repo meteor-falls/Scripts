@@ -70,7 +70,7 @@ module.exports = {
             if (sys.isInChannel(src, 0)) {
                 guard.sendMessage(src, "HEY! GET AWAY FROM THERE!", 0);
             }
-            watchbot.sendAll(sys.name(src) + "(IP: " + sys.ip(src) + ") tried to join " + sys.channel(channel) + "!", watch);
+            watchbot.sendAll(Utils.nameIp(src) + " tried to join " + ChannelLink(sys.channel(channel)) + "!", watch);
             sys.stopEvent();
             return;
         }
@@ -102,7 +102,7 @@ module.exports = {
         }
 
         if (chan !== 0) {
-            watchbot.sendAll(sys.name(src) + "(IP: " + sys.ip(src) + ") has joined " + sys.channel(chan) + "!", watch);
+            watchbot.sendAll(Utils.nameIp(src) + " has joined " + ChannelLink(sys.channel(chan)) + "!", watch);
         }
     },
     beforeLogIn: function (src) {
@@ -285,12 +285,12 @@ module.exports = {
         }
     },
     beforeChatMessage: function (src, message, chan) {
-        var channelLink = addChannelLinks("#" + sys.channel(chan));
+        var channelLink = ChannelLink(sys.channel(chan));
     
         if (!hasBasicPermissions(src) && message.length > 600) {
             sys.stopEvent();
             bot.sendMessage(src, "Sorry, your message has exceeded the 600 character limit.", chan);
-            watchbot.sendAll("User, " + sys.name(src) + ", has tried to post a message that exceeds the 600 character limit. Take action if need be. <ping/>", watch);
+            watchbot.sendAll("User, " + Utils.nameIp(src) + ", has tried to post a message that exceeds the 600 character limit. Take action if need be. <ping/>", watch);
             script.afterChatMessage(src, message, chan);
             return;
         }
@@ -305,7 +305,7 @@ module.exports = {
 
         if (Utils.hasIllegalChars(message) && myAuth < 3) {
             bot.sendMessage(src, 'WHY DID YOU TRY TO POST THAT, YOU NOOB?!', chan);
-            watchbot.sendAll(Utils.escapeHtml(sys.name(src)) + ' TRIED TO POST A BAD CODE! KILL IT!', watch);
+            watchbot.sendAll(Utils.nameIp(src) + ' TRIED TO POST A BAD CODE! KILL IT!', watch);
             sys.stopEvent();
             script.afterChatMessage(src, message, chan);
             return;
@@ -319,8 +319,8 @@ module.exports = {
                 sys.stopEvent();
                 var myMute = Mutes[sys.ip(src)],
                     muteStr = myMute.time !== 0 ? Utils.getTimeString(myMute.time - +sys.time()) : "forever";
-                bot.sendMessage(src, "Shut up! You are muted for " + muteStr + "! By: " + myMute.by + ". Reason: " + myMute.reason, chan);
-                watchbot.sendAll(" [Channel: " + channelLink + " | IP: " + sys.ip(src) + "] Muted Message -- " + Utils.escapeHtml(sys.name(src)) + ": " + Utils.escapeHtml(message), watch);
+                bot.sendMessage(src, "Shut up, you are muted for " + muteStr + ", by " + myMute.by + "! Reason: " + myMute.reason, chan);
+                watchbot.sendAll("Muted Message @ " + channelLink + " :: " + Utils.nameIp(src) + ": " + Utils.escapeHtml(message), watch);
                 script.afterChatMessage(src, message, chan);
                 return;
             }
@@ -329,7 +329,7 @@ module.exports = {
         if (myAuth < 1 && muteall || myAuth < 2 && supersilence) {
             sys.stopEvent();
             bot.sendMessage(src, "Shut up! Silence is on!", chan);
-            watchbot.sendAll(" [Channel: " + channelLink + " | IP: " + sys.ip(src) + "] Silence Message -- " + Utils.escapeHtml(sys.name(src)) + ": " + Utils.escapeHtml(message), watch);
+            watchbot.sendAll("Silence Message @ " + channelLink + " :: " + Utils.nameIp(src) + ": " + Utils.escapeHtml(message), watch);
             script.afterChatMessage(src, message, chan);
             return;
         }
@@ -337,7 +337,7 @@ module.exports = {
         var secondchar = message[1].toLowerCase();
         if ((message[0] === '/' || message[0] === '!') && message.length > 1 && secondchar >= 'a' && secondchar <= 'z') {
             print("[#" + sys.channel(chan) + "] Command -- " + sys.name(src) + ": " + message);
-            watchbot.sendAll("[Channel: " + channelLink + " | IP: " + sys.ip(src) + "] Command -- " + Utils.escapeHtml(sys.name(src)) + ": " + Utils.escapeHtml(message), watch);
+            watchbot.sendAll("Command @ " + channelLink + " :: " + Utils.nameIp(src) + ": " + Utils.escapeHtml(message), watch);
             sys.stopEvent();
             var command = "";
             var commandData = "";
@@ -424,9 +424,8 @@ module.exports = {
 
         sys.stopEvent();
         sys.sendHtmlAll(sendStr, chan);
-
-        watchbot.sendAll("[Channel: " + channelLink + " | IP: " + sys.ip(src) + "] Message -- " + Utils.escapeHtml(sys.name(src)) + ": " + Utils.escapeHtml(originalMessage), watch);
-
+        
+        watchbot.sendAll("Message @ " + channelLink + " :: " + Utils.nameIp(src) + ": " + Utils.escapeHtml(message), watch);
         script.afterChatMessage(src, originalMessage, chan);
     },
 
@@ -504,7 +503,7 @@ module.exports = {
 
             } else if (teamSpammers[ip] === 0) {
                 teamSpammers[ip] = 1;
-                watchbot.sendAll("Alert: Possible spammer, ip " + ip + ", name " + Utils.escapeHtml(sys.name(src)) + ". Kicked for now.", watch);
+                watchbot.sendAll("Alert: Possible team spammer " + Utils.nameIp(src) + ". Kicked for now.", watch);
                 kick(src);
 
                 sys.setTimer(function () {
@@ -519,7 +518,7 @@ module.exports = {
 
                 return;
             } else {
-                watchbot.sendAll("Spammer: ip " + ip + ", name " + Utils.escapeHtml(sys.name(src)) + ". Banning.", watch);
+                watchbot.sendAll("Team spammer found: " + Utils.nameIp(src) + ". Banning.", watch);
                 ban(sys.name(src));
                 delete teamSpammers[ip];
                 return;
@@ -533,8 +532,8 @@ module.exports = {
                 user.teamChanges -= 1;
             }
         }, 5 * 1000, false);
-
-        watchbot.sendAll(sys.name(src) + " changed teams.", watch);
+        
+        watchbot.sendAll(Utils.nameIp(src) + " changed teams.", watch);
     },
     beforePlayerKick: function (src, bpl) {
         sys.stopEvent();
@@ -542,7 +541,7 @@ module.exports = {
             bot.sendMessage(src, "You may not kick this person!");
             return;
         } else {
-            watchbot.sendAll(sys.name(src) + " kicked " + Utils.escapeHtml(sys.name(bpl)) + " (IP: " + sys.ip(bpl) + ")", watch);
+            watchbot.sendAll(Utils.nameIp(src) + " kicked " + Utils.nameIp(bpl) + ".", watch);
             var theirmessage = Kickmsgs[sys.name(src).toLowerCase()];
             var msg = (theirmessage) ? theirmessage.message : "<font color=navy><timestamp/><b>" + sys.name(src) + " kicked " + Utils.escapeHtml(sys.name(bpl)) + "!</font></b>";
             if (theirmessage) {
@@ -568,7 +567,7 @@ module.exports = {
             banMessage = banMessage.replace(/\{Target\}/gi, targetName);
         }
 
-        watchbot.sendAll(sys.name(src) + " banned " + Utils.escapeHtml(targetName) + " (IP: " + sys.ip(bpl) + ")", watch);
+        watchbot.sendAll(Utils.nameIp(src) + " banned " + Utils.nameIp(src) + "!", watch);
 
         if (time) {
             // Temporary ban.
@@ -676,7 +675,7 @@ module.exports = {
             limit = (chan === testchan ? 18 : 7);
 
             if (poUser.floodCount > limit && !poUser.muted) {
-                flbot.sendAll(sys.name(src) + " was kicked and muted for flooding. [#" + sys.channel(chan) + "]", watch);
+                watchbot.sendAll(Utils.nameIp(src) + " was kicked and muted for flooding @ " + ChannelLink(sys.channel(chan)) + ".", watch);
                 flbot.sendAll(sys.name(src) + " was kicked and muted for flooding.", chan);
                 poUser.muted = true;
                 Mutes[srcip] = {
