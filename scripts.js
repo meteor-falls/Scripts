@@ -19,7 +19,7 @@ var Config = {
     plugins: ['jsession', 'bot', 'reg', 'utils', 'emotes', 'feedmon', 'init', 'lists', 'commands', 'events', 'mathjs'],
     
     // Whether or not to load plugins from repourl. If set to false, they will load locally.
-    load_from_web: true, 
+    load_from_web: true,
     // If HTML should be stripped from channel messages outputted onto the server window.
     stripHtmlFromChannelMessages: true,
     // If emotes are enabled.
