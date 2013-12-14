@@ -2420,16 +2420,27 @@ addCommand(3, "update", function (src, command, commandData, tar, chan) {
         bot.sendMessage(src, "Specify a plugin!", chan);
         return;
     }
-    bot.sendMessage(src, "Updating plugin " + commandData, chan);
-    sys.webCall(Config.repourl + commandData, function (resp) {
-        if (resp === "" || resp.length < 1) { 
-            return;
+    
+    var plugins = commandData.trim().split(" ");
+    var plugin, len, i;
+    for (i = 0, len = plugins.length; i < len; i += 1) {
+        plugin = plugins[i];
+        if (plugin.indexOf(".js") === -1) {
+            plugin += ".js";
         }
-        sys.writeToFile(Config.plugindir + commandData, resp);
-        PluginHandler.load(commandData, false);
-        reloadPlugin(commandData);
-        bot.sendMessage(src, "Plugin " + commandData + " updated!", chan);
-    });
+        
+        bot.sendMessage(src, "Updating plugin " + plugin, chan);
+        sys.webCall(Config.repourl + plugin, function (resp) {
+            if (resp === "" || resp.length < 1) { 
+                bot.sendMessage(src, "Couldn't update plugin " + plugin, chan);
+                return;
+            }
+            sys.writeToFile(Config.plugindir + plugin, resp);
+            PluginHandler.load(plugin, false);
+            reloadPlugin(plugin);
+            bot.sendMessage(src, "Plugin " + plugin + " updated!", chan);
+        });
+    }
 });
 addCommand(3, ["webcall", "updatescript"], function (src, command, commandData, tar, chan) {
     sys.sendHtmlAll('<font color=blue><timestamp/><b>±ScriptBot: </b></font>The scripts were webcalled by ' + sys.name(src) + '!', 0);
