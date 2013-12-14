@@ -320,7 +320,7 @@ module.exports = {
                 var myMute = Mutes[sys.ip(src)],
                     muteStr = myMute.time !== 0 ? Utils.getTimeString(myMute.time - +sys.time()) : "forever";
                 bot.sendMessage(src, "Shut up, you are muted for " + muteStr + ", by " + myMute.by + "! Reason: " + myMute.reason, chan);
-                util.watch.message(src, "Muted Message", message, chan);
+                Utils.watch.message(src, "Muted Message", message, chan);
                 script.afterChatMessage(src, message, chan);
                 return;
             }
@@ -329,7 +329,7 @@ module.exports = {
         if (myAuth < 1 && muteall || myAuth < 2 && supersilence) {
             sys.stopEvent();
             bot.sendMessage(src, "Shut up! Silence is on!", chan);
-            util.watch.message(src, "Silence Message", message, chan);
+            Utils.watch.message(src, "Silence Message", message, chan);
             script.afterChatMessage(src, message, chan);
             return;
         }
@@ -337,7 +337,7 @@ module.exports = {
         var secondchar = message[1].toLowerCase();
         if ((message[0] === '/' || message[0] === '!') && message.length > 1 && secondchar >= 'a' && secondchar <= 'z') {
             print("[#" + sys.channel(chan) + "] Command -- " + sys.name(src) + ": " + message);
-            util.watch.message(src, "Command", message, chan);
+            Utils.watch.message(src, "Command", message, chan);
             sys.stopEvent();
             var command = "";
             var commandData = "";
@@ -425,7 +425,7 @@ module.exports = {
         sys.stopEvent();
         sys.sendHtmlAll(sendStr, chan);
         
-        util.watch.message(src, "Message", originalMessage, chan);
+        Utils.watch.message(src, "Message", originalMessage, chan);
         script.afterChatMessage(src, originalMessage, chan);
     },
 
