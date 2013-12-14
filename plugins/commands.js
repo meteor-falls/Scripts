@@ -2429,16 +2429,20 @@ addCommand(3, "update", function (src, command, commandData, tar, chan) {
             plugin += ".js";
         }
         
-        bot.sendMessage(src, "Updating plugin " + plugin, chan);
+        bot.sendMessage(src, "Updating plugin " + plugin + "...", chan);
+        Utils.watch.notify("Updating plugin " + plugin + "...");
         sys.webCall(Config.repourl + plugin, function (resp) {
             if (resp === "" || resp.length < 1) { 
                 bot.sendMessage(src, "Couldn't update plugin " + plugin, chan);
                 return;
             }
+            
             sys.writeToFile(Config.plugindir + plugin, resp);
             PluginHandler.load(plugin, false);
             reloadPlugin(plugin);
+            
             bot.sendMessage(src, "Plugin " + plugin + " updated!", chan);
+            Utils.watch.notify("Plugin " + plugin + " updated.");
         });
     }
 });
