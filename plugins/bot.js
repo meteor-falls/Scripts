@@ -68,3 +68,13 @@ Bot.prototype.lineAll = function (channel) {
 };
 
 module.exports.Bot = Bot;
+module.exports.inject = function () {
+    // These are all meant to be globals.
+    bot      = new Bot("Bot", "#0a4aff");
+    guard    = new Bot("Guard", "#a80000");
+    watchbot = new Bot("Watch", "#00aa7f");
+    topicbot = new Bot("Topic", "#cc0000");
+    setbybot = new Bot("Set By", "#ffaf1e");
+    capsbot  = new Bot("CAPSBot", "#31945e");
+    flbot    = new Bot("FloodBot", "#39ab5a");
+};

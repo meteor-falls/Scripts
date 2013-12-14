@@ -366,5 +366,8 @@ module.exports = {
 
         Lists.Auth = Auth;
         return Lists;
+    },
+    inject: function () {
+        Lists = module.exports.lists();
     }
 };

@@ -69,4 +69,11 @@
         return new RegClass();
     };
     module.exports.RegClass = RegClass;
+    module.exports.inject = function (reloadAnyway) {
+        if (typeof Reg !== "undefined" && !reloadAnyway) {
+            return;
+        }
+        
+        Reg = module.exports.Reg();
+    };
 }());

@@ -16,7 +16,7 @@ var Config = {
 
     // Do not touch unless you are adding a new plugin.
     // Plugins to load on script load.
-    plugins: ['jsession', 'bot', 'reg', 'utils', 'emotes', 'feedmon', 'init', 'lists', 'commands', 'events', 'mathjs'],
+    plugins: ['jsession', 'bot', 'reg', 'utils', 'emotes', 'feedmon', 'lists', 'init', 'commands', 'events', 'mathjs'],
     
     // Whether or not to load plugins from repourl. If set to false, they will load locally.
     load_from_web: true,
@@ -403,26 +403,14 @@ poScript = ({
     },
 
     loadRegHelper: function loadRegHelper(reloadAnyway) {
-        if (typeof Reg !== "undefined" && !reloadAnyway) {
-            return;
-        }
-
-        Reg = Plugins('reg.js').Reg();
+        Plugins('reg.js').inject(reloadAnyway);
     },
     
     loadBots: function loadBots() {
-        var Bot = Plugins('bot.js').Bot;
-
-        bot      = new Bot("Bot", "#0a4aff");
-        guard    = new Bot("Guard", "#a80000");
-        watchbot = new Bot("Watch", "#00aa7f");
-        topicbot = new Bot("Topic", "#cc0000");
-        setbybot = new Bot("Set By", "#ffaf1e");
-        capsbot  = new Bot("CAPSBot", "#31945e");
-        flbot    = new Bot("FloodBot", "#39ab5a");
+        Plugins('bot.js').inject();
     },
     
     loadCommandLists: function loadCommandLists() {
-        Lists = Plugins('lists.js').lists();
+        Plugins('lists.js').inject();
     }
 });
