@@ -320,7 +320,7 @@ module.exports = {
                 var myMute = Mutes[sys.ip(src)],
                     muteStr = myMute.time !== 0 ? Utils.getTimeString(myMute.time - +sys.time()) : "forever";
                 bot.sendMessage(src, "Shut up, you are muted for " + muteStr + ", by " + myMute.by + "! Reason: " + myMute.reason, chan);
-                watchbot.sendAll("Muted Message @ " + channelLink + " :: " + Utils.nameIp(src) + ": " + Utils.escapeHtml(message), watch);
+                util.watch.message(src, "Muted Message", message, chan);
                 script.afterChatMessage(src, message, chan);
                 return;
             }
@@ -329,7 +329,7 @@ module.exports = {
         if (myAuth < 1 && muteall || myAuth < 2 && supersilence) {
             sys.stopEvent();
             bot.sendMessage(src, "Shut up! Silence is on!", chan);
-            watchbot.sendAll("Silence Message @ " + channelLink + " :: " + Utils.nameIp(src) + ": " + Utils.escapeHtml(message), watch);
+            util.watch.message(src, "Silence Message", message, chan);
             script.afterChatMessage(src, message, chan);
             return;
         }
@@ -337,7 +337,7 @@ module.exports = {
         var secondchar = message[1].toLowerCase();
         if ((message[0] === '/' || message[0] === '!') && message.length > 1 && secondchar >= 'a' && secondchar <= 'z') {
             print("[#" + sys.channel(chan) + "] Command -- " + sys.name(src) + ": " + message);
-            watchbot.sendAll("Command @ " + channelLink + " :: " + Utils.nameIp(src) + ": " + Utils.escapeHtml(message), watch);
+            util.watch.message(src, "Command", message, chan);
             sys.stopEvent();
             var command = "";
             var commandData = "";
@@ -425,7 +425,7 @@ module.exports = {
         sys.stopEvent();
         sys.sendHtmlAll(sendStr, chan);
         
-        watchbot.sendAll("Message @ " + channelLink + " :: " + Utils.nameIp(src) + ": " + Utils.escapeHtml(originalMessage), watch);
+        util.watch.message(src, "Message", originalMessage, chan);
         script.afterChatMessage(src, originalMessage, chan);
     },
 
@@ -675,7 +675,7 @@ module.exports = {
             limit = (chan === testchan ? 18 : 7);
 
             if (poUser.floodCount > limit && !poUser.muted) {
-                watchbot.sendAll(Utils.nameIp(src) + " was kicked and muted for flooding @ " + ChannelLink(sys.channel(chan)) + ".", watch);
+                watchbot.sendAll(Utils.nameIp(src) + " was kicked and muted for flooding in " + ChannelLink(sys.channel(chan)) + ".", watch);
                 flbot.sendAll(sys.name(src) + " was kicked and muted for flooding.", chan);
                 poUser.muted = true;
                 Mutes[srcip] = {

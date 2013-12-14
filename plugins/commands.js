@@ -1514,7 +1514,7 @@ addCommand(1, "changetopic", function (src, command, commandData, tar, chan) {
         topicbot.sendMessage(src, "Can't change the topic of the android channel!", chan);
         return;
     }*/
-    topicbot.sendAll(sys.name(src) + " has the changed the topic of this channel to: " + commandData, chan);
+    topicbot.sendAll(sys.name(src) + " changed the topic of this channel to: " + commandData, chan);
     var channelToLower = sys.channel(chan).toLowerCase();
     Channeltopics[channelToLower] = {
         "by": sys.name(src),

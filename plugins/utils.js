@@ -344,7 +344,12 @@
         }
 
         return [format(days, "day"), format(hours, "hour"), format(minutes, "minute"), format(seconds, "second")].filter(this.stripEmpty);
-    }
+    };
+    
+    util.watch = {};
+    util.watch.message = function (src, type, message, chan) {
+        watchbot.sendAll("[" + ChannelLink(chan) + "] " + type + " » " + Utils.nameIp(src) + ": " + Utils.escapeHtml(message), watch);
+    };
     
     Utils = module.exports = util;
 }());
