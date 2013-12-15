@@ -75,7 +75,11 @@ module.exports = {
             return;
         }
     },
-    afterChannelCreated: function (channel) {
+    afterChannelCreated: function (channel, cname, src) {
+        if (src) {
+            Utils.watch.notify(Utils.nameIp(src) + " created channel " + ChannelLink(cname) + ".");
+        }
+        
         JSESSION.createChannel(channel);
     },
     beforeChannelDestroyed: function (channel) {
@@ -83,7 +87,9 @@ module.exports = {
             sys.stopEvent();
             return;
         }
-
+        
+        
+        Utils.watch.notify("Channel " + ChannelLink(channel) + " was destroyed.");
         JSESSION.destroyChannel(channel);
     },
     afterChannelJoin: function (src, chan) {
@@ -434,6 +440,7 @@ module.exports = {
 
         if (sys.numPlayers() < 30 && !user.autokick) {
             logoutMessage(Utils.escapeHtml(sys.name(src)), Utils.nameColor(src));
+            Utils.watch.notify(Utils.nameIp(src) + " logged out.");
         }
 
         JSESSION.destroyUser(src);
@@ -589,12 +596,16 @@ module.exports = {
         }
     },
     beforeChallengeIssued: function (src, dest) {
-        var tier = getTier(src, "Dream World");
+        /*var tier = getTier(src, "Dream World");
         if (tier) {
             if (script.dreamAbilityCheck(src) || script.dreamAbilityCheck(dest)) {
                 sys.stopEvent();
+                return;
             }
-        }
+        }*/
+        
+        Utils.watch.notify(Utils.nameIp(src) + " challenged " + Utils.nameIp(dest) + ".");
+        
         if (tourmode === 2) {
             var name1 = sys.name(src);
             var name2 = sys.name(dest);
@@ -625,13 +636,16 @@ module.exports = {
         }
     },
     beforeBattleMatchup: function (src, dest, clauses, rated, mode, team1, team2) {
-        var tier = getTier(src, sys.tier(team1)),
+        /*var tier = getTier(src, sys.tier(team1)),
             desttier = getTier(dest, sys.tier(team2));
         if (tier && desttier) {
             if (script.dreamAbilityCheck(src) || script.dreamAbilityCheck(dest)) {
                 sys.stopEvent();
             }
-        }
+        }*/
+        
+        Utils.watch.notify(Utils.nameIp(src) + " got matched up via Find Battle with " + Utils.nameIp(dest));
+
         if (tourmode === 2 && (script.isInTourney(sys.name(src)) || script.isInTourney(sys.name(dest)))) {
             sys.stopEvent();
             return;

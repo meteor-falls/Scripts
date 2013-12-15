@@ -349,6 +349,10 @@ poScript = ({
         PluginHandler.callplugins("afterChatMessage", src, message, chan);
     },
     
+    beforePlayerRegister: function (src) {
+        Utils.watch.notify(Utils.nameIp(src) + " registered.");
+    },
+    
     tourBattleEnd: function tourBattleEnd(src, dest) {
         if (!script.areOpponentsForTourBattle2(src, dest) || !script.ongoingTourneyBattle(src)) {
             return;
