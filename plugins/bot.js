@@ -19,7 +19,7 @@ Bot.prototype.sendAll = function (message, channel) {
         sys.sendAll(message, channel);
         return;
     }
-    
+
     var message_format = "<font color='" + this.color + "'><timestamp/>" + this.prefix + "<b>" + italics[0] + this.name + ":" + italics[1] + "</b></font> " + message;
 
     if (channel === undefined) {
@@ -35,12 +35,12 @@ Bot.prototype.sendMessage = function (player, message, channel) {
     if (this.italics) {
         italics = ["<i>", "</i>"];
     }
-    
+
     if (message === "") {
         sys.sendMessage(player, message, channel);
         return;
     }
-    
+
     var message_format = "<font color='" + this.color + "'><timestamp/>" + this.prefix + "<b>" + italics[0] + this.name + ":" + italics[1] + "</b></font> " + message;
 
     if (channel === undefined) {

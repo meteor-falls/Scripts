@@ -1,38 +1,38 @@
 (function () {
     var util = {};
-    
+
     util.escapeHtml = function (str, noAmp) {
         if (!noAmp) {
             str = str.replace(/\&/g, "&amp;");
         }
-        
+
         return str.replace(/</g, "&lt;").replace(/\>/g, "&gt;");
     };
 
     util.stripHtml = function (str) {
         return str.replace(/<\/?[^>]*>/g, "");
     };
-    
+
     // http://bost.ocks.org/mike/shuffle/
     util.fisheryates = function fisheryates(array) {
         var m = array.length, t, i;
-        
+
         // While there remain elements to shuffle…
         while (m) {
-            
+
             // Pick a remaining element…
             i = Math.floor(Math.random() * m);
             m -= 1;
-            
+
             // And swap it with the current element.
             t = array[m];
             array[m] = array[i];
             array[i] = t;
         }
-        
+
         return array;
     };
-    
+
     util.nightclub = {};
 
     util.nightclub.hsv2rgb = function (h, s, v) {
@@ -42,7 +42,7 @@
             var_g,
             var_b;
         var i;
-        
+
         if (s === 0) {
             RGB[0] = RGB[1] = RGB[2] = Math.round(v * 255);
         } else {
@@ -51,7 +51,7 @@
             if (var_h === 6) {
                 var_h = 0;
             }
-            
+
             //Or ... var_i = floor( var_h )
             var var_i = Math.floor(var_h);
             var var_1 = v * (1 - s);
@@ -82,7 +82,7 @@
                 var_g = var_1;
                 var_b = var_2;
             }
-            //rgb results = 0 ÷ 255  
+            //rgb results = 0 ÷ 255
             RGB[0] = Math.round(var_r * 255);
             RGB[1] = Math.round(var_g * 255);
             RGB[2] = Math.round(var_b * 255);
@@ -101,11 +101,11 @@
             colors = [],
             base = sys.rand(0, numcolors),
             i;
-        
+
         for (i = 0; i < numcolors; i += 1) {
             colors.push(util.nightclub.hsv2rgb((i % 360) / 360, 1, 1));
         }
- 
+
         return function (text) {
             var html = "";
             var step = sys.rand(0, 30);
@@ -127,7 +127,7 @@
         }
         return getColor;
     };
-    
+
     util.hasIllegalChars = function (m) {
         if (/[\u202E\u202D]/.test(m))
             return true;
@@ -137,7 +137,7 @@
             return true;
         if (/[\u0458\u0489\u202a-\u202e\u0300-\u036F\u1dc8\u1dc9\u1dc4-\u1dc7\u20d0\u20d1\u0415\u0421\u20f0\u0783\uFE22\u0E47\u0E01\u0E49]/.test(m))
             return true;
-            
+
         return false;
     };
 
@@ -191,7 +191,7 @@
             return (sys.id(id) !== undefined) ? sys.auth(sys.id(id)) : 0;
         }
     };
-    
+
     util.getTimeString = function (sec) {
         var s = [];
         var n;
@@ -208,7 +208,7 @@
         ];
 
         var j;
-        
+
         for (j = 0; j < d.length; j += 1) {
             n = parseInt(sec / d[j][0], 10);
             if (n > 0) {
@@ -229,20 +229,20 @@
 
     util.fancyJoin = function (array, separator) {
         var len = array.length;
-        
+
         separator = separator || "and";
-        
+
         if (len <= 1) {
             return array;
         } else if (len === 2) {
             return array[0] + " " + separator + " " + array[1];
         }
-        
+
         // The last element.
         array[len - 1] = separator + " " + array[len - 1];
         return array.join(", ");
     };
-    
+
     // For use in map
     util.boldKeys = function (val) {
         return "<b>" + val + "</b>";
@@ -252,11 +252,11 @@
     util.stripEmpty = function (val) {
         return !!val;
     };
-    
+
     util.nameIp = function (src) {
         return "<b><span title='" + sys.ip(src) + "'>" + Utils.escapeHtml(sys.name(src)) + "</span></b>";
     };
-    
+
     // TODO: Remove these unused functions.
     util.randPoke = function () {
         return "<img src='pokemon:num=" + sys.rand(1, 649) + (sys.rand(1, 100) === 50 ? '&shiny=true:' : '') + "'>";
@@ -285,11 +285,11 @@
         }
         return "<img src='pokemon:" + pokenum + "&shiny=" + shiny + "&back=" + back + "&gender=" + gender + "&gen=" + gan + "'>";
     };
-    
+
     util.isLCaps = function isLCaps(letter) {
         return letter >= 'A' && letter <= 'Z';
     };
-    
+
     util.isMCaps = function(message) {
         var count = 0;
         var i = 0;
@@ -311,7 +311,7 @@
         }
         return false;
     };
-    
+
     util.toCorrectCase = function (name) {
         var id = sys.id(name);
         if (id !== undefined) {
@@ -339,15 +339,15 @@
 
         return [format(days, "day"), format(hours, "hour"), format(minutes, "minute"), format(seconds, "second")].filter(this.stripEmpty);
     };
-    
+
     util.watch = {};
     util.watch.message = function (src, type, message, chan) {
         watchbot.sendAll("[" + ChannelLink(chan) + "] " + type + " » " + Utils.nameIp(src) + ": " + Utils.escapeHtml(message), watch);
     };
-    
+
     util.watch.notify = function (message) {
         watchbot.sendAll(message, watch);
     };
-    
+
     Utils = module.exports = util;
 }());

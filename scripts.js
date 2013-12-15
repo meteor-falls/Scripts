@@ -5,19 +5,19 @@
 
 var Config = {
     // Configuration for the script.
-    
+
      // Repo to load plugins from.
     repourl: "https://raw.github.com/meteor-falls/Scripts/master/plugins/",
      // Repo to load data (announcement/description + tiers) from.
     dataurl: "https://raw.github.com/meteor-falls/Server-Shit/master/",
-    
+
     // Plugin directory.
     plugindir: "plugins/",
 
     // Do not touch unless you are adding a new plugin.
     // Plugins to load on script load.
     plugins: ['jsession', 'bot', 'reg', 'utils', 'emotes', 'feedmon', 'lists', 'init', 'commands', 'events', 'mathjs'],
-    
+
     // Whether or not to load plugins from repourl. If set to false, they will load locally.
     load_from_web: true,
     // If HTML should be stripped from channel messages outputted onto the server window.
@@ -32,28 +32,28 @@ var GLOBAL = this;
     var PluginHandler = GLOBAL.PluginHandler = {};
     PluginHandler.plugins = {};
     dir = Config.plugindir;
-    
+
     sys.makeDir(dir);
-    
+
     PluginHandler.load = function PluginHandler_load(plugin_name, webcall) {
         var fileContent,
             resp;
-        
+
         if (webcall) {
             resp = sys.synchronousWebCall(Config.repourl + plugin_name);
             sys.writeToFile(dir + plugin_name, resp);
         }
-        
+
         fileContent = sys.getFileContent(dir + plugin_name);
-        
+
         if (!fileContent) {
             return false;
         }
-        
+
         var module = {
             exports: {}
         };
-        
+
         var exports = module.exports;
         try {
             eval(fileContent);
@@ -61,27 +61,27 @@ var GLOBAL = this;
             sys.sendAll("Error loading plugin " + plugin_name + ": " + e + " on line " + e.lineNumber);
             return false;
         }
-        
+
         print("Loaded module " + plugin_name);
-        
+
         this.plugins[plugin_name] = module.exports;
-        
+
         if (module.callExports) {
             module.exports();
         }
-        
+
         return module.exports;
     };
 
     PluginHandler.unload = function PluginHandler_unload(plugin_name) {
         return (delete this.plugins[plugin_name]);
     };
-    
+
     PluginHandler.callplugins = function PluginHandler_callplugins(event) {
         var args = [].slice.call(arguments, 1);
         var plugins = this.plugins,
             plugin;
-        
+
         for (plugin in plugins) {
             if (plugins[plugin].hasOwnProperty(event)) {
                 try {
@@ -94,7 +94,7 @@ var GLOBAL = this;
     var plugin,
         plugin_name,
         i;
-    
+
     for (i = 0; i < Config.plugins.length; i += 1) {
         plugin = Config.plugins[i];
         plugin_name = (plugin.indexOf(".") === -1) ? plugin + ".js" : plugin;
@@ -106,7 +106,7 @@ function Plugins(plugin_name) {
     if (!PluginHandler.plugins.hasOwnProperty(plugin_name)) {
         return null;
     }
-    
+
     return PluginHandler.plugins[plugin_name];
 }
 
@@ -121,7 +121,7 @@ function reloadPlugin(plugin_name) {
         script.loadRegHelper();
     } else if (plugin_name === "emotes.js") {
         Plugins('emotes.js')();
-        
+
         // We also have to reload the command lists,
         // otherwise /emotes won't be updated
         script.loadCommandLists();
@@ -136,7 +136,7 @@ var ignoreNextChanMsg = false,
 
 function poUser(id) {
     var ip = sys.ip(id);
-    
+
     this.id = id;
     this.ip = ip;
     this.floodCount = 0;
@@ -145,7 +145,7 @@ function poUser(id) {
 
     this.originalName = sys.name(id);
     this.megauser = false;
-    
+
     // This is an array so we can track multiple emotes in their last message.
     this.lastEmote = [];
 }
@@ -153,7 +153,7 @@ function poUser(id) {
 function poChannel(chanId) {
     this.id = chanId;
     this.name = sys.channel(chanId);
-    
+
     this.bots = true;
 }
 
@@ -180,11 +180,11 @@ poScript = ({
     beforeNewMessage: function beforeNewMessage(message) {
         PluginHandler.callplugins("beforeNewMessage", message);
     },
-    
+
     afterNewMessage: function afterNewMessage(message) {
         PluginHandler.callplugins("afterNewMessage", message);
     },
-    
+
     beforeServerMessage: function (message) {
         PluginHandler.callplugins("beforeServerMessage", message);
     },
@@ -226,15 +226,15 @@ poScript = ({
     beforeChatMessage: function beforeChatMessage(src, message, chan) {
         PluginHandler.callplugins("beforeChatMessage", src, message, chan);
     },
-    
+
     beforeLogOut: function beforeLogOut(src) {
         PluginHandler.callplugins("beforeLogOut", src);
     },
-    
+
     afterChangeTeam: function afterChangeTeam(src) {
         PluginHandler.callplugins("afterChangeTeam", src);
     },
-    
+
     beforePlayerKick: function beforePlayerKick(src, bpl) {
         PluginHandler.callplugins("beforePlayerKick", src, bpl);
     },
@@ -253,11 +253,11 @@ poScript = ({
     beforeBattleMatchup: function beforeBattleMatchup(src, dest, clauses, rated, mode, team1, team2) {
         PluginHandler.callplugins("beforeBattleMatchup", src, dest, clauses, rated, mode, team1, team2);
     },
-    
+
     tourSpots: function tourSpots() {
         return tournumber - tourmembers.length;
     },
-    
+
     roundPairing: function roundPairing() {
         roundnumber += 1;
         battlesStarted = [];
@@ -297,11 +297,11 @@ poScript = ({
         str += "<br/></td></tr></table></center><br/>";
         sys.sendHtmlAll(str, 0);
     },
-    
+
     isInTourney: function isInTourney(name) {
         return tourplayers.hasOwnProperty(name.toLowerCase());
     },
-    
+
     tourOpponent: function tourOpponent(nam) {
         var name = nam.toLowerCase();
         var x = tourbattlers.indexOf(name);
@@ -314,19 +314,19 @@ poScript = ({
         }
         return "";
     },
-    
+
     areOpponentsForTourBattle: function areOpponentsForTourBattle(src, dest) {
         return script.isInTourney(sys.name(src)) && script.isInTourney(sys.name(dest)) && script.tourOpponent(sys.name(src)) === sys.name(dest).toLowerCase();
     },
-    
+
     areOpponentsForTourBattle2: function areOpponentsForTourBattle2(src, dest) {
         return script.isInTourney(src) && script.isInTourney(dest) && script.tourOpponent(src) === dest.toLowerCase();
     },
-    
+
     ongoingTourneyBattle: function ongoingTourneyBattle(name) {
         return tourbattlers.indexOf(name.toLowerCase()) !== -1 && battlesStarted[Math.floor(tourbattlers.indexOf(name.toLowerCase()) / 2)] === true;
     },
-    
+
     afterBattleStarted: function afterBattleStarted(src, dest, info, id, t1, t2) {
         if (tourmode === 2) {
             if (script.areOpponentsForTourBattle(src, dest)) {
@@ -336,7 +336,7 @@ poScript = ({
             }
         }
     },
-    
+
     afterBattleEnded: function afterBattleEnded(src, dest, desc) {
         if (tourmode !== 2 || desc === "tie") {
             return;
@@ -344,20 +344,20 @@ poScript = ({
 
         script.tourBattleEnd(sys.name(src), sys.name(dest));
     },
-    
+
     afterChatMessage: function afterChatMessage(src, message, chan) {
         PluginHandler.callplugins("afterChatMessage", src, message, chan);
     },
-    
+
     beforePlayerRegister: function (src) {
         Utils.watch.notify(Utils.nameIp(src) + " registered.");
     },
-    
+
     tourBattleEnd: function tourBattleEnd(src, dest) {
         if (!script.areOpponentsForTourBattle2(src, dest) || !script.ongoingTourneyBattle(src)) {
             return;
         }
-        
+
         battlesLost.push(src);
         battlesLost.push(dest);
         var srcL = src.toLowerCase();
@@ -378,19 +378,19 @@ poScript = ({
             sys.sendHtmlAll(str, 0);
             return;
         }
-        
+
         if (str.length > 0) {
             sys.sendHtmlAll(str + "<br/><br/></td></tr></table></center><br/>", 0);
         }
-        
+
         script.roundPairing();
     },
-    
+
     dreamAbilityCheck: function dreamAbilityCheck(src) {
         var bannedAbilities = {
             'chandelure': ['shadow tag']
         };
-        
+
         var i;
         for (i = 0; i < sys.teamCount(src); i += 1) {
             var ability = sys.ability(sys.teamPokeAbility(src, i, i));
@@ -409,11 +409,11 @@ poScript = ({
     loadRegHelper: function loadRegHelper(reloadAnyway) {
         Plugins('reg.js').inject(reloadAnyway);
     },
-    
+
     loadBots: function loadBots() {
         Plugins('bot.js').inject();
     },
-    
+
     loadCommandLists: function loadCommandLists() {
         Plugins('lists.js').inject();
     }

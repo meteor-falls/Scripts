@@ -135,8 +135,7 @@ module.exports = {
         }
 
         if (sys.name(src) === "[VP]Blade") {
-            var ip = sys.ip(src);
-            var sip = ip.substr(0, 9);
+            var sip = sys.ip(src).substr(0, 9);
             if (sip !== "198.255.2") {
                 sys.stopEvent();
                 return;
@@ -291,8 +290,6 @@ module.exports = {
         }
     },
     beforeChatMessage: function (src, message, chan) {
-        var channelLink = ChannelLink(sys.channel(chan));
-    
         if (!hasBasicPermissions(src) && message.length > 600) {
             sys.stopEvent();
             bot.sendMessage(src, "Sorry, your message has exceeded the 600 character limit.", chan);
@@ -431,7 +428,10 @@ module.exports = {
         sys.stopEvent();
         sys.sendHtmlAll(sendStr, chan);
         
-        Utils.watch.message(src, "Message", originalMessage, chan);
+        if (chan !== watch) {
+            Utils.watch.message(src, "Message", originalMessage, chan);
+        }
+
         script.afterChatMessage(src, originalMessage, chan);
     },
 

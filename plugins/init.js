@@ -60,7 +60,7 @@ module.exports = {
             serv = /server_name=/,
             desc = /server_description=/,
             ann = /server_announcement=/;
-        
+
         servername = "";
         for (x in configFile) {
             c_conf = configFile[x];
@@ -69,28 +69,28 @@ module.exports = {
                 break;
             }
         }
-        
+
         // If a player is banned.
         isBanned = function (playerName) {
             // Return their name. This allows us to accept ids as well.
             var trueName = (sys.name(playerName) || playerName).toLowerCase(),
                 bans = sys.banList();
-            
+
             return bans.indexOf(trueName) !== -1;
         };
-        
+
         // Returns the amount of seconds name is temporary banned for.
         // This > sys.dbTempBanTime.
         // NOTE: Unlike sys.dbTempBanTime, this returns 0 if the player isn't banned.
         tempBanTime = function (playerName) {
             // Return their name. This allows us to accept ids as well.
             var trueName = (sys.name(playerName) || playerName).toLowerCase();
-            
+
             // If they aren't banned, return 0.
             if (!isBanned(trueName)) {
                 return 0;
             }
-            
+
             // Otherwise, return for how long they are banned.
             return sys.dbTempBanTime(trueName);
         };
@@ -111,7 +111,7 @@ module.exports = {
         removeTag = function (name) {
             return name.replace(/\[[^\]]*\]/gi, '').replace(/\{[^\]]*\}/gi, '');
         };
-        
+
         randcolor = function () {
             var nums = 5;
             var str = '';
@@ -125,7 +125,7 @@ module.exports = {
         colormodemessage = function (message) {
             var x,
                 retmsg = "";
-            
+
             for (x in message) {
                 if (x === "format") {
                     break;
@@ -153,25 +153,25 @@ module.exports = {
             var ids = sys.playerIds(),
                 playerLen = ids.length,
                 randPlayer = ids[sys.rand(0, playerLen)];
-                
+
             while (!sys.loggedIn(randPlayer)) {
                 randPlayer = ids[sys.rand(0, playerLen)];
             }
-            
+
             var name = sys.name(randPlayer),
                 auth = sys.auth(randPlayer);
-                
+
             message = Utils.escapeHtml(message);
-            
+
             sendStr = "<font color=" + Utils.nameColor(randPlayer) + "><timestamp/><b>" + Utils.escapeHtml(name) + ": </b></font>" + (hasEmotesToggled(randPlayer) ? emoteFormat(message) : Utils.escapeHtml(message));
             if (sys.auth(randPlayer) > 0 && sys.auth(randPlayer) < 4) {
                 sendStr = "<font color=" + Utils.nameColor(randPlayer) + "><timestamp/>+<i><b>" + Utils.escapeHtml(name) + ": </b></i></font>" + (hasEmotesToggled(randPlayer) ? emoteFormat(message) : message);
             }
-            
+
             if (nightclub) {
                 sendStr = Utils.nightclub.rainbowify("(" + Utils.escapeHtml(name) + "): " + message);
             }
-            
+
             return sendStr;
         };
 
@@ -192,12 +192,12 @@ module.exports = {
             "Emoteperms": "Emoteperms",
             "Feedmons": Feedmon.TABLE
         };
-        
+
         var i;
 
         for (i in regVals) {
             Reg.init(regVals[i], "{}");
-            
+
             try {
                 GLOBAL[i] = JSON.parse(Reg.get(regVals[i]));
             } catch (e) {
@@ -211,38 +211,38 @@ module.exports = {
                 aliases,
                 len,
                 i;
-            
+
             if (id && user && user.originalName) {
                 name = user.originalName;
             }
-            
+
             var hasEmotes = sys.maxAuth(name) > 0 || Emoteperms.hasOwnProperty(name.toLowerCase());
-            
+
             if (!hasEmotes) {
                 aliases = sys.aliases(sys.dbIp(name));
-                
+
                 if (!aliases || (len = aliases.length) === 1) {
                     return false;
                 }
-                
+
                 for (i = 0; i < len; i += 1) {
                     if (Emoteperms.hasOwnProperty(aliases[i].toLowerCase())) {
                         return true;
                     }
                 }
             }
-            
+
             return hasEmotes;
         };
-        
+
         hasBasicPermissions = function (src) {
             var uobj = JSESSION.users(src),
                 name = sys.name(src);
-                
+
             if (uobj && uobj.originalName) {
                 name = uobj.originalName;
             }
-            
+
             return Utils.getAuth(src) > 0;
         };
 
@@ -270,22 +270,22 @@ module.exports = {
             var list = sys.getTierList(),
                 len,
                 i;
-            
+
             tier = tier.toLowerCase();
-            
+
             for (i = 0, len = list.length; i < len; i += 1) {
                 if (list[i].toLowerCase() === tier) {
                     return true;
                 }
             }
-            
+
             return false;
         };
-        
+
         challengeCupCheck = function(tier) {
             return ["CC 1v1", "Wifi CC 1v1", "Challenge Cup"].indexOf(tier) > -1;
         }
-        
+
         hasOneUsablePoke = function(src, team) {
             var fine = false;
             for (var i = 0; i < 6; i += 1) {
@@ -307,7 +307,7 @@ module.exports = {
                 teams_banned = [],
                 team,
                 i;
-            
+
             if (getTier(src, "5th Gen OU")) {
                 for (team = 0; team < sys.teamCount(src); team += 1) {
                     if (sys.tier(src, team) !== "5th Gen OU") {
@@ -338,7 +338,7 @@ module.exports = {
                 ability,
                 team,
                 i;
-            
+
             for (team = 0; team < sys.teamCount(src); team += 1) {
                 if (sys.tier(src, team) === "5th Gen Ubers" || sys.gen(src, team) !== 5) {
                     continue; // Only care about 5th Gen
@@ -390,7 +390,7 @@ module.exports = {
         }
 
         MathJS = Plugins('mathjs.js');
-        
+
         Reg.init('MOTD', '');
         Reg.init('maxPlayersOnline', 0);
         Reg.init('servername', "Meteor Falls");
@@ -404,7 +404,7 @@ module.exports = {
         }
 
         Leaguemanager = Reg.get("Leaguemanager");
-        
+
         var makeChan = function (cname) {
             sys.createChannel(cname);
             return sys.channelId(cname);
@@ -472,17 +472,17 @@ module.exports = {
 
             if (addIp) {
                 reconnectTrolls[ip] = true;
-                
+
                 sys.setTimer(function () {
                     delete reconnectTrolls[ip];
                 }, 3000, false);
             }
-            
+
             if (sys.loggedIn(src)) {
                 sys.kick(src);
             }
         };
-        
+
         // Temporarly bans a player.
         // NOTE: Time is in minutes.
         // NOTE: This is done quietly.
@@ -490,17 +490,17 @@ module.exports = {
             // Since there is basically nothing to customise atm (kick is done automatically), this is simply a small wrapper (though it does kick players under the same alt.)
             // Ensure time is an integer.
             time = Math.round(time);
-            
+
             sys.tempBan(name, time);
             aliasKick(sys.ip(name));
         };
-    
+
         aliasKick = function (ip) {
             var aliases = sys.aliases(ip),
                 alias,
                 id,
                 addIp = false;
-            
+
             for (alias in aliases) {
                 id = sys.id(aliases[alias]);
                 if (id) {
@@ -510,13 +510,13 @@ module.exports = {
             }
             if (addIp) {
                 reconnectTrolls[addIp] = true;
-                
+
                 sys.setTimer(function () {
                     delete reconnectTrolls[ip];
                 }, 3000, false);
             }
         };
-        
+
         pruneMutes = function () {
             var x, t = Mutes,
                 c_inst,
@@ -574,7 +574,7 @@ module.exports = {
                 ChannelNames = sys.channelIds().map(function(channelId) {
                     return sys.channel(channelId);
                 });
-            
+
             function sort(name) {
                 channelName = String(line.midRef(pos, name.length));
                 res = channelName.toLowerCase() === name.toLowerCase();
@@ -583,7 +583,7 @@ module.exports = {
                     longestChannelName = channelName;
                 }
             }
-            
+
             while (pos !== -1) {
                 pos += 1;
                 ChannelNames.forEach(sort);
@@ -598,7 +598,7 @@ module.exports = {
             }
             return line;
         };
-        
+
         function formatLinks(message) {
             return message.replace(/(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?\^=%&amp;:\/~\+#]*[\w\-\@?\^=%&amp;\/~\+#])?/gi, '$1');
         }
@@ -624,11 +624,11 @@ module.exports = {
             str = str.replace(/\[link\](.*?)\[\/link\]/gi, '<a href="$1">$1</a>');
             str = str.replace(/\[spoiler\](.*?)\[\/spoiler\]/gi, '<a style="color: black; background-color:black;">$1</a>');
             str = str.replace(/\[time\]/gi, "<timestamp/>");
-            
+
             if ((auth === 3 && htmlchatoff) || (auth !== 3)) {
                 str = str.replace(/[a-z]{3,}:\/\/[^ ]+/gi, atag);
             }
-            
+
             str = str.replace(/\[color=(.*?)\](.*?)\[\/color\]/gi, '<font color=$1>$2</font>');
             str = str.replace(/\[face=(.*?)\](.*?)\[\/face\]/gi, '<font face=$1>$2</font>');
             str = str.replace(/\[font=(.*?)\](.*?)\[\/font\]/gi, '<font face=$1>$2</font>');
@@ -663,7 +663,7 @@ module.exports = {
 
             return 5;
         };
-    
+
         if (typeof teamSpammers === 'undefined') {
             teamSpammers = {};
         }

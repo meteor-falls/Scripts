@@ -44,26 +44,26 @@ TableList = function (name, color, border, padding, borderColor) {
     this.border = border;
     this.padding = padding;
     this.borderColor = borderColor;
-    
+
     this.template = "<font color=" + borderColor + " size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br><h2>" + name + "</h2><br/>";
     this.template += "<table border='" + border + "' cellpadding='" + padding + "'>";
-    
+
     this.zebra = true;
 };
 
 TableList.prototype.bgcolor = function () {
     var color = this.color.toLowerCase();
-    
+
     if (color === "zebra" || color === "stripe") {
         if (this.zebra) {
             color = "#eaeaea";
         } else {
             color = "#f4f4f4";
         }
-        
+
         this.zebra = !this.zebra;
     }
-    
+
     return color;
 };
 
@@ -72,11 +72,11 @@ TableList.prototype.add = function (elements, isBold) {
         tags = isBold ? ['<th>', '</th>'] : ['<td>', '</td>'],
         len,
         i;
-        
+
     for (i = 0, len = elements.length; i < len; i += 1) {
         out += tags[0] + elements[i] + tags[1];
     }
-    
+
     out += "</tr>";
     this.template += out;
 };
@@ -85,16 +85,16 @@ TableList.prototype.addEvery = function (elements, isBold, every, remainingIsBol
     var out = [],
         len,
         element;
-        
+
     for (element = 0, len = elements.length; element < len; element += 1) {
         out.push(elements[element]);
-        
+
         if (out.length >= every) {
             this.add(out, isBold);
             out = [];
         }
     }
-    
+
     if (out.length) {
         this.add(out, remainingIsBold === undefined ? isBold : remainingIsBold);
     }
@@ -174,7 +174,7 @@ module.exports = {
         Fun.finish();
 
         Lists.Fun = Fun;
-        
+
         /** FEEDMON **/
         var FeedmonList = new CommandList("Feedmon Commands", "navy");
         FeedmonList.add("catch", "Catches a random pokemon.");
@@ -185,7 +185,7 @@ module.exports = {
         FeedmonList.add("move <font color=red><b>[num]</b></font>", "Uses one of your pokemon's moves in battle.");
         FeedmonList.add("heal", "Revives/heals your (fainted) pokemon.");
         FeedmonList.finish();
-        
+
         Lists.Feedmon = FeedmonList;
 
         /** MEGAUSER **/
@@ -217,16 +217,16 @@ module.exports = {
         var emotesToAdd = [],
             len,
             i;
-        
+
         for (i = 0, len = EmoteList.__display__.length; i < len; i += 1) {
             emotesToAdd.push(Utils.escapeHtml(EmoteList.__display__[i]));
-            
+
             if (emotesToAdd.length >= 8) {
                 Emotes.add(emotesToAdd, false);
                 emotesToAdd = [];
             }
         }
-        
+
         if (emotesToAdd.length) {
             Emotes.add(emotesToAdd, false);
         }
