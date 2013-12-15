@@ -5,15 +5,15 @@ function addCommand(authLevel, name, callback, specialPerms) {
     if (typeof authLevel !== "number") {
         return;
     }
-    
+
     if ((typeof name !== "string") && (typeof name !== "object")) {
         return;
     }
-    
+
     if (typeof callback !== "function") {
         return;
     }
-    
+
     if (!specialPerms || typeof specialPerms !== "object") {
         specialPerms = [];
     }
@@ -21,7 +21,7 @@ function addCommand(authLevel, name, callback, specialPerms) {
     var names = [].concat(name),
         len,
         i;
-    
+
     for (i = 0, len = names.length; i < len; i += 1) {
         commands[names[i]] = {
             'authLevel': authLevel,
@@ -74,17 +74,17 @@ addCommand(0, "catch", function (src, command, commandData, tar, chan) {
     var name = sys.name(src).toLowerCase();
     var feedmon = Feedmon.ensurePlayer(name);
     var time = +sys.time();
-    
+
     if (Feedmon.isBattling(name)) {
         bot.sendMessage(src, "You're busy battling right now!", chan);
         return;
     }
-    
+
     if (Feedmon.checkTimeout(name, "timeout")) {
         bot.sendMessage(src, "Please wait " + Utils.getTimeString(feedmon.timeout - time) + " to send out another pokemon.");
         return;
     }
-    
+
     if (feedmon.faint) {
         bot.sendMessage(src, "Your " + Feedmon.getPokemonName(name) + " has fainted! Revive that poor soul!", chan);
         return;
@@ -92,17 +92,17 @@ addCommand(0, "catch", function (src, command, commandData, tar, chan) {
 
     feedmon.timeout = time + Feedmon.CATCH_TIMEOUT;
     feedmon.total += 1;
-    
+
     var pokemon = Feedmon.generatePokemon(name),
         pokeName = Feedmon.getPokemonName(name);
-    
+
     bot.sendAll(sys.name(src) + " caught a(n) <b>" + pokeName + "</b>!", 0);
     bot.sendMessage(src, "It has the following moves: " + Utils.fancyJoin(pokemon.moves.map(Utils.boldKeys)) + "!", chan);
     bot.sendMessage(src, "Its nature is: <b>" + pokemon.nature + "</b>!", chan);
     bot.sendMessage(src, 'Type /feed to feed this pokemon.', chan);
     return;
 });
- 
+
 addCommand(0, "feed", function (src, command, commandData, tar, chan) {
     var name = sys.name(src).toLowerCase(),
         player = Feedmon.getPlayer(name),
@@ -110,47 +110,47 @@ addCommand(0, "feed", function (src, command, commandData, tar, chan) {
         feedmon,
         feedexp,
         time = +sys.time();
-    
+
     if (Feedmon.isBattling(name)) {
         bot.sendMessage(src, "You're busy battling right now!", chan);
         return;
     }
-    
+
     if (!player) {
         bot.sendMessage(src, "First catch a Feedmon!", chan);
         return;
     }
-    
+
     feedmon = Feedmon.getPokemon(name);
-    
+
     if (!feedmon) {
         bot.sendMessage(src, "First catch a Feedmon!", chan);
         return;
     }
-    
+
     feedname = Feedmon.getPokemonName(name);
 
     if (feedmon.faint) {
         bot.sendMessage(src, "Your " + feedname + " is faint!", chan);
         return;
     }
-    
+
     if (Feedmon.checkTimeout(name, "feedtimeout")) {
         bot.sendMessage(src, "Please wait " + Utils.getTimeString(player.feedtimeout - time) + " to feed your " + feedname + " again.", chan);
         return;
     }
-    
+
     player.feedtimeout = time + Feedmon.FEED_TIMEOUT;
     feedmon.fed += 1;
-    
+
     feedexp = Feedmon.giveExp(name);
-    
+
     bot.sendMessage(src, "Your " + feedname + " gained " + feedexp.gain + " EXP" + (feedexp.happinessGain ? " and " + feedexp.happinessGain + " happiness" : "") + "!", chan);
-    
+
     if (feedexp.levelGain) {
         bot.sendMessage(src, feedname + " leveled up " + feedexp.levelGain + " time(s)! It's now level " + feedmon.level + "!", chan);
     }
-    
+
     Feedmon.save();
 });
 
@@ -158,29 +158,29 @@ addCommand(0, "nickname", function (src, command, commandData, tar, chan) {
     var name = sys.name(src).toLowerCase(),
         player = Feedmon.getPlayer(name),
         feedmon;
-    
+
     if (Feedmon.isBattling(name)) {
         bot.sendMessage(src, "You're busy battling right now!", chan);
         return;
     }
-    
+
     if (!player) {
         bot.sendMessage(src, "First catch a Feedmon!", chan);
         return;
     }
-    
+
     feedmon = Feedmon.getPokemon(name);
-    
+
     if (!feedmon) {
         bot.sendMessage(src, "First catch a Feedmon!", chan);
         return;
     }
-    
+
     if (commandData.length > 20) {
         bot.sendMessage(src, "Your nickname is too long (max: 20).", chan);
         return;
     }
-    
+
     feedmon.nickname = commandData;
     bot.sendMessage(src, feedmon.name + " is now named " + feedmon.nickname + "!", chan);
 });
@@ -194,33 +194,33 @@ addCommand(0, "level", function (src, command, commandData, tar, chan) {
         feedname,
         len,
         i;
-    
+
     if (!player) {
         bot.sendMessage(src, "First catch a Feedmon!", chan);
         return;
     }
-    
+
     feedmon = Feedmon.getPokemon(name);
-    
+
     if (!feedmon) {
         bot.sendMessage(src, "First catch a Feedmon!", chan);
         return;
     }
-    
+
     feedname = Feedmon.getPokemonName(name);
-    
+
     if (commandData.toLowerCase() === "all") {
         Feedmon.expTableList().display(src, chan);
         return;
     }
-    
+
     if (feedmon.level >= 100) {
         bot.sendMessage(src, "Max level (100) reached.", chan);
         return;
     }
-    
+
     nextlvl = feedmon.level + 1;
-    
+
     // Arrays start 0-index, so don't increment 1 if we want to know the exact level requirement.
     bot.sendMessage(src, "Next level (" + (nextlvl) + ") requires " + table[feedmon.level] + " EXP. Your " + feedname + " has " + feedmon.exp + " EXP, an additional " + (table[feedmon.level] - feedmon.exp) + " is required for level " + nextlvl + ".", chan);
 });
@@ -230,33 +230,33 @@ addCommand(0, "battle", function (src, command, commandData, tar, chan) {
         player = Feedmon.getPlayer(name),
         feedmon,
         feedname;
-    
+
     if (Feedmon.isBattling(name)) {
         bot.sendMessage(src, "You're busy battling right now!", chan);
         return;
     }
-    
+
     if (!player) {
         bot.sendMessage(src, "First catch a Feedmon!", chan);
         return;
     }
-    
+
     feedmon = Feedmon.getPokemon(name);
-    
+
     if (!feedmon) {
         bot.sendMessage(src, "First catch a Feedmon!", chan);
         return;
     }
-    
+
     feedname = Feedmon.getPokemonName(name);
-    
+
     if (feedmon.faint) {
         bot.sendMessage(src, "Your " + feedname + " is faint!", chan);
         return;
     }
-    
+
     Feedmon.generateBattle(name);
-    
+
     Feedmon.turnMessage(name, function (str) {
         bot.sendMessage(src, str, chan);
     });
@@ -272,75 +272,75 @@ addCommand(0, "move", function (src, command, commandData, tar, chan) {
         exp,
         feedmon,
         feedname;
-    
+
     if (!Feedmon.isBattling(name)) {
         bot.sendMessage(src, "You're not battling anything right now!", chan);
         return;
     }
-    
+
     if (!player) {
         bot.sendMessage(src, "First catch a Feedmon!", chan);
         return;
     }
-    
+
     feedmon = Feedmon.getPokemon(name);
-    
+
     if (!feedmon) {
         bot.sendMessage(src, "First catch a Feedmon!", chan);
         return;
     }
-    
+
     feedname = Feedmon.getPokemonName(name);
-    
+
     if (feedmon.faint) {
         bot.sendMessage(src, "Your " + feedname + " is faint!", chan);
         return;
     }
-    
+
     battle = Feedmon.battles[name];
     opponent = battle.opponent;
-    
+
     if (move <= 0 || move >= 5) {
         bot.sendMessage(src, "The move num needs to be 1-4.", chan);
         return;
     }
-    
+
     res = Feedmon.battleTurn(name, move - 1);
-    
+
     bot.sendMessage(src, "Turn #" + res.turn, chan);
     sys.sendMessage(src, "", chan);
-    
+
     bot.sendMessage(src, feedname + " attacked <b>" + opponent.pokemon + "</b> with " + res.self.move + "!", chan);
     bot.sendMessage(src, "Ouch! <b>" + opponent.pokemon + "</b> -" + res.self.damage + " HP (HP: " + opponent.hp + ")", chan);
-    
+
     if (res.opponent.fainted) {
         bot.sendMessage(src, feedname + " won the battle!", chan);
         exp = Feedmon.giveExp(name, 2);
-        
+
         bot.sendMessage(src, "Your " + feedname + " gained " + exp.gain + " EXP" + (exp.happinessGain ? " and " + exp.happinessGain + " happiness" : "") + "!", chan);
-        
+
         if (exp.levelGain) {
             bot.sendMessage(src, feedname + " leveled up " + exp.levelGain + " time(s)! It's now level " + feedmon.level + "!", chan);
         }
-        
+
         delete Feedmon.battles[name];
         return;
     }
-    
+
     sys.sendMessage(src, "", chan);
-    
+
     bot.sendMessage(src, "<b>" + opponent.pokemon + "</b> attacked " + feedname + " with " + res.opponent.move + "!", chan);
     bot.sendMessage(src, "Ouch! " + feedname + " -" + res.opponent.damage + " HP (HP: " + feedmon.hp + ")", chan);
-    
+
     if (res.self.fainted) {
         bot.sendMessage(src, feedname + " lost the battle!", chan);
         // TODO: Happiness loss.
         delete Feedmon.battles[name];
         return;
     }
-    
+
     sys.sendMessage(src, "", chan);
-    
+
     // Re-send turn message.
     Feedmon.turnMessage(name, function (str) {
         bot.sendMessage(src, str, chan);
@@ -356,16 +356,16 @@ addCommand(0, "vote", function (src, command, commandData, tar, chan) {
     if (!Poll.options[option]) {
         return bot.sendMessage(src, "There is no such option as " + (option + 1) + " available.", chan);
     }
-    
+
     var ip = sys.ip(src);
     bot.sendMessage(src, "You voted for option #" + (option + 1) + ": " + Poll.options[option], chan);
-    
+
     if (ip in Poll.votes) {
         bot.sendAll(sys.name(src) + " changed their vote!", chan);
     } else {
         bot.sendAll(sys.name(src) + " voted!", chan);
     }
-    
+
     Poll.votes[ip] = option;
 });
 
@@ -374,26 +374,26 @@ addCommand(0, "heal", function (src, command, commandData, tar, chan) {
         player = Feedmon.getPlayer(name),
         feedmon,
         feedname;
-    
+
     if (Feedmon.isBattling(name)) {
         bot.sendMessage(src, "You're busy battling right now!", chan);
         return;
     }
-    
+
     if (!player) {
         bot.sendMessage(src, "First catch a Feedmon!", chan);
         return;
     }
-    
+
     feedmon = Feedmon.getPokemon(name);
 
     if (!feedmon) {
         bot.sendMessage(src, "First catch a Feedmon!", chan);
         return;
     }
-    
+
     feedname = Feedmon.getPokemonName(name);
-    
+
     feedmon.faint = false;
     feedmon.hp = Feedmon.getHp(feedmon.level);
     bot.sendMessage(src, "Healed " + feedname + " to " + feedmon.hp + " (full) HP!", chan);
@@ -456,7 +456,7 @@ addCommand(0, "league", function (src, command, commandData, tar, chan) {
         Elite3 = Reg.get("Elite3"),
         Elite4 = Reg.get("Elite4"),
         Champ = Reg.get("Champ");
-    
+
     League.add(Gym1 || "Open");
     League.add(Gym2 || "Open");
     League.add(Gym3 || "Open");
@@ -472,9 +472,9 @@ addCommand(0, "league", function (src, command, commandData, tar, chan) {
     League.add(Elite2 || "Open");
     League.add(Elite3 || "Open");
     League.add(Elite4 || "Open");
-    
+
     League.template += "</ol><br><h2><font color=red>±±The Champion±±</font></h2><ul><b>" + (Champ || "Open") + "</b></ul>";
-    
+
     League.finish();
     League.display(src, chan);
     sys.sendHtmlMessage(src, '<i><b><font color=blue>Type /leaguerules to see the rules of the league!</font>', chan);
@@ -550,11 +550,11 @@ addCommand(0, ["calc", "calculate"], function (src, command, commandData, tar, c
         bot.sendMessage(src, "Sorry, MathJS needs to be loaded in order to use this command.", chan);
         return;
     }
-    
+
     var res;
     try {
         res = mathjs.eval(commandData);
-        
+
         bot.sendMessage(src, Utils.escapeHtml("The result of '" + commandData + "' is:"), chan);
         bot.sendMessage(src, Utils.escapeHtml(res.toString()), chan);
     } catch (ex) {
@@ -589,42 +589,42 @@ addCommand(0, "bbcodes", function (src, command, commandData, tar, chan) {
         BB.add("[hr]Makes a long, solid line - <hr>");
         BB.add("[ping]Pings everybody");
     }
-    
+
     BB.finish();
     BB.display(src, chan);
 });
 addCommand(0, ["sendto", "ping"], function (src, command, commandData, tar, chan) {
     var r = commandData.split(':');
     var mess = Utils.cut(r, 1, ':');
-    
+
     tar = sys.id(r[0]);
-    
+
     if (!tar) {
         bot.sendMessage(src, "Must send the message to a real person!", chan);
         return;
     }
-    
+
     if (!mess || command === "ping") {
         bot.sendMessage(src, "Your ping was sent to " + Utils.escapeHtml(r[0]) + "!", chan);
         bot.sendMessage(tar, "<ping/>" + Utils.escapeHtml(sys.name(src)) + " has sent you a ping!", chan);
         return;
     }
-    
+
     mess = Utils.escapeHtml(mess);
     if (this.myAuth > 0 && hasEmotesToggled(src)) {
         mess = emoteFormat(true, mess);
     }
-    
+
     bot.sendMessage(src, "Your message was sent!", chan);
     bot.sendMessage(tar, '<ping/>' + Utils.escapeHtml(sys.name(src)) + ' sent you a message! The message says: ' + mess);
 });
 addCommand(0, "auth", function (src, command, commandData, tar, chan) {
     var authlist = sys.dbAuths().sort();
     var x;
-    
+
     sys.sendHtmlMessage(src, "<font color=navy><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br><font color=black><h2>Auth List</h2>", chan);
     sys.sendHtmlMessage(src, "<b><font color=red>**Owners**", chan);
-    
+
     for (x in authlist) {
         if (sys.dbAuth(authlist[x]) === 3) {
             if (!sys.id(authlist[x])) {
@@ -634,10 +634,10 @@ addCommand(0, "auth", function (src, command, commandData, tar, chan) {
             }
         }
     }
-    
+
     sys.sendMessage(src, "", chan);
     sys.sendHtmlMessage(src, "<b><font color=blue><font size=3>**Administrators**", chan);
-    
+
     for (x in authlist) {
         if (sys.dbAuth(authlist[x]) === 2) {
             if (!sys.id(authlist[x])) {
@@ -649,7 +649,7 @@ addCommand(0, "auth", function (src, command, commandData, tar, chan) {
     }
     sys.sendMessage(src, "", chan);
     sys.sendHtmlMessage(src, "<b><font color=green><font size=3>**Moderators**", chan);
-    
+
     for (x in authlist) {
         if (sys.dbAuth(authlist[x]) === 1) {
             if (!sys.id(authlist[x])) {
@@ -666,7 +666,7 @@ addCommand(0, "summonauth", function (src, command, commandData, tar, chan) {
     var auths = sys.dbAuths(),
         auth_id,
         x;
-    
+
     for (x = 0; x < auths.length; x += 1) {
         auth_id = sys.id(auths[x]);
         if (auth_id) {
@@ -709,13 +709,13 @@ addCommand(0, "viewround", function (src, command, commandData, tar, chan) {
     var myStr;
     var finals = isFinals;
     var i;
-    
+
     if (finals) {
         myStr = "<center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Finals of <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament:</font><hr width=300/>";
     } else {
         myStr = "<center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Round <i>" + roundnumber + "</i> of <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament!</font><hr width=300/>";
     }
-    
+
     if (battlesLost.length > 0) {
         myStr += "<br><b><u>Battles Finished:</u></b><br>";
         for (i = 0; i < battlesLost.length; i += 2) {
@@ -746,7 +746,7 @@ addCommand(0, "viewround", function (src, command, commandData, tar, chan) {
         myStr += "<br><b><u>Members to the next round:</u></b><br>";
         var str = "",
             x;
-        
+
         for (x in tourmembers) {
             myStr += (str.length === 0 ? "" : ", ") + tourplayers[tourmembers[x]] + "<br>";
         }
@@ -782,12 +782,12 @@ addCommand(0, "tourtier", function (src, command, commandData, tar, chan) {
 addCommand(0, "attack", function (src, command, commandData, tar, chan) {
     function randomColor(text) {
         var randColors = ["blue", "darkblue", "green", "darkgreen", "red", "darkred", "orange", "skyblue", "purple", "violet", "black", "lightsteelblue", "navy", "burlywood", "DarkSlateGrey", "darkviolet", "Gold", "Lawngreen", "silver"];
-        
+
         var selectedColor = sys.rand(0, randColors.length);
 
         return "<font color='" + randColors[selectedColor] + "'>" + text + "</font>";
     }
-    
+
     if (!tar) {
         bot.sendMessage(src, 'Target doesn\'t exist!', chan);
         return;
@@ -846,12 +846,12 @@ addCommand(0, "spin", function (src, command, commandData, tar, chan) {
 addCommand(0, "megausers", function (src, command, commandData, tar, chan) {
     var keys = Object.keys(MegaUsers),
         list;
-        
+
     if (keys.length === 0) {
         bot.sendMessage(src, "There are no megausers.", chan);
         return;
     }
-    
+
     list = new TableList("Megausers", "cornflowerblue", 2, 5, "navy");
     list.addEvery(keys, false, 10);
     list.finish();
@@ -861,12 +861,12 @@ addCommand(0, "megausers", function (src, command, commandData, tar, chan) {
 addCommand(0, "floodignorelist", function (src, command, commandData, tar, chan) {
     var keys = Object.keys(FloodIgnore),
         list;
-        
+
     if (keys.length === 0) {
         bot.sendMessage(src, "There are no flood ignores.", chan);
         return;
     }
-    
+
     list = new TableList("Flood Ignores", "cornflowerblue", 2, 5, "navy");
     list.addEvery(keys, false, 10);
     list.finish();
@@ -875,12 +875,12 @@ addCommand(0, "floodignorelist", function (src, command, commandData, tar, chan)
 addCommand(0, "capsignorelist", function (src, command, commandData, tar, chan) {
     var keys = Object.keys(Capsignore),
         list;
-        
+
     if (keys.length === 0) {
         bot.sendMessage(src, "There are no caps ignores.", chan);
         return;
     }
-    
+
     list = new TableList("Caps Ignores", "cornflowerblue", 2, 5, "navy");
     list.addEvery(keys, false, 10);
     list.finish();
@@ -890,12 +890,12 @@ addCommand(0, "capsignorelist", function (src, command, commandData, tar, chan) 
 addCommand(0, "autoidlelist", function (src, command, commandData, tar, chan) {
     var keys = Object.keys(Autoidle),
         list;
-        
+
     if (keys.length === 0) {
         bot.sendMessage(src, "There are no auto idles.", chan);
         return;
     }
-    
+
     list = new TableList("Auto Idles", "cornflowerblue", 2, 5, "navy");
     list.addEvery(keys, false, 10);
     list.finish();
@@ -905,12 +905,12 @@ addCommand(0, "autoidlelist", function (src, command, commandData, tar, chan) {
 addCommand(0, "emotepermlist", function (src, command, commandData, tar, chan) {
     var keys = Object.keys(Emoteperms),
         list;
-        
+
     if (keys.length === 0) {
         bot.sendMessage(src, "There are no emote perm users.", chan);
         return;
     }
-    
+
     list = new TableList("Emote Permission", "cornflowerblue", 2, 5, "navy");
     list.addEvery(keys, false, 10);
     list.finish();
@@ -921,7 +921,7 @@ addCommand(0, "players", function (src, command, commandData, tar, chan) {
     if (commandData) {
         commandData = commandData.toLowerCase();
     }
-    
+
     if (["windows", "linux", "android", "mac", "webclient"].indexOf(commandData) !== -1) {
         var count = 0;
         sys.playerIds().forEach(function (id) {
@@ -932,7 +932,7 @@ addCommand(0, "players", function (src, command, commandData, tar, chan) {
         bot.sendMessage(src, "There are  " + count + " " + commandData + " players online.", chan);
         return;
     }
-    
+
     bot.sendMessage(src, "There are " + sys.numPlayers() + " players online.", chan);
 });
 
@@ -1012,7 +1012,7 @@ addCommand(0, "sub", function (src, command, commandData, tar, chan) {
     var p1 = players[0].toLowerCase();
     var p2 = players[1].toLowerCase(),
         x;
-    
+
     for (x in tourmembers) {
         if (tourmembers[x] === p1) {
             tourmembers[x] = p2;
@@ -1063,14 +1063,14 @@ addCommand(0, "tour", function (src, command, commandData, tar, chan) {
         bot.sendMessage(src, "Sorry, you are unable to start a tournament because one is still currently running.", chan);
         return;
     }
-    
+
     var commandpart;
     if (commandData.indexOf(':') === -1) {
         commandpart = commandData.split(' ');
     } else {
         commandpart = commandData.split(':');
     }
-    
+
     tournumber = parseInt(commandpart[1], 10);
     prize = commandpart[2];
     if (isNaN(tournumber) || tournumber <= 2) {
@@ -1081,7 +1081,7 @@ addCommand(0, "tour", function (src, command, commandData, tar, chan) {
     if (!isTier(commandpart[0])) {
         found = false;
     }
-    
+
     if (!found) {
         bot.sendMessage(src, "Sorry, the server does not recognise the " + commandpart[0] + " tier.", chan);
         return;
@@ -1095,11 +1095,11 @@ addCommand(0, "tour", function (src, command, commandData, tar, chan) {
     battlesStarted = [];
     battlesLost = [];
     isFinals = false;
-    
+
     if (typeof prize === "undefined") {
         prize = "No prize";
     }
-    
+
     sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Tournament Started by <i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(sys.name(src)) + "!</i></font><hr width=300/><table cellspacing=2 cellpadding=2><tr><td><b>Tier: <font style='color:red; font-weight:bold;'>" + tourtier + "</i></td></tr><tr><td><b>Players: <font style='color:red; font-weight:bold;'>" + tournumber + "</i></td></tr><tr><td><b>Prize: <font style='color:red; font-weight:bold;'>" + Utils.escapeHtml(prize) + "</i></td></tr></table><hr width=300/><center style='margin-right: 7px;'><b>Type <font color=red>/join</font> to join!<br/></td></tr></table></center><br/>", 0);
 });
 
@@ -1144,7 +1144,7 @@ addCommand(0, "push", function (src, command, commandData, tar, chan) {
         bot.sendMessage(src, commandData + " is already in the tournament.", chan);
         return;
     }
-    
+
     if (tourmode === 2) {
         sys.sendHtmlAll("<font color=blue><timestamp/><b>" + Utils.escapeHtml(commandData) + " was added to the tournament by " + Utils.escapeHtml(sys.name(src)) + ".</b></font>", 0);
 
@@ -1157,7 +1157,7 @@ addCommand(0, "push", function (src, command, commandData, tar, chan) {
         tourplayers[commandData.toLowerCase()] = commandData;
         sys.sendHtmlAll("<font color=blue><timestamp/><b>" + Utils.escapeHtml(commandData) + " was added to the tournament by " + Utils.escapeHtml(sys.name(src)) + ".</b></font>", 0);
     }
-    
+
     if (tourmode === 1 && script.tourSpots() === 0) {
         tourmode = 2;
         roundnumber = 0;
@@ -1209,12 +1209,12 @@ addCommand(0, "message", function (src, command, commandData, tar, chan) {
         bot.sendMessage(src, "You need to be a higher auth to use this command!", chan);
         return;
     }
-    
+
     if (!commandData) {
         bot.sendMessage(src, "Specify kick, ban, or welcome!", chan);
         return;
     }
-    
+
     commandData = commandData.split(":");
     if (!commandData[1]) {
         bot.sendMessage(src, "Usage of this command is: [kick/ban/welcome]:[message]", chan);
@@ -1223,7 +1223,7 @@ addCommand(0, "message", function (src, command, commandData, tar, chan) {
     var which = commandData[0];
     var message = Utils.cut(commandData, 1, ":");
     var whichl = which.toLowerCase();
-    
+
     if (whichl === "kick") {
         bot.sendMessage(src, "Set kick message to: " + Utils.escapeHtml(message) + "!", chan);
         Kickmsgs[sys.name(src).toLowerCase()] = {
@@ -1256,12 +1256,12 @@ addCommand(0, "viewmessage", function (src, command, commandData, tar, chan) {
         bot.sendMessage(src, "You need to be a higher auth to use this command!", chan);
         return;
     }
-    
+
     if (!commandData) {
         bot.sendMessage(src, "Specify kick, ban, or welcome!", chan);
         return;
     }
-    
+
     if (commandData === "kick") {
         if (!Kickmsgs[sys.name(src).toLowerCase()]) {
             bot.sendMessage(src, "You currently do not have a kick message, please go make one!", chan);
@@ -1294,7 +1294,7 @@ addCommand(0, "removemessage", function (src, command, commandData, tar, chan) {
         bot.sendMessage(src, "You need to be a higher auth to use this command!", chan);
         return;
     }
-    
+
     var lower = commandData.toLowerCase();
     if (lower === "kick") {
         if (!Kickmsgs[sys.name(src).toLowerCase()]) {
@@ -1542,15 +1542,15 @@ addCommand(1, "mutes", function (src, command, commandData, tar, chan) {
         list,
         now,
         key;
-        
+
     if (keys.length === 0) {
         bot.sendMessage(src, "There are no mutes.", chan);
         return;
     }
-    
+
     list = new TableList("Mutes", "cornflowerblue", 2, 5, "navy");
     list.add(["IP", "Muted Name", "By", "Length", "Reason"], true);
-    
+
     for (key in Mutes) {
         now = Mutes[key];
         var mutedname = now.mutedname,
@@ -1558,10 +1558,10 @@ addCommand(1, "mutes", function (src, command, commandData, tar, chan) {
             time = now.time,
             timeString = (time === 0 ? "forever" : "for " + Utils.getTimeString(time - timeNow)),
             reason = now.reason;
-            
+
         list.add([key, mutedname, by, timeString, reason], false);
     }
-    
+
     list.finish();
     list.display(src, chan);
 });
@@ -1572,20 +1572,20 @@ addCommand(1, "rangebans", function (src, command, commandData, tar, chan) {
         list,
         now,
         key;
-        
+
     if (keys.length === 0) {
         bot.sendMessage(src, "There are no rangebans.", chan);
         return;
     }
-    
+
     list = new TableList("Rangebans", "cornflowerblue", 2, 5, "navy");
     list.add(["IP", "By", "Reason"], true);
-    
+
     for (key in Rangebans) {
         now = Rangebans[key];
         list.add([key, now.by, now.reason], false);
     }
-    
+
     list.finish();
     list.display(src, chan);
 });
@@ -1595,19 +1595,19 @@ addCommand(1, "bans", function (src, command, commandData, tar, chan) {
         len,
         i,
         list;
-        
+
     if (keys.length === 0) {
         bot.sendMessage(src, "There are no bans.", chan);
         return;
     }
-    
+
     list = new TableList("Bans", "cornflowerblue", 2, 5, "navy");
     list.add(["IP", "Aliases"], true);
-    
+
     for (i = 0, len = keys.length; i < len; i += 1) {
         list.add([keys[i], sys.aliases(keys[i])], false);
     }
-    
+
     list.finish();
     list.display(src, chan);
 });
@@ -1616,19 +1616,19 @@ addCommand(1, "poll", function (src, command, commandData, tar, chan) {
     if (Poll.active) {
         return bot.sendMessage(src, "There is already a poll. Close it with /closepoll.", chan);
     }
-    
+
     var parts = commandData.split(':');
     var subject = parts[0];
     var options = Utils.cut(parts, 1, ':').split('*');
-    
+
     if (!subject) {
         return bot.sendMessage(src, "You need to give a subject!", chan);
     }
-    
+
     if (!options || options.length < 2) {
         return bot.sendMessage(src, "You need at least 2 options.", chan);
     }
-    
+
     var self = sys.name(src), len, i;
     Poll.active = true;
     Poll.subject = subject;
@@ -1648,7 +1648,7 @@ addCommand(1, "closepoll", function (src, command, commandData, tar, chan) {
     if (!Poll.active) {
         return bot.sendMessage(src, "There isn't a poll. Start one with /poll [subject]:[option1]*[option..].", chan);
     }
-    
+
     var results = {}, choice, i, total, winner, most = 0;
     for (i in Poll.votes) {
         choice = Poll.votes[i];
@@ -1657,13 +1657,13 @@ addCommand(1, "closepoll", function (src, command, commandData, tar, chan) {
         } else {
             results[choice] += 1;
         }
-        
+
         if (results[choice] > most) {
             winner = choice;
             most = results[choice];
         }
     }
-    
+
     var self = sys.name(src);
     var msgs = {};
     bot.sendAll(self + " closed the poll (started by " + Poll.by + ")!", chan);
@@ -1671,16 +1671,16 @@ addCommand(1, "closepoll", function (src, command, commandData, tar, chan) {
     for (i in results) {
         msgs[i] = "Option #" + (parseInt(i, 10) + 1) + " (" + Poll.options[i] + "): " + results[i] + " vote" + (results[i] === 1 ? '' : 's');
     }
-    
+
     for (i = 0, total = Poll.options.length; i < total; i += 1) {
         if (msgs[i]) {
             bot.sendAll(msgs[i], chan);
         }
     }
-    
+
     sys.sendAll("", chan);
     bot.sendAll("Winner: Option #" + (winner + 1) + " (" + Poll.options[winner] + ") with " + results[winner] + " vote" + (results.winner === 1 ? '' : 's') + ".", chan);
-    
+
     Poll.active = false;
     Poll.subject = '';
     Poll.by = '';
@@ -1699,7 +1699,7 @@ addCommand(1, "info", function (src, command, commandData, tar, chan) {
     var registered = sys.dbRegistered(commandData) ? "yes" : "no";
     var loggedon = sys.loggedIn(tar) ? "yes" : "no";
     sys.sendMessage(src, "", chan);
-    
+
     sys.sendHtmlMessage(src, "<timestamp/><b><font color=black>±Bot:</font></b> Information of player <font color=" + Utils.nameColor(tar) + "><b>" + commandData + ":</font></b>", chan);
     sys.sendHtmlMessage(src, "<timestamp/><font color=purple><b>IP:</b></font> " + tarip, chan);
     sys.sendHtmlMessage(src, "<timestamp/><font color=black><b>Auth Level:</b></font> " + tarauth, chan);
@@ -1707,7 +1707,7 @@ addCommand(1, "info", function (src, command, commandData, tar, chan) {
     sys.sendHtmlMessage(src, "<timestamp/><font color=black><b>Number of aliases:</b></font> " + aliases.length, chan);
     sys.sendHtmlMessage(src, "<timestamp/><font color=purple><b>Registered:</b></font> " + registered, chan);
     sys.sendHtmlMessage(src, "<timestamp/><font color=black><b>Logged In:</b></font> " + loggedon, chan);
-    
+
     if (loggedon === "yes") {
         var lengths;
         var arrays = [];
@@ -1719,7 +1719,7 @@ addCommand(1, "info", function (src, command, commandData, tar, chan) {
     } else {
         sys.sendHtmlMessage(src, "<timestamp/><font color=purple><b>Last On:</b></font> " + sys.dbLastOn(commandData), chan);
     }
-    
+
     sys.sendMessage(src, "", chan);
 });
 addCommand(1, "logwarn", function (src, command, commandData, tar, chan) {
@@ -1871,12 +1871,12 @@ addCommand(1, ["tempban", "tb"], function (src, command, commandData, tar, chan)
         bot.sendMessage(src, "Target doesn't exist!", chan);
         return;
     }
-    
+
     if (tempBanTime(tarip)) {
         bot.sendMessage(src, "This person is already (temp)banned.", chan);
         return;
     }
-    
+
     if (Utils.getAuth(t[0]) >= this.myAuth) {
         bot.sendMessage(src, "You dont have sufficient auth to tempban " + commandData + ".", chan);
         return;
@@ -1885,9 +1885,9 @@ addCommand(1, ["tempban", "tb"], function (src, command, commandData, tar, chan)
         bot.sendMessage(src, "Please specify a time.", chan);
         return;
     }
-    
+
     reason = reason || 'No reason.';
-    
+
     bantime = Number(bantime);
     if (bantime === 0) {
         time = 30;
@@ -1903,7 +1903,7 @@ addCommand(1, ["tempban", "tb"], function (src, command, commandData, tar, chan)
     }
 
     sys.sendHtmlAll("<font color=red><timestamp/><b> " + t[0] + " has been tempbanned by " + Utils.escapeHtml(sys.name(src)) + " for " + timestr + "!</font></b><br><font color=black><timestamp/><b> Reason:</b> " + Utils.escapeHtml(reason), 0);
-    
+
     tempBan(t[0], time / 60);
 });
 
@@ -1928,7 +1928,7 @@ addCommand(1, ["mute"], function (src, command, commandData, tar, chan) {
         tarip = sys.dbIp(v[0]);
 
     tar = sys.id(v[0]);
-    
+
     if (!tarip) {
         bot.sendMessage(src, "Target doesn't exist!", chan);
         return;
@@ -1942,12 +1942,12 @@ addCommand(1, ["mute"], function (src, command, commandData, tar, chan) {
         bot.sendMessage(src, "You don't have sufficient auth to mute " + v[0] + ".", chan);
         return;
     }
-    
+
     if (!reason) {
         bot.sendMessage(src, "A reason must be specified.", chan);
         return;
     }
-    
+
     reason = Utils.escapeHtml(reason);
 
     var time = Utils.stringToTime(timeunit, Number(mutetime)),
@@ -2158,7 +2158,7 @@ addCommand(2, ["rangeban", "rb"], function (src, command, commandData, tar, chan
         bot.sendMessage(src, "Please specify a reason.", chan);
         return;
     }
-    
+
     function valid(ip) {
         if (ip.length > 8) {
             return false;
@@ -2171,7 +2171,7 @@ addCommand(2, ["rangeban", "rb"], function (src, command, commandData, tar, chan
         }
         return true;
     }
-    
+
     if (!valid(rangeip)) {
         bot.sendMessage(src, "Ranges can only go up to 6 digits and must have one period.", chan);
         return;
@@ -2295,7 +2295,7 @@ addCommand(2, "showteam", function (src, command, commandData, tar, chan) {
         z,
         team;
     ret.push("");
-    
+
     for (team = 0; team < sys.teamCount(tar); team += 1) {
         var toPush = "<table cellpadding=3 cellspacing=3 width='20%' border=1><tr><td><b>Team #" + (team + 1) + "</b></td></tr>";
         toPush += "<tr><td>";
@@ -2359,7 +2359,7 @@ addCommand(2, ["ban", "sban"], function (src, command, commandData, tar, chan) {
     var banlist = sys.banList(),
         a,
         cmdToL = commandData.toLowerCase();
-    
+
     for (a in banlist) {
         if (cmdToL === banlist[a].toLowerCase()) {
             bot.sendMessage(src, "He/she's already banned!", chan);
@@ -2408,7 +2408,7 @@ addCommand(3, "update", function (src, command, commandData, tar, chan) {
         bot.sendMessage(src, "Specify a plugin!", chan);
         return;
     }
-    
+
     var plugins = commandData.trim().split(" ");
     var plugin, len, i;
     for (i = 0, len = plugins.length; i < len; i += 1) {
@@ -2416,7 +2416,7 @@ addCommand(3, "update", function (src, command, commandData, tar, chan) {
         if (plugin.indexOf(".js") === -1) {
             plugin += ".js";
         }
-        
+
         bot.sendMessage(src, "Updating plugin " + plugin + "...", chan);
         Utils.watch.notify("Updating plugin " + plugin + "...");
         sys.webCall(Config.repourl + plugin, function (resp) {
@@ -2424,12 +2424,12 @@ addCommand(3, "update", function (src, command, commandData, tar, chan) {
                 bot.sendMessage(src, "Couldn't update plugin " + plugin, chan);
                 return;
             }
-            
+
             try {
                 sys.writeToFile(Config.plugindir + plugin, resp);
                 PluginHandler.load(plugin, false);
                 reloadPlugin(plugin);
-                
+
                 bot.sendMessage(src, "Plugin " + plugin + " updated!", chan);
                 Utils.watch.notify("Plugin " + plugin + " updated.");
             } catch (ex) {
@@ -2575,7 +2575,7 @@ addCommand(3, "unidle", function (src, command, commandData, tar, chan) {
 addCommand(3, "resetladder", function (src, command, commandData, tar, chan) {
     var tiers = sys.getTierList(),
         x;
-    
+
     for (x in tiers) {
         sys.resetLadder(tiers[x]);
     }
@@ -2588,20 +2588,20 @@ addCommand(3, "setwelcomemessage", function(src, command, commandData, tar, chan
     var r = commandData.split(':'),
         mess = Utils.cut(r, 1, ':'),
         name = r[0];
-        
+
     if (r.length != 2) {
         bot.sendMessage(src, "Usage of this command is Name:Message", chan);
         return;
     }
-    
+
     if (sys.dbIp(name) === undefined) {
         bot.sendMessage(src, "You must set the welcome message of a real person!", chan);
         return;
     }
-    
+
     Welmsgs[name] = {message: mess};
     Reg.save("Welmsgs", JSON.stringify(Welmsgs));
-    
+
     bot.sendMessage(src, "Set welcome message of " + name + " to: " + Utils.escapeHtml(mess), chan);
 });
 

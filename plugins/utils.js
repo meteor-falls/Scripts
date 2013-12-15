@@ -1,5 +1,6 @@
 (function () {
     var util = {};
+    var clist = ['#5811b1', '#399bcd', '#0474bb', '#f8760d', '#a00c9e', '#0d762b', '#5f4c00', '#9a4f6d', '#d0990f', '#1b1390', '#028678', '#0324b1'];
 
     util.escapeHtml = function (str, noAmp) {
         if (!noAmp) {
@@ -122,7 +123,6 @@
     util.nameColor = function (src) {
         var getColor = sys.getColor(src);
         if (getColor === '#000000') {
-            var clist = ['#5811b1', '#399bcd', '#0474bb', '#f8760d', '#a00c9e', '#0d762b', '#5f4c00', '#9a4f6d', '#d0990f', '#1b1390', '#028678', '#0324b1'];
             return clist[src % clist.length];
         }
         return getColor;
@@ -254,7 +254,7 @@
     };
 
     util.nameIp = function (src) {
-        return "<b><span title='" + sys.ip(src) + "'>" + Utils.escapeHtml(sys.name(src)) + "</span></b>";
+        return "<b style='color: " + Utils.nameColor(src) + ";'><span title='" + sys.ip(src) + "'>" + Utils.escapeHtml(sys.name(src)) + "</span></b>";
     };
 
     // TODO: Remove these unused functions.
