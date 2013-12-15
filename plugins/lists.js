@@ -366,8 +366,10 @@ module.exports = {
 
         Lists.Auth = Auth;
         return Lists;
-    },
-    inject: function () {
-        Lists = module.exports.lists();
     }
+};
+
+module.reload = function () {
+    Lists = module.exports.lists();
+    return true;
 };

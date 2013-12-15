@@ -6,8 +6,8 @@
         try {
             this.data = JSON.parse(sys.getFileContent(file));
         } catch (e) {
-            print("Runtime Error: Could not find Reg.json");
-            sys.writeToFile("Reg.json", "{}");
+            print("Runtime Error: Could not find " + file);
+            sys.writeToFile(file, "{}");
         }
 
         this.save = function (key, value) {
@@ -69,11 +69,17 @@
         return new RegClass();
     };
     module.exports.RegClass = RegClass;
-    module.exports.inject = function (reloadAnyway) {
+    module.reload = function (reloadAnyway) {
         if (typeof Reg !== "undefined" && !reloadAnyway) {
-            return;
+            return false;
+        }
+
+        sys.appendToFile("Reg.json", "");
+        if (sys.getFileContent("Reg.json") === "") {
+            sys.writeToFile("Reg.json", "{}");
         }
 
         Reg = module.exports.Reg();
+        return true;
     };
 }());

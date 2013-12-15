@@ -23,8 +23,12 @@ module.exports = {
             return;
         }
 
+        if (message.substr(0, 16) === "[#Watch] ±Watch:") {
+            return sys.stopEvent();
+        }
+
         // Strip HTML. :]
-        if (stripHtmlFromChannelMessages && message.substring(0, 2) === "[#") {
+        if (Config.stripHtmlFromChannelMessages && message.substring(0, 2) === "[#") {
             sys.stopEvent();
             ignoreNextChanMsg = true;
             print(Utils.stripHtml(message));
@@ -79,7 +83,7 @@ module.exports = {
         if (src) {
             Utils.watch.notify(Utils.nameIp(src) + " created channel " + ChannelLink(cname) + ".");
         }
-        
+
         JSESSION.createChannel(channel);
     },
     beforeChannelDestroyed: function (channel) {
@@ -87,8 +91,8 @@ module.exports = {
             sys.stopEvent();
             return;
         }
-        
-        
+
+
         Utils.watch.notify("Channel " + ChannelLink(channel) + " was destroyed.");
         JSESSION.destroyChannel(channel);
     },
@@ -234,7 +238,7 @@ module.exports = {
                 sys.changeTier(src, sandCloak[i], "5th Gen Ubers");
             }
         }
-        
+
         for (var team = 0; team < sys.teamCount(src); team++) {
             if (!hasOneUsablePoke(src, team)) {
                 bot.sendMessage(src, "Sorry, you do not have a valid team for the " + sys.tier(src, team) + " tier.");
@@ -264,7 +268,7 @@ module.exports = {
             bot.sendMessage(src, "You have been placed into 'Challenge Cup.'");
             sys.changeTier(src, team, "Challenge Cup");
         }
-        
+
         var drizzleSwim = hasDrizzleSwim(src),
             i;
 
@@ -336,7 +340,7 @@ module.exports = {
             script.afterChatMessage(src, message, chan);
             return;
         }
-        
+
         var secondchar = message[1].toLowerCase();
         if ((message[0] === '/' || message[0] === '!') && message.length > 1 && secondchar >= 'a' && secondchar <= 'z') {
             print("[#" + sys.channel(chan) + "] Command -- " + sys.name(src) + ": " + message);
@@ -353,7 +357,7 @@ module.exports = {
             }
             var tar = sys.id(commandData);
 
-            var commands = Plugins('commands.js');
+            var commands = require('commands.js');
 
             try {
                 if (commands.can_use_command(src, command)) {
@@ -365,7 +369,7 @@ module.exports = {
                 return;
             }
         }
-        
+
         var originalMessage = message;
         var sentMessage = ((isOwner && !htmlchatoff) ? originalMessage : Utils.escapeHtml(originalMessage, true).replace(/&lt;_&lt;/g, "<_<").replace(/&gt;_&lt;/g, ">_<").replace(/&gt;_&gt;/g, ">_>").replace(/&lt;3/g, "<3")); // no amp
         var emotes = false;
@@ -427,7 +431,7 @@ module.exports = {
 
         sys.stopEvent();
         sys.sendHtmlAll(sendStr, chan);
-        
+
         if (chan !== watch) {
             Utils.watch.message(src, "Message", originalMessage, chan);
         }
@@ -450,7 +454,7 @@ module.exports = {
             aliasKick(sys.ip(src));
             return;
         }
-        
+
         for (var team = 0; team < sys.teamCount(src); team++) {
             if (!hasOneUsablePoke(src, team) && !challengeCupCheck(sys.tier(src, team))) {
                 bot.sendMessage(src, "Sorry, you do not have a valid team for the " + sys.tier(src, team) + " tier.");
@@ -458,7 +462,7 @@ module.exports = {
                 sys.changeTier(src, team, "Challenge Cup");
             }
         }
-        
+
         var drizzleSwim = hasDrizzleSwim(src),
             i;
 
@@ -539,7 +543,7 @@ module.exports = {
                 user.teamChanges -= 1;
             }
         }, 5 * 1000, false);
-        
+
         watchbot.sendAll(Utils.nameIp(src) + " changed teams.", watch);
     },
     beforePlayerKick: function (src, bpl) {
@@ -603,9 +607,9 @@ module.exports = {
                 return;
             }
         }*/
-        
+
         Utils.watch.notify(Utils.nameIp(src) + " challenged " + Utils.nameIp(dest) + ".");
-        
+
         if (tourmode === 2) {
             var name1 = sys.name(src);
             var name2 = sys.name(dest);
@@ -643,7 +647,7 @@ module.exports = {
                 sys.stopEvent();
             }
         }*/
-        
+
         Utils.watch.notify(Utils.nameIp(src) + " got matched up via Find Battle with " + Utils.nameIp(dest));
 
         if (tourmode === 2 && (script.isInTourney(sys.name(src)) || script.isInTourney(sys.name(dest)))) {
@@ -723,4 +727,8 @@ module.exports = {
             poUser.caps -= 1;
         }
     }
+};
+
+module.reload = function () {
+    return true;
 };

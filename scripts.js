@@ -30,110 +30,86 @@ var Config = {
 var GLOBAL = this;
 
 (function() {
-    var PluginHandler = GLOBAL.PluginHandler = {};
-    PluginHandler.plugins = {};
-    dir = Config.plugindir;
-
+    var dir = Config.plugindir;
     sys.makeDir(dir);
 
-    PluginHandler.load = function PluginHandler_load(plugin_name, webcall) {
+    require = function require(name, webcall, noCache) {
+        if ((name in require.cache) && !webcall && !noCache) {
+            return require.cache[name];
+        }
+
         var fileContent,
             resp;
 
         if (webcall) {
-            resp = sys.synchronousWebCall(Config.repourl + plugin_name);
-            sys.writeToFile(dir + plugin_name, resp);
+            resp = sys.synchronousWebCall(Config.repourl + name);
+            sys.writeToFile(dir + name, resp);
         }
 
-        fileContent = sys.getFileContent(dir + plugin_name);
+        fileContent = sys.getFileContent(dir + name);
 
         if (!fileContent) {
             return false;
         }
 
         var module = {
-            exports: {}
+            exports: {},
+            reload: function () { return false; },
+            name: name
         };
-
         var exports = module.exports;
+
         try {
-            eval(fileContent);
+            sys.eval(fileContent, dir + name);
         } catch (e) {
-            sys.sendAll("Error loading plugin " + plugin_name + ": " + e + " on line " + e.lineNumber);
+            sys.sendAll("Error loading module " + name + ": " + e + " on line " + e.lineNumber);
             return false;
         }
 
-        print("Loaded module " + plugin_name);
+        print("Loaded module " + name);
 
-        this.plugins[plugin_name] = module.exports;
-
-        if (module.callExports) {
-            module.exports();
-        }
-
+        require.cache[name] = module.exports;
+        require.meta[name] = module;
         return module.exports;
     };
 
-    PluginHandler.unload = function PluginHandler_unload(plugin_name) {
-        return (delete this.plugins[plugin_name]);
+    require.reload = function require_reload(name) {
+        require(name, false, false);
+        return require.meta[name].reload();
     };
 
-    PluginHandler.callplugins = function PluginHandler_callplugins(event) {
+    // Reset every reload
+    require.cache = {};
+    require.meta  = {};
+
+    require.callPlugins = function require_callPlugins(event) {
         var args = [].slice.call(arguments, 1);
-        var plugins = this.plugins,
-            plugin;
+        var plugins = this.meta,
+            plugin,
+            exports;
 
         for (plugin in plugins) {
-            if (plugins[plugin].hasOwnProperty(event)) {
+            exports = plugins[plugin].exports;
+            if (exports.hasOwnProperty(event)) {
                 try {
-                    plugins[plugin][event].apply(plugins[plugin], args);
-                } catch (e) {}
+                    exports[event].apply(exports, args);
+                } catch (e) {
+                    print("Plugin error (" + plugins[plugin].name + ") on line " + e.lineNumber + ": " + e);
+                }
             }
         }
     };
 
     var plugin,
-        plugin_name,
         i;
 
     for (i = 0; i < Config.plugins.length; i += 1) {
-        plugin = Config.plugins[i];
-        plugin_name = (plugin.indexOf(".") === -1) ? plugin + ".js" : plugin;
-        PluginHandler.load(plugin_name, Config.load_from_web);
+        plugin = Config.plugins[i] + ".js";
+        require(plugin, Config.load_from_web);
     }
 }());
 
-function Plugins(plugin_name) {
-    if (!PluginHandler.plugins.hasOwnProperty(plugin_name)) {
-        return null;
-    }
-
-    return PluginHandler.plugins[plugin_name];
-}
-
-function reloadPlugin(plugin_name) {
-    if (plugin_name === "init.js") {
-        script.init();
-    } else if (plugin_name === "lists.js") {
-        script.loadCommandLists();
-    } else if (plugin_name === "bot.js") {
-        script.loadBots();
-    } else if (plugin_name === "reg.js") {
-        script.loadRegHelper();
-    } else if (plugin_name === "emotes.js") {
-        Plugins('emotes.js')();
-
-        // We also have to reload the command lists,
-        // otherwise /emotes won't be updated
-        script.loadCommandLists();
-    } else if (plugin_name === "mathjs.js") {
-        mathjs = Plugins('mathjs.js')();
-    }
-}
-
-var ignoreNextChanMsg = false,
-    // Lookups are slow. Cache this as NewMessage is called many, many times.
-    stripHtmlFromChannelMessages = Config.stripHtmlFromChannelMessages;
+var ignoreNextChanMsg = false;
 
 function poUser(id) {
     var ip = sys.ip(id);
@@ -158,44 +134,50 @@ function poChannel(chanId) {
     this.bots = true;
 }
 
-JSESSION = Plugins('jsession.js');
+JSESSION = require('jsession.js');
 JSESSION.identifyScriptAs("Meteor Falls Script v0.8");
 JSESSION.registerUserFactory(poUser);
 JSESSION.registerChannelFactory(poChannel);
-JSESSION.refill();
 
 var poScript;
-
 poScript = ({
     serverStartUp: function serverStartUp() {
         script.startUpTime = +sys.time();
         script.init();
     },
     init: function init() {
-        Plugins('init.js').init();
-        Plugins('emotes.js')();
+        require.reload('utils.js');
+
+        require.reload('reg.js');
+        require.reload('bot.js');
+        require.reload('feedmon.js');
+
+        require.reload('init.js');
+
+        require.reload('emotes.js');
+        require.reload('lists.js');
     },
     warning: function warning(func, message, backtrace) {
-        PluginHandler.callplugins("warning", func, message, backtrace);
+        require.callPlugins("warning", func, message, backtrace);
     },
     beforeNewMessage: function beforeNewMessage(message) {
-        PluginHandler.callplugins("beforeNewMessage", message);
+        require.callPlugins("beforeNewMessage", message);
     },
 
     afterNewMessage: function afterNewMessage(message) {
-        PluginHandler.callplugins("afterNewMessage", message);
+        require.callPlugins("afterNewMessage", message);
     },
 
     beforeServerMessage: function (message) {
-        PluginHandler.callplugins("beforeServerMessage", message);
+        require.callPlugins("beforeServerMessage", message);
     },
 
     beforeChannelJoin: function beforeChannelJoin(src, channel) {
-        PluginHandler.callplugins("beforeChannelJoin", src, channel);
+        require.callPlugins("beforeChannelJoin", src, channel);
     },
 
     beforeChannelDestroyed: function beforeChannelDestroyed(channel) {
-        PluginHandler.callplugins("beforeChannelDestroyed", channel);
+        require.callPlugins("beforeChannelDestroyed", channel);
     },
 
     megauserCheck: function megauserCheck(src) {
@@ -207,52 +189,52 @@ poScript = ({
     },
 
     afterChannelJoin: function afterChannelJoin(src, chan) {
-        PluginHandler.callplugins("afterChannelJoin", src, chan);
+        require.callPlugins("afterChannelJoin", src, chan);
     },
 
     beforeLogIn: function beforeLogIn(src) {
-        PluginHandler.callplugins("beforeLogIn", src);
+        require.callPlugins("beforeLogIn", src);
     },
     afterLogIn: function afterLogIn(src, defaultChan) {
-        PluginHandler.callplugins("afterLogIn", src, defaultChan);
+        require.callPlugins("afterLogIn", src, defaultChan);
     },
     beforeChangeTier: function(src, team, oldtier, newtier) {
-        PluginHandler.callplugins("beforeChangeTier", src, team, oldtier, newtier);
+        require.callPlugins("beforeChangeTier", src, team, oldtier, newtier);
     },
 
     beforeChangeTeam: function beforeChangeTeam(src) {
-        PluginHandler.callplugins("beforeChangeTeam", src);
+        require.callPlugins("beforeChangeTeam", src);
     },
 
     beforeChatMessage: function beforeChatMessage(src, message, chan) {
-        PluginHandler.callplugins("beforeChatMessage", src, message, chan);
+        require.callPlugins("beforeChatMessage", src, message, chan);
     },
 
     beforeLogOut: function beforeLogOut(src) {
-        PluginHandler.callplugins("beforeLogOut", src);
+        require.callPlugins("beforeLogOut", src);
     },
 
     afterChangeTeam: function afterChangeTeam(src) {
-        PluginHandler.callplugins("afterChangeTeam", src);
+        require.callPlugins("afterChangeTeam", src);
     },
 
     beforePlayerKick: function beforePlayerKick(src, bpl) {
-        PluginHandler.callplugins("beforePlayerKick", src, bpl);
+        require.callPlugins("beforePlayerKick", src, bpl);
     },
 
     beforePlayerBan: function beforePlayerBan(src, bpl, time) {
-        PluginHandler.callplugins("beforePlayerBan", src, bpl, time);
+        require.callPlugins("beforePlayerBan", src, bpl, time);
     },
 
     beforeChallengeIssued: function beforeChallengeIssued(src, dest) {
-        PluginHandler.callplugins("beforeChallengeIssued", src, dest);
+        require.callPlugins("beforeChallengeIssued", src, dest);
     },
 
     afterPlayerAway: function afterPlayerAway(src, mode) {
     },
 
     beforeBattleMatchup: function beforeBattleMatchup(src, dest, clauses, rated, mode, team1, team2) {
-        PluginHandler.callplugins("beforeBattleMatchup", src, dest, clauses, rated, mode, team1, team2);
+        require.callPlugins("beforeBattleMatchup", src, dest, clauses, rated, mode, team1, team2);
     },
 
     tourSpots: function tourSpots() {
@@ -347,7 +329,7 @@ poScript = ({
     },
 
     afterChatMessage: function afterChatMessage(src, message, chan) {
-        PluginHandler.callplugins("afterChatMessage", src, message, chan);
+        require.callPlugins("afterChatMessage", src, message, chan);
     },
 
     beforePlayerRegister: function (src) {
@@ -405,17 +387,5 @@ poScript = ({
         }
 
         return false;
-    },
-
-    loadRegHelper: function loadRegHelper(reloadAnyway) {
-        Plugins('reg.js').inject(reloadAnyway);
-    },
-
-    loadBots: function loadBots() {
-        Plugins('bot.js').inject();
-    },
-
-    loadCommandLists: function loadCommandLists() {
-        Plugins('lists.js').inject();
     }
 });

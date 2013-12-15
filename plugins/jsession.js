@@ -215,4 +215,8 @@
 
     // export jSession
     module.exports = jSession;
+    module.reload = function () {
+        jSession.clearAll();
+        return true;
+    };
 }());

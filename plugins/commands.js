@@ -2431,18 +2431,27 @@ addCommand(3, "update", function (src, command, commandData, tar, chan) {
 
             try {
                 sys.writeToFile(Config.plugindir + plugin, resp);
-                PluginHandler.load(plugin, false);
-                reloadPlugin(plugin);
+                require(plugin, false, false);
+                if (!require.reload(plugin)) {
+                    bot.sendMessage(src, "Plugin refused to reload.", chan);
+                    Utils.watch.notify("Plugin refused to reload.");
+                }
 
                 bot.sendMessage(src, "Plugin " + plugin + " updated!", chan);
                 Utils.watch.notify("Plugin " + plugin + " updated.");
             } catch (ex) {
-                bot.sendMessage(src, "Couldn't upldate plugin " + plugin + ": " + ex.toString() + " on line " + ex.lineNumber + " :(", chan);
-                Utils.watch.notify("Couldn't upldate plugin " + plugin + ": " + ex.toString() + " on line " + ex.lineNumber + " :(");
+                bot.sendMessage(src, "Couldn't update plugin " + plugin + ": " + ex.toString() + " on line " + ex.lineNumber + " :(", chan);
+                Utils.watch.notify("Couldn't update plugin " + plugin + ": " + ex.toString() + " on line " + ex.lineNumber + " :(");
             }
         });
     }
 }, addCommand.flags.MAINTAINERS);
+
+addCommand(3, "init", function (src, command, commandData, tar, chan) {
+    script.init();
+    bot.sendMessage(src, "Init was called successfully.", chan);
+}, addCommand.flags.MAINTAINERS);
+
 addCommand(3, ["webcall", "updatescript"], function (src, command, commandData, tar, chan) {
     sys.sendHtmlAll('<font color=blue><timestamp/><b>±ScriptBot: </b></font>The scripts were webcalled by ' + sys.name(src) + '!', 0);
     if (!commandData) {
@@ -2655,4 +2664,8 @@ module.exports = {
             );
         }
     }
+};
+
+module.reload = function () {
+    return true;
 };

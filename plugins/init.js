@@ -1,6 +1,6 @@
-// NOTE: New global functions should go in utils.js, old ones should slowly be ported over.
+// NOTE: New functions should go in utils.js, old ones should slowly be ported over.
 module.exports = {
-    init: function () {
+    init: function init() {
         String.prototype.format = function () {
             var str = this;
             var exp, i, args = arguments.length,
@@ -45,14 +45,6 @@ module.exports = {
         String.prototype.scramble = function () {
             return Utils.fisheryates(this.split("")).join("");
         };
-
-        sys.appendToFile("Reg.json", "");
-        if (sys.getFileContent("Reg.json") === "") {
-            sys.writeToFile("Reg.json", "{}");
-        }
-
-        script.loadRegHelper();
-        script.loadBots();
 
         var configFile = sys.getFileContent("config").split("\n"),
             x,
@@ -389,7 +381,7 @@ module.exports = {
             }
         }
 
-        MathJS = Plugins('mathjs.js');
+        MathJS = require('mathjs.js');
 
         Reg.init('MOTD', '');
         Reg.init('maxPlayersOnline', 0);
@@ -533,8 +525,6 @@ module.exports = {
             return str.replace(/([.?*+\^$\[\]\\(){}|\-])/g, "\\$1");
         };
 
-        script.loadCommandLists();
-
         nthNumber = function (num) {
             var nthNum = {
                 0: "th",
@@ -671,4 +661,9 @@ module.exports = {
             reconnectTrolls = {};
         }
     }
+};
+
+module.reload = function reloadInit() {
+    module.exports.init();
+    return true;
 };
