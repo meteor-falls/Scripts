@@ -541,7 +541,6 @@ module.exports = {
             bot.sendMessage(src, "You may not kick this person!");
             return;
         } else {
-            watchbot.sendAll(Utils.nameIp(src) + " kicked " + Utils.nameIp(bpl) + ".", watch);
             var theirmessage = Kickmsgs[sys.name(src).toLowerCase()];
             var msg = (theirmessage) ? theirmessage.message : "<font color=navy><timestamp/><b>" + sys.name(src) + " kicked " + Utils.escapeHtml(sys.name(bpl)) + "!</font></b>";
             if (theirmessage) {
@@ -566,8 +565,6 @@ module.exports = {
         if (banMessage) {
             banMessage = banMessage.replace(/\{Target\}/gi, targetName);
         }
-
-        watchbot.sendAll(Utils.nameIp(src) + " banned " + Utils.nameIp(src) + "!", watch);
 
         if (time) {
             // Temporary ban.
