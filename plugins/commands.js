@@ -352,19 +352,7 @@ addCommand(0, "vote", function (src, command, commandData, tar, chan) {
         return bot.sendMessage(src, "There is no poll right now.", chan);
     }
 
-    var lc = commandData.toLowerCase();
-    var option;
-    if (lc === "yes") {
-        option = 0;
-    } else if (lc === "no") {
-        option = 1;
-    } else {
-        option = parseInt(commandData, 10) - 1;
-    }
-
-    if (isNaN(option)) {
-        return bot.sendMessage(src, "Sorry, you must specify `yes` or `no`.", chan);
-    }
+    var option = parseInt(commandData, 10) - 1;
     if (!Poll.options[option]) {
         return bot.sendMessage(src, "There is no such option as " + (option + 1) + " available.", chan);
     }
