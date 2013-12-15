@@ -1653,37 +1653,40 @@ addCommand(1, "closepoll", function (src, command, commandData, tar, chan) {
         return bot.sendMessage(src, "There isn't a poll. Start one with /poll [subject]:[option1]*[option..].", chan);
     }
 
-    var results = {}, choice, i, total, winner, most = 0;
-    for (i in Poll.votes) {
-        choice = Poll.votes[i];
-        if (!(choice in results)) {
-            results[choice] = 1;
-        } else {
-            results[choice] += 1;
-        }
-
-        if (results[choice] > most) {
-            winner = choice;
-            most = results[choice];
-        }
-    }
-
     var self = sys.name(src);
-    var msgs = {};
     bot.sendAll(self + " closed the poll (started by " + Poll.by + ")!", chan);
-    bot.sendAll("'" + Poll.subject + "' - Results:", chan);
-    for (i in results) {
-        msgs[i] = "Option #" + (parseInt(i, 10) + 1) + " (" + Poll.options[i] + "): " + results[i] + " vote" + (results[i] === 1 ? '' : 's');
-    }
 
-    for (i = 0, total = Poll.options.length; i < total; i += 1) {
-        if (msgs[i]) {
-            bot.sendAll(msgs[i], chan);
+    if (Object.keys(Poll.votes).length !== 0) {
+        var results = {}, msgs = {}, choice, i, total, winner, most = 0;
+        for (i in Poll.votes) {
+            choice = Poll.votes[i];
+            if (!(choice in results)) {
+                results[choice] = 1;
+            } else {
+                results[choice] += 1;
+            }
+
+            if (results[choice] > most) {
+                winner = choice;
+                most = results[choice];
+            }
         }
-    }
 
-    sys.sendAll("", chan);
-    bot.sendAll("Winner: Option #" + (winner + 1) + " (" + Poll.options[winner] + ") with " + results[winner] + " vote" + (results.winner === 1 ? '' : 's') + ".", chan);
+        for (i in results) {
+            msgs[i] = "Option #" + (parseInt(i, 10) + 1) + " (" + Poll.options[i] + "): " + results[i] + " vote" + (results[i] === 1 ? '' : 's');
+        }
+
+        bot.sendAll("'" + Poll.subject + "' - Results:", chan);
+
+        for (i = 0, total = Poll.options.length; i < total; i += 1) {
+            if (msgs[i]) {
+                bot.sendAll(msgs[i], chan);
+            }
+        }
+
+        sys.sendAll("", chan);
+        bot.sendAll("Winner: Option #" + (winner + 1) + " (" + Poll.options[winner] + ") with " + results[winner] + " vote" + (results.winner === 1 ? '' : 's') + ".", chan);
+    }
 
     Poll.active = false;
     Poll.subject = '';
