@@ -216,7 +216,10 @@
     // export jSession
     module.exports = jSession;
     module.reload = function () {
-        jSession.clearAll();
+        userData = {};
+        channelData = {};
+        globalData = {};
+        jSession.refill();
         return true;
     };
 }());
