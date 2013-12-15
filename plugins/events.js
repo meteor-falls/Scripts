@@ -131,11 +131,10 @@ module.exports = {
                     return;
                 }
             }
-        }
-
-        if (Utils.hasIllegalChars(sys.name(src))) {
-            sys.stopEvent();
-            return;
+            if (Utils.hasIllegalChars(sys.name(src))) {
+                sys.stopEvent();
+                return;
+            }
         }
 
         if (sys.name(src) === "[VP]Blade") {
@@ -552,7 +551,7 @@ module.exports = {
             bot.sendMessage(src, "You may not kick this person!");
             return;
         } else {
-            var theirmessage = Kickmsgs[sys.name(src).toLowerCase()];
+            var theirmessage = Kickmsgs[Utils.realName(src)];
             var msg = (theirmessage) ? theirmessage.message : "<font color=navy><timestamp/><b>" + sys.name(src) + " kicked " + Utils.escapeHtml(sys.name(bpl)) + "!</font></b>";
             if (theirmessage) {
                 msg = msg.replace(/\{Target\}/gi, sys.name(bpl));
@@ -571,7 +570,7 @@ module.exports = {
 
         var targetName = sys.name(bpl);
 
-        var banMessage = Banmsgs[sys.name(src).toLowerCase()];
+        var banMessage = Banmsgs[Utils.realName(src)];
 
         if (banMessage) {
             banMessage = banMessage.replace(/\{Target\}/gi, targetName);

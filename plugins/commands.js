@@ -2136,7 +2136,7 @@ addCommand(1, "warn", function (src, command, commandData, _, chan) {
     warning.strike += 1;
     switch (warning.strike) {
         case 1:
-            script.beforeChatMessage(src, "@" + tarname + ": You've received a warning: " + msg, chan);
+            script.beforeChatMessage(src, tarname + ": You've received a warning: " + msg, chan);
             script.beforeChatMessage(src, "Further infraction of the rules may result in a kick, mute, or ban.", chan);
             break;
         case 2:

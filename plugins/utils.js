@@ -324,6 +324,10 @@ module.exports = function () {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
 
+    util.realName = function (src) {
+        return JSESSION.users(src).originalName || sys.name(src);
+    };
+
     util.uptime = function () {
         var uptime = script.startUpTime;
 
