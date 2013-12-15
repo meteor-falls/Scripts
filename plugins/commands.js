@@ -1,21 +1,20 @@
 var commands = {};
 var disabledCmds = [];
-function addCommand(authLevel, name, callback, specialPerms) {
+function addCommand(authLevel, name, callback, flags) {
     // Proper checks
     if (typeof authLevel !== "number") {
+        print("Error: command " + name + " doesn't have a minimum authlevel.");
         return;
     }
 
     if ((typeof name !== "string") && (typeof name !== "object")) {
+        print("Error: unknown command without name.");
         return;
     }
 
     if (typeof callback !== "function") {
+        print("Error: command " + name + " doesn't have a callback.");
         return;
-    }
-
-    if (!specialPerms || typeof specialPerms !== "object") {
-        specialPerms = [];
     }
 
     var names = [].concat(name),
@@ -26,10 +25,15 @@ function addCommand(authLevel, name, callback, specialPerms) {
         commands[names[i]] = {
             'authLevel': authLevel,
             'callback': callback,
-            'specialPerms': specialPerms
+            'flags': flags || 0
         };
     }
 }
+
+addCommands.flags = {
+    MAINTAINERS: 1
+};
+
 
 /** USER COMMANDS */
 
@@ -2438,7 +2442,7 @@ addCommand(3, "update", function (src, command, commandData, tar, chan) {
             }
         });
     }
-});
+}, addCommands.flags.MAINTAINERS);
 addCommand(3, ["webcall", "updatescript"], function (src, command, commandData, tar, chan) {
     sys.sendHtmlAll('<font color=blue><timestamp/><b>±ScriptBot: </b></font>The scripts were webcalled by ' + sys.name(src) + '!', 0);
     if (!commandData) {
@@ -2456,7 +2460,7 @@ addCommand(3, ["webcall", "updatescript"], function (src, command, commandData, 
             bot.sendMessage(src, "The error was " + e + " on line " + e.lineNumber, chan);
         }
     });
-});
+}, addCommands.flags.MAINTAINERS);
 addCommand(3, ["updatetiers"], function (src, command, commandData, tar, chan) {
     if (!commandData || (commandData.substr(0, 7) !== 'http://' && commandData.substr(0, 8) !== 'https://')) {
         commandData = Config.dataurl + "tiers.xml";
@@ -2471,7 +2475,7 @@ addCommand(3, ["updatetiers"], function (src, command, commandData, tar, chan) {
             return;
         }
     });
-});
+}, addCommands.flags.MAINTAINERS);
 addCommand(3, ["testann", "updateann"], function (src, command, commandData, tar, chan) {
     if (!commandData || (commandData.substr(0, 7) !== 'http://' && commandData.substr(0, 8) !== 'https://')) {
         commandData = Config.dataurl + "announcement.html";
@@ -2491,7 +2495,7 @@ addCommand(3, ["testann", "updateann"], function (src, command, commandData, tar
             sys.changeAnnouncement(resp);
         }
     });
-});
+}, addCommands.flags.MAINTAINERS);
 addCommand(3, ["toggleemotes"], function (src, command, commandData, tar, chan) {
     Config.emotesEnabled = !Config.emotesEnabled;
     bot.sendAll("Emotes were " + (Config.emotesEnabled ? "enabled!" : "disabled."), chan);
@@ -2616,6 +2620,11 @@ module.exports = {
         if (disabledCmds.indexOf(command.toLowerCase()) > -1 && srcauth < 3) {
             throw "The command " + command + " has been disabled.";
         }
+
+        if ((cmd.flags & addCommand.flags.MAINTAINERS) && Config.maintainers.indexOf(name) !== -1) {
+            return true;
+        }
+
         if (cmd.authLevel && cmd.authLevel > srcauth) {
             throw "You need to be a higher auth to use this command.";
         }

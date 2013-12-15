@@ -5,10 +5,11 @@
 
 var Config = {
     // Configuration for the script.
+    maintainers: ['[VP]Blade', 'Ethan', 'TheUnknownOne'],
 
-     // Repo to load plugins from.
+    // Repo to load plugins from.
     repourl: "https://raw.github.com/meteor-falls/Scripts/master/plugins/",
-     // Repo to load data (announcement/description + tiers) from.
+    // Repo to load data (announcement/description + tiers) from.
     dataurl: "https://raw.github.com/meteor-falls/Server-Shit/master/",
 
     // Plugin directory.
