@@ -156,6 +156,8 @@ poScript = ({
 
         require.reload('emotes.js');
         require.reload('lists.js');
+
+        MathJS = require('mathjs.js');
     },
     warning: function warning(func, message, backtrace) {
         require.callPlugins("warning", func, message, backtrace);

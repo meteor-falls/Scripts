@@ -361,6 +361,9 @@ module.exports = {
             colormode: false,
             pewpewpew: false,
             nightclub: false,
+            warnings: {},
+            teamSpammers: {},
+            reconnectTrolls: {},
             uniqueVisitors: {
                 ips: {},
                 count: 0,
@@ -380,8 +383,6 @@ module.exports = {
                 global[i] = globalVars[i];
             }
         }
-
-        MathJS = require('mathjs.js');
 
         Reg.init('MOTD', '');
         Reg.init('maxPlayersOnline', 0);
@@ -653,13 +654,6 @@ module.exports = {
 
             return 5;
         };
-
-        if (typeof teamSpammers === 'undefined') {
-            teamSpammers = {};
-        }
-        if (typeof reconnectTrolls === 'undefined') {
-            reconnectTrolls = {};
-        }
     }
 };
 

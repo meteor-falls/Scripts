@@ -268,16 +268,14 @@ module.exports = {
         /** MODERATOR COMMANDS **/
         var Mod = new CommandList("Moderator Commands", "navy");
         Mod.add("changetopic <font color=red><b>[channel]</b></font>:<font color=red><b>[topic]</b></font>", "To change the topic of the channel [channel] to [topic].");
-        Mod.add("wall <font color=red><b>[text]</b></font>", "To post [text] with borders around it. [appears in all channels]");
-        Mod.add("cwall <font color=red><b>[text]</b></font>", "To post [text] with borders around it. [only appears in channel command used in]");
-        Mod.add("addautoidle <font color=red>[name]</font>", "To add [name] to the auto idle list");
-        Mod.add("removeautoidle <font color=red>[name]</font>", "To remove [name] from the auto idle list.");
-        Mod.add("addfloodignore <font color=red><b>[name]</b></font>", "To add [name] to the flood ignore list.");
-        Mod.add("removefloodignore <font color=red><b>[name]</b></font>", "To remove [name] from the flood ignore list.");
+        Mod.add("[c]wall <font color=red><b>[text]</b></font>", "To post [text] with borders around it. [c makes it so it only appears in the channel it's used in]");
+        Mod.add("[add/remove]autoidle <font color=red>[name]</font>", "To add/remove [name] to the auto idle list");
+        Mod.add("[add/remove]floodignore <font color=red><b>[name]</b></font>", "To add/remove [name] to the flood ignore list.");
         Mod.add("emoteperms <font color=red><b>[name]</b></font>", "To add/remove [name] from the emote permission list.");
         Mod.add("imp <font color=red><b>[name]</b></font>", "To change your name to [name].");
         Mod.add("motd <font color=red><b>[message]</b></font>", "To change the Message of the Day to [message].");
         Mod.add("roulette <font color='red'><b>&lt;type1, type2&gt;</b></font>", "To start or end a roulette (/spin) game. Types can include: pokemons, items, emotes, avatars. By default, all 4 are enabled.");
+        Mod.add("forcerules <font color=red><b>[player]</b></font>", "To show the rules to [player].");
         Mod.add("info <font color=red><b>[player]</b></font>", "To view info about [player].");
         Mod.add("sendall <font color=red><b>[message]</b></font>", "To send a message to everyone.");
         Mod.add("sendhtmlall <font color=red><b>[message]</b></font>", "To send a HTML message to everyone.");
@@ -288,7 +286,6 @@ module.exports = {
         Mod.add("partycommands", "To display a list of party commands.");
         Mod.add("silence", "To silence all users.");
         Mod.add("unsilence", "To cancel the silence.");
-        Mod.add("silenceoff", "Same as unsilence.");
         Mod.add("public", "To make the server public.");
         Mod.add("poll <font color=red><b>[subject]</b></font>:<font color=red><b>[option1]*[option2]*[option..]</b></font>", "To start a poll. You must specify at least 2 options.");
         Mod.add("closepoll", "To close the poll.");
@@ -340,7 +337,6 @@ module.exports = {
         Admin.add("unssilence", "To cancel the super silence.");
         Admin.add("ssilenceoff", "Same as unssilence.");
         Admin.add("showteam <font color=red><b>[player]</b></font>", "To view a player's team.");
-        Admin.add("forcerules <font color=red><b>[player]</b></font>", "To show the rules to [player].");
         Admin.add("megauser <font color=red><b>[player]</b></font>", "To make [player] a megauser.");
         Admin.add("megauseroff <font color=red><b>[player]</b></font>", "To remove [player]'s megauser.");
         Admin.add("private", "To make the server private.");

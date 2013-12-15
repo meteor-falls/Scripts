@@ -2113,6 +2113,16 @@ addCommand(1, "enable", function (src, command, commandData, tar, chan) {
     bot.sendAll(sys.name(src) + " re-enabled /" + cmdToLower + "!");
 });
 
+addCommand(1, "forcerules", function (src, command, commandData, tar, chan) {
+    if (!tar) {
+        bot.sendMessage(src, "Must force rules to a real person!", chan);
+        return;
+    }
+    bot.sendMessage(tar, Utils.escapeHtml(sys.name(src)) + " has forced the rules to you!");
+    Lists.Rules.display(tar, chan);
+    bot.sendMessage(src, "You have forced " + sys.name(tar) + " to read the rules!", chan);
+});
+
 /** ADMIN COMMANDS */
 addCommand(2, "admincommands", function (src, command, commandData, tar, chan) {
     Lists.Admin.display(src, chan);
@@ -2340,15 +2350,6 @@ addCommand(2, "showteam", function (src, command, commandData, tar, chan) {
     } else {
         bot.sendMessage(src, "That person doesn't have a valid team.", chan);
     }
-});
-addCommand(2, "forcerules", function (src, command, commandData, tar, chan) {
-    if (!tar) {
-        bot.sendMessage(src, "Must force rules to a real person!", chan);
-        return;
-    }
-    bot.sendMessage(tar, Utils.escapeHtml(sys.name(src)) + " has forced the rules to you!");
-    Lists.Rules.display(tar, chan);
-    bot.sendMessage(src, "You have forced " + sys.name(tar) + " to read the rules!", chan);
 });
 addCommand(2, ["ban", "sban"], function (src, command, commandData, tar, chan) {
     if (!sys.dbIp(commandData)) {
