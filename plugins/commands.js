@@ -1836,26 +1836,6 @@ addCommand(1, "public", function (src, command, commandData, tar, chan) {
     sys.sendAll('~~Server~~: The server was made public by ' + sys.name(src) + '.');
     sys.makeServerPublic(true);
 });
-addCommand(1, ["warn", "warning"], function (src, command, commandData, tar, chan) {
-    var parts = commandData.split(":"),
-        player = parts[0],
-        mess = parts[1],
-        playerId = sys.id(player);
-
-    if (!playerId) {
-        bot.sendMessage(src, "That player isn't online.", chan);
-        return;
-    }
-
-    if (!mess) {
-        bot.sendMessage(src, "Please specify a reason.", chan);
-        return;
-    }
-
-    bot.sendMessage(src, "Warning sent.", chan);
-    sys.sendHtmlMessage(playerId, "<font color=red><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + " warned you!", 0);
-    sys.sendHtmlMessage(playerId, "<font color=green><timestamp/><b>Reason:</b></font> " + Utils.escapeHtml(Utils.cut(parts, 1, ':')), 0);
-});
 
 addCommand(1, ["tempban", "tb"], function (src, command, commandData, tar, chan) {
     var t = commandData.split(':'),
@@ -2111,6 +2091,59 @@ addCommand(1, "enable", function (src, command, commandData, tar, chan) {
     }
     disabledCmds.splice(disabledCmds.indexOf(cmdToLower), 1);
     bot.sendAll(sys.name(src) + " re-enabled /" + cmdToLower + "!");
+});
+
+addCommand(1, "warn", function (src, command, commandData, _, chan) {
+    var parts = commandData.split(':'), tar = sys.id(parts[0]), msg = parts[1];
+    if (!tar) {
+        bot.sendMessage(src, "You have to specify a target!", chan);
+        return;
+    }
+
+    if (sys.auth(tar) > 0) {
+        bot.sendMessage(src, "Can't warn auth.", chan);
+        return;
+    }
+
+    var tarname = sys.name(tar);
+    var warning = warnings[tarname];
+
+    if (!msg && !warning) {
+        bot.sendMessage(src, "Specify a reason!", chan);
+        return;
+    }
+
+    if (msg === "undo") {
+        if (warning) {
+            delete warnings[tarname];
+            bot.sendMessage(src, tarname + "'s warning is now void!", chan);
+            return;
+        } else {
+            return bot.sendMessage(src, tarname + " doesn't have any warnings yet.", chan);
+        }
+    }
+
+    if (!warning) {
+        warning = warnings[tarname] = {
+            strike: 0,
+            reason: msg
+        };
+    }
+
+    warning.strike += 1;
+    switch (warning.strike) {
+        case 1:
+            script.beforeChatMessage(src, "@" + tarname + ": You've received a warning: " + msg, chan);
+            script.beforeChatMessage(src, "Further infraction of the rules may result in a kick, mute, or ban.", chan);
+            break;
+        case 2:
+            commands["kick"].callback.call({myAuth: this.myAuth}, src, "kick", parts[0] + ":" + warning.reason + ". You have been warned.", tar, chan);
+            break;
+        case 3:
+            commands["mute"].callback.call({myAuth: this.myAuth}, src, "mute", parts[0] + ":5:minutes:" + warning.reason + ". You have been warned.", tar, chan);
+            delete warnings[tarname];
+            break;
+    }
 });
 
 addCommand(1, "forcerules", function (src, command, commandData, tar, chan) {
