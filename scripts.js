@@ -138,6 +138,7 @@ JSESSION = require('jsession.js');
 JSESSION.identifyScriptAs("Meteor Falls Script v0.8");
 JSESSION.registerUserFactory(poUser);
 JSESSION.registerChannelFactory(poChannel);
+JSESSION.refill();
 
 var poScript;
 poScript = ({
