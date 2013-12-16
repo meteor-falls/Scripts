@@ -382,8 +382,7 @@ module.exports = {
             }
             sentMessage = sentMessage.replace(/<_</g, "&lt;_&lt;").replace(/>_</g, "&gt;_&lt;").replace(/<3/g, "&lt;3");
         }
-
-        message = Utils.htmllinks(sentMessage);
+        message = sentMessage;
 
         if (!emotes) {
             if (lolmode) {
