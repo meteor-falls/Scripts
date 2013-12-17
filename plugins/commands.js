@@ -2552,7 +2552,7 @@ addCommand(3, "bots", function (src, command, commandData, tar, chan) {
     bot.sendAll(sys.name(src) + " turned bots " + word + " in this channel!", chan);
 });
 addCommand(3, "leaguemanager", function (src, command, commandData, tar, chan) {
-   if(tar == undefined && sys.dbIp(commandData) != undefined) { 
+   if(tar == undefined) { 
     bot.sendAll(commandData + " is now the league manager!");
     Reg.save("Leaguemanager", commandData.toLowerCase());
     Leaguemanager = commandData.toLowerCase();
