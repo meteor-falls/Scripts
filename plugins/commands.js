@@ -2488,6 +2488,7 @@ addCommand(3, ["webcall", "updatescript"], function (src, command, commandData, 
     }
     sys.webCall(commandData, function (resp) {
         try {
+            FULLRELOAD = true;
             sys.changeScript(resp);
             var oldContent = sys.getFileContent("scripts.js");
             sys.writeToFile("scripts.js", resp);

@@ -215,6 +215,7 @@
 
     // export jSession
     module.exports = jSession;
+    module.preferCache = true;
     module.reload = function () {
         userData = {};
         channelData = {};

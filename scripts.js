@@ -34,7 +34,7 @@ var GLOBAL = this;
     sys.makeDir(dir);
 
     require = function require(name, webcall, noCache) {
-        if ((name in require.cache) && !webcall && !noCache) {
+        if ((name in require.cache) && !webcall && (require.meta[name] ? (!require.meta[name].preferCache && !noCache) : !noCache)) {
             return require.cache[name];
         }
 
@@ -78,9 +78,12 @@ var GLOBAL = this;
         return require.meta[name].reload();
     };
 
-    // Reset every reload
-    require.cache = {};
-    require.meta  = {};
+    if (typeof require.cache === 'undefined' || FULLRELOAD) {
+        require.cache = {};
+        require.meta  = {};
+    }
+
+    FULLRELOAD = false;
 
     require.callPlugins = function require_callPlugins(event) {
         var args = [].slice.call(arguments, 1);
