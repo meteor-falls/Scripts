@@ -2460,27 +2460,19 @@ addCommand(3, "update", function (src, command, commandData, tar, chan) {
 
         bot.sendMessage(src, "Updating plugin " + plugin + "...", chan);
         Utils.watch.notify("Updating plugin " + plugin + "...");
-        sys.webCall(Config.repourl + plugin, function (resp) {
-            if (resp === "" || resp.length < 1) {
-                bot.sendMessage(src, "Couldn't update plugin " + plugin + ": no response from server.", chan);
-                return;
+        try {
+            require(plugin, true, false);
+            if (!require.reload(plugin)) {
+                bot.sendMessage(src, "Plugin " + plugin + " refused to reload.", chan);
+                Utils.watch.notify("Plugin " + plugin + " refused to reload.");
             }
 
-            try {
-                sys.writeToFile(Config.plugindir + plugin, resp);
-                require(plugin, false, false);
-                if (!require.reload(plugin)) {
-                    bot.sendMessage(src, "Plugin " + plugin + " refused to reload.", chan);
-                    Utils.watch.notify("Plugin " + plugin + " refused to reload.");
-                }
-
-                bot.sendMessage(src, "Plugin " + plugin + " updated!", chan);
-                Utils.watch.notify("Plugin " + plugin + " updated.");
-            } catch (ex) {
-                bot.sendMessage(src, "Couldn't update plugin " + plugin + ": " + ex.toString() + " on line " + ex.lineNumber + " :(", chan);
-                Utils.watch.notify("Couldn't update plugin " + plugin + ": " + ex.toString() + " on line " + ex.lineNumber + " :(");
-            }
-        });
+            bot.sendMessage(src, "Plugin " + plugin + " updated!", chan);
+            Utils.watch.notify("Plugin " + plugin + " updated.");
+        } catch (ex) {
+            bot.sendMessage(src, "Couldn't update plugin " + plugin + ": " + ex.toString() + " on line " + ex.lineNumber + " :(", chan);
+            Utils.watch.notify("Couldn't update plugin " + plugin + ": " + ex.toString() + " on line " + ex.lineNumber + " :(");
+        }
     }
 }, addCommand.flags.MAINTAINERS);
 
@@ -2552,7 +2544,7 @@ addCommand(3, "bots", function (src, command, commandData, tar, chan) {
     bot.sendAll(sys.name(src) + " turned bots " + word + " in this channel!", chan);
 });
 addCommand(3, "leaguemanager", function (src, command, commandData, tar, chan) {
-   if(tar == undefined) { 
+   if(tar == undefined) {
     bot.sendAll(commandData + " is now the league manager!");
     Reg.save("Leaguemanager", commandData.toLowerCase());
     Leaguemanager = commandData.toLowerCase();
