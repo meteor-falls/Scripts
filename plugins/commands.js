@@ -2500,6 +2500,12 @@ addCommand(3, ["webcall", "updatescript"], function (src, command, commandData, 
         }
     });
 }, addCommand.flags.MAINTAINERS);
+
+addCommand(3, "jsessionrefill", function (src, command, commandData, tar, chan) {
+    JSESSION.refill();
+    bot.sendMessage(src, "Done.", chan);
+}, addCommand.flags.MAINTAINERS);
+
 addCommand(3, ["updatetiers"], function (src, command, commandData, tar, chan) {
     if (!commandData || (commandData.substr(0, 7) !== 'http://' && commandData.substr(0, 8) !== 'https://')) {
         commandData = Config.dataurl + "tiers.xml";
