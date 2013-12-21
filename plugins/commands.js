@@ -36,48 +36,35 @@
     };
 
     // Shorthands
-    function addListCommand(auth, names, listname, flags) {
+    function addListCommand(auth, names, listname, cb, flags) {
         addCommand(auth, names, function (src, command, commandData, tar, chan) {
+            if (cb) {
+                if (!cb.call(this, src, command, commandData, tar, chan)) {
+                    return;
+                }
+            }
+
             Lists[listname].display(src, chan);
         }, flags);
     }
 
     /** USER COMMANDS */
-
-    addCommand(0, "commands", function (src, command, commandData, tar, chan) {
-        Lists.Commands.display(src, chan);
-    });
-
-    addCommand(0, "usercommands", function (src, command, commandData, tar, chan) {
-        Lists.User.display(src, chan);
-    });
-
-    addCommand(0, "feedmoncommands", function (src, command, commandData, tar, chan) {
-        Lists.Feedmon.display(src, chan);
-    });
-
-    addCommand(0, "funcommands", function (src, command, commandData, tar, chan) {
-        Lists.Fun.display(src, chan);
-    });
-
-    addCommand(0, "tourusercommands", function (src, command, commandData, tar, chan) {
-        Lists.Tour.display(src, chan);
-    });
-
-    addCommand(0, "megausercommands", function (src, command, commandData, tar, chan) {
+    addListCommand(0, "commands", "Commands");
+    addListCommand(0, "usercommands", "User");
+    addListCommand(0, "feedmoncommands", "Feedmon");
+    addListCommand(0, "funcommands", "Fun");
+    addListCommand(0, "tourusercommands", "Tour");
+    addListCommand(0, "megausercommands", "Megauser", function () {
         if (!this.poUser.megauser && this.myAuth < 1) {
             bot.sendMessage(src, "You need to be a megauser to view these.", chan);
-            return;
+            return false;
         }
-        Lists.Megauser.display(src, chan);
     });
-
-    addCommand(0, "leaguemanagercommands", function (src, command, commandData, tar, chan) {
+    addListCommand(0, "leaguemanagercommands", "LeagueManager", function (src, command, commandData, tar, chan) {
         if (!this.isLManager) {
             bot.sendMessage(src, 'You need to be a league manager to view these!', chan);
-            return;
+            return false;
         }
-        Lists.LeagueManager.display(src, chan);
     });
 
     /* Feedmon commands */
