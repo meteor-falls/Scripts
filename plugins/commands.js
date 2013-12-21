@@ -891,21 +891,6 @@ addCommand(0, "capsignorelist", function (src, command, commandData, tar, chan) 
     list.display(src, chan);
 });
 
-addCommand(0, "autoidlelist", function (src, command, commandData, tar, chan) {
-    var keys = Object.keys(Autoidle),
-        list;
-
-    if (keys.length === 0) {
-        bot.sendMessage(src, "There are no auto idles.", chan);
-        return;
-    }
-
-    list = new TableList("Auto Idles", "cornflowerblue", 2, 5, "navy");
-    list.addEvery(keys, false, 10);
-    list.finish();
-    list.display(src, chan);
-});
-
 addCommand(0, "emotepermlist", function (src, command, commandData, tar, chan) {
     var keys = Object.keys(Emoteperms),
         list;
@@ -1508,39 +1493,8 @@ addCommand(1, "changetopic", function (src, command, commandData, tar, chan) {
     };
     Reg.save("Channeltopics", JSON.stringify(Channeltopics));
 });
-addCommand(1, "addautoidle", function (src, command, commandData, tar, chan) {
-    if (!sys.dbIp(commandData)) {
-        bot.sendMessage(src, "Specify a real person!", chan);
-        return;
-    }
-    var playerName = commandData.toLowerCase();
-    if (Autoidle.hasOwnProperty(playerName)) {
-        bot.sendMessage(src, "This person already has auto-idle!", chan);
-        return;
-    }
-    bot.sendMessage(src, commandData + " was added to the auto idle list!", 0);
-    Autoidle[playerName] = {
-        "by": sys.name(src)
-    };
 
-    Reg.save("Autoidle", JSON.stringify(Autoidle));
-});
-addCommand(1, "removeautoidle", function (src, command, commandData, tar, chan) {
-    if (!sys.dbIp(commandData)) {
-        bot.sendMessage(src, "Specify a real person!", chan);
-        return;
-    }
-    var playerName = commandData.toLowerCase();
-    if (!Autoidle.hasOwnProperty(playerName)) {
-        bot.sendMessage(src, "This person doesn't have auto-idle!", chan);
-        return;
-    }
-    bot.sendMessage(src, commandData + " was removed from the auto idle list!", 0);
-    delete Autoidle[playerName];
-    Reg.save("Autoidle", JSON.stringify(Autoidle));
-});
-
-addCommand(1, "mutes", function (src, command, commandData, tar, chan) {
+addCommand(1, ["mutes", "mutelist"], function (src, command, commandData, tar, chan) {
     var keys = Object.keys(Mutes),
         timeNow = +sys.time(),
         list,
@@ -1570,7 +1524,7 @@ addCommand(1, "mutes", function (src, command, commandData, tar, chan) {
     list.display(src, chan);
 });
 
-addCommand(1, "rangebans", function (src, command, commandData, tar, chan) {
+addCommand(1, ["rangebans", "rangebanlist"], function (src, command, commandData, tar, chan) {
     var keys = Object.keys(Rangebans),
         timeNow = +sys.time(),
         list,
@@ -1594,7 +1548,7 @@ addCommand(1, "rangebans", function (src, command, commandData, tar, chan) {
     list.display(src, chan);
 });
 
-addCommand(1, "bans", function (src, command, commandData, tar, chan) {
+addCommand(1, ["bans", "banlist"], function (src, command, commandData, tar, chan) {
     var keys = sys.banList(),
         len,
         i,

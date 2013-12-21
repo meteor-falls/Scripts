@@ -157,10 +157,6 @@ module.exports = {
 
         poUser.originalName = sys.name(src);
 
-        if (Autoidle[myName.toLowerCase()]) {
-            sys.changeAway(src, true);
-        }
-
         if (hasBasicPermissions(src)) {
             if (!sys.isInChannel(src, watch)) {
                 sys.putInChannel(src, watch);

@@ -173,7 +173,6 @@ module.exports = {
             "MegaUsers": "Megausers",
             "FloodIgnore": "FloodIgnore",
             "Capsignore": "Capsignore",
-            "Autoidle": "Autoidle",
             "Channeltopics": "Channeltopics",
             "Mutes": "Mutes",
             "Rangebans": "Rangebans",

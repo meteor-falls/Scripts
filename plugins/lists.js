@@ -132,7 +132,6 @@ module.exports = {
         User.add("auth", "To view the authlist.");
         User.add("megausers", "To view the list of people who can make tournaments.");
         User.add("floodignorelist", "To view the users who can't be flood kicked");
-        User.add("autoidlelist", "To view the users who automatic idle.");
         User.add("emotepermlist", "To view the users who have emote permissions.");
         User.add("league", "To view the list of gym leaders, elites, and the champion.");
         User.add("leaguerules", "To view the rules for the League.");
@@ -269,7 +268,6 @@ module.exports = {
         var Mod = new CommandList("Moderator Commands", "navy");
         Mod.add("changetopic <font color=red><b>[channel]</b></font>:<font color=red><b>[topic]</b></font>", "To change the topic of the channel [channel] to [topic].");
         Mod.add("[c]wall <font color=red><b>[text]</b></font>", "To post [text] with borders around it. [c makes it so it only appears in the channel it's used in]");
-        Mod.add("[add/remove]autoidle <font color=red>[name]</font>", "To add/remove [name] to the auto idle list");
         Mod.add("[add/remove]floodignore <font color=red><b>[name]</b></font>", "To add/remove [name] to the flood ignore list.");
         Mod.add("emoteperms <font color=red><b>[name]</b></font>", "To add/remove [name] from the emote permission list.");
         Mod.add("imp <font color=red><b>[name]</b></font>", "To change your name to [name].");
