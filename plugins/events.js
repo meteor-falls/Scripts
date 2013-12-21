@@ -341,6 +341,13 @@
                 return;
             }
 
+            // Strip empty character
+            message = message.replace(/\ufffc/gi, "");
+
+            if (message.length === 0) {
+                return sys.stopEvent();
+            }
+
             var secondchar = message[1].toLowerCase();
             if ((message[0] === '/' || message[0] === '!') && message.length > 1 && secondchar >= 'a' && secondchar <= 'z') {
                 print("[#" + sys.channel(chan) + "] Command -- " + sys.name(src) + ": " + message);
@@ -409,13 +416,6 @@
                 if (colormode) {
                     message = colormodemessage(message);
                 }
-            }
-
-            // Strip empty character
-            message = message.replace(/\ufffc/gi, "");
-
-            if (message.length === 0) {
-                return sys.stopEvent();
             }
 
             var sendStr = "<font color=" + Utils.nameColor(src) + "><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + ": </b></font>" + message;

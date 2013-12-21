@@ -1887,8 +1887,8 @@
     });
 
     addCommand(1, "imp", function (src, command, commandData, tar, chan) {
-        if (commandData.length < 1) {
-            bot.sendMessage(src, "Thou cannot impersonate the void!", chan);
+        if (commandData.length < 5) {
+            bot.sendMessage(src, "Thou cannot impersonate the void (longer name, please)!", chan);
             return;
         }
 
