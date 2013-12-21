@@ -1,4 +1,6 @@
 (function () {
+    var commands = require('commands.js');
+
     module.exports = {
         warning: function (func, message, backtrace) {
             var toSend = ['ethan'],
@@ -364,8 +366,6 @@
                 }
 
                 var tar = sys.id(commandData);
-                var commands = require('commands.js');
-
                 try {
                     if (commands.can_use_command(src, command)) {
                         commands.handle_command(src, message, command, commandData, tar, chan);
@@ -727,6 +727,7 @@
     };
 
     module.reload = function () {
+        commands = require('commands.js');
         return true;
     };
 }());
