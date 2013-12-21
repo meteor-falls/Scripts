@@ -78,7 +78,7 @@ var GLOBAL = this;
         return require.meta[name].reload();
     };
 
-    if (typeof require.cache === 'undefined' || FULLRELOAD) {
+    if (typeof require.cache === 'undefined' || (typeof FULLRELOAD === 'boolean' && FULLRELOAD === true)) {
         require.cache = {};
         require.meta  = {};
     }
