@@ -663,18 +663,6 @@
         sys.sendMessage(src, "", chan);
         sys.sendHtmlMessage(src, "<font color=navy><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font>", chan);
     });
-    addCommand(0, "summonauth", function (src, command, commandData, tar, chan) {
-        var auths = sys.dbAuths(),
-            auth_id,
-            x;
-
-        for (x = 0; x < auths.length; x += 1) {
-            auth_id = sys.id(auths[x]);
-            if (auth_id) {
-                sys.sendHtmlMessage(auth_id, "<timestamp/><b><font color=" + Utils.nameColor(src) + ">" + this.originalName + "</b></font> has summoned all of the auth!<ping/>");
-            }
-        }
-    });
     addCommand(0, "join", function (src, command, commandData, tar, chan) {
         if (tourmode !== 1) {
             bot.sendMessage(src, "Sorry, you are unable to join because a tournament is not currently running or has passed the signups phase.", chan);

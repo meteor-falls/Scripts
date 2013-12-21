@@ -135,7 +135,6 @@ module.exports = {
         User.add("emotepermlist", "To view the users who have emote permissions.");
         User.add("league", "To view the list of gym leaders, elites, and the champion.");
         User.add("leaguerules", "To view the rules for the League.");
-        User.add("summonauth", "To summon all of the authorities.");
         User.add("tourusercommands", "To view the tournament commands for users.");
         User.add("sendto <font color=red><b>[person]</b></font>:<font color=red><b>[message]</b></font>", "To send a message to a certain person. To ping, just type /sendto [person].");
         User.add("emotes", "To view a list of emotes. For moderators and above only.");
