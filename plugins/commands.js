@@ -497,12 +497,16 @@ addCommand(0, "superimp", function (src, command, commandData, tar, chan) {
         bot.sendMessage(src, "The name is " + Number(commandData.length - 20) + " characters too long.", chan);
         return;
     }
+    if (tar) {
+        bot.sendMessage(src, "It appears as if your target does not appreciate being impersonated.", chan);
+        return;
+    }
 
-    sys.sendHtmlAll('<font color=#8A2BE2><timestamp/><b>' + Utils.escapeHtml(sys.name(src)) + ' has super-impersonated ' + Utils.escapeHtml(commandData) + '!</font></b>', chan);
+    sys.sendHtmlAll('<font color=#8A2BE2><timestamp/><b>' + Utils.escapeHtml(sys.name(src)) + ' has super-impersonated ' + Utils.escapeHtml(commandData) + '!</font></b>', 0);
     sys.changeName(src, '~~' + commandData + '~~');
 });
 
-addCommand(0, "impoff", function (src, command, commandData, tar, chan) {
+addCommand(0, ["impoff", "unimp"], function (src, command, commandData, tar, chan) {
     if (sys.name(src) === this.originalName) {
         bot.sendMessage(src, "You aren't imping!", chan);
         return;
@@ -1942,16 +1946,30 @@ addCommand(1, "unmute", function (src, command, commandData, tar, chan) {
         JSESSION.users(tar).muted = false;
     }
 });
+
 addCommand(1, ["moderationcommands", "moderatecommands"], function (src, command, commandData, tar, chan) {
     Lists.Moderate.display(src, chan);
 });
+
 addCommand(1, ["partycommands", "funmodcommands"], function (src, command, commandData, tar, chan) {
     Lists.Party.display(src, chan);
 });
+
 addCommand(1, "imp", function (src, command, commandData, tar, chan) {
+    if (commandData.length < 1) {
+        bot.sendMessage(src, "Thou cannot impersonate the void!", chan);
+        return;
+    }
+
+    if (tar) {
+        bot.sendMessage(src, "It appears as if your target does not appreciate being impersonated.", chan);
+        return;
+    }
+
     sys.sendHtmlAll('<font color=#8A2BE2><timestamp/><b>' + Utils.escapeHtml(sys.name(src)) + ' has impersonated ' + Utils.escapeHtml(commandData) + '!</font></b>');
     sys.changeName(src, commandData);
 });
+
 addCommand(1, "roulette", function (src, command, commandData, tar, chan) {
     rouletteon = !rouletteon;
 
