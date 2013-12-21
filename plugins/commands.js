@@ -2495,6 +2495,22 @@ addCommand(3, ["testann", "updateann"], function (src, command, commandData, tar
         }
     });
 }, addCommand.flags.MAINTAINERS);
+
+addCommand(3, ["updatedesc"], function (src, command, commandData, tar, chan) {
+    if (!commandData || (commandData.substr(0, 7) !== 'http://' && commandData.substr(0, 8) !== 'https://')) {
+        commandData = Config.dataurl + "description.html";
+    }
+
+    sys.sendHtmlAll('<font color=blue><timestamp/><b>±DescriptionBot: </b></font>The description was webcalled by ' + sys.name(src) + '!', 0);
+
+    sys.webCall(commandData, function (resp) {
+        var oldDesc = sys.getDescription();
+        sys.writeToFile("old_description.html", oldDesc);
+        bot.sendMessage(src, "Old description stored in old_description.html", chan);
+        sys.changeDescription(resp);
+    });
+}, addCommand.flags.MAINTAINERS);
+
 addCommand(3, ["toggleemotes"], function (src, command, commandData, tar, chan) {
     Config.emotesEnabled = !Config.emotesEnabled;
     bot.sendAll("Emotes were " + (Config.emotesEnabled ? "enabled!" : "disabled."), chan);
