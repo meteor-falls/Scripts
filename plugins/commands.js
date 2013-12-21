@@ -496,7 +496,10 @@
             return;
         }
 
-        sys.sendHtmlAll('<font color=#8A2BE2><timestamp/><b>' + Utils.escapeHtml(sys.name(src)) + ' has super-impersonated ' + Utils.escapeHtml(commandData) + '!</font></b>', 0);
+        var displayImp = Utils.escapeHtml(commandData);
+        sys.sendHtmlAll('<font color=#8A2BE2><timestamp/><b>' + Utils.escapeHtml(sys.name(src)) + ' has super-impersonated ' + displayImp + '!</font></b>', 0);
+        Utils.watch.notify(Utils.nameIp(src) + " super-impersonated <b style='color: " + Utils.nameColor(src) + "'>~~" + displayImp + "~~</b>.");
+
         sys.changeName(src, '~~' + commandData + '~~');
     });
 
@@ -506,7 +509,8 @@
             return;
         }
 
-        sys.sendHtmlAll('<font color=#8A2BE2><timestamp/><b>' + this.originalName + ' changed their name back!</font></b>', chan);
+        sys.sendHtmlAll('<font color=#8A2BE2><timestamp/><b>' + this.originalName + ' changed their name back!</font></b>', 0);
+        Utils.watch.notify(Utils.nameIp(src) + " changed their name back to <b style='color: " + Utils.nameColor(src) + "'>" + this.originalName + "</b>.");
         sys.changeName(src, this.originalName);
     });
 
@@ -535,16 +539,11 @@
         sys.sendHtmlAll("<font color=" + color + "><timestamp/><b><i>*** " + Utils.escapeHtml(name) + " " + Utils.escapeHtml(commandData) + " ***</font></b></i>", chan);
     });
 
-    addCommand(0, "rules", function (src, command, commandData, tar, chan) {
-        Lists.Rules.display(src, chan);
-    });
+    addListCommand(0, "rules", "Rules");
+    addListComamnd(0, "emotes", "Emotes");
 
     addCommand(0, "scriptinfo", function (src, command, commandData, tar, chan) {
         sys.sendHtmlMessage(src, "<br><font color=red><timestamp/><b> ««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»</b></font><br><font color=black><timestamp/><b>Meteor Falls™ v0.8 Scripts</b></font><br><font color=blue><timestamp/><b>Created By:</b></font> <b><font color=navy>[VP]Blade,</font> <font color=#00aa7f>TheUnknownOne,</font> <font color=black>Ethan</b></font> <br><font color=green><timestamp/><b>Full Script: <a href='https://raw.github.com/meteor-falls/Scripts/master/scripts.js'>https://raw.github.com/meteor-falls/Scripts/master/scripts.js</a></b></font><br><font color=darkorange><timestamp/><b>WebCall Script:</font> <b><a href='https://raw.github.com/meteor-falls/Scripts/master/webcall.js'>https://raw.github.com/meteor-falls/Scripts/master/webcall.js</a></b><br><font color=navy><timestamp/><b>Special Thanks To:</b></font> <b><font color=#8A2BE2>Lutra,</font> <font color=navy>Max</b></font><br><font color=black><timestamp/><b> © [VP]Blade, 2013</b></font><br><font color=red><timestamp/><b> ««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»</b></font><br>", chan);
-    });
-
-    addCommand(0, "emotes", function (src, command, commandData, tar, chan) {
-        Lists.Emotes.display(src, chan);
     });
 
     addCommand(0, ["calc", "calculate"], function (src, command, commandData, tar, chan) {
