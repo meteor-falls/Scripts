@@ -2206,6 +2206,10 @@
             bot.sendMessage(src, "Please specify a valid channel.", chan);
             return;
         }
+        if (chan === watch) {
+            bot.sendMessage(src, "I'm watching you...", chan);
+            return;
+        }
         var c;
         for (c = 0; c < 2999; c += 1) {
             sys.sendAll("", chan);
@@ -2347,6 +2351,7 @@
     addCommand(3, "ownercommands", function (src, command, commandData, tar, chan) {
         Lists.Owner.display(src, chan);
     });
+
     addCommand(3, "update", function (src, command, commandData, tar, chan) {
         if (!commandData) {
             bot.sendMessage(src, "Specify a plugin!", chan);
