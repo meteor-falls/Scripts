@@ -348,7 +348,7 @@
                 return sys.stopEvent();
             }
 
-            var secondchar = message[1].toLowerCase();
+            var secondchar = (message[1] || '').toLowerCase();
             if ((message[0] === '/' || message[0] === '!') && message.length > 1 && secondchar >= 'a' && secondchar <= 'z') {
                 print("[#" + sys.channel(chan) + "] Command -- " + sys.name(src) + ": " + message);
                 Utils.watch.message(src, "Command", message, chan);
