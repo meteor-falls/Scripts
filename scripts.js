@@ -34,7 +34,8 @@ var GLOBAL = this;
     sys.makeDir(dir);
 
     require = function require(name, webcall, noCache) {
-        if ((name in require.cache) && !webcall && (require.meta[name] ? (!require.meta[name].preferCache && !noCache) : !noCache)) {
+        fromCache = (require.meta[name] ? (!require.meta[name].preferCache && !noCache) : !noCache);
+        if ((name in require.cache) && !webcall && fromCache) {
             return require.cache[name];
         }
 
@@ -43,6 +44,10 @@ var GLOBAL = this;
 
         if (webcall) {
             resp = sys.synchronousWebCall(Config.repourl + name);
+            if ((resp === sys.getFileContent(dir + name)) && fromCache) {
+                return;
+            }
+
             sys.writeToFile(dir + name, resp);
         }
 
