@@ -329,9 +329,7 @@ module.exports = function () {
     };
 
     util.uptime = function () {
-        var uptime = script.startUpTime;
-
-        var diff = parseInt(sys.time(), 10) - uptime,
+        var diff = parseInt(sys.time(), 10) - startUpTime,
             days = parseInt(diff / (60*60*24), 10),
             hours = parseInt((diff % (60*60*24)) / (60*60), 10),
             minutes = parseInt((diff % (60*60)) / 60, 10),
