@@ -71,7 +71,7 @@
             }
         },
         beforeChannelJoin: function (src, channel) {
-            var user = JSESSION.users(src);
+            var user = SESSION.users(src);
 
             if ((channel === staffchannel && !user.megauser && !hasBasicPermissions(src)) || (channel === watch && !hasBasicPermissions(src))) {
                 if (sys.isInChannel(src, 0)) {
@@ -86,8 +86,6 @@
             if (src) {
                 Utils.watch.notify(Utils.nameIp(src) + " created channel " + ChannelLink(cname) + ".");
             }
-
-            JSESSION.createChannel(channel);
         },
         beforeChannelDestroyed: function (channel) {
             if (channel === staffchannel || channel === testchan || channel === watch) {
@@ -97,7 +95,6 @@
 
 
             Utils.watch.notify("Channel " + ChannelLink(channel) + " was destroyed.");
-            JSESSION.destroyChannel(channel);
         },
         afterChannelJoin: function (src, chan) {
             var channelToLower = sys.channel(chan).toLowerCase();
@@ -121,7 +118,7 @@
         beforeLogIn: function (src) {
             var srcip = sys.ip(src);
 
-            var poUser = JSESSION.users(src),
+            var poUser = SESSION.users(src),
                 cu_rb,
                 t_n = +sys.time(),
                 x;
@@ -147,11 +144,9 @@
                     return;
                 }
             }
-
-            JSESSION.createUser(src);
         },
         afterLogIn: function (src, defaultChan) {
-            var poUser = JSESSION.users(src),
+            var poUser = SESSION.users(src),
                 myName = sys.name(src),
                 ip = sys.ip(src),
                 myAuth = Utils.getAuth(src),
@@ -302,7 +297,7 @@
                 return;
             }
 
-            var poUser = JSESSION.users(src),
+            var poUser = SESSION.users(src),
                 isMuted = poUser.muted,
                 originalName = poUser.originalName,
                 isLManager = Leaguemanager === originalName.toLowerCase(),
@@ -441,14 +436,12 @@
         },
 
         beforeLogOut: function (src) {
-            var user = JSESSION.users(src);
+            var user = SESSION.users(src);
 
             if (sys.numPlayers() < 30 && !user.autokick) {
                 logoutMessage(Utils.escapeHtml(sys.name(src)), Utils.nameColor(src));
                 Utils.watch.notify(Utils.nameIp(src) + " logged out.");
             }
-
-            JSESSION.destroyUser(src);
         },
         afterChangeTeam: function (src) {
             if (Utils.hasIllegalChars(sys.name(src))) {
@@ -481,7 +474,7 @@
                 }
             }
 
-            var myUser = JSESSION.users(src);
+            var myUser = SESSION.users(src);
 
             myUser.originalName = sys.name(src);
 
@@ -538,7 +531,7 @@
             }
 
             sys.setTimer(function () {
-                var user = JSESSION.users(src);
+                var user = SESSION.users(src);
 
                 if (user) {
                     user.teamChanges -= 1;
@@ -657,17 +650,13 @@
             }
         },
         afterChatMessage: function (src, message, chan) {
-            if (!JSESSION.channels(chan).bots) {
+            if (!SESSION.channels(chan).bots) {
                 return;
-            }
-
-            if (!JSESSION.hasUser(src)) {
-                JSESSION.createUser(src);
             }
 
             var time = +sys.time();
             var srcip = sys.ip(src);
-            var poUser = JSESSION.users(src),
+            var poUser = SESSION.users(src),
                 limit,
                 ignoreFlood = floodIgnoreCheck(src),
                 auth = Utils.getAuth(src);
@@ -680,7 +669,7 @@
                 poUser.floodCount += 1;
 
                 sys.setTimer(function () {
-                    var user = JSESSION.users(src);
+                    var user = SESSION.users(src);
 
                     if (user) {
                         user.floodCount -= 1;

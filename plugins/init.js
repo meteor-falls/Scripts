@@ -197,7 +197,7 @@ module.exports = {
 
         hasEmotePerms = function (name) {
             var id = sys.id(name),
-                user = JSESSION.users(id),
+                user = SESSION.users(id),
                 aliases,
                 len,
                 i;
@@ -226,7 +226,7 @@ module.exports = {
         };
 
         hasBasicPermissions = function (src) {
-            var uobj = JSESSION.users(src),
+            var uobj = SESSION.users(src),
                 name = sys.name(src);
 
             if (uobj && uobj.originalName) {
@@ -237,7 +237,7 @@ module.exports = {
         };
 
         hasEmotesToggled = function (src) {
-            var name = JSESSION.users(src).originalName.toLowerCase();
+            var name = SESSION.users(src).originalName.toLowerCase();
             return (hasBasicPermissions(src) || hasEmotePerms(name)) && Emotetoggles.hasOwnProperty(name);
         };
 

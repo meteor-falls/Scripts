@@ -1832,7 +1832,7 @@
             timeString = "for " + Utils.getTimeString(time);
 
         if (tar) {
-            JSESSION.users(tar).muted = true;
+            SESSION.users(tar).muted = true;
         }
 
         if (!mutetime || mutetime === "forever") {
@@ -1874,7 +1874,7 @@
         Reg.save("Mutes", JSON.stringify(Mutes));
 
         if (tar !== undefined) {
-            JSESSION.users(tar).muted = false;
+            SESSION.users(tar).muted = false;
         }
     });
 
@@ -2178,7 +2178,7 @@
         Reg.save("Megausers", JSON.stringify(MegaUsers));
 
         if (tar !== undefined) {
-            JSESSION.users(tar).megauser = true;
+            SESSION.users(tar).megauser = true;
         }
     });
     addCommand(2, "megauseroff", function (src, command, commandData, tar, chan) {
@@ -2196,7 +2196,7 @@
 
         bot.sendAll(commandData + ' is no longer a megauser!', chan);
         if (tar !== undefined) {
-            JSESSION.users(tar).megauser = false;
+            SESSION.users(tar).megauser = false;
         }
 
     });
@@ -2417,8 +2417,8 @@
         });
     }, addCommand.flags.MAINTAINERS);
 
-    addCommand(3, "jsessionrefill", function (src, command, commandData, tar, chan) {
-        JSESSION.refill();
+    addCommand(3, "sessionrefill", function (src, command, commandData, tar, chan) {
+        SESSION.refill();
         bot.sendMessage(src, "Done.", chan);
     }, addCommand.flags.MAINTAINERS);
 
@@ -2478,8 +2478,8 @@
         bot.sendAll("Emotes were " + (Config.emotesEnabled ? "enabled!" : "disabled."), chan);
     });
     addCommand(3, "bots", function (src, command, commandData, tar, chan) {
-        JSESSION.channels(chan).bots = !JSESSION.channels(chan).bots;
-        var word = JSESSION.channels(chan).bots ? "on" : "off";
+        SESSION.channels(chan).bots = !SESSION.channels(chan).bots;
+        var word = SESSION.channels(chan).bots ? "on" : "off";
         bot.sendAll(sys.name(src) + " turned bots " + word + " in this channel!", chan);
     });
     addCommand(3, "leaguemanager", function (src, command, commandData, tar, chan) {
@@ -2599,7 +2599,7 @@
                 throw "The command " + command + " doesn't exist.";
             }
             var srcauth = Utils.getAuth(src),
-                name = JSESSION.users(src).originalName,
+                name = SESSION.users(src).originalName,
                 cmd = commands[command];
             if (disabledCmds.indexOf(command.toLowerCase()) > -1 && srcauth < 3) {
                 throw "The command " + command + " has been disabled.";
@@ -2615,7 +2615,7 @@
             return true;
         },
         handle_command: function (src, message, command, commandData, tar, chan) {
-            var poUser = JSESSION.users(src),
+            var poUser = SESSION.users(src),
                 isMuted = poUser.muted,
                 originalName = poUser.originalName,
                 isLManager = Leaguemanager === originalName.toLowerCase(),

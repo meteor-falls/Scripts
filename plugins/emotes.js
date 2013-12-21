@@ -31,7 +31,7 @@ module.exports = function () {
         }
 
         var emotes = [],
-            uobj = JSESSION.users(src),
+            uobj = SESSION.users(src),
             perm,
             timeout,
             lastEmote = [],

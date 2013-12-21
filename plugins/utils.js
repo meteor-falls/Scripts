@@ -325,7 +325,7 @@ module.exports = function () {
     };
 
     util.realName = function (src) {
-        return JSESSION.users(src).originalName || sys.name(src);
+        return SESSION.users(src).originalName || sys.name(src);
     };
 
     util.uptime = function () {

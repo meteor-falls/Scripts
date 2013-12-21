@@ -3,6 +3,8 @@ Meteor Falls
 
 Scripts for Meteor Falls v0.8
 
+Requires 2.4.0 with SESSION fixes.
+
 ### Includes
 * A simple script to install the entire script onto your server (webcall.js)!
 * Redesigned tours, completely redesigned from that old "vp style."

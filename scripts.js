@@ -17,7 +17,7 @@ var Config = {
 
     // Do not touch unless you are adding a new plugin.
     // Plugins to load on script load.
-    plugins: ['jsession', 'bot', 'reg', 'utils', 'emotes', 'feedmon', 'lists', 'init', 'commands', 'events', 'mathjs'],
+    plugins: ['bot', 'reg', 'utils', 'emotes', 'feedmon', 'lists', 'init', 'commands', 'events', 'mathjs'],
 
     // Whether or not to load plugins from repourl. If set to false, they will load locally.
     load_from_web: true,
@@ -139,11 +139,10 @@ function poChannel(chanId) {
     this.bots = true;
 }
 
-JSESSION = require('jsession.js');
-JSESSION.identifyScriptAs("Meteor Falls Script v0.8");
-JSESSION.registerUserFactory(poUser);
-JSESSION.registerChannelFactory(poChannel);
-JSESSION.refill();
+SESSION.identifyScriptAs("Meteor Falls Script v0.8");
+SESSION.registerUserFactory(poUser);
+SESSION.registerChannelFactory(poChannel);
+SESSION.refill();
 
 var poScript;
 poScript = ({
@@ -189,11 +188,10 @@ poScript = ({
     },
 
     megauserCheck: function megauserCheck(src) {
-        JSESSION.users(src).megauser = MegaUsers.hasOwnProperty(sys.name(src).toLowerCase());
+        SESSION.users(src).megauser = MegaUsers.hasOwnProperty(sys.name(src).toLowerCase());
     },
 
     afterChannelCreated: function afterChannelCreated(chan, name, src) {
-        JSESSION.createChannel(chan);
     },
 
     afterChannelJoin: function afterChannelJoin(src, chan) {
