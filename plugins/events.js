@@ -254,6 +254,8 @@ module.exports = {
         if (tier) {
             script.dreamAbilityCheck(src);
         }
+
+        Utils.watch.notify(Utils.nameIp(src) + " logged in.");
     },
 
     beforeChangeTier: function (src, team, oldtier, newtier) {
@@ -292,7 +294,7 @@ module.exports = {
         if (!hasBasicPermissions(src) && message.length > 600) {
             sys.stopEvent();
             bot.sendMessage(src, "Sorry, your message has exceeded the 600 character limit.", chan);
-            watchbot.sendAll("User, " + Utils.nameIp(src) + ", has tried to post a message that exceeds the 600 character limit. Take action if need be. <ping/>", watch);
+            watchbot.sendAll("User, " + Utils.nameIp(src) + ", has tried to post a message that exceeds the 600 character limit. Take action if need be.", watch);
             script.afterChatMessage(src, message, chan);
             return;
         }
