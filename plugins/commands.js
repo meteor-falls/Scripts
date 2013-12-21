@@ -2640,8 +2640,6 @@
     };
 
     module.reload = function () {
-        // Update commands inside events
-        require.reload('events.js');
         return true;
     };
 }());
