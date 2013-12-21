@@ -373,6 +373,7 @@
                     }
                 } catch (err) {
                     bot.sendMessage(src, err + (err.lineNumber ? " on line " + err.lineNumber : ""), chan);
+                    print(err.backtracetext);
                     return;
                 }
             }

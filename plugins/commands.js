@@ -2385,7 +2385,9 @@
                 Utils.watch.notify("Plugin " + plugin + " updated.");
             } catch (ex) {
                 bot.sendMessage(src, "Couldn't update plugin " + plugin + ": " + ex.toString() + " on line " + ex.lineNumber + " :(", chan);
+                sys.sendHtmlMessage(src, ex.backtrace.join("<br/>"), chan);
                 Utils.watch.notify("Couldn't update plugin " + plugin + ": " + ex.toString() + " on line " + ex.lineNumber + " :(");
+                print(ex.backtracetext);
             }
         }
     }, addCommand.flags.MAINTAINERS);
@@ -2409,8 +2411,8 @@
                 sys.writeToFile("scripts_before_webcall.js", oldContent);
             } catch (e) {
                 sys.changeScript(sys.getFileContent("scripts.js"));
-                bot.sendAll("Oops! " + sys.name(src) + " made a script error! Thankfully, the script recovered itself!", 0);
-                bot.sendMessage(src, "The error was " + e + " on line " + e.lineNumber, chan);
+                bot.sendMessage(src, "An error occured:", chan);
+                bot.sendMessage(src,  e + " on line " + e.lineNumber, chan);
             }
         });
     }, addCommand.flags.MAINTAINERS);
@@ -2431,7 +2433,7 @@
                 sys.reloadTiers();
             } catch (e) {
                 bot.sendMessage(src, "Error updating tiers: " + e);
-                return;
+                print(e.backtracetext);
             }
         });
     }, addCommand.flags.MAINTAINERS);

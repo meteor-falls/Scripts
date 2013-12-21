@@ -12,6 +12,7 @@ loadScripts = function (msg) {
                 // sys.writeToFile("scripts.js", resp);
             } catch (err) {
                 print("Error: " + err);
+                print(err.backtracetext);
             }
         });
     }

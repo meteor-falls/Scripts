@@ -68,6 +68,7 @@ var GLOBAL = this;
             sys.eval(fileContent, dir + name);
         } catch (e) {
             sys.sendAll("Error loading module " + name + ": " + e + " on line " + e.lineNumber);
+            print(e.backtracetext);
             return false;
         }
 
@@ -103,6 +104,7 @@ var GLOBAL = this;
                     exports[event].apply(exports, args);
                 } catch (e) {
                     print("Plugin error (" + plugins[plugin].name + ") on line " + e.lineNumber + ": " + e);
+                    print(e.backtracetext);
                 }
             }
         }
