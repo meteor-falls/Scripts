@@ -2364,7 +2364,13 @@
             bot.sendMessage(src, "Updating plugin " + plugin + "...", chan);
             Utils.watch.notify("Updating plugin " + plugin + "...");
             try {
-                require(plugin, true, false);
+                if (!require(plugin, true, false)) {
+                    throw {
+                        toString: function() { return "Couldn't load plugin (see given error message)"; }
+                        lineNumber: "Unknown"
+                    };
+                }
+
                 if (!require.reload(plugin)) {
                     bot.sendMessage(src, "Plugin " + plugin + " refused to reload.", chan);
                     Utils.watch.notify("Plugin " + plugin + " refused to reload.");
