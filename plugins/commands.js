@@ -2371,7 +2371,7 @@
             try {
                 if (!require(plugin, true, false)) {
                     throw {
-                        toString: function() { return "Couldn't load plugin (see given error message)"; }
+                        toString: function() { return "Couldn't load plugin (see given error message)"; },
                         lineNumber: "Unknown"
                     };
                 }
