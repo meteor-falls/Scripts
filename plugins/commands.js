@@ -880,20 +880,6 @@ addCommand(0, "floodignorelist", function (src, command, commandData, tar, chan)
     list.finish();
     list.display(src, chan);
 });
-addCommand(0, "capsignorelist", function (src, command, commandData, tar, chan) {
-    var keys = Object.keys(Capsignore),
-        list;
-
-    if (keys.length === 0) {
-        bot.sendMessage(src, "There are no caps ignores.", chan);
-        return;
-    }
-
-    list = new TableList("Caps Ignores", "cornflowerblue", 2, 5, "navy");
-    list.addEvery(keys, false, 10);
-    list.finish();
-    list.display(src, chan);
-});
 
 addCommand(0, "emotepermlist", function (src, command, commandData, tar, chan) {
     var keys = Object.keys(Emoteperms),
@@ -1426,41 +1412,6 @@ addCommand(1, "addfloodignore", function (src, command, commandData, tar, chan) 
         "by": sys.name(src)
     };
     Reg.save("FloodIgnore", JSON.stringify(FloodIgnore));
-});
-addCommand(1, "capsignore", function (src, command, commandData, tar, chan) {
-    if (!sys.dbIp(commandData)) {
-        bot.sendMessage(src, "Specify a real person!", chan);
-        return;
-    }
-    var playerName = commandData.toLowerCase();
-    if (!Capsignore.hasOwnProperty(playerName)) {
-        bot.sendMessage(src, "This person already has caps ignore!", chan);
-        return;
-    }
-    if (!sys.dbRegistered(commandData)) {
-        bot.sendMessage(src, "This person is not registered and will not receive caps ignore until they register.", chan);
-        bot.sendMessage(tar, "Please register so you can receive caps ignore.");
-        return;
-    }
-    bot.sendMessage(src, commandData + " was added to the caps ignore list!", chan);
-    Capsignore[playerName] = {
-        "by": sys.name(src)
-    };
-    Reg.save("Capsignore", JSON.stringify(Capsignore));
-});
-addCommand(1, "removecapsignore", function (src, command, commandData, tar, chan) {
-    if (!sys.dbIp(commandData)) {
-        bot.sendMessage(src, "Specify a real person!", chan);
-        return;
-    }
-    var playerName = commandData.toLowerCase();
-    if (!Capsignore.hasOwnProperty(playerName)) {
-        bot.sendMessage(src, "This person doesn't have caps ignore!", chan);
-        return;
-    }
-    bot.sendMessage(src, commandData + " was removed from the caps ignore list!", chan);
-    delete Capsignore[playerName];
-    Reg.save("Capsignore", JSON.stringify(Capsignore));
 });
 addCommand(1, "removefloodignore", function (src, command, commandData, tar, chan) {
     if (!sys.dbIp(commandData)) {

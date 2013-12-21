@@ -707,10 +707,6 @@ module.exports = {
             limit = (chan === testchan ? 15 : 6);
 
             if (poUser.caps >= limit && !poUser.muted) {
-                if (Capsignore[sys.name(src).toLowerCase()] !== undefined) {
-                    return;
-                }
-
                 capsbot.sendAll(sys.name(src) + " was muted for 5 minutes for CAPS.", 0);
                 poUser.muted = true;
                 Mutes[srcip] = {
