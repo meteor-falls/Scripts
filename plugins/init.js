@@ -432,7 +432,7 @@ module.exports = {
         ban = function (name) {
             sys.ban(name);
             if (sys.id(name)) {
-                kick(sys.id(name));
+                Utils.mod.kick(sys.id(name));
             } else {
                 aliasKick(sys.dbIp(name));
             }
@@ -445,33 +445,6 @@ module.exports = {
             }
 
             return name;
-        };
-
-        kick = function (src, floodBot) {
-            var xlist, c;
-            var ip = sys.ip(src);
-            var playerIdList = sys.playerIds(),
-                addIp = false;
-
-            for (xlist in playerIdList) {
-                c = playerIdList[xlist];
-                if (ip === sys.ip(c)) {
-                    sys.kick(c);
-                    addIp = true;
-                }
-            }
-
-            if (addIp) {
-                reconnectTrolls[ip] = true;
-
-                sys.setTimer(function () {
-                    delete reconnectTrolls[ip];
-                }, 3000, false);
-            }
-
-            if (sys.loggedIn(src)) {
-                sys.kick(src);
-            }
         };
 
         // Temporarly bans a player.

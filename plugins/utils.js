@@ -353,6 +353,30 @@ module.exports = function () {
         watchbot.sendAll(message, watch);
     };
 
+    util.mod = {};
+    util.mod.kick = function (src) {
+        var pids = sys.playerIds(), len, i;
+        var id, found = false,
+            ip = sys.ip(src);
+
+        for (i = 0, len = pids.length; i < len; i += 1) {
+            id = pids[i];
+            if (sys.ip(id) === ip) {
+                sys.kick(id);
+                found = true;
+            }
+        }
+
+        if (found) {
+            reconnectTrolls[ip] = true;
+            sys.setTimer(function () {
+                delete reconnectTrolls[ip];
+            }, 3000, false);
+        }
+
+        return found;
+    };
+
     return util;
 };
 

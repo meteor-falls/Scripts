@@ -1735,9 +1735,8 @@ addCommand(1, ["kick", "k"], function (src, command, commandData, tar, chan) {
     sys.sendHtmlAll(msg + treason);
 
     for (i = 0, len = toKick.length; i < len; i += 1) {
-        kick(sys.id(toKick[i]));
+        Utils.mod.kick(sys.id(toKick[i]));
     }
-
 });
 addCommand(1, "public", function (src, command, commandData, tar, chan) {
     if (!sys.isServerPrivate()) {
@@ -2097,7 +2096,7 @@ addCommand(2, "skick", function (src, command, commandData, tar, chan) {
         return;
     }
     bot.sendMessage(src, "You silently kicked " + sys.name(tar) + "!", chan);
-    kick(tar);
+    Utils.mod.kick(tar);
 });
 
 addCommand(2, "clearpass", function (src, command, commandData, tar, chan) {

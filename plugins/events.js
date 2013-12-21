@@ -512,7 +512,7 @@ module.exports = {
             } else if (teamSpammers[ip] === 0) {
                 teamSpammers[ip] = 1;
                 watchbot.sendAll("Alert: Possible team spammer " + Utils.nameIp(src) + ". Kicked for now.", watch);
-                kick(src);
+                Utils.mod.kick(src);
 
                 sys.setTimer(function () {
                     if (typeof teamSpammers[ip] !== "undefined") {
@@ -555,7 +555,7 @@ module.exports = {
                 msg = msg.replace(/\{Target\}/gi, sys.name(bpl));
             }
             sys.sendHtmlAll(msg);
-            kick(bpl);
+            Utils.mod.kick(bpl);
         }
     },
     beforePlayerBan: function (src, bpl, time) {
@@ -696,7 +696,7 @@ module.exports = {
                     "reason": "Flooding.",
                     "time": time + 300
                 };
-                kick(src, true);
+                Utils.mod.kick(src);
                 return;
             }
         }
