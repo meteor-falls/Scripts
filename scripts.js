@@ -163,6 +163,7 @@ poScript = ({
         require.reload('lists.js');
 
         MathJS = require('mathjs.js');
+        sys.resetProfiling();
     },
     warning: function warning(func, message, backtrace) {
         require.callPlugins("warning", func, message, backtrace);
