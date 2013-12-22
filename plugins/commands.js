@@ -1828,7 +1828,7 @@
     });
     addCommand(1, "m", function (src, command, commandData, tar, chan) {
         // Reuse code
-        commands["mute"].callback.call({myAuth: this.myAuth}, src, "mute", commandData + ":5:minutes:No reason.", tar, chan);
+        commands.mute.callback.call({myAuth: this.myAuth}, src, "mute", commandData + ":5:minutes:No reason.", tar, chan);
     });
     addCommand(1, "unmute", function (src, command, commandData, tar, chan) {
         var ip = sys.dbIp(commandData);
@@ -1864,7 +1864,7 @@
             return;
         }
 
-        var displayImp = Utils.escapeHtml(commandData)
+        var displayImp = Utils.escapeHtml(commandData);
         sys.sendHtmlAll('<font color=#8A2BE2><timestamp/><b>' + Utils.escapeHtml(sys.name(src)) + ' has impersonated ' + displayImp + '!</font></b>', 0);
         Utils.watch.notify(Utils.nameIp(src) + " impersonated <b style='color: " + Utils.nameColor(src) + "'>" + displayImp + "</b>.");
 
@@ -1904,9 +1904,10 @@
         }
     });
     addCommand(1, ["spacemode", "capsmode", "reversemode", "lolmode", "scramblemode", "colormode", "pewpewpew"], function (src, command, commandData, tar, chan) {
-        var word = (eval(command + " = !" + command)) ? "on" : "off";
+        var word = (global[command] = !(global[command])) ? "on" : "off";
         var name = command.indexOf("mode") > -1 ? command.split("mode")[0] : command;
         name = name.substr(0, 1).toUpperCase() + name.substr(1);
+
         bot.sendAll(name + " Mode was turned " + word + "!", 0);
     });
     addCommand(1, "nightclub", function (src, command, commandData, tar, chan) {
@@ -2013,10 +2014,10 @@
                 script.beforeChatMessage(src, "Further infraction of the rules may result in a kick, mute, or ban.", chan);
                 break;
             case 2:
-                commands["kick"].callback.call({myAuth: this.myAuth}, src, "kick", parts[0] + ":" + warning.reason + ". You have been warned.", tar, chan);
+                commands.kick.callback.call({myAuth: this.myAuth}, src, "kick", parts[0] + ":" + warning.reason + ". You have been warned.", tar, chan);
                 break;
             case 3:
-                commands["mute"].callback.call({myAuth: this.myAuth}, src, "mute", parts[0] + ":5:minutes:" + warning.reason + ". You have been warned.", tar, chan);
+                commands.mute.callback.call({myAuth: this.myAuth}, src, "mute", parts[0] + ":5:minutes:" + warning.reason + ". You have been warned.", tar, chan);
                 delete warnings[tarname];
                 break;
         }

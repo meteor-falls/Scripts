@@ -137,15 +137,13 @@ module.exports = {
             "Feedmons": Feedmon.TABLE
         };
 
-        var i;
-
-        for (i in regVals) {
+        for (var i in regVals) {
             Reg.init(regVals[i], {});
 
             try {
-                GLOBAL[i] = Reg.get(regVals[i]);
+                global[i] = Reg.get(regVals[i]);
             } catch (e) {
-                GLOBAL[i] = {};
+                global[i] = {};
             }
         }
 
@@ -279,7 +277,7 @@ module.exports = {
             }
 
             return "";
-        }
+        };
 
         ban = function (name) {
             sys.ban(name);
@@ -445,9 +443,9 @@ module.exports = {
                 str = str.replace(/\[br\]/gi, "<br/>");
                 str = str.replace(/\[hr\]/gi, "<hr/>");
                 str = str.replace(/\[announce\](.*?)\[\/announce\]/gi, function ($1, $2) {
-                    return "<br><font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>"
-                        + "<br/><font color=" + Utils.nameColor(src) + "><timestamp/><b>" + sys.name(src) + ":</b><font color=black> " + $2 + "<br>"
-                        + "<br/><font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>";
+                    return "<br><font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>" +
+                        "<br/><font color=" + Utils.nameColor(src) + "><timestamp/><b>" + sys.name(src) + ":</b><font color=black> " + $2 + "<br>" +
+                        "<br/><font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>";
                 });
             }
 

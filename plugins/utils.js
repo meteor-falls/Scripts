@@ -483,7 +483,7 @@
                     if (sys.tier(src, team) !== "5th Gen OU") {
                         continue;
                     }
-                    swiftswim = false,
+                    swiftswim = false;
                     drizzle = false;
                     for (i = 0; i < 6; i += 1) {
                         ability = sys.ability(sys.teamPokeAbility(src, team, i));

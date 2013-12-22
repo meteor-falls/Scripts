@@ -561,7 +561,7 @@
                 return;
             }
 
-            var targetName = sys.name(bpl), time;
+            var targetName = sys.name(bpl), timeString;
             var banMessage = Banmsgs[Utils.realName(src)];
 
             if (banMessage) {

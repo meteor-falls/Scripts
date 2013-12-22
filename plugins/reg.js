@@ -86,7 +86,7 @@
     module.exports.Reg = RegClass;
     module.preferCache = true;
     module.reload = function () {
-        Reg = new (module.exports.Reg());
+        Reg = new (module.exports.Reg)();
         return true;
     };
 }());

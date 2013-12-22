@@ -27,8 +27,6 @@ var Config = {
     emotesEnabled: true
 };
 
-var GLOBAL = this;
-
 (function() {
     var dir = Config.plugindir;
     sys.makeDir(dir);
