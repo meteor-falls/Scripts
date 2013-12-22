@@ -261,7 +261,7 @@
             ghosts = 0;
         for (xlist in playerIdList) {
             c = playerIdList[xlist];
-            if (ip === sys.ip(c)) {
+            if (c !== src && ip === sys.ip(c)) {
                 sys.kick(c);
                 ghosts += 1;
             }
