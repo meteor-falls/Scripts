@@ -2394,12 +2394,12 @@
         sys.sendMessage(src, '', chan);
 
         bot.sendMessage(src, "Profile dump:", chan);
-        sys.sendHtmlMessage(src, sys.profileDump().replace('\n', '<br/>'), chan);
+        sys.sendHtmlMessage(src, sys.profileDump().replace(/\n/g, '<br/>'), chan);
 
         sys.sendMessage(src, '', chan);
 
         bot.sendMessage(src, "SESSION dump:", chan);
-        sys.sendHtmlMessage(src, SESSION.dump().replace('\n', '<br/>'), chan);
+        sys.sendHtmlMessage(src, SESSION.dump().replace(/\n/g, '<br/>'), chan);
     }, addCommand.flags.MAINTAINERS);
 
     addCommand(3, ["updatetiers"], function (src, command, commandData, tar, chan) {
