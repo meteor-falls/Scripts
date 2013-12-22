@@ -1,4 +1,6 @@
 (function () {
+    var listBorder = "»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»";
+
     function formatArgs(args) {
         if (!args || !Array.isArray(args)) {
             return "";
@@ -12,7 +14,7 @@
     CommandList = function (title, bordercolor, help, listtype) {
         this.title = title;
         this.bordercolor = bordercolor;
-        this.template = "<font color='" + this.bordercolor + "' size='4'><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br/><h2>" + title + "</h2>";
+        this.template = "<font color='" + this.bordercolor + "' size='4'><b>" + listBorder + "</b></font><br/><h2>" + title + "</h2>";
 
         if (!help && help !== "") {
             help = "Type one of the following into the channel's chat to use it:";
@@ -33,6 +35,10 @@
 
     CommandList.prototype.add = function (cmd, desc, args) {
         if (this.forCommands) {
+            if (!args) {
+                cmd = "<a href='po:send//" + cmd + "' style='text-decoration: none; color: black;'>" + cmd + "</a>";
+            }
+
             this.template += "<li><b>/" + cmd + "</b>" + formatArgs(args) + " " + desc + "</li>";
         } else {
             this.template += "<li><b>" + cmd + "</b></li>";
@@ -40,7 +46,7 @@
     };
 
     CommandList.prototype.finish = function () {
-        this.template += "</" + this.listtype + "><br/><font color='" + this.bordercolor + "' size='4'><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font>";
+        this.template += "</" + this.listtype + "><br/><font color='" + this.bordercolor + "' size='4'><b>" + listBorder + "</b></font>";
     };
 
     CommandList.prototype.display = function (player, channel) {
@@ -56,23 +62,23 @@
         this.padding = padding;
         this.borderColor = borderColor;
 
-        this.template = "<font color='" + borderColor + "' size='4'><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><h2>" + name + "</h2>";
+        this.template = "<font color='" + borderColor + "' size='4'><b>" + listBorder + "</b></font><h2>" + name + "</h2><br/>";
         this.template += "<table border='" + border + "' cellpadding='" + padding + "'>";
 
-        this.zebra = true;
+        this._zebra = true;
     };
 
     TableList.prototype.bgcolor = function () {
         var color = this.color.toLowerCase();
 
         if (color === "zebra" || color === "stripe") {
-            if (this.zebra) {
+            if (this._zebra) {
                 color = "#eaeaea";
             } else {
                 color = "#f4f4f4";
             }
 
-            this.zebra = !this.zebra;
+            this._zebra = !this._zebra;
         }
 
         return color;
