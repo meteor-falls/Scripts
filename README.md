@@ -1,9 +1,9 @@
 Meteor Falls
 =======
 
-Scripts for Meteor Falls v0.8
+Scripts for Meteor Falls v0.9
 
-Requires 2.4.0 with SESSION fixes.
+Requires 2.4.0 with SESSION fixes. It's expected that our [tiers](https://raw.github.com/meteor-falls/Server-Shit/master/tiers.xml) are used on the server.
 
 ### Includes
 * A simple script to install the entire script onto your server (webcall.js)!

@@ -1,4 +1,4 @@
-/* Meteor Falls v0.8 Scripts.
+/* Meteor Falls v0.9 Scripts.
     By: [VP]Blade, TheUnknownOne, Ethan
     Credit to: Max, Lutra
 */
@@ -139,7 +139,7 @@ function poChannel(chanId) {
     this.bots = true;
 }
 
-SESSION.identifyScriptAs("Meteor Falls Script v0.8");
+SESSION.identifyScriptAs("Meteor Falls Script v0.9");
 SESSION.registerUserFactory(poUser);
 SESSION.registerChannelFactory(poChannel);
 SESSION.refill();
