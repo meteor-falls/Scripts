@@ -1,7 +1,21 @@
 (function () {
+    var currentVersion = 1;
+    function updateReg(reg) {
+        if (reg.version === 0) {
+            ("Megausers FloodIgnore Channeltopics Mutes Rangebans Kickmsgs Banmsgs Welmsgs EmoteToggles Emoteperms " + Feedmon.TABLE)
+                .split(" ")
+                .forEach(function (key) {
+                    reg.save(key, JSON.parse(reg.get(key)));
+                });
+        }
+
+        reg.save("version", currentVersion);
+    }
+
     function RegClass() {
         var file = "Reg.json";
         this.data = {};
+        this.version = -1;
 
         try {
             this.data = JSON.parse(sys.getFileContent(file));
@@ -10,15 +24,19 @@
             sys.writeToFile(file, "{}");
         }
 
+        this.version = this.data.version || 0;
+        updateReg(this);
+
         this.save = function (key, value) {
-            this.data[key] = value;
-            this.saveData();
+            if (this.data[key] !== value) {
+                this.data[key] = value;
+                this.saveData();
+            }
         };
 
         this.init = function (key, value) {
             if (this.data[key] === undefined) {
-                this.data[key] = value;
-                this.saveData();
+                this.save(key, value);
             }
         };
 
@@ -69,11 +87,8 @@
         return new RegClass();
     };
     module.exports.RegClass = RegClass;
+    module.preferCache = true;
     module.reload = function (reloadAnyway) {
-        if (typeof Reg !== "undefined" && !reloadAnyway) {
-            return false;
-        }
-
         sys.appendToFile("Reg.json", "");
         if (sys.getFileContent("Reg.json") === "") {
             sys.writeToFile("Reg.json", "{}");

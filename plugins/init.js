@@ -182,10 +182,10 @@ module.exports = {
         var i;
 
         for (i in regVals) {
-            Reg.init(regVals[i], "{}");
+            Reg.init(regVals[i], {});
 
             try {
-                GLOBAL[i] = JSON.parse(Reg.get(regVals[i]));
+                GLOBAL[i] = Reg.get(regVals[i]);
             } catch (e) {
                 GLOBAL[i] = {};
             }

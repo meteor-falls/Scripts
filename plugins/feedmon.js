@@ -50,7 +50,7 @@ module.exports = function () {
     }
 
     function save() {
-        Reg.save(FEEDMON_TABLE, JSON.stringify(Feedmons));
+        Reg.save(FEEDMON_TABLE, Feedmons);
     }
 
     function getPlayer(name) {

@@ -795,7 +795,7 @@
         } else {
             Emotetoggles[sys.name(src).toLowerCase()] = true;
         }
-        Reg.save("Emotetoggles", JSON.stringify(Emotetoggles));
+        Reg.save("Emotetoggles", Emotetoggles);
     });
     addCommand(0, "spin", function (src, command, commandData, tar, chan) {
         if (!rouletteon) {
@@ -1187,13 +1187,13 @@
             Kickmsgs[sys.name(src).toLowerCase()] = {
                 "message": message
             };
-            Reg.save("Kickmsgs", JSON.stringify(Kickmsgs));
+            Reg.save("Kickmsgs", Kickmsgs);
         } else if (whichl === "welcome") {
             bot.sendMessage(src, "Set welcome message to: " + Utils.escapeHtml(message) + "!", chan);
             Welmsgs[sys.name(src).toLowerCase()] = {
                 "message": message
             };
-            Reg.save("Welmsgs", JSON.stringify(Welmsgs));
+            Reg.save("Welmsgs", Welmsgs);
         } else if (whichl === "ban") {
             if (this.myAuth < 2) {
                 bot.sendMessage(src, "You need to be a higher auth to set your ban message!", chan);
@@ -1203,7 +1203,7 @@
             Banmsgs[sys.name(src).toLowerCase()] = {
                 "message": message
             };
-            Reg.save("Banmsgs", JSON.stringify(Banmsgs));
+            Reg.save("Banmsgs", Banmsgs);
         } else {
             bot.sendMessage(src, "Specify kick, ban, or welcome!", chan);
         }
@@ -1260,7 +1260,7 @@
                 return;
             }
             delete Kickmsgs[sys.name(src).toLowerCase()];
-            Reg.save("Kickmsgs", JSON.stringify(Kickmsgs));
+            Reg.save("Kickmsgs", Kickmsgs);
             bot.sendMessage(src, "Kick message removed!", chan);
             return;
         } else if (lower === "ban") {
@@ -1269,7 +1269,7 @@
                 return;
             }
             delete Banmsgs[sys.name(src).toLowerCase()];
-            Reg.save("Banmsgs", JSON.stringify(Banmsgs));
+            Reg.save("Banmsgs", Banmsgs);
             bot.sendMessage(src, "Ban message removed!", chan);
             return;
         } else if (lower === "welcome") {
@@ -1278,7 +1278,7 @@
                 return;
             }
             delete Welmsgs[sys.name(src).toLowerCase()];
-            Reg.save("Welmsgs", JSON.stringify(Welmsgs));
+            Reg.save("Welmsgs", Welmsgs);
             bot.sendMessage(src, "Welcome message removed!", chan);
             return;
         } else {
@@ -1302,12 +1302,12 @@
         if (Emoteperms[commandData.toLowerCase()]) {
             bot.sendAll(sys.name(src) + " revoked " + commandData + "'s permission to use emotes!");
             delete Emoteperms[commandData.toLowerCase()];
-            Reg.save("Emoteperms", JSON.stringify(Emoteperms));
+            Reg.save("Emoteperms", Emoteperms);
             return;
         }
         bot.sendAll(sys.name(src) + " has given " + commandData + " permission to use emotes!");
         Emoteperms[commandData.toLowerCase()] = true;
-        Reg.save("Emoteperms", JSON.stringify(Emoteperms));
+        Reg.save("Emoteperms", Emoteperms);
     });
     addCommand(1, "channelkick", function (src, command, commandData, tar, chan) {
         if (!tar) {
@@ -1388,7 +1388,7 @@
             FloodIgnore[playerName] = true;
         }
 
-        Reg.save("FloodIgnore", JSON.stringify(FloodIgnore));
+        Reg.save("FloodIgnore", FloodIgnore);
     });
 
     addCommand(1, "removetopic", function (src, command, commandData, tar, chan) {
@@ -1410,7 +1410,7 @@
             "by": sys.name(src),
             "topic": commandData
         };
-        Reg.save("Channeltopics", JSON.stringify(Channeltopics));
+        Reg.save("Channeltopics", Channeltopics);
     });
 
     addCommand(1, ["mutes", "mutelist"], function (src, command, commandData, tar, chan) {
@@ -1821,7 +1821,7 @@
         };
 
         Mutes[tarip] = muteHash;
-        Reg.save("Mutes", JSON.stringify(Mutes));
+        Reg.save("Mutes", Mutes);
 
         sys.sendHtmlAll("<font color=blue><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + " muted " + v[0] + " " + timeString + "!</b></font>");
         sys.sendHtmlAll("<font color=green><timestamp/><b>Reason:</b></font> " + reason);
@@ -1843,7 +1843,7 @@
         }
         sys.sendHtmlAll("<font color=green><timestamp/><b>" + commandData + " was unmuted by " + Utils.escapeHtml(sys.name(src)) + "!</b></font>");
         delete Mutes[ip];
-        Reg.save("Mutes", JSON.stringify(Mutes));
+        Reg.save("Mutes", Mutes);
 
         if (tar !== undefined) {
             SESSION.users(tar).muted = false;
@@ -2105,7 +2105,7 @@
             "reason": rbreason
         };
 
-        Reg.save("Rangebans", JSON.stringify(Rangebans));
+        Reg.save("Rangebans", Rangebans);
 
     });
     addCommand(2, "unrangeban", function (src, command, commandData, tar, chan) {
@@ -2120,7 +2120,7 @@
         bot.sendMessage(src, "Rangeban removed for range: " + commandData, chan);
 
         delete Rangebans[commandData];
-        Reg.save("Rangebans", JSON.stringify(Rangebans));
+        Reg.save("Rangebans", Rangebans);
     });
     addCommand(2, "megauser", function (src, command, commandData, tar, chan) {
         if (!sys.dbIp(commandData)) {
@@ -2143,7 +2143,7 @@
         };
 
         bot.sendAll(commandData + ' is now a megauser!', 0);
-        Reg.save("Megausers", JSON.stringify(MegaUsers));
+        Reg.save("Megausers", MegaUsers);
 
         if (tar !== undefined) {
             SESSION.users(tar).megauser = true;
@@ -2160,7 +2160,7 @@
             return;
         }
         delete MegaUsers[playerName];
-        Reg.save("Megausers", JSON.stringify(MegaUsers));
+        Reg.save("Megausers", MegaUsers);
 
         bot.sendAll(commandData + ' is no longer a megauser!', chan);
         if (tar !== undefined) {
@@ -2560,7 +2560,7 @@
         }
 
         Welmsgs[name] = {message: mess};
-        Reg.save("Welmsgs", JSON.stringify(Welmsgs));
+        Reg.save("Welmsgs", Welmsgs);
 
         bot.sendMessage(src, "Set welcome message of " + name + " to: " + Utils.escapeHtml(mess), chan);
     });
