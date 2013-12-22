@@ -81,6 +81,16 @@
             this.data = {};
             this.saveData();
         };
+
+        this.dump = function () {
+            var dataKeys = Object.keys(this.data);
+            return [
+                "Reg dump @ " + (new Date()).toUTCString(),
+                "Version " + this.version,
+                dataKeys.length + " keys, being:",
+                dataKeys.join(", ")
+            ].join("\n");
+        };
     }
 
     module.exports.Reg = RegClass;

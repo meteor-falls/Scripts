@@ -2125,19 +2125,34 @@
         bot.sendMessage(src, "Done.", chan);
     }, addCommand.flags.MAINTAINERS);
 
+    // /dump memory:profile
+    // /dump *
     addCommand(3, "dump", function (src, command, commandData, tar, chan) {
-        bot.sendMessage(src, "Memory dump:", chan);
-        sys.sendMessage(src, sys.memoryDump(), chan);
+        var types = (commandData || '*').split(':').map(Utils.lowerKeys),
+            wildcard = types.indexOf('*') !== -1;
+        function wantsDump(type) {
+            return wildcard || types.indexOf(type) !== -1;
+        }
 
-        sys.sendMessage(src, '', chan);
+        if (wantsDump('memory')) {
+            bot.sendMessage(src, "Memory dump:", chan);
+            sys.sendMessage(src, sys.memoryDump(), chan);
+        }
 
-        bot.sendMessage(src, "Profile dump:", chan);
-        sys.sendHtmlMessage(src, sys.profileDump().replace(/\n/g, '<br/>'), chan);
+        if (wantsDump('profile')) {
+            bot.sendMessage(src, "Profile dump:", chan);
+            sys.sendHtmlMessage(src, sys.profileDump().replace(/\n/g, '<br/>'), chan);
+        }
 
-        sys.sendMessage(src, '', chan);
+        if (wantsDump('session')) {
+            bot.sendMessage(src, "SESSION dump:", chan);
+            sys.sendHtmlMessage(src, SESSION.dump().replace(/\n/g, '<br/>'), chan);
+        }
 
-        bot.sendMessage(src, "SESSION dump:", chan);
-        sys.sendHtmlMessage(src, SESSION.dump().replace(/\n/g, '<br/>'), chan);
+        if (wantsDump('reg')) {
+            bot.sendMessage(src, "Reg dump:", chan);
+            sys.sendHtmlMessage(src, Reg.dump().replace(/\n/g, '<br/>'), chan);
+        }
     }, addCommand.flags.MAINTAINERS);
 
     addCommand(3, ["updatetiers"], function (src, command, commandData, tar, chan) {

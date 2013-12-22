@@ -274,6 +274,10 @@
             return "<b>" + val + "</b>";
         };
 
+        util.lowerKeys = function (val) {
+            return ('' + val).toLowerCase();
+        };
+
         // For use in filter
         util.stripEmpty = function (val) {
             return !!val;
@@ -372,6 +376,7 @@
         util.placeCommas = function (number) {
             return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         };
+
 
         util.realName = function (src) {
             return SESSION.users(src).originalName || sys.name(src);
