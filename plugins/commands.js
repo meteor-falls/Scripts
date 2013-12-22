@@ -1290,9 +1290,7 @@
     });
 
     /** MOD COMMANDS */
-    addCommand(1, "modcommands", function (src, command, commandData, tar, chan) {
-        Lists.Mod.display(src, chan);
-    });
+    addListCommand(1, "modcommands", "Mod");
     addCommand(1, "emoteperms", function (src, command, commandData, tar, chan) {
         if (!commandData) {
             bot.sendMessage(src, "You need to specify a user!", chan);
@@ -1529,13 +1527,13 @@
         Poll.by = self;
         Poll.options = options;
 
-        bot.sendAll(self + " started a poll!", chan);
-        bot.sendAll(subject);
-        bot.sendAll("Options:", chan);
+        bot.sendAll(self + " started a poll!", 0);
+        bot.sendAll(subject, 0);
+        bot.sendAll("Options:", 0);
         for (i = 0, len = options.length; i < len; i += 1) {
-            bot.sendAll((i + 1) + ". " + options[i], chan);
+            bot.sendAll((i + 1) + ". " + options[i], 0);
         }
-        bot.sendAll("Vote with /vote [option]!", chan);
+        bot.sendAll("Vote with /vote [option]!", 0);
     });
 
     addCommand(1, "closepoll", function (src, command, commandData, tar, chan) {
@@ -1544,7 +1542,7 @@
         }
 
         var self = sys.name(src);
-        bot.sendAll(self + " closed the poll (started by " + Poll.by + ")!", chan);
+        bot.sendAll(self + " closed the poll (started by " + Poll.by + ")!", 0);
 
         if (Object.keys(Poll.votes).length !== 0) {
             var results = {}, msgs = {}, choice, i, total, winner, most = 0;
@@ -1566,16 +1564,16 @@
                 msgs[i] = "Option #" + (parseInt(i, 10) + 1) + " (" + Poll.options[i] + "): " + results[i] + " vote" + (results[i] === 1 ? '' : 's');
             }
 
-            bot.sendAll("'" + Poll.subject + "' - Results:", chan);
+            bot.sendAll("'" + Poll.subject + "' - Results:", 0);
 
             for (i = 0, total = Poll.options.length; i < total; i += 1) {
                 if (msgs[i]) {
-                    bot.sendAll(msgs[i], chan);
+                    bot.sendAll(msgs[i], 0);
                 }
             }
 
-            sys.sendAll("", chan);
-            bot.sendAll("Winner: Option #" + (winner + 1) + " (" + Poll.options[winner] + ") with " + results[winner] + " vote" + (results.winner === 1 ? '' : 's') + ".", chan);
+            sys.sendAll("", 0);
+            bot.sendAll("Winner: Option #" + (winner + 1) + " (" + Poll.options[winner] + ") with " + results[winner] + " vote" + (results.winner === 1 ? '' : 's') + ".", 0);
         }
 
         Poll.active = false;
@@ -1678,7 +1676,7 @@
 
         var t = commandData.split(':'),
             tars = (t[0].split("*")),
-            reason = t[1] || "No reason.",
+            reason = t[1] || false,
             toKick = [],
             len = tars.length,
             i;
@@ -1706,14 +1704,15 @@
 
         var theirmessage = Kickmsgs[sys.name(src).toLowerCase()];
         var tarNames = Utils.fancyJoin(toKick);
-        var msg = (theirmessage !== undefined) ? theirmessage.message : "<font color=red><timestamp/><b>" + tarNames + " " + (toKick.length === 1 ? "was" : "were") + " kicked by " + Utils.escapeHtml(sys.name(src)) + "!";
+        var msg = (theirmessage !== undefined) ? theirmessage.message : "<font color='navy'><timestamp/><b>" + tarNames + " " + (toKick.length === 1 ? "was" : "were") + " kicked by " + Utils.escapeHtml(sys.name(src)) + "!";
 
         if (theirmessage) {
             msg = msg.replace(/\{Target\}/gi, tarNames);
         }
 
-        var treason = "<br></font></b><font color=black><timestamp/><b>Reason:</font></b> " + reason;
-        sys.sendHtmlAll(msg + treason);
+        if (reason) {
+            sys.sendHtmlAll(msg + "<br></font></b><font color=black><timestamp/><b>Reason:</font></b> " + reason);
+        }
 
         for (i = 0, len = toKick.length; i < len; i += 1) {
             Utils.mod.kick(sys.id(toKick[i]));
@@ -1878,13 +1877,8 @@
         }
     });
 
-    addCommand(1, ["moderationcommands", "moderatecommands"], function (src, command, commandData, tar, chan) {
-        Lists.Moderate.display(src, chan);
-    });
-
-    addCommand(1, ["partycommands", "funmodcommands"], function (src, command, commandData, tar, chan) {
-        Lists.Party.display(src, chan);
-    });
+    addListCommand(1, ["moderationcommands", "moderatecommands"], "Moderate");
+    addListCommand(1, ["partycommands", "funmodcommands"], "Party");
 
     addCommand(1, "imp", function (src, command, commandData, tar, chan) {
         if (commandData.length < 3) {
@@ -1897,7 +1891,10 @@
             return;
         }
 
-        sys.sendHtmlAll('<font color=#8A2BE2><timestamp/><b>' + Utils.escapeHtml(sys.name(src)) + ' has impersonated ' + Utils.escapeHtml(commandData) + '!</font></b>');
+        var displayImp = Utils.escapeHtml(commandData)
+        sys.sendHtmlAll('<font color=#8A2BE2><timestamp/><b>' + Utils.escapeHtml(sys.name(src)) + ' has impersonated ' + displayImp + '!</font></b>', 0);
+        Utils.watch.notify(Utils.nameIp(src) + " super-impersonated <b style='color: " + Utils.nameColor(src) + "'>~~" + displayImp + "~~</b>.");
+
         sys.changeName(src, commandData);
     });
 

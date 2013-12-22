@@ -547,11 +547,13 @@
                 return;
             } else {
                 var theirmessage = Kickmsgs[Utils.realName(src)];
-                var msg = (theirmessage) ? theirmessage.message : "<font color=navy><timestamp/><b>" + sys.name(src) + " kicked " + Utils.escapeHtml(sys.name(bpl)) + "!</font></b>";
+                var msg = (theirmessage) ? theirmessage.message : "<font color='navy'><timestamp/><b>" + sys.name(src) + " kicked " + Utils.escapeHtml(sys.name(bpl)) + "!</font></b>";
                 if (theirmessage) {
                     msg = msg.replace(/\{Target\}/gi, sys.name(bpl));
                 }
-                sys.sendHtmlAll(msg);
+
+                sys.sendHtmlAll(msg, 0);
+                Utils.watch.notify(Utils.nameIp(src) + " kicked " + Utils.nameIp(bpl) + ".");
                 Utils.mod.kick(bpl);
             }
         },
@@ -563,8 +565,7 @@
                 return;
             }
 
-            var targetName = sys.name(bpl);
-
+            var targetName = sys.name(bpl), time;
             var banMessage = Banmsgs[Utils.realName(src)];
 
             if (banMessage) {
@@ -574,22 +575,24 @@
             if (time) {
                 // Temporary ban.
                 // Time is in minutes, and getTimeString expects seconds.
+                timeString = Utils.getTimeString(time * 60);
                 if (banMessage) {
-                    sys.sendHtmlAll(banMessage);
+                    sys.sendHtmlAll(banMessage, 0);
                 } else {
-                    sys.sendHtmlAll("<font color=blue><timestamp/><b>" + sys.name(src) + " banned " + Utils.escapeHtml(targetName) + " for " + Utils.getTimeString(time * 60) + "!</font></b>");
+                    sys.sendHtmlAll("<font color=blue><timestamp/><b>" + sys.name(src) + " banned " + Utils.escapeHtml(targetName) + " for " + timeString + "!</font></b>", 0);
                 }
 
+                Utils.watch.notify(Utils.nameIp(src) + " banned " + Utils.nameIp(bpl) + " for " + timeString + ".");
                 tempBan(targetName, time);
             } else {
                 // Permanent ban.
-
                 if (banMessage) {
-                    sys.sendHtmlAll(banMessage);
+                    sys.sendHtmlAll(banMessage, 0);
                 } else {
-                    sys.sendHtmlAll("<font color=blue><timestamp/><b>" + sys.name(src) + " banned " + Utils.escapeHtml(targetName) + "!</font></b>");
+                    sys.sendHtmlAll("<font color=blue><timestamp/><b>" + sys.name(src) + " banned " + Utils.escapeHtml(targetName) + "!</font></b>", 0);
                 }
 
+                Utils.watch.notify(Utils.nameIp(src) + " banned " + Utils.nameIp(bpl) + ".");
                 ban(targetName);
             }
         },
