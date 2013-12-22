@@ -2382,6 +2382,26 @@
         bot.sendMessage(src, "Done.", chan);
     }, addCommand.flags.MAINTAINERS);
 
+    addCommand(3, "resetprofiling", function (src, command, commandData, tar, chan) {
+        sys.resetProfiling();
+        bot.sendMessage(src, "Done.", chan);
+    }, addCommand.flags.MAINTAINERS);
+
+    addCommand(3, "dump", function (src, command, commandData, tar, chan) {
+        bot.sendMessage(src, "Memory dump:", chan);
+        sys.sendMessage(src, sys.memoryDump(), chan);
+
+        sys.sendMessage(src, '', chan);
+
+        bot.sendMessage(src, "Profile dump:", chan);
+        sys.sendMessage(src, sys.profileDump(), chan);
+
+        sys.sendMessage(src, '', chan);
+
+        bot.sendMessage(src, "SESSION dump:", chan);
+        sys.sendMessage(src, SESSION.dump(), chan);
+    }, addCommand.flags.MAINTAINERS);
+
     addCommand(3, ["updatetiers"], function (src, command, commandData, tar, chan) {
         if (!commandData || (commandData.substr(0, 7) !== 'http://' && commandData.substr(0, 8) !== 'https://')) {
             commandData = Config.dataurl + "tiers.xml";
