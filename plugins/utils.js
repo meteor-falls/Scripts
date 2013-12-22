@@ -373,10 +373,24 @@
             return obj.hasOwnProperty((('' + key).toLowerCase()));
         };
 
+        util.regToggle = function (container, key, field, info) {
+            var added;
+            info = info || true;
+
+            if (key in container) {
+                delete key[container];
+                added = false;
+            } else {
+                key[container] = info;
+                added = true;
+            }
+
+            Reg.save(field, container);
+        };
+
         util.placeCommas = function (number) {
             return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         };
-
 
         util.realName = function (src) {
             return SESSION.users(src).originalName || sys.name(src);

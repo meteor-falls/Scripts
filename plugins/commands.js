@@ -48,6 +48,10 @@
         }, flags);
     }
 
+    function addMaintainerCommand(names, cb) {
+        addCommand(3, names, cb, addCommand.flags.MAINTAINERS);
+    }
+
     function canUseCommand(src, command) {
         if (!commands.hasOwnProperty(command)) {
             throw "The command " + command + " doesn't exist.";
@@ -1860,52 +1864,31 @@
         delete Rangebans[commandData];
         Reg.save("Rangebans", Rangebans);
     });
+
     addCommand(2, "megauser", function (src, command, commandData, tar, chan) {
         if (!sys.dbIp(commandData)) {
             bot.sendMessage(src, "That person does not exist.", chan);
             return;
         }
         var playerName = commandData.toLowerCase();
-        if (MegaUsers[playerName]) {
-            bot.sendMessage(src, "This person is already a megauser!", chan);
-            return;
-        }
         if (!sys.dbRegistered(commandData)) {
             bot.sendMessage(src, "This person is not registered and will not receive megauser until they register.", chan);
             bot.sendMessage(tar, "Please register so you can receive megauser.");
             return;
         }
 
-        MegaUsers[playerName] = {
-            "by": sys.name(src)
-        };
+        var added = Utils.regToggle(MegaUsers, playerName, "Megausers");
+        if (added) {
+            bot.sendAll(commandData + ' is now a megauser!', 0);
+        } else {
+            bot.sendAll(commandData + ' is no longer a megauser!', 0);
+        }
 
-        bot.sendAll(commandData + ' is now a megauser!', 0);
-        Reg.save("Megausers", MegaUsers);
-
-        if (tar !== undefined) {
-            SESSION.users(tar).megauser = true;
+        if (tar) {
+            SESSION.users(tar).megauser = added;
         }
     });
-    addCommand(2, "megauseroff", function (src, command, commandData, tar, chan) {
-        if (!sys.dbIp(commandData)) {
-            bot.sendMessage(src, "That person does not exist.", chan);
-            return;
-        }
-        var playerName = commandData.toLowerCase();
-        if (!MegaUsers[playerName]) {
-            bot.sendMessage(src, "This person is not a megauser!", chan);
-            return;
-        }
-        delete MegaUsers[playerName];
-        Reg.save("Megausers", MegaUsers);
 
-        bot.sendAll(commandData + ' is no longer a megauser!', chan);
-        if (tar !== undefined) {
-            SESSION.users(tar).megauser = false;
-        }
-
-    });
     addCommand(2, "clearchat", function (src, command, commandData, tar, chan) {
         chan = sys.channelId(commandData);
         if (chan === undefined) {
@@ -2056,156 +2039,6 @@
     /** OWNER COMMANDS */
     addListCommand(3, "ownercommands", "Owner");
 
-    addCommand(3, "update", function (src, command, commandData, tar, chan) {
-        if (!commandData) {
-            bot.sendMessage(src, "Specify a plugin!", chan);
-            return;
-        }
-
-        var plugins = commandData.trim().split(" ");
-        var plugin, len, i;
-        for (i = 0, len = plugins.length; i < len; i += 1) {
-            plugin = plugins[i];
-            if (plugin.indexOf(".js") === -1) {
-                plugin += ".js";
-            }
-
-            bot.sendMessage(src, "Updating plugin " + plugin + "...", chan);
-            Utils.watch.notify("Updating plugin " + plugin + "...");
-            try {
-                require(plugin, true, false);
-                if (!require.reload(plugin)) {
-                    bot.sendMessage(src, "Plugin " + plugin + " refused to reload.", chan);
-                    Utils.watch.notify("Plugin " + plugin + " refused to reload.");
-                }
-
-                bot.sendMessage(src, "Plugin " + plugin + " updated!", chan);
-                Utils.watch.notify("Plugin " + plugin + " updated.");
-            } catch (ex) {
-                bot.sendMessage(src, "Couldn't update plugin " + plugin + ": " + ex.toString() + " on line " + ex.lineNumber + " :(", chan);
-                sys.sendHtmlMessage(src, ex.backtrace.join("<br/>"), chan);
-                Utils.watch.notify("Couldn't update plugin " + plugin + ": " + ex.toString() + " on line " + ex.lineNumber + " :(");
-                print(ex.backtracetext);
-            }
-        }
-    }, addCommand.flags.MAINTAINERS);
-
-    addCommand(3, "init", function (src, command, commandData, tar, chan) {
-        script.init();
-        bot.sendMessage(src, "Init was called successfully.", chan);
-    }, addCommand.flags.MAINTAINERS);
-
-    addCommand(3, ["webcall", "updatescript"], function (src, command, commandData, tar, chan) {
-        sys.sendHtmlAll('<font color=blue><timestamp/><b>±ScriptBot: </b></font>The scripts were webcalled by ' + sys.name(src) + '!', 0);
-        if (!commandData) {
-            commandData = "https://raw.github.com/meteor-falls/Scripts/master/scripts.js";
-        }
-        sys.webCall(commandData, function (resp) {
-            try {
-                FULLRELOAD = true;
-                sys.changeScript(resp);
-                var oldContent = sys.getFileContent("scripts.js");
-                sys.writeToFile("scripts.js", resp);
-                sys.writeToFile("scripts_before_webcall.js", oldContent);
-            } catch (e) {
-                sys.changeScript(sys.getFileContent("scripts.js"));
-                bot.sendMessage(src, "An error occured:", chan);
-                bot.sendMessage(src,  e + " on line " + e.lineNumber, chan);
-            }
-        });
-    }, addCommand.flags.MAINTAINERS);
-
-    addCommand(3, "sessionrefill", function (src, command, commandData, tar, chan) {
-        SESSION.refill();
-        bot.sendMessage(src, "Done.", chan);
-    }, addCommand.flags.MAINTAINERS);
-
-    addCommand(3, "resetprofiling", function (src, command, commandData, tar, chan) {
-        sys.resetProfiling();
-        bot.sendMessage(src, "Done.", chan);
-    }, addCommand.flags.MAINTAINERS);
-
-    // /dump memory:profile
-    // /dump *
-    addCommand(3, "dump", function (src, command, commandData, tar, chan) {
-        var types = (commandData || '*').split(':').map(Utils.lowerKeys),
-            wildcard = types.indexOf('*') !== -1;
-        function wantsDump(type) {
-            return wildcard || types.indexOf(type) !== -1;
-        }
-
-        if (wantsDump('memory')) {
-            bot.sendMessage(src, "Memory dump:", chan);
-            sys.sendMessage(src, sys.memoryDump(), chan);
-        }
-
-        if (wantsDump('profile')) {
-            bot.sendMessage(src, "Profile dump:", chan);
-            sys.sendHtmlMessage(src, sys.profileDump().replace(/\n/g, '<br/>'), chan);
-        }
-
-        if (wantsDump('session')) {
-            bot.sendMessage(src, "SESSION dump:", chan);
-            sys.sendHtmlMessage(src, SESSION.dump().replace(/\n/g, '<br/>'), chan);
-        }
-
-        if (wantsDump('reg')) {
-            bot.sendMessage(src, "Reg dump:", chan);
-            sys.sendHtmlMessage(src, Reg.dump().replace(/\n/g, '<br/>'), chan);
-        }
-    }, addCommand.flags.MAINTAINERS);
-
-    addCommand(3, ["updatetiers"], function (src, command, commandData, tar, chan) {
-        if (!commandData || (commandData.substr(0, 7) !== 'http://' && commandData.substr(0, 8) !== 'https://')) {
-            commandData = Config.dataurl + "tiers.xml";
-        }
-        sys.sendHtmlAll('<font color=blue><timestamp/><b>±TierBot: </b></font>The tiers were webcalled by ' + sys.name(src) + '!', 0);
-        sys.webCall(commandData, function (resp) {
-            try {
-                sys.writeToFile("tiers.xml", resp);
-                sys.reloadTiers();
-            } catch (e) {
-                bot.sendMessage(src, "Error updating tiers: " + e);
-                print(e.backtracetext);
-            }
-        });
-    }, addCommand.flags.MAINTAINERS);
-    addCommand(3, ["testann", "updateann"], function (src, command, commandData, tar, chan) {
-        if (!commandData || (commandData.substr(0, 7) !== 'http://' && commandData.substr(0, 8) !== 'https://')) {
-            commandData = Config.dataurl + "announcement.html";
-        }
-
-        if (command === "updateann") {
-            sys.sendHtmlAll('<font color=blue><timestamp/><b>±AnnouncementBot: </b></font>The announcement was webcalled by ' + sys.name(src) + '!', 0);
-        }
-
-        sys.webCall(commandData, function (resp) {
-            if (command === "testann") {
-                sys.setAnnouncement(resp, src);
-            } else {
-                var oldAnn = sys.getAnnouncement();
-                sys.writeToFile("old_announcement.html", oldAnn);
-                bot.sendMessage(src, "Old announcement stored in old_announcement.html", chan);
-                sys.changeAnnouncement(resp);
-            }
-        });
-    }, addCommand.flags.MAINTAINERS);
-
-    addCommand(3, ["updatedesc"], function (src, command, commandData, tar, chan) {
-        if (!commandData || (commandData.substr(0, 7) !== 'http://' && commandData.substr(0, 8) !== 'https://')) {
-            commandData = Config.dataurl + "description.html";
-        }
-
-        sys.sendHtmlAll('<font color=blue><timestamp/><b>±DescriptionBot: </b></font>The description was webcalled by ' + sys.name(src) + '!', 0);
-
-        sys.webCall(commandData, function (resp) {
-            var oldDesc = sys.getDescription();
-            sys.writeToFile("old_description.html", oldDesc);
-            bot.sendMessage(src, "Old description stored in old_description.html", chan);
-            sys.changeDescription(resp);
-        });
-    }, addCommand.flags.MAINTAINERS);
-
     addCommand(3, ["toggleemotes"], function (src, command, commandData, tar, chan) {
         Config.emotesEnabled = !Config.emotesEnabled;
         bot.sendAll("Emotes were " + (Config.emotesEnabled ? "enabled!" : "disabled."), chan);
@@ -2318,11 +2151,165 @@
         bot.sendMessage(src, "Set welcome message of " + name + " to: " + Utils.escapeHtml(mess), chan);
     });
 
+    /* Maintainer commands */
+    addMaintainerCommand("update", function (src, command, commandData, tar, chan) {
+        if (!commandData) {
+            bot.sendMessage(src, "Specify a plugin!", chan);
+            return;
+        }
+
+        var plugins = commandData.trim().split(" ");
+        var plugin, len, i;
+        for (i = 0, len = plugins.length; i < len; i += 1) {
+            plugin = plugins[i];
+            if (plugin.indexOf(".js") === -1) {
+                plugin += ".js";
+            }
+
+            bot.sendMessage(src, "Updating plugin " + plugin + "...", chan);
+            Utils.watch.notify("Updating plugin " + plugin + "...");
+            try {
+                require(plugin, true, false);
+                if (!require.reload(plugin)) {
+                    bot.sendMessage(src, "Plugin " + plugin + " refused to reload.", chan);
+                    Utils.watch.notify("Plugin " + plugin + " refused to reload.");
+                }
+
+                bot.sendMessage(src, "Plugin " + plugin + " updated!", chan);
+                Utils.watch.notify("Plugin " + plugin + " updated.");
+            } catch (ex) {
+                bot.sendMessage(src, "Couldn't update plugin " + plugin + ": " + ex.toString() + " on line " + ex.lineNumber + " :(", chan);
+                sys.sendHtmlMessage(src, ex.backtrace.join("<br/>"), chan);
+                Utils.watch.notify("Couldn't update plugin " + plugin + ": " + ex.toString() + " on line " + ex.lineNumber + " :(");
+                print(ex.backtracetext);
+            }
+        }
+    });
+
+    addMaintainerCommand("init", function (src, command, commandData, tar, chan) {
+        script.init();
+        bot.sendMessage(src, "Init was called successfully.", chan);
+    });
+
+    addMaintainerCommand(["webcall", "updatescript"], function (src, command, commandData, tar, chan) {
+        sys.sendHtmlAll('<font color=blue><timestamp/><b>±ScriptBot: </b></font>The scripts were webcalled by ' + sys.name(src) + '!', 0);
+        if (!commandData) {
+            commandData = "https://raw.github.com/meteor-falls/Scripts/master/scripts.js";
+        }
+        sys.webCall(commandData, function (resp) {
+            try {
+                FULLRELOAD = true;
+                sys.changeScript(resp);
+                var oldContent = sys.getFileContent("scripts.js");
+                sys.writeToFile("scripts.js", resp);
+                sys.writeToFile("scripts_before_webcall.js", oldContent);
+            } catch (e) {
+                sys.changeScript(sys.getFileContent("scripts.js"));
+                bot.sendMessage(src, "An error occured:", chan);
+                bot.sendMessage(src,  e + " on line " + e.lineNumber, chan);
+            }
+        });
+    });
+
+    addMaintainerCommand("sessionrefill", function (src, command, commandData, tar, chan) {
+        SESSION.refill();
+        bot.sendMessage(src, "Done.", chan);
+    });
+
+    addMaintainerCommand("resetprofiling", function (src, command, commandData, tar, chan) {
+        sys.resetProfiling();
+        bot.sendMessage(src, "Done.", chan);
+    });
+
+    // /dump memory:profile
+    // /dump *
+    addMaintainerCommand("dump", function (src, command, commandData, tar, chan) {
+        var types = (commandData || '*').split(':').map(Utils.lowerKeys),
+            wildcard = types.indexOf('*') !== -1;
+        function wantsDump(type) {
+            return wildcard || types.indexOf(type) !== -1;
+        }
+
+        if (wantsDump('memory')) {
+            bot.sendMessage(src, "Memory dump:", chan);
+            sys.sendMessage(src, sys.memoryDump(), chan);
+        }
+
+        if (wantsDump('profile')) {
+            bot.sendMessage(src, "Profile dump:", chan);
+            sys.sendHtmlMessage(src, sys.profileDump().replace(/\n/g, '<br/>'), chan);
+        }
+
+        if (wantsDump('session')) {
+            bot.sendMessage(src, "SESSION dump:", chan);
+            sys.sendHtmlMessage(src, SESSION.dump().replace(/\n/g, '<br/>'), chan);
+        }
+
+        if (wantsDump('reg')) {
+            bot.sendMessage(src, "Reg dump:", chan);
+            sys.sendHtmlMessage(src, Reg.dump().replace(/\n/g, '<br/>'), chan);
+        }
+    });
+
+    addMaintainerCommand(["updatetiers"], function (src, command, commandData, tar, chan) {
+        if (!commandData || (commandData.substr(0, 7) !== 'http://' && commandData.substr(0, 8) !== 'https://')) {
+            commandData = Config.dataurl + "tiers.xml";
+        }
+        sys.sendHtmlAll('<font color=blue><timestamp/><b>±TierBot: </b></font>The tiers were webcalled by ' + sys.name(src) + '!', 0);
+        sys.webCall(commandData, function (resp) {
+            try {
+                sys.writeToFile("tiers.xml", resp);
+                sys.reloadTiers();
+            } catch (e) {
+                bot.sendMessage(src, "Error updating tiers: " + e);
+                print(e.backtracetext);
+            }
+        });
+    });
+
+    addMaintainerCommand(["testann", "updateann"], function (src, command, commandData, tar, chan) {
+        if (!commandData || (commandData.substr(0, 7) !== 'http://' && commandData.substr(0, 8) !== 'https://')) {
+            commandData = Config.dataurl + "announcement.html";
+        }
+
+        if (command === "updateann") {
+            sys.sendHtmlAll('<font color=blue><timestamp/><b>±AnnouncementBot: </b></font>The announcement was webcalled by ' + sys.name(src) + '!', 0);
+        }
+
+        sys.webCall(commandData, function (resp) {
+            if (command === "testann") {
+                sys.setAnnouncement(resp, src);
+            } else {
+                var oldAnn = sys.getAnnouncement();
+                sys.writeToFile("old_announcement.html", oldAnn);
+                bot.sendMessage(src, "Old announcement stored in old_announcement.html", chan);
+                sys.changeAnnouncement(resp);
+            }
+        });
+    });
+
+    addMaintainerCommand(["updatedesc"], function (src, command, commandData, tar, chan) {
+        if (!commandData || (commandData.substr(0, 7) !== 'http://' && commandData.substr(0, 8) !== 'https://')) {
+            commandData = Config.dataurl + "description.html";
+        }
+
+        sys.sendHtmlAll('<font color=blue><timestamp/><b>±DescriptionBot: </b></font>The description was webcalled by ' + sys.name(src) + '!', 0);
+
+        sys.webCall(commandData, function (resp) {
+            var oldDesc = sys.getDescription();
+            sys.writeToFile("old_description.html", oldDesc);
+            bot.sendMessage(src, "Old description stored in old_description.html", chan);
+            sys.changeDescription(resp);
+        });
+    });
+
+    /* Exports & metadata */
     module.exports = {
         handleCommand: handleCommand,
         canUseCommand: canUseCommand,
         addCommand: addCommand,
-        addListCommand: addListCommand
+        addListCommand: addListCommand,
+        addMaintainerCommand: addMaintainerCommand
     };
 
     module.reload = function () {

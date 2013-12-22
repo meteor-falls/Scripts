@@ -336,8 +336,7 @@ module.exports = {
         Admin.add("unssilence", "To cancel the super silence.");
         Admin.add("ssilenceoff", "Same as unssilence.");
         Admin.add("showteam <font color=red><b>[player]</b></font>", "To view a player's team.");
-        Admin.add("megauser <font color=red><b>[player]</b></font>", "To make [player] a megauser.");
-        Admin.add("megauseroff <font color=red><b>[player]</b></font>", "To remove [player]'s megauser.");
+        Admin.add("megauser <font color=red><b>[player]</b></font>", "To give/take [player] megauser status.");
         Admin.add("private", "To make the server private.");
         Admin.finish();
 
