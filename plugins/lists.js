@@ -157,7 +157,7 @@
         User.add("emotetoggle", "To toggle emotes on or off for you.");
         User.add("bbcode", "To view a list of bbcodes.");
         User.add("selfkick", "Kicks all the ghosts on your ip.");
-        User.add("vote <font color=red><b>[option]</b></font>", "To vote on a poll option.");
+        User.add("vote", "To vote on a poll option.", ["option"]);
         User.add("calc", "Evaluates a mathematical expression (10 / 2 * 4 ^ pi!). Full documentation <a href='https://github.com/josdejong/mathjs/blob/master/README.md'>here</a>.", ["expression"]);
         User.add("players", "Tells you how many players there are online on the given [os] (windows, mac, linux, android, webclient). If not specified, tells you how many players there are online regardless of OS.", ["os"]);
         User.finish();
@@ -343,15 +343,14 @@
         /** ADMIN COMMANDS **/
         var Admin = new CommandList("Administrator Commands", "navy");
         Admin.add("<font color=blue>[s]</font>ban", "To ban [player]. Use /sban instead to silently ban.", ["player"]);
-        Admin.add("unban <font color=red><b>[player]</b></font>", "To unban a [player].");
-        Admin.add("skick <font color=red><b>[player]</b></font>", "To silently kick [player].");
-        Admin.add("clearpass <font color=red><b>[player]</b></font>", "To clear [player]'s password.");
-        Admin.add("clearchat <font color=red><b>[channel]</b></font>", "To clear the chat in the channel [channel]. Default channel is " + sys.channel(0));
+        Admin.add("unban", "To unban a [player].", ["player"]);
+        Admin.add("skick", "To silently kick [player].", ["player"]);
+        Admin.add("clearpass", "To clear [player]'s password.", ["player"]);
+        Admin.add("clearchat", "To clear the chat in the channel [channel]. Default channel is " + sys.channel(0) + ".", ["channel"]);
         Admin.add("supersilence", "To silence all users and mods.");
-        Admin.add("unssilence", "To cancel the super silence.");
-        Admin.add("ssilenceoff", "Same as unssilence.");
-        Admin.add("showteam <font color=red><b>[player]</b></font>", "To view a player's team.");
-        Admin.add("megauser <font color=red><b>[player]</b></font>", "To give/take [player] megauser status.");
+        Admin.add("unssilence", "To cancel the super silence. Note: double s.");
+        Admin.add("showteam", "To view a player's team.", ["player"]);
+        Admin.add("megauser", "To give/take [player] megauser status.", ["player"]);
         Admin.add("private", "To make the server private.");
         Admin.finish();
 

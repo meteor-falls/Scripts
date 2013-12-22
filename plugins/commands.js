@@ -303,7 +303,7 @@
         }
     });
 
-    addCommand(0, "bbcodes", function (src, command, commandData, tar, chan) {
+    addCommand(0, ["bbcode", "bbcodes"], function (src, command, commandData, tar, chan) {
         var BB = new CommandList("BB Code List", "navy", "Type in these BB Codes to use them:");
         var formatBB = function (m) {
             return m + " <b>-</b> " + format(0, m);
