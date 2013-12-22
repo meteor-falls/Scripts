@@ -471,6 +471,60 @@
             return fine;
         };
 
+        util.tier.hasDrizzleSwim = function hasDrizzleSwim(src) {
+            var swiftswim,
+                drizzle,
+                teamCount = sys.teamCount(src),
+                teams_banned = [];
+            var ability, team, i;
+
+            if (sys.hasTier(src, "5th Gen OU")) {
+                for (team = 0; team < teamCount; team += 1) {
+                    if (sys.tier(src, team) !== "5th Gen OU") {
+                        continue;
+                    }
+                    swiftswim = false,
+                    drizzle = false;
+                    for (i = 0; i < 6; i += 1) {
+                        ability = sys.ability(sys.teamPokeAbility(src, team, i));
+                        if (ability === "Swift Swim") {
+                            swiftswim = true;
+                        } else if (ability === "Drizzle") {
+                            drizzle = true;
+                        }
+
+                        if (drizzle && swiftswim) {
+                            teams_banned.push(team);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return teams_banned;
+        };
+
+        util.tier.hasSandCloak = function hasSandCloak(src) { // Has Sand Veil or Snow Cloak in tiers < 5th Gen Ubers.
+            var teams_banned = [],
+                teamCount = sys.teamCount(src);
+            var ability, team, i;
+
+            for (team = 0; team < teamCount; team += 1) {
+                if (sys.tier(src, team) === "5th Gen Ubers" || sys.gen(src, team) !== 5) {
+                    continue; // Only care about 5th Gen
+                }
+                for (i = 0; i < 6; i += 1) {
+                    ability = sys.ability(sys.teamPokeAbility(src, team, i));
+                    if (ability === "Sand Veil" || ability === "Snow Cloak") {
+                        teams_banned.push(team);
+                        break;
+                    }
+                }
+            }
+
+            return teams_banned;
+        };
+
         return util;
     };
 

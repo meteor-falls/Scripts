@@ -195,59 +195,6 @@ module.exports = {
             return (hasBasicPermissions(src) || hasEmotePerms(name)) && Emotetoggles.hasOwnProperty(name);
         };
 
-        hasDrizzleSwim = function (src) {
-            var swiftswim,
-                drizzle,
-                ability,
-                teams_banned = [],
-                team,
-                i;
-
-            if (sys.hasTier(src, "5th Gen OU")) {
-                for (team = 0; team < sys.teamCount(src); team += 1) {
-                    if (sys.tier(src, team) !== "5th Gen OU") {
-                        continue;
-                    }
-                    swiftswim = false,
-                    drizzle = false;
-                    for (i = 0; i < 6; i += 1) {
-                        ability = sys.ability(sys.teamPokeAbility(src, team, i));
-                        if (ability === "Swift Swim") {
-                            swiftswim = true;
-                        }
-                        if (ability === "Drizzle") {
-                            drizzle = true;
-                        }
-                        if (drizzle && swiftswim) {
-                            teams_banned.push(team);
-                            break;
-                        }
-                    }
-                }
-            }
-            return teams_banned;
-        };
-
-        hasSandCloak = function (src) { // Has Sand Veil or Snow Cloak in tiers < 5th Gen Ubers.
-            var teams_banned = [],
-                ability,
-                team,
-                i;
-
-            for (team = 0; team < sys.teamCount(src); team += 1) {
-                if (sys.tier(src, team) === "5th Gen Ubers" || sys.gen(src, team) !== 5) {
-                    continue; // Only care about 5th Gen
-                }
-                for (i = 0; i < 6; i += 1) {
-                    ability = sys.ability(sys.teamPokeAbility(src, team, i));
-                    if (ability === "Sand Veil" || ability === "Snow Cloak") {
-                        teams_banned.push(team);
-                    }
-                }
-            }
-            return teams_banned;
-        };
-
         var globalVars = {
             border: "<font color=green><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</b></font>",
             tourmode: 0,

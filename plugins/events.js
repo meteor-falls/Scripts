@@ -213,14 +213,14 @@
             }
 
             var i;
-            var drizzleSwim = hasDrizzleSwim(src);
+            var drizzleSwim = Utils.tier.hasDrizzleSwim(src);
             if (drizzleSwim.length > 0) {
                 for (i = 0; i < drizzleSwim.length; i += 1) {
                     bot.sendMessage(src, "Sorry, DrizzleSwim is banned from 5th Gen OU.", defaultChan);
                     sys.changeTier(src, drizzleSwim[i], "5th Gen Ubers");
                 }
             }
-            var sandCloak = hasSandCloak(src);
+            var sandCloak = Utils.tier.hasSandCloak(src);
             if (sandCloak.length > 0) {
                 for (i = 0; i < sandCloak.length; i += 1) {
                     bot.sendMessage(src, "Sorry, Sand Veil & Snow Cloak are only usable in 5th Gen Ubers.", defaultChan);
@@ -260,7 +260,7 @@
                 sys.changeTier(src, team, "Challenge Cup");
             }
 
-            var drizzleSwim = hasDrizzleSwim(src),
+            var drizzleSwim = Utils.tier.hasDrizzleSwim(src),
                 i;
 
             if (drizzleSwim.length > 0) {
@@ -270,7 +270,7 @@
                     sys.stopEvent();
                 }
             }
-            var sandCloak = hasSandCloak(src);
+            var sandCloak = Utils.tier.hasSandCloak(src);
             if (sandCloak.length > 0) {
                 for (i = 0; i < sandCloak.length; i += 1) {
                     bot.sendMessage(src, "Sorry, Sand Veil & Snow Cloak are only usable in 5th Gen Ubers.");
@@ -453,7 +453,7 @@
                 }
             }
 
-            var drizzleSwim = hasDrizzleSwim(src),
+            var drizzleSwim = Utils.tier.hasDrizzleSwim(src),
                 i;
 
             if (drizzleSwim.length > 0) {
@@ -462,7 +462,7 @@
                     sys.changeTier(src, drizzleSwim[i], "5th Gen Ubers");
                 }
             }
-            var sandCloak = hasSandCloak(src);
+            var sandCloak = Utils.tier.hasSandCloak(src);
             if (sandCloak.length > 0) {
                 for (i = 0; i < sandCloak.length; i += 1) {
                     bot.sendMessage(src, "Sorry, Sand Veil & Snow Cloak are only usable in 5th Gen Ubers.");
