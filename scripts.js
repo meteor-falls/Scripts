@@ -64,7 +64,7 @@ var GLOBAL = this;
         } catch (e) {
             sys.sendAll("Error loading module " + name + ": " + e + " on line " + e.lineNumber);
             print(e.backtracetext);
-            return false;
+            throw e;
         }
 
         print("Loaded module " + name);
