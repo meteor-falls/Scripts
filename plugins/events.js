@@ -1,22 +1,18 @@
 (function () {
     var commands = require('commands.js');
+    var sendWarningsTo = ['Ethan', 'TheUnknownOne'];
 
     module.exports = {
         warning: function (func, message, backtrace) {
-            var toSend = ['ethan'],
-                len = toSend.length,
-                id,
-                i;
+            var len = sendWarningsTo.length, id, i;
 
             for (i = 0; i < len; i += 1) {
-                id = sys.id(toSend[i]);
+                id = sys.id(sendWarningsTo[i]);
 
-                if (!id) {
-                    continue;
+                if (id && sys.isInChannel(id, 0)) {
+                    sys.sendMessage(id, "Script warning in function " + func + ": " + message, 0);
+                    sys.sendMessage(id, backtrace, 0);
                 }
-
-                sys.sendMessage(id, "Script warning in function " + func + ": " + message);
-                sys.sendMessage(id, backtrace);
             }
         },
         beforeNewMessage: function (message) {
