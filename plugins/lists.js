@@ -12,7 +12,7 @@
     CommandList = function (title, bordercolor, help, listtype) {
         this.title = title;
         this.bordercolor = bordercolor;
-        this.template = "<font color='" + this.bordercolor + "' size='4'><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br/><h2>" + title + "</h2><br/>";
+        this.template = "<font color='" + this.bordercolor + "' size='4'><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br/><h2>" + title + "</h2>";
 
         if (!help && help !== "") {
             help = "Type one of the following into the channel's chat to use it:";
@@ -23,7 +23,7 @@
         }
 
         if (help !== "") {
-            this.template += "<i>" + help + "</i><br/><" + listtype + ">";
+            this.template += "<i>" + help + "</i><" + listtype + ">";
         }
 
         this.forCommands = title.indexOf("Commands") > -1 || title.indexOf("Option") > -1;
@@ -33,7 +33,7 @@
 
     CommandList.prototype.add = function (cmd, desc, args) {
         if (this.forCommands) {
-            this.template += "<li><b>/" + cmd + "</b>" + formatArgs(args) + "<b>:</b> " + desc + "</li>";
+            this.template += "<li><b>/" + cmd + "</b>" + formatArgs(args) + ": " + desc + "</li>";
         } else {
             this.template += "<li><b>" + cmd + "</b></li>";
         }
