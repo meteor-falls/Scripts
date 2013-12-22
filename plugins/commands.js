@@ -2221,6 +2221,11 @@
         bot.sendMessage(src, "Done.", chan);
     });
 
+    addMaintainerCommand("regremove", function (src, command, commandData, tar, chan) {
+        var removed = Reg.remove(commandData);
+        bot.sendMessage(src, commandData + " was " + (removed ? "removed" : "not removed (doesn't exist)") + ".", chan);
+    });
+
     // /dump memory:profile
     // /dump *
     addMaintainerCommand("dump", function (src, command, commandData, tar, chan) {

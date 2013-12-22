@@ -44,10 +44,13 @@
         };
 
         this.remove = function (key) {
+            var deleted = false;
             if (this.data[key]) {
-                delete this.data[key];
+                deleted = (delete this.data[key]);
                 this.saveData();
             }
+
+            return deleted;
         };
 
         /*
