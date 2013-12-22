@@ -17,7 +17,8 @@ var Config = {
 
     // Do not touch unless you are adding a new plugin.
     // Plugins to load on script load.
-    plugins: ['bot', 'reg', 'utils', 'emotes', 'feedmon', 'lists', 'init', 'commands', 'events', 'mathjs'],
+    // mathjs is loaded dynamically.
+    plugins: ['bot', 'reg', 'utils', 'emotes', 'feedmon', 'lists', 'init', 'commands', 'events'],
 
     // Whether or not to load plugins from repourl. If set to false, they will load locally.
     load_from_web: true,
@@ -160,7 +161,7 @@ poScript = ({
         require.reload('emotes.js');
         require.reload('lists.js');
 
-        MathJS = require('mathjs.js');
+        //MathJS = require('mathjs.js');
         sys.resetProfiling();
     },
     warning: function warning(func, message, backtrace) {

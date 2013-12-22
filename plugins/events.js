@@ -358,8 +358,8 @@
 
                 var tar = sys.id(commandData);
                 try {
-                    if (commands.can_use_command(src, command)) {
-                        commands.handle_command(src, message, command, commandData, tar, chan);
+                    if (commands.canUseCommand(src, command)) {
+                        commands.handleCommand(src, message, command, commandData, tar, chan);
                         return;
                     }
                 } catch (err) {

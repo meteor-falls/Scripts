@@ -48,6 +48,53 @@
         }, flags);
     }
 
+    function canUseCommand(src, command) {
+        if (!commands.hasOwnProperty(command)) {
+            throw "The command " + command + " doesn't exist.";
+        }
+        var srcauth = Utils.getAuth(src),
+            name = SESSION.users(src).originalName,
+            cmd = commands[command];
+        if (disabledCmds.indexOf(command.toLowerCase()) > -1 && srcauth < 3) {
+            throw "The command " + command + " has been disabled.";
+        }
+
+        if ((cmd.flags & addCommand.flags.MAINTAINERS) && Config.maintainers.indexOf(name) !== -1) {
+            return true;
+        }
+
+        if (cmd.authLevel && cmd.authLevel > srcauth) {
+            throw "You need to be a higher auth to use this command.";
+        }
+        return true;
+    }
+
+    function handleCommand(src, message, command, commandData, tar, chan) {
+        var poUser = SESSION.users(src),
+            isMuted = poUser.muted,
+            originalName = poUser.originalName,
+            isLManager = Leaguemanager === originalName.toLowerCase(),
+            myAuth = Utils.getAuth(src);
+
+        var cmd = commands[command];
+        if (typeof cmd.callback === "function") {
+            cmd.callback.call(
+                {
+                    poUser: poUser,
+                    isMuted: isMuted,
+                    originalName: originalName,
+                    isLManager: isLManager,
+                    myAuth: myAuth
+                },
+                src,
+                command,
+                commandData,
+                tar,
+                chan
+            );
+        }
+    }
+
     /** USER COMMANDS */
     addListCommand(0, "commands", "Commands");
     addListCommand(0, "usercommands", "User");
@@ -544,10 +591,9 @@
         sys.sendHtmlMessage(src, "<br><font color=red><timestamp/><b> ««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»</b></font><br><font color=black><timestamp/><b>Meteor Falls™ v0.9 Scripts</b></font><br><font color=blue><timestamp/><b>Created By:</b></font> <b><font color=navy>[VP]Blade,</font> <font color=#00aa7f>TheUnknownOne,</font> <font color=black>Ethan</b></font> <br><font color=green><timestamp/><b>Full Script: <a href='https://raw.github.com/meteor-falls/Scripts/master/scripts.js'>https://raw.github.com/meteor-falls/Scripts/master/scripts.js</a></b></font><br><font color=darkorange><timestamp/><b>WebCall Script:</font> <b><a href='https://raw.github.com/meteor-falls/Scripts/master/webcall.js'>https://raw.github.com/meteor-falls/Scripts/master/webcall.js</a></b><br><font color=navy><timestamp/><b>Special Thanks To:</b></font> <b><font color=#8A2BE2>Lutra,</font> <font color=navy>Max</b></font><br><font color=black><timestamp/><b> © Meteor Falls 2013 [WTFPL] </b></font><br><font color=red><timestamp/><b> ««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»</b></font><br>", chan);
     });
 
-    addCommand(0, ["calc", "calculate"], function (src, command, commandData, tar, chan) {
+    addCommand(0, ["calc", "calculate", "calculator"], function (src, command, commandData, tar, chan) {
         if (!mathjs) {
-            bot.sendMessage(src, "Sorry, MathJS needs to be loaded in order to use this command.", chan);
-            return;
+            require.reload('mathjs.js');
         }
 
         var res;
@@ -2567,51 +2613,10 @@
     });
 
     module.exports = {
-        can_use_command: function (src, command) {
-            if (!commands.hasOwnProperty(command)) {
-                throw "The command " + command + " doesn't exist.";
-            }
-            var srcauth = Utils.getAuth(src),
-                name = SESSION.users(src).originalName,
-                cmd = commands[command];
-            if (disabledCmds.indexOf(command.toLowerCase()) > -1 && srcauth < 3) {
-                throw "The command " + command + " has been disabled.";
-            }
-
-            if ((cmd.flags & addCommand.flags.MAINTAINERS) && Config.maintainers.indexOf(name) !== -1) {
-                return true;
-            }
-
-            if (cmd.authLevel && cmd.authLevel > srcauth) {
-                throw "You need to be a higher auth to use this command.";
-            }
-            return true;
-        },
-        handle_command: function (src, message, command, commandData, tar, chan) {
-            var poUser = SESSION.users(src),
-                isMuted = poUser.muted,
-                originalName = poUser.originalName,
-                isLManager = Leaguemanager === originalName.toLowerCase(),
-                myAuth = Utils.getAuth(src);
-
-            var cmd = commands[command];
-            if (typeof cmd.callback === "function") {
-                cmd.callback.call(
-                    {
-                        poUser: poUser,
-                        isMuted: isMuted,
-                        originalName: originalName,
-                        isLManager: isLManager,
-                        myAuth: myAuth
-                    },
-                    src,
-                    command,
-                    commandData,
-                    tar,
-                    chan
-                );
-            }
-        }
+        handleCommand: handleCommand,
+        canUseCommand: canUseCommand,
+        addCommand: addCommand,
+        addListCommand: addListCommand
     };
 
     module.reload = function () {
