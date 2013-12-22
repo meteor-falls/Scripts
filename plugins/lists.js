@@ -33,7 +33,7 @@
 
     CommandList.prototype.add = function (cmd, desc, args) {
         if (this.forCommands) {
-            this.template += "<li><b>/" + cmd + "</b>" + formatArgs(args) + ": " + desc + "</li>";
+            this.template += "<li><b>/" + cmd + "</b>" + formatArgs(args) + "<small>»</small> " + desc + "</li>";
         } else {
             this.template += "<li><b>" + cmd + "</b></li>";
         }
@@ -56,7 +56,7 @@
         this.padding = padding;
         this.borderColor = borderColor;
 
-        this.template = "<font color='" + borderColor + "' size='4'><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br/><h2>" + name + "</h2><br/>";
+        this.template = "<font color='" + borderColor + "' size='4'><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><h2>" + name + "</h2>";
         this.template += "<table border='" + border + "' cellpadding='" + padding + "'>";
 
         this.zebra = true;
