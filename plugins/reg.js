@@ -24,7 +24,6 @@
         }
 
         this.version = this.data.version || 0;
-        updateReg(this);
 
         this.save = function (key, value) {
             if (this.data[key] !== value) {
@@ -91,6 +90,8 @@
                 dataKeys.join(", ")
             ].join("\n");
         };
+
+        updateReg(this);
     }
 
     module.exports.Reg = RegClass;
