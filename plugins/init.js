@@ -134,7 +134,7 @@ module.exports = {
             "Welmsgs": "Welmsgs",
             "Emotetoggles": "Emotetoggles",
             "Emoteperms": "Emoteperms",
-            "Feedmons": Feedmon.TABLE
+            "Feedmons": "Feedmon"
         };
 
         for (var i in regVals) {

@@ -2,7 +2,7 @@
     var currentVersion = 1;
     function updateReg(reg) {
         if (reg.version === 0) {
-            ("Megausers FloodIgnore Channeltopics Mutes Rangebans Kickmsgs Banmsgs Welmsgs EmoteToggles Emoteperms " + Feedmon.TABLE)
+            ("Megausers FloodIgnore Channeltopics Mutes Rangebans Kickmsgs Banmsgs Welmsgs EmoteToggles Emoteperms Feedmon")
                 .split(" ")
                 .forEach(function (key) {
                     reg.save(key, JSON.parse(reg.get(key)));
