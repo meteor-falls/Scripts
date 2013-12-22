@@ -1,11 +1,21 @@
 (function () {
+    function formatArgs(args) {
+        if (!args || !Array.isArray(args)) {
+            return "";
+        }
+
+        return " " + args.map(function (val) {
+            return "<b style='color: red;'>[" + val + "]</b>";
+        }).join(":");
+    }
+
     CommandList = function (title, bordercolor, help, listtype) {
         this.title = title;
         this.bordercolor = bordercolor;
         this.template = "<font color=" + this.bordercolor + " size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br><h2>" + title + "</h2><br>";
 
         if (!help && help !== "") {
-            help = "Type the following in the main chat in order to use them:";
+            help = "Type one of the following into the channel's chat to use it:";
         }
 
         if (!listtype) {
@@ -21,9 +31,9 @@
         this.listtype = listtype;
     };
 
-    CommandList.prototype.add = function (cmd, desc) {
+    CommandList.prototype.add = function (cmd, desc, args) {
         if (this.forCommands) {
-            this.template += "<li><b>/" + cmd + ": " + desc + "</b></li>";
+            this.template += "<li><b>/" + cmd + formatArgs(args) + ": " + desc + "</b></li>";
         } else {
             this.template += "<li><b>" + cmd + "</b></li>";
         }
@@ -137,38 +147,38 @@
             User.add("league", "To view the list of gym leaders, elites, and the champion.");
             User.add("leaguerules", "To view the rules for the League.");
             User.add("tourusercommands", "To view the tournament commands for users.");
-            User.add("sendto <font color=red><b>[person]</b></font>:<font color=red><b>[message]</b></font>", "To send a message to a certain person. To ping, just type /sendto [person].");
+            User.add("sendto", "To send a message to a certain person. To ping, just type /sendto [person].", ["person", "message"]);
             User.add("emotes", "To view a list of emotes. For moderators and above only.");
             User.add("emotetoggle", "To toggle emotes on or off for you.");
             User.add("bbcode", "To view a list of bbcodes.");
             User.add("selfkick", "Kicks all the ghosts on your ip.");
             User.add("vote <font color=red><b>[option]</b></font>", "To vote on a poll option.");
-            User.add("calc <font color=red><b>[expression]</b></font>", "Evaluates a mathematical expression (10 / 2 * 4 ^ pi!). Full documentation <a href='https://github.com/josdejong/mathjs/blob/master/README.md'>here</a>.");
-            User.add("players <font color=red><b>[os]</b></font>", "Tells you how many players there are online on the given [os] (windows, mac, linux, android, webclient). If not specified, tells you how many players there are online regardless of OS.");
+            User.add("calc", "Evaluates a mathematical expression (10 / 2 * 4 ^ pi!). Full documentation <a href='https://github.com/josdejong/mathjs/blob/master/README.md'>here</a>.", ["expression"]);
+            User.add("players", "Tells you how many players there are online on the given [os] (windows, mac, linux, android, webclient). If not specified, tells you how many players there are online regardless of OS.", ["os"]);
             User.finish();
 
             Lists.User = User;
 
             /** LEAGUE MANAGER **/
             var LeagueManager = new CommandList("League Manager Commands", "navy");
-            LeagueManager.add("gl <b><font color=red>[player]</font></b>:<font color=red><b>[spot]</b></font>", "To make someone the [spot] gym leader. [spot] can be 1-8. Removes gym leader [spot] if [player] is empty.");
-            LeagueManager.add("el <b><font color=red>[player]</font></b>:<font color=red><b>[spot]</b></font>", "To make someone the [spot] elite. [spot] can be 1-4. Removes elite [spot] if [player] is empty.");
-            LeagueManager.add("champ <b><font color=red>[player]</font></b>", "To make someone the champion. Removes the champion if [player] is empty.");
+            LeagueManager.add("gl", "To make someone the [spot] gym leader. [spot] can be 1-8. Removes gym leader [spot] if [player] is empty.", ["player", "spot"]);
+            LeagueManager.add("el", "To make someone the [spot] elite. [spot] can be 1-4. Removes elite [spot] if [player] is empty.", ["player", "spot"]);
+            LeagueManager.add("champ", "To make someone the champion. Removes the champion if [player] is empty.", ["player"]);
             LeagueManager.finish();
 
             Lists.LeagueManager = LeagueManager;
 
             /** FUN **/
             var Fun = new CommandList("Fun Commands", "navy");
-            Fun.add("burn <font color=red><b>[player]</b></font>", "To burn someone.");
-            Fun.add("freeze <font color=red><b>[player]</b></font>", "To freeze someone.");
-            Fun.add("paralyze <font color=red><b>[player]</b></font>", "To burn someone.");
-            Fun.add("poison <font color=red><b>[player]</b></font>", "To burn someone.");
-            Fun.add("cure <font color=red><b>[player]</b></font>", "To cure someone.");
-            Fun.add("me <font color=red><b>[message]</b></font>", "To post a message with *** around it.");
+            Fun.add("burn", "To burn someone.", ["player"]);
+            Fun.add("freeze", "To freeze someone.", ["player"]);
+            Fun.add("paralyze", "To burn someone.", ["player"]);
+            Fun.add("poison", "To burn someone.", ["player"]);
+            Fun.add("cure", "To cure someone.", ["player"]);
+            Fun.add("me", "To post a message with *** around it.", ["message"]);
             Fun.add("spin", "To play roulette if a game is going on.");
-            Fun.add("attack <font color=red><b>[player]</b></font>", "To use a pokemon attack on someone.");
-            Fun.add("superimp <font color=red><b>[name]</b></font>", "To superimp a name (<font size=2>Wraps your name in '~~'</font>)");
+            Fun.add("attack", "To use a pokemon attack on someone.", ["player"]);
+            Fun.add("superimp", "To superimp a name (<font size=2>Wraps your name in '~~'</font>)", ["name"]);
             Fun.add("impoff", "To stop imping.");
             Fun.finish();
 
@@ -178,10 +188,10 @@
             var FeedmonList = new CommandList("Feedmon Commands", "navy");
             FeedmonList.add("catch", "Catches a random pokemon.");
             FeedmonList.add("feed", "Feeds your caught pokemon.");
-            FeedmonList.add("nickname <font color=red><b>[name]</b></font>", "Gives your caught pokemon a nickname.");
-            FeedmonList.add("level <font color=red><b>[option]</b></font>", "If option is all, displays requirements for all levels. Otherwise, displays how many EXP you still need for the next level.");
+            FeedmonList.add("nickname", "Gives your caught pokemon a nickname.", ["name"]);
+            FeedmonList.add("level", "If [option] is all, displays requirements for all levels. Otherwise, displays how many EXP you still need for the next level.", ["option"]);
             FeedmonList.add("battle", "Starts a battle with a random pokémon.");
-            FeedmonList.add("move <font color=red><b>[num]</b></font>", "Uses one of your pokemon's moves in battle.");
+            FeedmonList.add("move", "Uses one of your pokemon's moves in battle.", ["num"]);
             FeedmonList.add("heal", "Revives/heals your (fainted) pokemon.");
             FeedmonList.finish();
 
@@ -189,13 +199,13 @@
 
             /** MEGAUSER **/
             var Megauser = new CommandList("Megauser Commands", "navy");
-            Megauser.add("tour <font color=red><b>[tier]</b></font>:<b><font color=red>[#ofplayers]</font></b>:<font color=red><b>[prize]</b></font>", "To start a tournament with tier [tier] that allows [#ofplayers] people to play with optional prize [prize].");
+            Megauser.add("tour", "To start a tournament with tier [tier] that allows [#ofplayers] people to play with optional prize [prize].", ["tier", "#ofplayers", "prize"]);
             Megauser.add("endtour", "To end a running tournament.");
-            Megauser.add("sub <font color=red><b>[player1]</b></font>:<font color=red><b>[player2]</b></font>", "To replace [player1] with [player2] in the running tournament.");
-            Megauser.add("changecount <font color=red><b>[number]</b></font>", "To change the number of entrants allowed to [number] durning the signup phase.");
-            Megauser.add("push <font color=red><b>[player]</b></font>", "To force [player] in the running tournament.");
-            Megauser.add("dq <font color=red><b>[player]</b></font>", "To disqualify [player] from the running tournament.");
-            Megauser.add("restart <font color=red><b>[name]</b></font>", "To restart [name]'s battle in the running tournament. Abusing this can cost you your megauser status.");
+            Megauser.add("sub", "To replace [player1] with [player2] in the running tournament.", ["player1", "player2"]);
+            Megauser.add("changecount", "To change the number of entrants allowed to [number] durning the signup phase.", ["number"]);
+            Megauser.add("push", "To force [player] in the running tournament.", ["player"]);
+            Megauser.add("dq", "To disqualify [player] from the running tournament.", ["player"]);
+            Megauser.add("restart", "To restart [name]'s battle in the running tournament. Abusing this can cost you your megauser status.", ["name"]);
             Megauser.finish();
 
             Lists.Megauser = Megauser;
@@ -269,46 +279,45 @@
             var Mod = new CommandList("Moderator Commands", "navy");
             Mod.add("moderationcommands", "To display a list of commands that moderate the chat.");
             Mod.add("partycommands", "To display a list of party commands.");
-            Mod.add("changetopic <font color=red><b>[channel]</b></font>:<font color=red><b>[topic]</b></font>", "To change the topic of the channel [channel] to [topic].");
-            Mod.add("[c]wall <font color=red><b>[text]</b></font>", "To post [text] with borders around it. [c makes it so it only appears in the channel it's used in]");
-            Mod.add("floodignore <font color=red><b>[name]</b></font>", "Toggles [name]'s flood ignore privilege.");
-            Mod.add("emoteperms <font color=red><b>[name]</b></font>", "To add/remove [name] from the emote permission list.");
-            Mod.add("imp <font color=red><b>[name]</b></font>", "To change your name to [name].");
-            Mod.add("motd <font color=red><b>[message]</b></font>", "To change the Message of the Day to [message].");
-            Mod.add("roulette <font color='red'><b>&lt;type1, type2&gt;</b></font>", "To start or end a roulette (/spin) game. Types can include: pokemons, items, emotes, avatars. By default, all 4 are enabled.");
-            Mod.add("forcerules <font color=red><b>[player]</b></font>", "To show the rules to [player].");
-            Mod.add("info <font color=red><b>[player]</b></font>", "To view info about [player].");
-            Mod.add("sendall <font color=red><b>[message]</b></font>", "To send a message to everyone.");
-            Mod.add("sendhtmlall <font color=red><b>[message]</b></font>", "To send a HTML message to everyone.");
-            Mod.add("warn <font color=red><b>[player]</b></font>:<font color=red><b>[reason]</b></font>", "To send a warning to [player] with reason [reason]. If [reason] is undo, the warning is undone. [reason] is only required when the target hasn't been infracted. Further usage of the command will result in a kick/mute (5 minutes) of the player.");
-            // Mod.add("tellupdate <font color=red><b>[player]</b></font>", "To tell [player] how to update to the latest version.");
+            Mod.add("changetopic", "To change the topic of the channel [channel] to [topic].", ["channel", "topic"]);
+            Mod.add("[c]wall", "To post [text] with borders around it. [c makes it so it only appears in the channel it's used in]", ["text"]);
+            Mod.add("floodignore", "Toggles [name]'s flood ignore privilege.", ["name"]);
+            Mod.add("emoteperms", "To add/remove [name] from the emote permission list.", ["name"]);
+            Mod.add("imp", "To change your name to [name].", ["name"]);
+            Mod.add("motd", "To change the Message of the Day to [message].", ["message"]);
+            Mod.add("roulette", "To start or end a roulette (/spin) game. Types can include: pokemons, items, emotes, avatars. By default, all 4 are enabled. It is separated with a comma followed by a space (, ).", ["type1, type2"]);
+            Mod.add("forcerules", "To show the rules to [player].", ["player"]);
+            Mod.add("info", "To view info about [player].", ["player"]);
+            Mod.add("sendall", "To send a message to everyone.", ["message"]);
+            Mod.add("sendhtmlall", "To send a HTML message to everyone.", ["message"]);
+            Mod.add("warn", "To send a warning to [player] with reason [reason]. If [reason] is undo, the warning is undone. [reason] is only required when the target hasn't been infracted. Further usage of the command will result in a kick/mute (5 minutes) of the player.", ["player", "reason"]);
             Mod.add("getmotd", "To get the MOTD (including HTML).");
             Mod.add("public", "To make the server public.");
-            Mod.add("poll <font color=red><b>[subject]</b></font>:<font color=red><b>[option1]*[option2]*[option..]</b></font>", "To start a poll. You must specify at least 2 options.");
+            Mod.add("poll", "To start a poll. You must specify at least 2 options.", ["subject", "option1*option2*option..."]);
             Mod.add("closepoll", "To close the poll.");
-            Mod.add("onos <font color=red><b>[os]</b></font>", "Gives you the list of players on the given [os] (windows, mac, linux, android, webclient).");
+            Mod.add("onos", "Gives you the list of players on the given [os] (windows, mac, linux, android, webclient).", ["os"]);
             Mod.finish();
 
             Lists.Mod = Mod;
 
             /** MODERATION COMMANDS **/
             var Moderate = new CommandList("Moderation Commands", "navy");
-            Moderate.add("logwarn <font color=red><b>[player]</b></font>", "To warn [player] of excessive logs.");
-            Moderate.add("tellemotes <font color=red><b>[player]</b></font>", "To explain [player] what emotes are.");
-            Moderate.add("kick <font color=red><b>[player*player2]</b></font>:<font color=red><b>[reason]</b></font>", "To kick [player] from the server. You can kick multiple players with by separating their names with '*'. [reason] is optional.");
-            Moderate.add("channelkick <font color=red><b>[player]</b></font>", "To kick [player] from the channel.");
-            Moderate.add("mute <font color=red><b>[person]</b></font>:<font color=red><b>[time]</b></font>:<font color=red><b>[unit]</b></font>:<font color=red><b>[reason]</b></font>", "To mute someone, [time], [timeunit], and [reason] is optional. [Units are: seconds, minutes, hours, days, weeks, months, years, decades. Default is minutes]. If no time is specified, mutes forever. You can skip time by doing: /mute [player]:::[reason].");
-            Moderate.add("unmute <font color=red><b>[person]</b></font>", "To unmute [person].");
-            Moderate.add("tempban <font color=red>[person]:[time]:[timeunit]:[reason]</font>", "To tempban [person] for [time]. [timeunit] and [reason] are optional. Units are the same from /mute. Default time is 30 minutes.");
-            Moderate.add("untempban <font color=red>[person]</font>", "To remove [person]'s tempban.");
+            Moderate.add("logwarn", "To warn [player] of excessive logs.", ["player"]);
+            Moderate.add("tellemotes", "To explain to [player] what emotes are.", ["player"]);
+            Moderate.add("kick", "To kick [player] from the server. You can kick multiple players with by separating their names with '*'. [reason] is optional.", ["player*player2", "reason"]);
+            Moderate.add("channelkick", "To kick [player] from the channel.", ["player"]);
+            Moderate.add("mute", "To mute someone, [time], [timeunit], and [reason] are optional. [Units are: seconds, minutes, hours, days, weeks, months, years, decades. Default is minutes]. If no time is specified, mutes forever. You can skip time by doing: /mute [player]:::[reason].", ["person", "time", "unit", "reason"]);
+            Moderate.add("unmute", "To unmute [person].", ["person"]);
+            Moderate.add("tempban", "To tempban [person] for [time]. [timeunit] and [reason] are optional. Units are the same from /mute. Default time is 30 minutes.", ["person", "time", "timeunit", "reason"]);
+            Moderate.add("untempban", "To remove [person]'s tempban.", ["person"]);
             Moderate.add("mutes", "To see a list of muted people.");
             Moderate.add("tempbans", "To see a list of temporarily banned players.");
             Moderate.add("rangebans", "To see a list of rangebanned ips.");
             Moderate.add("silence", "To silence all users.");
             Moderate.add("unsilence", "To cancel the silence.");
-            Moderate.add("message <font color=red><b>[kick/ban/welcome]:[message]</b></font>", "To set your kick, ban, or welcome message. Use {target} to say target (if kick or ban msg). If it is a welcome message, use {server} to say the server. You can use HTML, but don't aboose. Example: " + Utils.escapeHtml("<font color=green><timestamp/> <b>Ian struck the banhammer on {target}!</b></font>."));
-            Moderate.add("viewmessage", "<fontcolor=red><b>[kick/ban/welcome]</b></font", "To view your kick, ban, or welcome message.");
-            Moderate.add("removemessage", "<fontcolor=red><b>[kick/ban/welcome]</b></font", "To remove a kick, ban, or welcome message.");
+            Moderate.add("message", "To set your kick, ban, or welcome message. Use {target} to say target (if kick or ban msg). If it is a welcome message, use {server} to say the server. You can use HTML, but don't abuse. Example: " + Utils.escapeHtml("<font color=green><timestamp/> <b>Ethan struck the banhammer on {target}!</b></font>."), ["kick/ban/welcome", "message"]);
+            Moderate.add("viewmessage", "To view your kick, ban, or welcome message.", ["kick/ban/welcome"]);
+            Moderate.add("removemessage", "To remove a kick, ban, or welcome message.", ["kick/ban/welcome"]);
 
             Moderate.finish();
 
@@ -328,7 +337,7 @@
 
             /** ADMIN COMMANDS **/
             var Admin = new CommandList("Administrator Commands", "navy");
-            Admin.add("<font color=blue>[s]</font>ban <font color=red><b>[player]</b></font>", "To ban [player]. Use /sban instead to silently ban.");
+            Admin.add("<font color=blue>[s]</font>ban", "To ban [player]. Use /sban instead to silently ban.", ["player"]);
             Admin.add("unban <font color=red><b>[player]</b></font>", "To unban a [player].");
             Admin.add("skick <font color=red><b>[player]</b></font>", "To silently kick [player].");
             Admin.add("clearpass <font color=red><b>[player]</b></font>", "To clear [player]'s password.");
@@ -346,7 +355,7 @@
             /** OWNER COMMANDS **/
             var Owner = new CommandList("Owner Commands", "navy");
             Owner.add("authoptions", "To view the authority options.");
-            Owner.add("eval <font color=red><b>[code]</b></font>", "To evaluate [code].");
+            Owner.add("eval", "To evaluate [code].", ["code"]);
             Owner.add("resetladder", "To reset all ladders.");
             Owner.add("bots", "To turn all bots on or off.");
             Owner.finish();
@@ -355,7 +364,7 @@
 
             /** AUTH OPTIONS **/
             var Auth = new CommandList("Auth Options", "navy");
-            Auth.add("changeauth <font color=red><b>[player]</b></font>:<font color=red><b>[level]</b></font>", "Changes a user's auth.");
+            Auth.add("changeauth", "Changes a user's auth.", ["player", "level"]);
             Auth.add("dbauths", "To view all the players who have auth in the database.");
             Auth.finish();
 
