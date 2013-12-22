@@ -230,8 +230,8 @@
 
             for (var team = 0; team < sys.teamCount(src); team++) {
                 if (!Utils.tier.hasOneUsablePoke(src, team) && !Utils.tier.isCCTier(sys.tier(src, team))) {
-                    bot.sendMessage(src, "Sorry, you do not have a valid team for the " + sys.tier(src, team) + " tier.");
-                    bot.sendMessage(src, "You have been placed into 'Challenge Cup'.");
+                    bot.sendMessage(src, "Sorry, you do not have a valid team for the " + sys.tier(src, team) + " tier.", defaultChan);
+                    bot.sendMessage(src, "You have been placed into 'Challenge Cup'.", defaultChan);
                     sys.changeTier(src, team, "Challenge Cup");
                 }
             }
