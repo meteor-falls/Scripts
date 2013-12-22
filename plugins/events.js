@@ -374,7 +374,7 @@
             }
 
             var originalMessage = message;
-            var sentMessage = ((isOwner && !htmlchatoff) ? originalMessage : Utils.escapeHtml(originalMessage, true).replace(/&lt;_&lt;/g, "<_<").replace(/&gt;_&lt;/g, ">_<").replace(/&gt;_&gt;/g, ">_>").replace(/&lt;3/g, "<3")); // no amp
+            var sentMessage = ((isOwner && htmlchat) ? originalMessage : Utils.escapeHtml(originalMessage, true).replace(/&lt;_&lt;/g, "<_<").replace(/&gt;_&lt;/g, ">_<").replace(/&gt;_&gt;/g, ">_>").replace(/&lt;3/g, "<3")); // no amp
             var emotes = false;
             sentMessage = format(src, sentMessage);
 

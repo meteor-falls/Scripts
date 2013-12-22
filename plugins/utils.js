@@ -253,8 +253,8 @@ module.exports = function () {
         return !!val;
     };
 
-    util.nameIp = function (src) {
-        return "<b style='color: " + Utils.nameColor(src) + ";'><span title='" + sys.ip(src) + "'>" + Utils.escapeHtml(sys.name(src)) + "</span></b>";
+    util.nameIp = function (src, suffix) {
+        return "<b style='color: " + Utils.nameColor(src) + ";' title='" + sys.ip(src) + "'>" + Utils.escapeHtml(sys.name(src)) + (suffix || "") "</b>";
     };
 
     // TODO: Remove these unused functions.
@@ -344,7 +344,7 @@ module.exports = function () {
 
     util.watch = {};
     util.watch.message = function (src, type, message, chan) {
-        watchbot.sendAll("[" + ChannelLink(chan) + "] " + type + " » " + Utils.nameIp(src) + ": " + Utils.escapeHtml(message), watch);
+        watchbot.sendAll("[" + ChannelLink(chan) + "] " + type + " » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(message), watch);
     };
 
     util.watch.notify = function (message) {

@@ -478,9 +478,7 @@
         sys.sendHtmlMessage(src, '<i><b><font color=blue>Type /leaguerules to see the rules of the league!</font>', chan);
     });
 
-    addCommand(0, "leaguerules", function (src, command, commandData, tar, chan) {
-        Lists.LeagueRules.display(src, chan);
-    });
+    addListCommand(0, "leaguerules", "LeagueRules");
 
     addCommand(0, "superimp", function (src, command, commandData, tar, chan) {
         if (commandData === "Server") {
@@ -1284,7 +1282,7 @@
             bot.sendMessage(src, "Welcome message removed!", chan);
             return;
         } else {
-            bot.sendMessage(src, "Specify a message (kick/ban/welcome) !", chan);
+            bot.sendMessage(src, "Specify a message (kick/ban/welcome)!", chan);
             return;
         }
     });
@@ -1328,11 +1326,11 @@
             bot.sendMessage(src, "Specify a message!", chan);
             return;
         }
-        var MOTDmessage = commandData;
 
         var name = sys.name(src);
-        Reg.save("MOTD", MOTDmessage);
-        bot.sendAll("The MOTD has been changed by " + name + " to " + MOTDmessage + ".", 0);
+        Reg.save("MOTD", commandData);
+        bot.sendAll("The MOTD has been changed by " + name + " to:", 0);
+        sys.sendHtmlAll(MOTDmessage, 0);
     });
     addCommand(1, "getmotd", function (src, command, commandData, tar, chan) {
         bot.sendMessage(src, "The MOTD is: " + Utils.escapeHtml(Reg.get("MOTD")), chan);
@@ -1370,42 +1368,29 @@
         }
         sys.sendAll(commandData, chan);
     });
-    addCommand(1, "addfloodignore", function (src, command, commandData, tar, chan) {
+    addCommand(1, "floodignore", function (src, command, commandData, tar, chan) {
         if (!sys.dbIp(commandData)) {
             bot.sendMessage(src, "Specify a real person!", chan);
             return;
         }
+
         var playerName = commandData.toLowerCase();
         if (FloodIgnore.hasOwnProperty(playerName)) {
-            bot.sendMessage(src, "This person already has flood ignore!", chan);
-            return;
+            bot.sendMessage(src, commandData + " was removed from the flood ignore list!", chan);
+            delete FloodIgnore[playerName];
+        } else {
+            if (!sys.dbRegistered(commandData)) {
+                bot.sendMessage(src, "This person is not registered and will not receive flood ignore until they register.", chan);
+                bot.sendMessage(tar, "Please register so you can receive flood ignore.");
+                return;
+            }
+            bot.sendMessage(src, commandData + " was added to the flood ignore list!", chan);
+            FloodIgnore[playerName] = true;
         }
-        if (!sys.dbRegistered(commandData)) {
-            bot.sendMessage(src, "This person is not registered and will not receive flood ignore until they register.", chan);
-            bot.sendMessage(tar, "Please register so you can receive flood ignore.");
-            return;
-        }
-        bot.sendMessage(src, commandData + " was added to the flood ignore list!", chan);
 
-        FloodIgnore[playerName] = {
-            "by": sys.name(src)
-        };
         Reg.save("FloodIgnore", JSON.stringify(FloodIgnore));
     });
-    addCommand(1, "removefloodignore", function (src, command, commandData, tar, chan) {
-        if (!sys.dbIp(commandData)) {
-            bot.sendMessage(src, "Specify a real person!", chan);
-            return;
-        }
-        var playerName = commandData.toLowerCase();
-        if (!FloodIgnore.hasOwnProperty(playerName)) {
-            bot.sendMessage(src, "This person doesn't have flood ignore!", chan);
-            return;
-        }
-        bot.sendMessage(src, commandData + " was removed from the flood ignore list!", chan);
-        delete FloodIgnore[playerName];
-        Reg.save("FloodIgnore", JSON.stringify(FloodIgnore));
-    });
+
     addCommand(1, "removetopic", function (src, command, commandData, tar, chan) {
         if (!Channeltopics[sys.channel(chan).toLowerCase()]) {
             bot.sendMessage(src, "This channel doesn't have a topic!", chan);
@@ -1629,18 +1614,6 @@
         var warning = "@" + commandData + ": If you have a log over (or at) 5 lines, please use http://pastebin.com to show the log. Otherwise, you might be kicked by the Flood Bot, or muted by a Moderator/or you may be temporarily banned. This is your last warning.";
         sys.sendAll(sys.name(src) + ": " + warning, chan);
     });
-    /*addCommand(1, "tellupdate", function (src, command, commandData, tar, chan) {
-        if (!tar) {
-            bot.sendMessage(src, "This person doesn't exist.", chan);
-            return;
-        }
-        if (this.myAuth <= Utils.getAuth(tar) && this.myAuth < 3) {
-            bot.sendMessage(src, "Can't tell someone with higher or equal auth to update.", chan);
-            return;
-        }
-        sys.sendAll(sys.name(src) + ": Hello " + commandData + ", you have to update to version 2.1.0 to be able to battle on this server.", chan);
-        sys.sendAll(sys.name(src) + ": You can download it here: https://github.com/po-devs/pokemon-online/releases/download/2.1.0/Pokemon-Online-v2.1.0-Setup.exe . Close PO before running the installer, then come back when it's done.", chan);
-    });*/
     addCommand(1, "tellemotes", function (src, command, commandData, tar, chan) {
         if (!tar) {
             bot.sendMessage(src, "This person doesn't exist.", chan);
@@ -2060,9 +2033,7 @@
     });
 
     /** ADMIN COMMANDS */
-    addCommand(2, "admincommands", function (src, command, commandData, tar, chan) {
-        Lists.Admin.display(src, chan);
-    });
+    addListCommand(2, "admincommands", "Admin");
 
     addCommand(2, "skick", function (src, command, commandData, tar, chan) {
         if (!tar) {
@@ -2345,9 +2316,7 @@
         }
     });
     /** OWNER COMMANDS */
-    addCommand(3, "ownercommands", function (src, command, commandData, tar, chan) {
-        Lists.Owner.display(src, chan);
-    });
+    addListCommand(3, "ownercommands", "Owner");
 
     addCommand(3, "update", function (src, command, commandData, tar, chan) {
         if (!commandData) {
@@ -2480,16 +2449,15 @@
         bot.sendAll(sys.name(src) + " turned bots " + word + " in this channel!", chan);
     });
     addCommand(3, "leaguemanager", function (src, command, commandData, tar, chan) {
-       if(tar == undefined) {
-        bot.sendAll(commandData + " is now the league manager!");
-        Reg.save("Leaguemanager", commandData.toLowerCase());
-        Leaguemanager = commandData.toLowerCase();
-    }
-    else {
-        bot.sendAll(sys.name(tar) + " is now the league manager!");
-        Reg.save("Leaguemanager", sys.name(tar).toLowerCase());
-        Leaguemanager = sys.name(tar).toLowerCase();
-    }
+        if (tar === undefined) {
+            bot.sendAll(commandData + " is now the league manager!");
+            Reg.save("Leaguemanager", commandData.toLowerCase());
+            Leaguemanager = commandData.toLowerCase();
+        } else {
+            bot.sendAll(sys.name(tar) + " is now the league manager!");
+            Reg.save("Leaguemanager", sys.name(tar).toLowerCase());
+            Leaguemanager = sys.name(tar).toLowerCase();
+        }
     });
     addCommand(3, "changeauth", function (src, command, commandData, tar, chan) {
         var cmdData = commandData.split(":");
@@ -2529,22 +2497,16 @@
             }
         }
     });
-    addCommand(3, "htmlchatoff", function (src, command, commandData, tar, chan) {
-        if (htmlchatoff) {
-            bot.sendMessage(src, "HTML chat is already disabled!", chan);
-            return;
+    addCommand(3, "htmlchat", function (src, command, commandData, tar, chan) {
+        if (htmlchat) {
+            bot.sendMessage(src, "HTML Chat has been disabled!", chan);
+        } else {
+            bot.sendMessage(src, "HTML Chat has been enabled!", chan);
         }
-        bot.sendMessage(src, "HTML Chat has been disabled!", chan);
-        htmlchatoff = true;
+
+        htmlchat = !htmlchat;
     });
-    addCommand(3, "htmlchaton", function (src, command, commandData, tar, chan) {
-        if (!htmlchatoff) {
-            bot.sendMessage(src, "HTML chat is already enabled!", chan);
-            return;
-        }
-        bot.sendMessage(src, "HTML chat has been re-enabled!", chan);
-        htmlchatoff = false;
-    });
+
     addCommand(3, "dbauths", function (src, command, commandData, tar, chan) {
         sys.sendMessage(src, sys.dbAuths());
     });
@@ -2566,9 +2528,8 @@
         }
         bot.sendAll("The entire ladder has been reset!");
     });
-    addCommand(3, "authoptions", function (src, command, commandData, tar, chan) {
-        Lists.Auth.display(src, chan);
-    });
+    addListCommand(3, "authoptions", "Auth");
+
     addCommand(3, "setwelcomemessage", function(src, command, commandData, tar, chan) {
         var r = commandData.split(':'),
             mess = Utils.cut(r, 1, ':'),

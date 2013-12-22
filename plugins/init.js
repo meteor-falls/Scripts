@@ -350,7 +350,7 @@ module.exports = {
             muteall: false,
             supersilence: false,
             rouletteon: false,
-            htmlchatoff: true,
+            htmlchat: false,
             lolmode: false,
             spacemode: false,
             capsmode: false,

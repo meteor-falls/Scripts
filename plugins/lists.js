@@ -265,9 +265,11 @@ module.exports = {
 
         /** MODERATOR COMMANDS **/
         var Mod = new CommandList("Moderator Commands", "navy");
+        Mod.add("moderationcommands", "To display a list of commands that moderate the chat.");
+        Mod.add("partycommands", "To display a list of party commands.");
         Mod.add("changetopic <font color=red><b>[channel]</b></font>:<font color=red><b>[topic]</b></font>", "To change the topic of the channel [channel] to [topic].");
         Mod.add("[c]wall <font color=red><b>[text]</b></font>", "To post [text] with borders around it. [c makes it so it only appears in the channel it's used in]");
-        Mod.add("[add/remove]floodignore <font color=red><b>[name]</b></font>", "To add/remove [name] to the flood ignore list.");
+        Mod.add("floodignore <font color=red><b>[name]</b></font>", "Toggles [name]'s flood ignore privilege.");
         Mod.add("emoteperms <font color=red><b>[name]</b></font>", "To add/remove [name] from the emote permission list.");
         Mod.add("imp <font color=red><b>[name]</b></font>", "To change your name to [name].");
         Mod.add("motd <font color=red><b>[message]</b></font>", "To change the Message of the Day to [message].");
@@ -279,10 +281,6 @@ module.exports = {
         Mod.add("warn <font color=red><b>[player]</b></font>:<font color=red><b>[reason]</b></font>", "To send a warning to [player] with reason [reason]. If [reason] is undo, the warning is undone. [reason] is only required when the target hasn't been infracted. Further usage of the command will result in a kick/mute (5 minutes) of the player.");
         // Mod.add("tellupdate <font color=red><b>[player]</b></font>", "To tell [player] how to update to the latest version.");
         Mod.add("getmotd", "To get the MOTD (including HTML).");
-        Mod.add("moderationcommands", "To display a list of commands that moderate the chat.");
-        Mod.add("partycommands", "To display a list of party commands.");
-        Mod.add("silence", "To silence all users.");
-        Mod.add("unsilence", "To cancel the silence.");
         Mod.add("public", "To make the server public.");
         Mod.add("poll <font color=red><b>[subject]</b></font>:<font color=red><b>[option1]*[option2]*[option..]</b></font>", "To start a poll. You must specify at least 2 options.");
         Mod.add("closepoll", "To close the poll.");
@@ -294,6 +292,7 @@ module.exports = {
         /** MODERATION COMMANDS **/
         var Moderate = new CommandList("Moderation Commands", "navy");
         Moderate.add("logwarn <font color=red><b>[player]</b></font>", "To warn [player] of excessive logs.");
+        Moderate.add("tellemotes <font color=red><b>[player]</b></font>", "To explain [player] what emotes are.");
         Moderate.add("kick <font color=red><b>[player*player2]</b></font>:<font color=red><b>[reason]</b></font>", "To kick [player] from the server. You can kick multiple players with by separating their names with '*'. [reason] is optional.");
         Moderate.add("channelkick <font color=red><b>[player]</b></font>", "To kick [player] from the channel.");
         Moderate.add("mute <font color=red><b>[person]</b></font>:<font color=red><b>[time]</b></font>:<font color=red><b>[unit]</b></font>:<font color=red><b>[reason]</b></font>", "To mute someone, [time], [timeunit], and [reason] is optional. [Units are: seconds, minutes, hours, days, weeks, months, years, decades. Default is minutes]. If no time is specified, mutes forever. You can skip time by doing: /mute [player]:::[reason].");
@@ -303,6 +302,8 @@ module.exports = {
         Moderate.add("mutes", "To see a list of muted people.");
         Moderate.add("tempbans", "To see a list of temporarily banned players.");
         Moderate.add("rangebans", "To see a list of rangebanned ips.");
+        Moderate.add("silence", "To silence all users.");
+        Moderate.add("unsilence", "To cancel the silence.");
         Moderate.add("message <font color=red><b>[kick/ban/welcome]:[message]</b></font>", "To set your kick, ban, or welcome message. Use {target} to say target (if kick or ban msg). If it is a welcome message, use {server} to say the server. You can use HTML, but don't aboose. Example: " + Utils.escapeHtml("<font color=green><timestamp/> <b>Ian struck the banhammer on {target}!</b></font>."));
         Moderate.add("viewmessage", "<fontcolor=red><b>[kick/ban/welcome]</b></font", "To view your kick, ban, or welcome message.");
         Moderate.add("removemessage", "<fontcolor=red><b>[kick/ban/welcome]</b></font", "To remove a kick, ban, or welcome message.");
