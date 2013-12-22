@@ -65,7 +65,6 @@ module.exports = function () {
         }
 
         for (i in EmoteList) {
-            // Skip for performance
             if (limit && emotes.length > 4) {
                 break;
             }
@@ -74,18 +73,22 @@ module.exports = function () {
                 continue;
             }
 
-            message = message.replace(new RegExp(RegExp.quote(i), "g"), assignEmote(EmoteList[i]));
+            // Major speed up.
+            if (message.indexOf(i) !== -1) {
+                message = message.replace(new RegExp(RegExp.quote(i), "g"), assignEmote(EmoteList[i]));
+            }
         }
 
         // Misc "emotes". Pokemons, icons, items, and avatars.
         // pokemon:subtitute also works.
         // pokemon:30&cropped=true
         // etc
-        message = message.replace(/((trainer|icon|item|pokemon):([\d&=(gen|shiny|gender|back|cropped|num|substitute|true|false)]+))/g, "<img src='$1'>");
+        message = message.replace(/((trainer|icon|item|pokemon):([(\d|\-)&=(gen|shiny|gender|back|cropped|num|substitute|true|false)]+))/g, "<img src='$1'>");
 
         message = message.replace(/:\(/g, "<img src='item:177'>");
         message = message.replace(/:charimang:/g, "<img src='pokemon:6&gen=2'>");
         message = message.replace(/:mukmang:/g, "<img src='pokemon:89&gen=1'>");
+        message = message.replace(/:paper:/g, "<img src='' width='50' height='50'>");
 
         if (uobj && uobj.lastEmote && lastEmote.toString() !== uobj.lastEmote.toString()) {
             uobj.lastEmoteTime = time;
