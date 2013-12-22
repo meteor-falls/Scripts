@@ -33,7 +33,7 @@
 
     CommandList.prototype.add = function (cmd, desc, args) {
         if (this.forCommands) {
-            this.template += "<li><b>/" + cmd + "</b>" + formatArgs(args) + "<small>»</small> " + desc + "</li>";
+            this.template += "<li><b>/" + cmd + "</b>" + formatArgs(args) + " " + desc + "</li>";
         } else {
             this.template += "<li><b>" + cmd + "</b></li>";
         }
