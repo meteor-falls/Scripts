@@ -18,7 +18,7 @@ var Config = {
     // Do not touch unless you are adding a new plugin.
     // Plugins to load on script load.
     // mathjs is loaded dynamically.
-    plugins: ['bot', 'reg', 'utils', 'emotes', 'feedmon', 'lists', 'init', 'commands', 'events'],
+    plugins: ['bot', 'reg', 'utils', 'emotes', 'lists', 'init', 'commands', 'feedmon', 'events'],
 
     // Whether or not to load plugins from repourl. If set to false, they will load locally.
     load_from_web: true,
