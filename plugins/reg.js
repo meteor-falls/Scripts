@@ -10,6 +10,7 @@
         }
 
         reg.save("version", currentVersion);
+        reg.version = currentVersion;
     }
 
     function RegClass() {
