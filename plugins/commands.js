@@ -1893,7 +1893,7 @@
 
         var displayImp = Utils.escapeHtml(commandData)
         sys.sendHtmlAll('<font color=#8A2BE2><timestamp/><b>' + Utils.escapeHtml(sys.name(src)) + ' has impersonated ' + displayImp + '!</font></b>', 0);
-        Utils.watch.notify(Utils.nameIp(src) + " super-impersonated <b style='color: " + Utils.nameColor(src) + "'>~~" + displayImp + "~~</b>.");
+        Utils.watch.notify(Utils.nameIp(src) + " impersonated <b style='color: " + Utils.nameColor(src) + "'>" + displayImp + "</b>.");
 
         sys.changeName(src, commandData);
     });
