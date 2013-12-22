@@ -378,14 +378,15 @@
             info = info || true;
 
             if (key in container) {
-                delete key[container];
+                delete container[key];
                 added = false;
             } else {
-                key[container] = info;
+                container[key] = info;
                 added = true;
             }
 
             Reg.save(field, container);
+            return added;
         };
 
         util.placeCommas = function (number) {
