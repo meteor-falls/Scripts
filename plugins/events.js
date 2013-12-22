@@ -402,7 +402,7 @@
                 }
 
                 if (scramblemode) {
-                    message = message.scramble();
+                    message = Utils.fisheryates(message.split("")).join("");
                 }
 
                 if (colormode) {

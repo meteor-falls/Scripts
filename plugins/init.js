@@ -42,10 +42,6 @@ module.exports = {
             return returnStr;
         };
 
-        String.prototype.scramble = function () {
-            return Utils.fisheryates(this.split("")).join("");
-        };
-
         var configFile = sys.getFileContent("config").split("\n"),
             x,
             c_conf,
