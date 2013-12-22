@@ -58,48 +58,6 @@ module.exports = {
             }
         }
 
-        // If a player is banned.
-        isBanned = function (playerName) {
-            // Return their name. This allows us to accept ids as well.
-            var trueName = (sys.name(playerName) || playerName).toLowerCase(),
-                bans = sys.banList();
-
-            return bans.indexOf(trueName) !== -1;
-        };
-
-        // Returns the amount of seconds name is temporary banned for.
-        // This > sys.dbTempBanTime.
-        // NOTE: Unlike sys.dbTempBanTime, this returns 0 if the player isn't banned.
-        tempBanTime = function (playerName) {
-            // Return their name. This allows us to accept ids as well.
-            var trueName = (sys.name(playerName) || playerName).toLowerCase();
-
-            // If they aren't banned, return 0.
-            if (!isBanned(trueName)) {
-                return 0;
-            }
-
-            // Otherwise, return for how long they are banned.
-            return sys.dbTempBanTime(trueName);
-        };
-
-        loginMessage = function (name, color) {
-            sys.sendHtmlAll("<font color='#0c5959'><timestamp/>±<b>WelcomeBot:</b></font> <b><font color=" + color + ">" + name + "</font></b> joined <b>" + Reg.get('servername') + "</b>!", 0);
-        };
-
-        logoutMessage = function (name, color) {
-            sys.sendHtmlAll("<font color='#0c5959'><timestamp/>±<b>GoodbyeBot:</b></font> <b><font color=" + color + ">" + name + "</font></b> left <b>" + Reg.get('servername') + "</b>!", 0);
-        };
-
-        floodIgnoreCheck = function (src) {
-            var myNameToLower = sys.name(src).toLowerCase();
-            return FloodIgnore.hasOwnProperty(myNameToLower);
-        };
-
-        removeTag = function (name) {
-            return name.replace(/\[[^\]]*\]/gi, '').replace(/\{[^\]]*\}/gi, '');
-        };
-
         randcolor = function () {
             var nums = 5;
             var str = '';
@@ -237,55 +195,6 @@ module.exports = {
             return (hasBasicPermissions(src) || hasEmotePerms(name)) && Emotetoggles.hasOwnProperty(name);
         };
 
-        getTier = function (src, tier) {
-            return sys.hasTier(src, tier);
-        };
-
-        ev_name = function (num) {
-            return {
-                0: "HP",
-                1: "ATK",
-                2: "DEF",
-                3: "SPATK",
-                4: "SPDEF",
-                5: "SPD"
-            }[num];
-        };
-
-        isTier = function (tier) {
-            var list = sys.getTierList(),
-                len,
-                i;
-
-            tier = tier.toLowerCase();
-
-            for (i = 0, len = list.length; i < len; i += 1) {
-                if (list[i].toLowerCase() === tier) {
-                    return true;
-                }
-            }
-
-            return false;
-        };
-
-        challengeCupCheck = function(tier) {
-            return ["CC 1v1", "Wifi CC 1v1", "Challenge Cup"].indexOf(tier) > -1;
-        }
-
-        hasOneUsablePoke = function(src, team) {
-            var fine = false;
-            for (var i = 0; i < 6; i += 1) {
-                if (sys.teamPoke(src, team, i) !== 0) {
-                    for (var j = 0; j < 4; j += 1) {
-                        if (sys.teamPokeMove(src, team, i, j) !== 0) {
-                            fine = true;
-                        }
-                    }
-                }
-            }
-            return fine;
-        }
-
         hasDrizzleSwim = function (src) {
             var swiftswim,
                 drizzle,
@@ -294,7 +203,7 @@ module.exports = {
                 team,
                 i;
 
-            if (getTier(src, "5th Gen OU")) {
+            if (sys.hasTier(src, "5th Gen OU")) {
                 for (team = 0; team < sys.teamCount(src); team += 1) {
                     if (sys.tier(src, team) !== "5th Gen OU") {
                         continue;
@@ -432,15 +341,6 @@ module.exports = {
             } else {
                 aliasKick(sys.dbIp(name));
             }
-        };
-
-        getName = function (name) {
-            var pId = sys.id(name);
-            if (pId) {
-                return sys.name(pId);
-            }
-
-            return name;
         };
 
         // Temporarly bans a player.
@@ -606,20 +506,6 @@ module.exports = {
 
             str = addChannelLinks(str); // do this late for other bbcodes to work properly
             return str;
-        };
-
-        firstGen = function (poke) {
-            if (poke < 152) {
-                return sys.rand(1, 6);
-            } else if (poke < 252) {
-                return sys.rand(2, 6);
-            } else if (poke < 387) {
-                return sys.rand(3, 6);
-            } else if (poke < 494) {
-                return sys.rand(4, 6);
-            }
-
-            return 5;
         };
     }
 };

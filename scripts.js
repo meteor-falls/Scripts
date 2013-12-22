@@ -46,11 +46,11 @@ var GLOBAL = this;
             sys.writeToFile(dir + name, resp);
         }
 
-        fileContent = sys.getFileContent(dir + name);
-
-        if (!fileContent) {
-            return false;
+        if (!sys.fileExists(dir + name)) {
+            throw {name: "NoFileError", toString: function () { return "Couldn't find file " + (dir + name) + "."; }};
         }
+
+        fileContent = sys.getFileContent(dir + name);
 
         var module = {
             exports: {},
@@ -87,14 +87,14 @@ var GLOBAL = this;
     FULLRELOAD = false;
 
     require.callPlugins = function require_callPlugins(event) {
-        var args = [].slice.call(arguments, 1);
+        var args = Array.prototype.slice.call(arguments, 1);
         var plugins = this.meta,
             plugin,
             exports;
 
         for (plugin in plugins) {
             exports = plugins[plugin].exports;
-            if (exports.hasOwnProperty(event)) {
+            if (event in exports) {
                 try {
                     exports[event].apply(exports, args);
                 } catch (e) {
@@ -237,8 +237,8 @@ poScript = ({
         require.callPlugins("beforeChallengeIssued", src, dest);
     },
 
-    afterPlayerAway: function afterPlayerAway(src, mode) {
-    },
+    /*afterPlayerAway: function afterPlayerAway(src, mode) {
+    },*/
 
     beforeBattleMatchup: function beforeBattleMatchup(src, dest, clauses, rated, mode, team1, team2) {
         require.callPlugins("beforeBattleMatchup", src, dest, clauses, rated, mode, team1, team2);
@@ -320,7 +320,7 @@ poScript = ({
     afterBattleStarted: function afterBattleStarted(src, dest, info, id, t1, t2) {
         if (tourmode === 2) {
             if (script.areOpponentsForTourBattle(src, dest)) {
-                if (getTier(src, tourtier) && getTier(dest, tourtier)) {
+                if (sys.hasTier(src, tourtier) && sys.hasTier(dest, tourtier)) {
                     battlesStarted[Math.floor(tourbattlers.indexOf(sys.name(src).toLowerCase()) / 2)] = true;
                 }
             }

@@ -191,12 +191,12 @@
 
             var hasWelcomeMessage = Welmsgs.hasOwnProperty(sys.name(src).toLowerCase());
             if (sys.numPlayers() < 30 && !hasWelcomeMessage) {
-                loginMessage(sys.name(src), Utils.nameColor(src));
+                Utils.loginMessage(sys.name(src), Utils.nameColor(src));
             }
 
             if (hasWelcomeMessage) {
                 var theirmessage = Welmsgs[sys.name(src).toLowerCase()];
-                var msg = (theirmessage) ? theirmessage.message : loginMessage(sys.name(src), Utils.nameColor(src));
+                var msg = (theirmessage) ? theirmessage.message : Utils.loginMessage(sys.name(src), Utils.nameColor(src));
                 if (theirmessage) {
                     msg = msg.replace(/\{Server\}/gi, Reg.get("servername")).replace(/\{Color\}/gi, Utils.nameColor(src));
                     msg = emoteFormat(true, msg);
@@ -229,9 +229,9 @@
             }
 
             for (var team = 0; team < sys.teamCount(src); team++) {
-                if (!hasOneUsablePoke(src, team)) {
+                if (!Utils.tier.hasOneUsablePoke(src, team) && !Utils.tier.isCCTier(sys.tier(src, team))) {
                     bot.sendMessage(src, "Sorry, you do not have a valid team for the " + sys.tier(src, team) + " tier.");
-                    bot.sendMessage(src, "You have been placed into 'Challenge Cup.'");
+                    bot.sendMessage(src, "You have been placed into 'Challenge Cup'.");
                     sys.changeTier(src, team, "Challenge Cup");
                 }
             }
@@ -244,7 +244,7 @@
                 sys.sendHtmlMessage(src, "<br/><center><table width=35% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:11px; font-weight:bold;'>A <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament is currently running.</font><hr width=210/><br><b>Type <i style='color:red; font-weight:bold;'>/viewround</i> to check the status of the tournament!</b><br/><br/></td></tr></table></center><br/>", defaultChan);
             }
 
-            var tier = getTier(src, "5th Gen OU");
+            var tier = sys.hasTier(src, "5th Gen OU");
             if (tier) {
                 script.dreamAbilityCheck(src);
             }
@@ -253,10 +253,10 @@
         },
 
         beforeChangeTier: function (src, team, oldtier, newtier) {
-            if (!hasOneUsablePoke(src, team) && !challengeCupCheck(newtier)) {
+            if (!Utils.tier.hasOneUsablePoke(src, team) && !Utils.tier.isCCTIer(newtier)) {
                 sys.stopEvent();
                 bot.sendMessage(src, "Sorry, you do not have a valid team for the " + newtier + " tier.");
-                bot.sendMessage(src, "You have been placed into 'Challenge Cup.'");
+                bot.sendMessage(src, "You have been placed into 'Challenge Cup'.");
                 sys.changeTier(src, team, "Challenge Cup");
             }
 
@@ -435,7 +435,7 @@
             var user = SESSION.users(src);
 
             if (sys.numPlayers() < 30 && !user.autokick) {
-                logoutMessage(Utils.escapeHtml(sys.name(src)), Utils.nameColor(src));
+                Utils.logoutMessage(Utils.escapeHtml(sys.name(src)), Utils.nameColor(src));
                 Utils.watch.notify(Utils.nameIp(src) + " logged out.");
             }
         },
@@ -446,9 +446,9 @@
             }
 
             for (var team = 0; team < sys.teamCount(src); team++) {
-                if (!hasOneUsablePoke(src, team) && !challengeCupCheck(sys.tier(src, team))) {
+                if (!Utils.tier.hasOneUsablePoke(src, team) && !Utils.tier.isCCTier(sys.tier(src, team))) {
                     bot.sendMessage(src, "Sorry, you do not have a valid team for the " + sys.tier(src, team) + " tier.");
-                    bot.sendMessage(src, "You have been placed into 'Challenge Cup.'");
+                    bot.sendMessage(src, "You have been placed into 'Challenge Cup'.");
                     sys.changeTier(src, team, "Challenge Cup");
                 }
             }
@@ -593,7 +593,7 @@
             }
         },
         beforeChallengeIssued: function (src, dest) {
-            /*var tier = getTier(src, "Dream World");
+            /*var tier = sys.hasTier(src, "Dream World");
             if (tier) {
                 if (script.dreamAbilityCheck(src) || script.dreamAbilityCheck(dest)) {
                     sys.stopEvent();
@@ -618,7 +618,7 @@
                         sys.stopEvent();
                         return;
                     }
-                    if (!getTier(src, tourtier) || !getTier(sys.id(name2), tourtier)) {
+                    if (!sys.hasTier(src, tourtier) || !sys.hasTier(sys.id(name2), tourtier)) {
                         bot.sendMessage(src, "You must be both in the tier " + tourtier + " to battle in the tourney.");
                         sys.stopEvent();
                         return;
@@ -633,8 +633,8 @@
             }
         },
         beforeBattleMatchup: function (src, dest, clauses, rated, mode, team1, team2) {
-            /*var tier = getTier(src, sys.tier(team1)),
-                desttier = getTier(dest, sys.tier(team2));
+            /*var tier = sys.hasTier(src, sys.tier(team1)),
+                desttier = sys.hasTier(dest, sys.tier(team2));
             if (tier && desttier) {
                 if (script.dreamAbilityCheck(src) || script.dreamAbilityCheck(dest)) {
                     sys.stopEvent();
@@ -657,7 +657,7 @@
             var srcip = sys.ip(src);
             var poUser = SESSION.users(src),
                 limit,
-                ignoreFlood = floodIgnoreCheck(src),
+                ignoreFlood = Utils.checkFor(FloodIgnore, sys.name(src)),
                 auth = Utils.getAuth(src);
 
             if (auth < 1 && !ignoreFlood) {

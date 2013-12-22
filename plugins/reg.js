@@ -17,10 +17,9 @@
         this.data = {};
         this.version = -1;
 
-        try {
+        if (sys.fileExists(file)) {
             this.data = JSON.parse(sys.getFileContent(file));
-        } catch (e) {
-            print("Runtime Error: Could not find " + file);
+        } else {
             sys.writeToFile(file, "{}");
         }
 
@@ -51,6 +50,7 @@
             }
         };
 
+        /*
         this.removeIf = function (func) {
             var x, d = this.data,
                 madeChange = false;
@@ -71,7 +71,7 @@
                 delete this.data[key];
                 this.saveData();
             }
-        };
+        };*/
 
         this.saveData = function () {
             sys.writeToFile(file, JSON.stringify(this.data));
@@ -83,18 +83,10 @@
         };
     }
 
-    module.exports.Reg = function () {
-        return new RegClass();
-    };
-    module.exports.RegClass = RegClass;
+    module.exports.Reg = RegClass;
     module.preferCache = true;
-    module.reload = function (reloadAnyway) {
-        sys.appendToFile("Reg.json", "");
-        if (sys.getFileContent("Reg.json") === "") {
-            sys.writeToFile("Reg.json", "{}");
-        }
-
-        Reg = module.exports.Reg();
+    module.reload = function () {
+        Reg = new (module.exports.Reg());
         return true;
     };
 }());

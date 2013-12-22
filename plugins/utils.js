@@ -2,6 +2,7 @@
     module.exports = function () {
         var util = {};
         var clist = ['#5811b1', '#399bcd', '#0474bb', '#f8760d', '#a00c9e', '#0d762b', '#5f4c00', '#9a4f6d', '#d0990f', '#1b1390', '#028678', '#0324b1'];
+        var CCTiers = ["CC 1v1", "Wifi CC 1v1", "Challenge Cup"];
 
         util.escapeHtml = function (str, noAmp) {
             if (!noAmp) {
@@ -120,6 +121,30 @@
                        "</b></td></tr></table>";
             };
         }());
+
+
+        util.loginMessage = function (name, color) {
+            sys.sendHtmlAll("<font color='#0c5959'><timestamp/>±<b>WelcomeBot:</b></font> <b><font color=" + color + ">" + name + "</font></b> joined <b>" + Reg.get('servername') + "</b>!", 0);
+        };
+
+        util.logoutMessage = function (name, color) {
+            sys.sendHtmlAll("<font color='#0c5959'><timestamp/>±<b>GoodbyeBot:</b></font> <b><font color=" + color + ">" + name + "</font></b> left <b>" + Reg.get('servername') + "</b>!", 0);
+        };
+
+        util.isTier = function (tier) {
+            var list = sys.getTierList(),
+                len, i;
+
+            tier = tier.toLowerCase();
+
+            for (i = 0, len = list.length; i < len; i += 1) {
+                if (list[i].toLowerCase() === tier) {
+                    return true;
+                }
+            }
+
+            return false;
+        };
 
         util.nameColor = function (src) {
             var getColor = sys.getColor(src);
@@ -313,12 +338,35 @@
             return false;
         };
 
+        util.removeTag = function (name) {
+            return name.replace(/\[[^\]]*\]/gi, '').replace(/\{[^\]]*\}/gi, '');
+        };
+
         util.toCorrectCase = function (name) {
+            if (typeof name === 'number') {
+                return sys.name(name);
+            }
+
             var id = sys.id(name);
             if (id !== undefined) {
                 return sys.name(id);
             }
             return name;
+        };
+
+        util.EVName = function (num) {
+            return {
+                0: "HP",
+                1: "ATK",
+                2: "DEF",
+                3: "SPATK",
+                4: "SPDEF",
+                5: "SPD"
+            }[num];
+        };
+
+        util.checkFor = function (obj, key) {
+            return obj.hasOwnProperty((('' + key).toLowerCase()));
         };
 
         util.placeCommas = function (number) {
@@ -374,6 +422,53 @@
             }
 
             return found;
+        };
+
+        // If a player is banned.
+        util.mod.isBanned = function (playerName) {
+            // Return their name. This allows us to accept ids as well.
+            var trueName = (sys.name(playerName) || playerName).toLowerCase(),
+                bans = sys.banList();
+
+            return bans.indexOf(trueName) !== -1;
+        };
+
+        // Returns the amount of seconds name is temporary banned for.
+        // This > sys.dbTempBanTime.
+        // NOTE: Unlike sys.dbTempBanTime, this returns 0 if the player isn't banned.
+        util.mod.tempBanTime = function (playerName) {
+            // Return their name. This allows us to accept ids as well.
+            var trueName = (sys.name(playerName) || playerName).toLowerCase();
+
+            // If they aren't banned, return 0.
+            if (!Utils.mod.isBanned(trueName)) {
+                return 0;
+            }
+
+            // Otherwise, return for how long they are banned.
+            return sys.dbTempBanTime(trueName);
+        };
+
+        util.tier = {};
+        util.tier.isCCTier = function(tier) {
+            return CCTiers.indexOf(tier) > -1;
+        };
+
+        util.tier.hasOneUsablePoke = function(src, team) {
+            var fine = false;
+            var j, i;
+            for (i = 0; i < 6; i += 1) {
+                if (sys.teamPoke(src, team, i) !== 0) {
+                    for (j = 0; j < 4; j += 1) {
+                        if (sys.teamPokeMove(src, team, i, j) !== 0) {
+                            fine = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return fine;
         };
 
         return util;

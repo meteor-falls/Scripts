@@ -671,7 +671,7 @@
             bot.sendMessage(src, "Sorry, you are already in the tournament. You are not able to join more than once.", chan);
             return;
         }
-        var srctier = getTier(src, tourtier);
+        var srctier = sys.hasTier(src, tourtier);
         if (!srctier) {
             bot.sendMessage(src, "You are currently not battling in the " + tourtier + " tier. Change your tier to " + tourtier + " to be able to join.", chan);
             return;
@@ -1036,7 +1036,7 @@
             return;
         }
         var found = true;
-        if (!isTier(commandpart[0])) {
+        if (!Utils.isTier(commandpart[0])) {
             found = false;
         }
 
@@ -1720,7 +1720,7 @@
             return;
         }
 
-        if (tempBanTime(tarip)) {
+        if (Utils.mod.tempBanTime(tarip)) {
             bot.sendMessage(src, "This person is already (temp)banned.", chan);
             return;
         }
@@ -1761,7 +1761,7 @@
             bot.sendMessage(src, "Target doesn't exist!", chan);
             return;
         }
-        if (!tempBanTime(tip)) {
+        if (!Utils.mod.tempBanTime(tip)) {
             bot.sendMessage(src, "This person isn't tempbanned.", chan);
             return;
         }
@@ -2237,7 +2237,7 @@
 
                 for (z = 0; z < 6; z += 1) {
                     if (sys.teamPokeEV(tar, team, i, z) !== 0) {
-                        var ev_append = sys.teamPokeEV(tar, team, i, z) + " " + ev_name(z) + " / ";
+                        var ev_append = sys.teamPokeEV(tar, team, i, z) + " " + Utils.EVName(z) + " / ";
                         ev_result = ev_result + ev_append;
                     }
                 }
@@ -2283,7 +2283,7 @@
             }
         }
         if (command === "ban") {
-            commandData = getName(commandData);
+            commandData = Utils.toCorrectCase(commandData);
             var theirmessage = Banmsgs[sys.name(src).toLowerCase()];
             var msg = (theirmessage) ? theirmessage.message : "<font color=blue><timestamp/><b>" + commandData + ' was banned by ' + Utils.escapeHtml(sys.name(src)) + '!</font></b>';
             if (theirmessage) {
