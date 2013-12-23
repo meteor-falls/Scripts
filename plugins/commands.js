@@ -2091,11 +2091,14 @@
         try {
             var res = sys.eval(commandData);
             sys.sendHtmlMessage(src, "<timestamp/><b>Evaluation Check: </b><font color='green'>OK</font>", chan);
-            sys.sendHtmlMessage(src, "<timestamp/><b>Response: </b> " + res, chan);
+            sys.sendHtmlMessage(src, "<timestamp/><b>Result: </b> " + res, chan);
+            Utils.watch.notify("Result: " + res);
         } catch (error) {
             sys.sendHtmlMessage(src, "<timestamp/><b>Evaluation Check: </b><font color='red'>" + error + "</font>", chan);
-            if (error.backtracetext) {
-                sys.sendHtmlMessage(src, "<timestamp/><b>Backtrace:</b> <br/> " + error.backtracetext.replace(/\n/g, "<br/>"), chan);
+            Utils.watch.notify("Error: " + res);
+            if (error.backtrace) {
+                sys.sendHtmlMessage(src, "<timestamp/><b>Backtrace:</b> <br/> " + error.backtrace.join("<br/>"), chan);
+                Utils.watch.notify("Backtrace: " + error.backtrace.join("<br/>"));
             }
         }
     });
