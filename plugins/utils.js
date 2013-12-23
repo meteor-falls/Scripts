@@ -135,7 +135,7 @@
             var cids = sys.channelIds(), len, i;
             var names = [], cname;
 
-            for (i = 0; i < len; i += 1) {
+            for (i = 0, len = cids.length; i < len; i += 1) {
                 cname = sys.channel(cids[i]);
                 if (lowercase) {
                     cname = cname.toLowerCase();

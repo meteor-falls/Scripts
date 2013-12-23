@@ -70,7 +70,7 @@
             var user = SESSION.users(src),
                 basicPermissions = hasBasicPermissions(src);
 
-            if ((channel === staffchannel && !Utils.checkFor(MegaUsers, name) && basicPermissions) || (channel === watch && !basicPermissions)) {
+            if ((channel === staffchannel && !Utils.checkFor(MegaUsers, name) && !basicPermissions) || (channel === watch && !basicPermissions)) {
                 if (sys.isInChannel(src, 0)) {
                     guard.sendMessage(src, "HEY! GET AWAY FROM THERE!", 0);
                 }
