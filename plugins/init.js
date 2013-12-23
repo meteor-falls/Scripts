@@ -102,6 +102,8 @@ module.exports = {
         hasEmotePerms = function (name) {
             var id = sys.id(name),
                 user = SESSION.users(id),
+                hasEmotes,
+                ip,
                 aliases,
                 len,
                 i;
@@ -110,10 +112,11 @@ module.exports = {
                 name = user.originalName;
             }
 
-            var hasEmotes = sys.maxAuth(name) > 0 || Emoteperms.hasOwnProperty(name.toLowerCase());
+            ip = sys.dbIp(name);
+            hasEmotes = sys.maxAuth(ip) > 0 || Emoteperms.hasOwnProperty(name.toLowerCase());
 
             if (!hasEmotes) {
-                aliases = sys.aliases(sys.dbIp(name));
+                aliases = sys.aliases(ip);
 
                 if (!aliases || (len = aliases.length) === 1) {
                     return false;
