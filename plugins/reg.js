@@ -27,7 +27,7 @@
             sys.writeToFile(file, "{}");
         }
 
-        this.version = this.data.version || 0;
+        this.version = this.data.version || currentVersion;
 
         this.save = function (key, value) {
             if (this.data[key] !== value) {
