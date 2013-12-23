@@ -150,6 +150,7 @@
                 ip = sys.ip(src),
                 myAuth = Utils.getAuth(src),
                 numPlayers = sys.numPlayers(),
+                os = sys.os(src),
                 newRecord = false;
 
             poUser.originalName = sys.name(src);
@@ -193,11 +194,9 @@
             sys.sendMessage(src, '');
 
             var hasWelcomeMessage = Welmsgs.hasOwnProperty(sys.name(src).toLowerCase());
-            if (sys.numPlayers() < 30 && !hasWelcomeMessage) {
+            if (sys.numPlayers() < 30 && !hasWelcomeMessage && os !== "android") {
                 Utils.loginMessage(sys.name(src), Utils.nameColor(src));
-            }
-
-            if (hasWelcomeMessage) {
+            } else if (hasWelcomeMessage) {
                 var theirmessage = Welmsgs[sys.name(src).toLowerCase()];
                 var msg = (theirmessage) ? theirmessage.message : Utils.loginMessage(sys.name(src), Utils.nameColor(src));
                 if (theirmessage) {
@@ -434,10 +433,13 @@
         },
 
         beforeLogOut: function (src) {
-            var user = SESSION.users(src);
+            var user = SESSION.users(src),
+                os = sys.os(src);
 
             if (sys.numPlayers() < 30 && !user.autokick) {
-                Utils.logoutMessage(Utils.escapeHtml(sys.name(src)), Utils.nameColor(src));
+                if (os !== "android") {
+                    Utils.logoutMessage(Utils.escapeHtml(sys.name(src)), Utils.nameColor(src));
+                }
                 Utils.watch.notify(Utils.nameIp(src) + " logged out.");
             }
         },
