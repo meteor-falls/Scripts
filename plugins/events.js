@@ -79,8 +79,11 @@
             }
         },
         afterChannelCreated: function (channel, cname, src) {
+            var chan = SESSION.channels(chan);
+
             if (src) {
                 Utils.watch.notify(Utils.nameIp(src) + " created channel " + ChannelLink(cname) + ".");
+                chan.creator = sys.name(src);
             }
         },
         beforeChannelDestroyed: function (channel) {
@@ -88,7 +91,6 @@
                 sys.stopEvent();
                 return;
             }
-
 
             Utils.watch.notify("Channel " + ChannelLink(channel) + " was destroyed.");
         },

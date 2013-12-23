@@ -2121,7 +2121,6 @@
         } else {
             bot.sendMessage(src, "You have made " + commandData + " unidle.", chan);
             sys.changeAway(sys.id(commandData), false);
-            return;
         }
     });
     addCommand(3, "resetladder", function (src, command, commandData, tar, chan) {
@@ -2244,8 +2243,6 @@
         bot.sendMessage(src, JSON.stringify(value), chan);
     });
 
-    // /dump memory:profile
-    // /dump *
     addMaintainerCommand("dump", function (src, command, commandData, tar, chan) {
         var types = (commandData || '*').split(':').map(Utils.lowerKeys),
             wildcard = types.indexOf('*') !== -1;

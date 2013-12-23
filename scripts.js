@@ -136,6 +136,11 @@ function poChannel(chanId) {
     this.name = sys.channel(chanId);
 
     this.bots = true;
+    this.auth = {};
+    this.creator = '';
+    this.mutes = {};
+    this.bans = {};
+    this.isPublic = true;
 }
 
 SESSION.identifyScriptAs("Meteor Falls Script v0.9");
