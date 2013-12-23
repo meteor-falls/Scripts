@@ -428,7 +428,7 @@ module.exports = {
             str = str.replace(/\[spoiler\](.*?)\[\/spoiler\]/gi, '<a style="color: black; background-color:black;">$1</a>');
             str = str.replace(/\[time\]/gi, "<timestamp/>");
 
-            if ((auth === 3 && htmlchatoff) || (auth !== 3)) {
+            if ((auth === 3 && !htmlchat) || (auth !== 3)) {
                 str = str.replace(/[a-z]{3,}:\/\/[^ ]+/gi, atag);
             }
 
