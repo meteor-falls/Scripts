@@ -1071,7 +1071,7 @@
         var name = sys.name(src);
         Reg.save("MOTD", commandData);
         bot.sendAll("The MOTD has been changed by " + name + " to:", 0);
-        sys.sendHtmlAll(MOTDmessage, 0);
+        sys.sendHtmlAll(commandData, 0);
     });
     addCommand(1, "getmotd", function (src, command, commandData, tar, chan) {
         bot.sendMessage(src, "The MOTD is: " + Utils.escapeHtml(Reg.get("MOTD")), chan);
