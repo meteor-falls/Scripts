@@ -121,6 +121,7 @@ function poUser(id) {
     this.id = id;
     this.ip = ip;
     this.floodCount = 0;
+    this.teamChanges = 0;
     this.caps = 0;
     this.muted = false;
 
@@ -145,7 +146,7 @@ function poChannel(chanId) {
     this.isPublic = true;
 }
 
-SESSION.identifyScriptAs("Meteor Falls Script v0.9");
+SESSION.identifyScriptAs("Meteor Falls Script v0.9.1");
 SESSION.registerUserFactory(poUser);
 SESSION.registerChannelFactory(poChannel);
 SESSION.refill();

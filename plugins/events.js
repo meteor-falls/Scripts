@@ -223,6 +223,7 @@
                     sys.changeTier(src, drizzleSwim[i], "5th Gen Ubers");
                 }
             }
+
             var sandCloak = Utils.tier.hasSandCloak(src);
             if (sandCloak.length > 0) {
                 for (i = 0; i < sandCloak.length; i += 1) {
@@ -474,19 +475,10 @@
             var myUser = SESSION.users(src);
 
             myUser.originalName = sys.name(src);
-
-            if (typeof myUser.teamChanges === 'undefined') {
-                myUser.teamChanges = 0;
-            }
-
             myUser.teamChanges += 1;
 
             var teamChanges = myUser.teamChanges;
             var ip = sys.ip(src);
-
-            if (!teamSpammers) {
-                teamSpammers = {};
-            }
 
             if (teamChanges > 2) {
                 if (typeof teamSpammers[ip] === "undefined") {
