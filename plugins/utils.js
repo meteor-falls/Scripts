@@ -428,7 +428,7 @@
             key = key.toLowerCase();
 
             addCheck = addCheck || function () { return true; };
-            if ((key in container) && addCheck(container, key, field, info)) {
+            if ((key in container) && addCheck(container, key, field)) {
                 delete container[key];
                 added = false;
             } else {
