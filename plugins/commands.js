@@ -2317,8 +2317,6 @@
         });
     });
 
-    require('feedmon.js').addCommands();
-
     /* Exports & metadata */
     module.exports = {
         handleCommand: handleCommand,
