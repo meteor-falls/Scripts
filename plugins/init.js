@@ -1,34 +1,6 @@
 // NOTE: New functions should go in utils.js, old ones should slowly be ported over.
 module.exports = {
     init: function init() {
-        String.prototype.midRef = function (position, n) { // QStringRef QString::midRef
-            if ((!n && n !== 0) || typeof n !== "number") {
-                n = -1;
-            }
-
-            var str = this;
-            var strlen = str.length - 1;
-            if (position > strlen) {
-                return "";
-            }
-
-            var substri = str.substr(position);
-            if (n > strlen || n === -1) {
-                return substri;
-            }
-            return substri.substr(0, n);
-        };
-
-        String.prototype.replaceBetween = function (pos1, pos2, replace) {
-            var str = this,
-                returnStr = str,
-                sub = str.substr(pos1, pos2);
-
-            returnStr = returnStr.replace(sub, replace);
-
-            return returnStr;
-        };
-
         var configFile = sys.getFileContent("config").split("\n"),
             x,
             c_conf,
@@ -56,29 +28,23 @@ module.exports = {
         };
 
         colormodemessage = function (message) {
-            var x,
-                retmsg = "";
-
-            for (x in message) {
-                if (x === "midRef") {
-                    break;
-                }
-                retmsg += randcolor() + message[x] + "</font>";
+            var msg = "";
+            var len, i;
+            for (i = 0, len = message.length; i < len; i += 1) {
+                msg += randcolor() + message[i] + "</font>";
             }
 
-            return retmsg;
+            return msg;
         };
 
         lolmessage = function (message) {
-            var x, retmsg = "";
-            for (x in message) {
-                if (x === "midRef") {
-                    break;
-                }
-                retmsg += "lol";
+            var msg = "";
+            var len, i;
+            for (i = 0, len = message.length; i < len; i += 1) {
+                msg += "lol";
             }
 
-            return retmsg;
+            return msg;
         };
 
         pewpewpewmessage = function (message) {
