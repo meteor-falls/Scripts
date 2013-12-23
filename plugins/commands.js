@@ -2140,7 +2140,7 @@
             mess = Utils.cut(r, 1, ':'),
             name = r[0];
 
-        if (r.length != 2) {
+        if (r.length < 2) {
             bot.sendMessage(src, "Usage of this command is Name:Message", chan);
             return;
         }
@@ -2150,7 +2150,7 @@
             return;
         }
 
-        Welmsgs[name] = {message: mess};
+        Welmsgs[name.toLowerCase()] = {message: mess};
         Reg.save("Welmsgs", Welmsgs);
 
         bot.sendMessage(src, "Set welcome message of " + name + " to: " + Utils.escapeHtml(mess), chan);
