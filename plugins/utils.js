@@ -146,6 +146,21 @@
             return false;
         };
 
+        var autoCorrectRegex = {
+            im: /\bim\b/g,
+            i: /\bi\b/g,
+            cant: /\bcant\b/g,
+            wont: /\bwont\b/g
+        };
+
+        util.autoCorrect = function (message) {
+            return message
+                .replace(autoCorrectRegex.im, "I'm")
+                .replace(autoCorrectRegex.i, "I")
+                .replace(autoCorrectRegex.cant, "can't")
+                .replace(autoCorrectRegex.wont, "won't");
+        };
+
         util.nameColor = function (src) {
             var getColor = sys.getColor(src);
             if (getColor === '#000000') {
