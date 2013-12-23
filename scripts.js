@@ -154,7 +154,7 @@ poScript = ({
 
         require.reload('reg.js');
         require.reload('bot.js');
-        // require.reload('feedmon.js');
+        require.reload('feedmon.js');
 
         require.reload('init.js');
 
