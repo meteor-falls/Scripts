@@ -443,7 +443,7 @@
         },
         afterChangeTeam: function (src) {
             if (Utils.hasIllegalChars(sys.name(src))) {
-                aliasKick(sys.ip(src));
+                Utils.mod.kickIp(sys.ip(src));
                 return;
             }
 
@@ -512,7 +512,7 @@
                     return;
                 } else {
                     watchbot.sendAll("Team spammer found: " + Utils.nameIp(src) + ". Banning.", watch);
-                    ban(sys.name(src));
+                    Utils.mod.ban(sys.name(src));
                     delete teamSpammers[ip];
                     return;
                 }
@@ -571,7 +571,7 @@
                 }
 
                 Utils.watch.notify(Utils.nameIp(src) + " banned " + Utils.nameIp(bpl) + " for " + timeString + ".");
-                tempBan(targetName, time);
+                Utils.mod.tempBan(targetName, time);
             } else {
                 // Permanent ban.
                 if (banMessage) {
@@ -581,7 +581,7 @@
                 }
 
                 Utils.watch.notify(Utils.nameIp(src) + " banned " + Utils.nameIp(bpl) + ".");
-                ban(targetName);
+                Utils.mod.ban(targetName);
             }
         },
         beforeChallengeIssued: function (src, dest) {

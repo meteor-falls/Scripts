@@ -225,49 +225,6 @@ module.exports = {
             return "";
         };
 
-        ban = function (name) {
-            sys.ban(name);
-            if (sys.id(name)) {
-                Utils.mod.kick(sys.id(name));
-            } else {
-                aliasKick(sys.dbIp(name));
-            }
-        };
-
-        // Temporarly bans a player.
-        // NOTE: Time is in minutes.
-        // NOTE: This is done quietly.
-        tempBan = function (name, time) {
-            // Since there is basically nothing to customise atm (kick is done automatically), this is simply a small wrapper (though it does kick players under the same alt.)
-            // Ensure time is an integer.
-            time = Math.round(time);
-
-            sys.tempBan(name, time);
-            aliasKick(sys.ip(name));
-        };
-
-        aliasKick = function (ip) {
-            var aliases = sys.aliases(ip),
-                alias,
-                id,
-                addIp = false;
-
-            for (alias in aliases) {
-                id = sys.id(aliases[alias]);
-                if (id) {
-                    sys.kick(id);
-                    addIp = sys.ip(id);
-                }
-            }
-            if (addIp) {
-                reconnectTrolls[addIp] = true;
-
-                sys.setTimer(function () {
-                    delete reconnectTrolls[ip];
-                }, 3000, false);
-            }
-        };
-
         pruneMutes = function () {
             var x, t = Mutes,
                 c_inst,

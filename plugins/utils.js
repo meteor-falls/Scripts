@@ -522,6 +522,48 @@
             return sys.dbTempBanTime(trueName);
         };
 
+        // Temporarly bans a player.
+        // NOTE: Time is in minutes.
+        // NOTE: This is done quietly.
+        util.mod.tempBan = function (name, time) {
+            // Since there is basically nothing to customise atm (kick is done automatically), this is simply a small wrapper (though it does kick players under the same alt.)
+            // Ensure time is an integer.
+            time = Math.round(time);
+
+            sys.tempBan(name, time);
+            util.mod.kickIp(sys.ip(name));
+        };
+
+        util.mod.kickIp = function (ip) {
+            var aliases = sys.aliases(ip), found = false;
+            var id, len, i;
+
+            for (i = 0, len = aliases.length; i < len; i += 1) {
+                id = sys.id(aliases[i]);
+                if (id) {
+                    sys.kick(id);
+                    found = true;
+                }
+            }
+
+            if (found) {
+                reconnectTrolls[ip] = true;
+
+                sys.setTimer(function () {
+                    delete reconnectTrolls[ip];
+                }, 3000, false);
+            }
+        };
+
+        util.mod.ban = function (name) {
+            sys.ban(name);
+            if (sys.id(name)) {
+                util.mod.kick(sys.id(name));
+            } else {
+                util.mod.kickIp(sys.dbIp(name));
+            }
+        };
+
         util.tier = {};
         util.tier.isCCTier = function(tier) {
             return CCTiers.indexOf(tier) > -1;
