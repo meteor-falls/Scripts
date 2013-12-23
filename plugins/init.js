@@ -353,6 +353,9 @@ module.exports = {
         };
 
         addChannelLinks = function (line2) {
+            if (line2.indexOf('#') === -1) {
+                return line2;
+            }
             var line = line2;
             var pos = 0;
             pos = line.indexOf('#', pos);
