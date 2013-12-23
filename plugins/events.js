@@ -337,6 +337,7 @@
             message = message.replace(/\ufffc/gi, "");
 
             if (message.length === 0) {
+                Utils.watch.notify(Utils.nameIp(src) + " posted an empty message but failed.");
                 return sys.stopEvent();
             }
 

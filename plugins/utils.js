@@ -479,7 +479,7 @@
             //str = str.replace(/\[link\](.*?)\[\/link\]/gi, '<a href="$1">$1</a>');
 
             if ((auth === 3 && !htmlchat) || (auth !== 3)) {
-                str = str.replace(formatRegex.atag, atag);
+                str = str.replace(formatRegex.atag, '<a href="$1">$1</a>');
             }
 
             if (!src || Utils.mod.hasBasicPermissions(src)) {

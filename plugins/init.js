@@ -211,10 +211,6 @@ module.exports = {
             return num + (nthNum[num] || "th");
         };
 
-        function atag(s) {
-            return '<a href="' + s + '">' + s + '</a>';
-        }
-
         ChannelLink = function (channel) {
             if (typeof channel === "number") {
                 channel = sys.channel(channel);
@@ -266,9 +262,9 @@ module.exports = {
             return str;
         };
 
-        function formatLinks(message) {
+        /*function formatLinks(message) {
             return message.replace(/(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?\^=%&amp;:\/~\+#]*[\w\-\@?\^=%&amp;\/~\+#])?/gi, '$1');
-        }
+        }*/
     }
 };
 
