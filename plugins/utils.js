@@ -182,8 +182,12 @@
         };
 
         util.nameColor = function (src) {
+            if (typeof src !== 'number') { // Random colors
+                src = Math.round(Math.random() * (Math.random() * 1000));
+            }
+
             var getColor = sys.getColor(src);
-            if (getColor === '#000000') {
+            if (getColor === '#000000' || !getColor) {
                 return clist[src % clist.length];
             }
             return getColor;
@@ -322,6 +326,16 @@
             return "<b style='color: " + Utils.nameColor(src) + ";' title='" + sys.ip(src) + "'>" + Utils.escapeHtml(sys.name(src)) + (suffix || "") + "</b>";
         };
 
+        util.beautifyName = function (src, suffix) {
+            var id;
+            if (typeof src === 'string' && (id = sys.id(src))) {
+                src = id;
+            }
+
+            var name = typeof src === 'number' ? sys.name(src) : src;
+            return "<b style='color: " + Utils.nameColor(src) + ";'>" + Utils.escapeHtml(name) + (suffix || "") + "</b>";
+        };
+
         // TODO: Remove these unused functions.
         util.randPoke = function () {
             return "<img src='pokemon:num=" + sys.rand(1, 649) + (sys.rand(1, 100) === 50 ? '&shiny=true:' : '') + "'>";
@@ -408,15 +422,17 @@
             return obj.hasOwnProperty((('' + key).toLowerCase()));
         };
 
-        util.regToggle = function (container, key, field, info) {
+        // Keys are automatically lowercase.
+        util.regToggle = function (container, key, field, addCheck) {
             var added;
-            info = info || true;
+            key = key.toLowerCase();
 
-            if (key in container) {
+            addCheck = addCheck || function () { return true; };
+            if ((key in container) && addCheck(container, key, field, info)) {
                 delete container[key];
                 added = false;
             } else {
-                container[key] = info;
+                container[key] = true;
                 added = true;
             }
 

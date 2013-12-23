@@ -1030,25 +1030,33 @@
     /** MOD COMMANDS */
     addListCommand(1, "modcommands", "Mod");
     addCommand(1, "emoteperms", function (src, command, commandData, tar, chan) {
-        if (!commandData) {
-            bot.sendMessage(src, "You need to specify a user!", chan);
+        if (!sys.dbIp(commandData)) {
+            bot.sendMessage(src, "That person does not exist.", chan);
             return;
         }
-        if (!sys.dbRegistered(commandData)) {
-            bot.sendMessage(src, "This person is not registered and will not receive permission to use emotes until they register.", chan);
-            bot.sendMessage(tar, "Please register so you can receive permission to use emotes.");
-            return;
+
+        var playerName = Utils.toCorrectCase(commandData), beautifulName = Utils.beautifyName(playerName);
+        var added = Utils.regToggle(Emoteperms, playerName, "Emoteperms", function () {
+            if (!sys.dbRegistered(playerName)) {
+                bot.sendMessage(src, "This person is not registered and will not receive permission to use emotes until they register.", chan);
+                if (tar) {
+                    bot.sendMessage(tar, "Please register so you can receive permission to use emotes.");
+                }
+                return;
+            }
+
+            return true;
+        });
+
+        if (added) {
+            bot.sendAll(Utils.beautifyName(src) + " granted " + beautifulName + " permission to use emotes!", 0);
+            Utils.watch.notify(Utils.nameIp(src) + " granted " + beautifulName + " permission to use emotes.");
+        } else {
+            bot.sendAll(Utils.beautifyName(src) + " revoked " + beautifulName + "'s permission to use emotes!", 0);
+            Utils.watch.notify(Utils.nameIp(src) + " revoked " + beautifulName + "'s permission to use emotes.");
         }
-        if (Emoteperms[commandData.toLowerCase()]) {
-            bot.sendAll(sys.name(src) + " revoked " + commandData + "'s permission to use emotes!");
-            delete Emoteperms[commandData.toLowerCase()];
-            Reg.save("Emoteperms", Emoteperms);
-            return;
-        }
-        bot.sendAll(sys.name(src) + " has given " + commandData + " permission to use emotes!");
-        Emoteperms[commandData.toLowerCase()] = true;
-        Reg.save("Emoteperms", Emoteperms);
     });
+
     addCommand(1, "channelkick", function (src, command, commandData, tar, chan) {
         if (!tar) {
             bot.sendMessage(src, "This person either does not exist or isn't logged on.", chan);
@@ -1872,18 +1880,24 @@
             bot.sendMessage(src, "That person does not exist.", chan);
             return;
         }
-        var playerName = commandData.toLowerCase();
-        if (!sys.dbRegistered(commandData)) {
-            bot.sendMessage(src, "This person is not registered and will not receive megauser until they register.", chan);
-            bot.sendMessage(tar, "Please register so you can receive megauser.");
-            return;
-        }
 
-        var added = Utils.regToggle(MegaUsers, playerName, "Megausers");
+        var playerName = Utils.toCorrectCase(commandData);
+        var added = Utils.regToggle(MegaUsers, playerName, "Megausers", function () {
+            if (!sys.dbRegistered(playerName)) {
+                bot.sendMessage(src, "This person is not registered and will not receive megauser until they register.", chan);
+                if (tar) {
+                    bot.sendMessage(tar, "Please register so you can receive megauser.");
+                }
+                return;
+            }
+
+            return true;
+        });
+
         if (added) {
-            bot.sendAll(commandData + ' is now a megauser!', 0);
+            bot.sendAll(playerName + ' is now a megauser!', 0);
         } else {
-            bot.sendAll(commandData + ' is no longer a megauser!', 0);
+            bot.sendAll(playerName + ' is no longer a megauser!', 0);
         }
 
         if (tar) {
