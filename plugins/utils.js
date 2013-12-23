@@ -3,6 +3,33 @@
         var util = {};
         var clist = ['#5811b1', '#399bcd', '#0474bb', '#f8760d', '#a00c9e', '#0d762b', '#5f4c00', '#9a4f6d', '#d0990f', '#1b1390', '#028678', '#0324b1'];
         var CCTiers = ["CC 1v1", "Wifi CC 1v1", "Challenge Cup"];
+        var formatRegex = {
+            bold: /\[b\](.*?)\[\/b\]/gi,
+            strike: /\[s\](.*?)\[\/s\]/gi,
+            under: /\[u\](.*?)\[\/u\]/gi,
+            italic: /\[i\](.*?)\[\/i\]/gi,
+            sub: /\[sub\](.*?)\[\/sub\]/gi,
+            sup: /\[sup\](.*?)\[\/sup\]/gi,
+            code: /\[code\](.*?)\[\/code\]/gi,
+            spoiler: /\[spoiler\](.*?)\[\/spoiler\]/gi,
+            color: /\[color=(.*?)\](.*?)\[\/color\]/gi,
+            face: /\[face=(.*?)\](.*?)\[\/face\]/gi,
+            font: /\[font=(.*?)\](.*?)\[\/font\]/gi,
+            size: /\[size=([0-9]{1,})\](.*?)\[\/size\]/gi,
+            pre: /\[pre\](.*?)\[\/pre\]/gi,
+            ping: /\[ping\]/gi,
+            br: /\[br\]/gi,
+            hr: /\[hr\]/gi,
+            atag: /[a-z]{3,}:\/\/[^ ]+/gi
+        };
+        var autoCorrectRegex = {
+            im: /\bim\b/g,
+            i: /\bi\b/g,
+            cant: /\bcant\b/g,
+            wont: /\bwont\b/g,
+            dont: /\bdont\b/g,
+            iam: /\biam\b/g
+        };
 
         util.escapeHtml = function (str, noAmp) {
             if (!noAmp) {
@@ -122,7 +149,6 @@
             };
         }());
 
-
         util.loginMessage = function (name, color) {
             sys.sendHtmlAll("<font color='#0c5959'><timestamp/>±<b>WelcomeBot:</b></font> <b><font color=" + color + ">" + name + "</font></b> joined <b>" + Reg.get('servername') + "</b>!", 0);
         };
@@ -160,15 +186,6 @@
             }
 
             return false;
-        };
-
-        var autoCorrectRegex = {
-            im: /\bim\b/g,
-            i: /\bi\b/g,
-            cant: /\bcant\b/g,
-            wont: /\bwont\b/g,
-            dont: /\bdont\b/g,
-            iam: /\biam\b/g
         };
 
         util.autoCorrect = function (message) {
@@ -442,6 +459,41 @@
             return added;
         };
 
+        util.format = function format(src, str) {
+            var auth = src === 0 ? 3 : sys.maxAuth(sys.ip(src));
+            str = '' + str;
+
+            str = str
+                    .replace(formatRegex.bold, '<b>$1</b>')
+                    .replace(formatRegex.strike, '<s>$1</s>')
+                    .replace(formatRegex.under, '<u>$1</u>')
+                    .replace(formatRegex.italic, '<i>$1</i>')
+                    .replace(formatRegex.sub, '<sub>$1</sub>')
+                    .replace(formatRegex.sup, '<sup>$1</sup>')
+                    .replace(formatRegex.code, '<code>$1</code>')
+                    .replace(formatRegex.spoiler, '<a style="color: black; background-color:black;">$1</a>')
+                    .replace(formatRegex.color, '<font color=$1>$2</font>')
+                    .replace(formatRegex.face, '<font face=$1>$2</font>');
+
+            // Potential security risk (not going into detail).
+            //str = str.replace(/\[link\](.*?)\[\/link\]/gi, '<a href="$1">$1</a>');
+
+            if ((auth === 3 && !htmlchat) || (auth !== 3)) {
+                str = str.replace(formatRegex.atag, atag);
+            }
+
+            if (!src || Utils.mod.hasBasicPermissions(src)) {
+                str = str
+                    .replace(formatRegex.size, '<font size=$1>$2</font>')
+                    .replace(formatRegex.pre, '<pre>$1</pre>')
+                    .replace(formatRegex.ping, "<ping/>")
+                    .replace(formatRegex.br, "<br/>")
+                    .replace(formatRegex.hr, "<hr/>");
+            }
+
+            return addChannelLinks(str); // Do this last to prevent collisions.
+        };
+
         util.placeCommas = function (number) {
             return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         };
@@ -457,11 +509,11 @@
                 minutes = parseInt((diff % (60*60)) / 60, 10),
                 seconds = (diff % 60);
 
-            var format = function(num, type) {
+            var formatTime = function(num, type) {
                 return (num > 0 && num !== 1) ? (num + " " + type + "s") : (num === 1) ? (num + " " + type) : "";
             };
 
-            return [format(days, "day"), format(hours, "hour"), format(minutes, "minute"), format(seconds, "second")].filter(this.stripEmpty);
+            return [formatTime(days, "day"), formatTime(hours, "hour"), formatTime(minutes, "minute"), formatTime(seconds, "second")].filter(this.stripEmpty);
         };
 
         util.watch = {};
@@ -562,6 +614,21 @@
             } else {
                 util.mod.kickIp(sys.dbIp(name));
             }
+        };
+
+        util.mod.pruneMutes = function () {
+            var now = +sys.time();
+            var mute, meta;
+            for (mute in Mutes) {
+                meta = Mutes[mute];
+                if (meta.time !== 0 && meta.time < now) {
+                    delete Mutes[mute];
+                }
+            }
+        };
+
+        util.mod.hasBasicPermissions = function (src) {
+            return Utils.getAuth(src) > 0;
         };
 
         util.tier = {};

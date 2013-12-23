@@ -305,10 +305,11 @@
         }
     });
 
+    // TODO: Move to lists.js
     addCommand(0, ["bbcode", "bbcodes"], function (src, command, commandData, tar, chan) {
         var BB = new CommandList("BB Code List", "navy", "Type in these BB Codes to use them:");
         var formatBB = function (m) {
-            return m + " <b>-</b> " + format(0, m);
+            return m + " <b>-</b> " + Utils.format(0, m);
         };
 
         BB.add(formatBB("[b]Bold[/b]"));
@@ -323,7 +324,7 @@
         BB.add(formatBB("[spoiler]Spoiler[/spoiler]"));
         //BB.add(formatBB("[link]Link[/link]"));
 
-        if (hasBasicPermissions(src)) {
+        if (Utils.mod.hasBasicPermissions(src)) {
             BB.add(formatBB("[pre]Preformatted text[/pre]"));
             BB.add(formatBB("[size=5]Any size[/size]"));
             BB.add("[br]Skips a line");
@@ -1488,7 +1489,8 @@
             bot.sendMessage(src, "Target doesn't exist!", chan);
             return;
         }
-        pruneMutes();
+
+        Utils.mod.pruneMutes();
         if (Mutes[tarip]) {
             bot.sendMessage(src, 'This person is already muted.', chan);
             return;
@@ -1543,7 +1545,7 @@
             bot.sendMessage(src, "Target doesn't exist!", chan);
             return;
         }
-        pruneMutes();
+        Utils.mod.pruneMutes();
         if (!Mutes[ip]) {
             bot.sendMessage(src, 'This person is not muted.', chan);
             return;

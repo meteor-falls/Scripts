@@ -68,7 +68,7 @@
         },
         beforeChannelJoin: function (src, channel) {
             var user = SESSION.users(src),
-                basicPermissions = hasBasicPermissions(src);
+                basicPermissions = Utils.mod.hasBasicPermissions(src);
 
             if ((channel === staffchannel && !Utils.checkFor(MegaUsers, name) && !basicPermissions) || (channel === watch && !basicPermissions)) {
                 if (sys.isInChannel(src, 0)) {
@@ -154,7 +154,7 @@
 
             poUser.originalName = sys.name(src);
 
-            if (hasBasicPermissions(src)) {
+            if (Utils.mod.hasBasicPermissions(src)) {
                 if (!sys.isInChannel(src, watch)) {
                     sys.putInChannel(src, watch);
                 }
@@ -182,7 +182,7 @@
             displayBot("ForumBot", "Get in touch with the community by joining the <b><a href='http://meteorfalls.us/'>Meteor Falls Forums</a></b>!", "blue");
             displayBot("StatsBot", "There are <b>" + numPlayers + "</b> players online. You are the <b>" + nthNumber(Utils.placeCommas(src)) + "</b> player to join. At most, there were <b>" + Reg.get("maxPlayersOnline") + "</b> players online" + (newRecord ? " (new record!)" : "") + ".", "goldenrod");
             if (typeof(startUpTime) === "number" && startUpTime < +sys.time()) {
-                displayBot("UptimeBot", "The server has been up for " + andJoin(Utils.uptime()) + ".", "orange");
+                displayBot("UptimeBot", "The server has been up for " + Utils.fancyJoin(Utils.uptime()) + ".", "orange");
             }
 
             var MOTD = Reg.get("MOTD");
@@ -207,7 +207,7 @@
                 sys.sendHtmlAll(msg, 0);
             }
 
-            pruneMutes();
+            Utils.mod.pruneMutes();
             if (Mutes.hasOwnProperty(ip)) {
                 var myMute = Mutes[ip],
                     muteStr = myMute.time !== 0 ? Utils.getTimeString(myMute.time - +sys.time()) : "forever";
@@ -287,7 +287,7 @@
             }
         },
         beforeChatMessage: function (src, message, chan) {
-            if (!hasBasicPermissions(src) && message.length > 600) {
+            if (!Utils.mod.hasBasicPermissions(src) && message.length > 600) {
                 sys.stopEvent();
                 bot.sendMessage(src, "Sorry, your message has exceeded the 600 character limit.", chan);
                 watchbot.sendAll("User, " + Utils.nameIp(src) + ", has tried to post a message that exceeds the 600 character limit. Take action if need be.", watch);
@@ -312,7 +312,7 @@
             }
 
             if (myAuth < 2 && isMuted) {
-                pruneMutes();
+                Utils.mod.pruneMutes();
                 if (!Mutes[sys.ip(src)]) {
                     poUser.muted = false;
                 } else {
@@ -374,7 +374,7 @@
             var originalMessage = message;
             var sentMessage = ((isOwner && htmlchat) ? originalMessage : Utils.autoCorrect(Utils.escapeHtml(originalMessage, true).replace(/&lt;_&lt;/g, "<_<").replace(/&gt;_&lt;/g, ">_<").replace(/&gt;_&gt;/g, ">_>").replace(/&lt;3/g, "<3"))); // no amp
             var emotes = false;
-            sentMessage = format(src, sentMessage);
+            sentMessage = Utils.format(src, sentMessage);
 
             if (hasEmotesToggled(src)) {
                 var simpleMessage = sentMessage;

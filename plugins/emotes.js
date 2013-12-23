@@ -39,7 +39,7 @@ module.exports = function () {
             i;
 
         if (src && uobj) {
-            perm = hasBasicPermissions(src);
+            perm = Utils.mod.hasBasicPermissions(src);
             timeout = perm ? 4 : 7;
             if (uobj.lastEmoteTime && uobj.lastEmoteTime + timeout > time) {
                 lastEmote = uobj.lastEmote || [];

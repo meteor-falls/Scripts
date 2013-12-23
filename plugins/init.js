@@ -74,7 +74,6 @@ module.exports = {
             return sendStr;
         };
 
-
         // Global var name: reg val name
         var regVals = {
             "MegaUsers": "Megausers",
@@ -130,13 +129,9 @@ module.exports = {
             return hasEmotes;
         };
 
-        hasBasicPermissions = function (src) {
-            return Utils.getAuth(src) > 0;
-        };
-
         hasEmotesToggled = function (src) {
             var name = SESSION.users(src).originalName.toLowerCase();
-            return (hasBasicPermissions(src) || hasEmotePerms(name)) && Emotetoggles.hasOwnProperty(name);
+            return (Utils.mod.hasBasicPermissions(src) || hasEmotePerms(name)) && Emotetoggles.hasOwnProperty(name);
         };
 
         var globalVars = {
@@ -200,42 +195,6 @@ module.exports = {
         staffchannel = makeChan("Auth Party");
         testchan = makeChan("Ground Zero");
         watch = makeChan("Watch");
-
-        andJoin = function (array) {
-            var x, retstr = '',
-                arrlen = array.length;
-
-            if (arrlen === 0 || arrlen === 1) {
-                return array.join("");
-            }
-
-            arrlen--;
-
-            for (x in array) {
-                if (Number(x) === arrlen) {
-                    retstr = retstr.substr(0, retstr.lastIndexOf(","));
-                    retstr += " and " + array[x];
-
-                    return retstr;
-                }
-
-                retstr += array[x] + ", ";
-            }
-
-            return "";
-        };
-
-        pruneMutes = function () {
-            var x, t = Mutes,
-                c_inst,
-                TIME_NOW = +sys.time();
-            for (x in t) {
-                c_inst = t[x];
-                if (c_inst.time !== 0 && c_inst.time < TIME_NOW) {
-                    delete t[x];
-                }
-            }
-        };
 
         RegExp.quote = function (str) {
             return str.replace(/([.?*+\^$\[\]\\(){}|\-])/g, "\\$1");
@@ -310,61 +269,6 @@ module.exports = {
         function formatLinks(message) {
             return message.replace(/(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?\^=%&amp;:\/~\+#]*[\w\-\@?\^=%&amp;\/~\+#])?/gi, '$1');
         }
-
-        var formatRegex = {
-            bold: /\[b\](.*?)\[\/b\]/gi,
-            strike: /\[s\](.*?)\[\/s\]/gi,
-            under: /\[u\](.*?)\[\/u\]/gi,
-            italic: /\[i\](.*?)\[\/i\]/gi,
-            sub: /\[sub\](.*?)\[\/sub\]/gi,
-            sup: /\[sup\](.*?)\[\/sup\]/gi,
-            code: /\[code\](.*?)\[\/code\]/gi,
-            spoiler: /\[spoiler\](.*?)\[\/spoiler\]/gi,
-            color: /\[color=(.*?)\](.*?)\[\/color\]/gi,
-            face: /\[face=(.*?)\](.*?)\[\/face\]/gi,
-            font: /\[font=(.*?)\](.*?)\[\/font\]/gi,
-            size: /\[size=([0-9]{1,})\](.*?)\[\/size\]/gi,
-            pre: /\[pre\](.*?)\[\/pre\]/gi,
-            ping: /\[ping\]/gi,
-            br: /\[br\]/gi,
-            hr: /\[hr\]/gi,
-            atag: /[a-z]{3,}:\/\/[^ ]+/gi
-        };
-
-        format = function (src, str) {
-            var auth = src === 0 ? 3 : sys.maxAuth(sys.ip(src));
-            str = '' + str;
-
-            str = str
-                    .replace(formatRegex.bold, '<b>$1</b>')
-                    .replace(formatRegex.strike, '<s>$1</s>')
-                    .replace(formatRegex.under, '<u>$1</u>')
-                    .replace(formatRegex.italic, '<i>$1</i>')
-                    .replace(formatRegex.sub, '<sub>$1</sub>')
-                    .replace(formatRegex.sup, '<sup>$1</sup>')
-                    .replace(formatRegex.code, '<code>$1</code>')
-                    .replace(formatRegex.spoiler, '<a style="color: black; background-color:black;">$1</a>')
-                    .replace(formatRegex.color, '<font color=$1>$2</font>')
-                    .replace(formatRegex.face, '<font face=$1>$2</font>');
-
-            // Potential security risk (not going into detail).
-            //str = str.replace(/\[link\](.*?)\[\/link\]/gi, '<a href="$1">$1</a>');
-
-            if ((auth === 3 && !htmlchat) || (auth !== 3)) {
-                str = str.replace(formatRegex.atag, atag);
-            }
-
-            if (!src || hasBasicPermissions(src)) {
-                str = str
-                    .replace(formatRegex.size, '<font size=$1>$2</font>')
-                    .replace(formatRegex.pre, '<pre>$1</pre>')
-                    .replace(formatRegex.ping, "<ping/>")
-                    .replace(formatRegex.br, "<br/>")
-                    .replace(formatRegex.hr, "<hr/>");
-            }
-
-            return addChannelLinks(str); // Do this last to prevent collisions.
-        };
     }
 };
 
