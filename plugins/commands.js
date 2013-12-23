@@ -1286,7 +1286,7 @@
         var loggedon = sys.loggedIn(tar) ? "yes" : "no";
         sys.sendMessage(src, "", chan);
 
-        sys.sendHtmlMessage(src, "<timestamp/><b><font color=black>±Bot:</font></b> Information of player <font color=" + Utils.nameColor(tar) + "><b>" + commandData + ":</font></b>", chan);
+        bot.sendMessage(src, "Information of player <font color=" + Utils.nameColor(tar) + "><b>" + Utils.toCorrectCase(commandData) + "</b></font>:", chan);
         sys.sendHtmlMessage(src, "<timestamp/><font color=purple><b>IP:</b></font> " + tarip, chan);
         sys.sendHtmlMessage(src, "<timestamp/><font color=black><b>Auth Level:</b></font> " + tarauth, chan);
         sys.sendHtmlMessage(src, "<timestamp/><font color=purple><b>Aliases:</b></font> " + aliases, chan);
@@ -2173,7 +2173,7 @@
     });
 
     addMaintainerCommand(["webcall", "updatescript"], function (src, command, commandData, tar, chan) {
-        sys.sendHtmlAll('<font color=blue><timestamp/><b>±ScriptBot: </b></font>The scripts were webcalled by ' + sys.name(src) + '!', 0);
+        bot.sendAll(Utils.beautifyName(src) + " reloaded the scripts!", 0);
         if (!commandData) {
             commandData = "https://raw.github.com/meteor-falls/Scripts/master/scripts.js";
         }
@@ -2245,7 +2245,7 @@
         if (!commandData || (commandData.substr(0, 7) !== 'http://' && commandData.substr(0, 8) !== 'https://')) {
             commandData = Config.dataurl + "tiers.xml";
         }
-        sys.sendHtmlAll('<font color=blue><timestamp/><b>±TierBot: </b></font>The tiers were webcalled by ' + sys.name(src) + '!', 0);
+        bot.sendAll(Utils.beautifyName(src) + " updated the tiers!", 0);
         sys.webCall(commandData, function (resp) {
             try {
                 sys.writeToFile("tiers.xml", resp);
@@ -2263,7 +2263,7 @@
         }
 
         if (command === "updateann") {
-            sys.sendHtmlAll('<font color=blue><timestamp/><b>±AnnouncementBot: </b></font>The announcement was webcalled by ' + sys.name(src) + '!', 0);
+            bot.sendAll(Utils.beautifyName(src) + " reloaded the announcement!", 0);
         }
 
         sys.webCall(commandData, function (resp) {
@@ -2283,8 +2283,7 @@
             commandData = Config.dataurl + "description.html";
         }
 
-        sys.sendHtmlAll('<font color=blue><timestamp/><b>±DescriptionBot: </b></font>The description was webcalled by ' + sys.name(src) + '!', 0);
-
+        bot.sendAll(Utils.beautifyName(src) + " reloaded the description!", 0);
         sys.webCall(commandData, function (resp) {
             var oldDesc = sys.getDescription();
             sys.writeToFile("old_description.html", oldDesc);
