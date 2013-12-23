@@ -1,19 +1,6 @@
 // NOTE: New functions should go in utils.js, old ones should slowly be ported over.
 module.exports = {
     init: function init() {
-        String.prototype.format = function () {
-            var str = this;
-            var exp, i, args = arguments.length,
-                icontainer = 0;
-
-            for (i = 0; i < args; i += 1) {
-                icontainer += 1;
-                exp = new RegExp("%" + icontainer, "");
-                str = str.replace(exp, arguments[i]);
-            }
-            return str;
-        };
-
         String.prototype.midRef = function (position, n) { // QStringRef QString::midRef
             if ((!n && n !== 0) || typeof n !== "number") {
                 n = -1;
@@ -73,7 +60,7 @@ module.exports = {
                 retmsg = "";
 
             for (x in message) {
-                if (x === "format") {
+                if (x === "midRef") {
                     break;
                 }
                 retmsg += randcolor() + message[x] + "</font>";
@@ -85,7 +72,7 @@ module.exports = {
         lolmessage = function (message) {
             var x, retmsg = "";
             for (x in message) {
-                if (x === "format") {
+                if (x === "midRef") {
                     break;
                 }
                 retmsg += "lol";
@@ -391,7 +378,7 @@ module.exports = {
                 pos += 1;
                 ChannelNames.forEach(sort);
                 if (longestName !== "") {
-                    html = "<a href=\"po:join/%1\">#%2</a>".format(longestName, longestChannelName);
+                    html = "<a href=\"po:join/" + longestName + "\">#" + longestChannelName + "</a>";
                     line = line.replaceBetween(pos - 1, longestName.length + 1, html);
                     pos += html.length - 1;
                     longestName = "";
