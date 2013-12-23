@@ -3,11 +3,12 @@
         file = "channeldata.json";
 
     var defaultValues = {
-        bots: true,
-        auth: {},
         creator: '',
+        members: {},
+        auth: {},
         mutes: {},
         bans: {},
+        bots: true,
         isPublic: true
     };
 

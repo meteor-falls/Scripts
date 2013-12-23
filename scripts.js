@@ -132,14 +132,17 @@ function poUser(id) {
 }
 
 function poChannel(chanId) {
-    this.id = chanId;
+    this.id   = chanId;
     this.name = sys.channel(chanId);
 
-    this.bots = true;
-    this.auth = {};
     this.creator = '';
-    this.mutes = {};
-    this.bans = {};
+
+    this.members = {};
+    this.auth    = {};
+    this.mutes   = {};
+    this.bans    = {};
+
+    this.bots     = true;
     this.isPublic = true;
 }
 
