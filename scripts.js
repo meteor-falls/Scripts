@@ -125,7 +125,6 @@ function poUser(id) {
     this.muted = false;
 
     this.originalName = sys.name(id);
-    this.megauser = false;
 
     // This is an array so we can track multiple emotes in their last message.
     this.lastEmote = [];
@@ -193,10 +192,6 @@ poScript = ({
 
     beforeChannelDestroyed: function beforeChannelDestroyed(channel) {
         require.callPlugins("beforeChannelDestroyed", channel);
-    },
-
-    megauserCheck: function megauserCheck(src) {
-        SESSION.users(src).megauser = MegaUsers.hasOwnProperty(sys.name(src).toLowerCase());
     },
 
     /*afterChannelCreated: function afterChannelCreated(chan, name, src) {

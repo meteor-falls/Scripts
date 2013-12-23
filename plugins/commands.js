@@ -69,7 +69,7 @@
             return true;
         }
 
-        if ((cmd.flags & addCommand.flags.MEGAUSER) && poUser.megauser) {
+        if ((cmd.flags & addCommand.flags.MEGAUSER) && Utils.checkFor(MegaUsers, name)) {
             return true;
         }
 
@@ -869,24 +869,15 @@
     }, addCommand.flags.MEGAUSERS);
 
     addCommand(1, "endtour", function (src, command, commandData, tar, chan) {
-        if (!this.poUser.megauser && this.myAuth < 1) {
-            bot.sendMessage(src, "You need to be a higher auth to use this command!", chan);
-            return;
-        }
         if (tourmode !== 0) {
             tourmode = 0;
             sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>The tour was ended by <i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(sys.name(src)) + "!</i></font><hr width=300/><br><b>Sorry! A new tournament may be starting soon!</b><br/><br/></td></tr></table></center><br/>", 0);
         } else {
             bot.sendMessage(src, "Sorry, you are unable to end a tournament because one is not currently running.", chan);
         }
-    });
+    }, addCommand.flags.MEGAUSERS);
 
     addCommand(0, "message", function (src, command, commandData, tar, chan) {
-        if (!this.poUser.megauser && this.myAuth < 1) {
-            bot.sendMessage(src, "You need to be a higher auth to use this command!", chan);
-            return;
-        }
-
         if (!commandData) {
             bot.sendMessage(src, "Specify kick, ban, or welcome!", chan);
             return;
@@ -1863,10 +1854,6 @@
             bot.sendAll(playerName + ' is now a megauser!', 0);
         } else {
             bot.sendAll(playerName + ' is no longer a megauser!', 0);
-        }
-
-        if (tar) {
-            SESSION.users(tar).megauser = added;
         }
     });
 
