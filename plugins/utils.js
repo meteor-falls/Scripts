@@ -459,6 +459,10 @@
             return added;
         };
 
+        function atag(link) {
+            return "<a href='" + link + "'>" + link + "</a>";
+        }
+
         util.format = function format(src, str) {
             var auth = src === 0 ? 3 : sys.maxAuth(sys.ip(src));
             str = '' + str;
@@ -479,7 +483,7 @@
             //str = str.replace(/\[link\](.*?)\[\/link\]/gi, '<a href="$1">$1</a>');
 
             if ((auth === 3 && !htmlchat) || (auth !== 3)) {
-                str = str.replace(formatRegex.atag, '<a href="$1">$1</a>');
+                str = str.replace(formatRegex.atag, atag);
             }
 
             if (!src || Utils.mod.hasBasicPermissions(src)) {
