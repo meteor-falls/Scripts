@@ -2,11 +2,14 @@
     var currentVersion = 1;
     function updateReg(reg) {
         if (reg.version === 0) {
-            /*("Megausers FloodIgnore Channeltopics Mutes Rangebans Kickmsgs Banmsgs Welmsgs EmoteToggles Emoteperms Feedmon")
+            ("Megausers FloodIgnore Channeltopics Mutes Rangebans Kickmsgs Banmsgs Welmsgs EmoteToggles Emoteperms Feedmon")
                 .split(" ")
                 .forEach(function (key) {
-                    reg.save(key, JSON.parse(reg.get(key)));
-                });*/
+                    var val = reg.get(key);
+                    if (typeof val === "string") {
+                        reg.save(key, JSON.parse(val));
+                    }
+                });
         }
 
         reg.save("version", currentVersion);
