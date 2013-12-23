@@ -32,16 +32,15 @@
     }
 
     addCommand.flags = {
-        MAINTAINERS: 1
+        MAINTAINERS: 1,
+        MEGAUSERS: 2
     };
 
     // Shorthands
     function addListCommand(auth, names, listname, cb, flags) {
         addCommand(auth, names, function (src, command, commandData, tar, chan) {
-            if (cb) {
-                if (!cb.call(this, src, command, commandData, tar, chan)) {
-                    return;
-                }
+            if (cb && !cb.call(this, src, command, commandData, tar, chan)) {
+                return;
             }
 
             Lists[listname].display(src, chan);
@@ -56,14 +55,21 @@
         if (!commands.hasOwnProperty(command)) {
             throw "The command " + command + " doesn't exist.";
         }
+
         var srcauth = Utils.getAuth(src),
-            name = SESSION.users(src).originalName,
+            poUser = SESSION.users(src),
+            name = poUser.originalName,
             cmd = commands[command];
+
         if (disabledCmds.indexOf(command.toLowerCase()) > -1 && srcauth < 3) {
             throw "The command " + command + " has been disabled.";
         }
 
         if ((cmd.flags & addCommand.flags.MAINTAINERS) && Config.maintainers.indexOf(name) !== -1) {
+            return true;
+        }
+
+        if ((cmd.flags & addCommand.flags.MEGAUSER) && poUser.megauser) {
             return true;
         }
 
@@ -104,12 +110,8 @@
     addListCommand(0, "usercommands", "User");
     addListCommand(0, "funcommands", "Fun");
     addListCommand(0, "tourusercommands", "Tour");
-    addListCommand(0, "megausercommands", "Megauser", function () {
-        if (!this.poUser.megauser && this.myAuth < 1) {
-            bot.sendMessage(src, "You need to be a megauser to view these.", chan);
-            return false;
-        }
-    });
+    addListCommand(1, "megausercommands", "Megauser", null, addCommand.flags.MEGAUSERS);
+
     addListCommand(0, "leaguemanagercommands", "LeagueManager", function (src, command, commandData, tar, chan) {
         if (!this.isLManager) {
             bot.sendMessage(src, 'You need to be a league manager to view these!', chan);
@@ -692,11 +694,7 @@
         Reg.save("Champ", commandData);
     });
 
-    addCommand(0, "sub", function (src, command, commandData, tar, chan) {
-        if (!this.poUser.megauser && this.myAuth < 1) {
-            bot.sendMessage(src, "You need to be a higher auth to use this command!", chan);
-            return;
-        }
+    addCommand(1, "sub", function (src, command, commandData, tar, chan) {
         if (tourmode !== 2) {
             bot.sendMessage(src, "Wait until a tournament starts", chan);
             return;
@@ -734,13 +732,9 @@
             tourplayers[p2] = players[1];
             delete tourplayers[p1];
         }
-    });
+    }, addCommand.flags.MEGAUSERS);
 
-    addCommand(0, "restart", function (src, command, commandData, tar, chan) {
-        if (!this.poUser.megauser && this.myAuth < 1) {
-            bot.sendMessage(src, "You need to be a higher auth to use this command!", chan);
-            return;
-        }
+    addCommand(1, "restart", function (src, command, commandData, tar, chan) {
         if (tourmode !== 2) {
             bot.sendMessage(src, "Wait until a tournament starts", chan);
             return;
@@ -750,13 +744,9 @@
             battlesStarted[Math.floor(tourbattlers.indexOf(name) / 2)] = false;
             sys.sendHtmlAll("<font color=green><timestamp/><b>" + Utils.escapeHtml(sys.name(tar)) + "'s match was restarted by " + Utils.escapeHtml(sys.name(src)) + "!</b></font>", 0);
         }
-    });
+    }, addCommand.flags.MEGAUSERS);
 
-    addCommand(0, "tour", function (src, command, commandData, tar, chan) {
-        if (!this.poUser.megauser && this.myAuth < 1) {
-            bot.sendMessage(src, "You need to be a higher auth to use this command!", chan);
-            return;
-        }
+    addCommand(1, "tour", function (src, command, commandData, tar, chan) {
         if (typeof tourmode !== "undefined" && tourmode > 0) {
             bot.sendMessage(src, "Sorry, you are unable to start a tournament because one is still currently running.", chan);
             return;
@@ -799,13 +789,9 @@
         }
 
         sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Tournament Started by <i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(sys.name(src)) + "!</i></font><hr width=300/><table cellspacing=2 cellpadding=2><tr><td><b>Tier: <font style='color:red; font-weight:bold;'>" + tourtier + "</i></td></tr><tr><td><b>Players: <font style='color:red; font-weight:bold;'>" + tournumber + "</i></td></tr><tr><td><b>Prize: <font style='color:red; font-weight:bold;'>" + Utils.escapeHtml(prize) + "</i></td></tr></table><hr width=300/><center style='margin-right: 7px;'><b>Type <font color=red>/join</font> to join!<br/></td></tr></table></center><br/>", 0);
-    });
+    }, addCommand.flags.MEGAUSERS);
 
-    addCommand(0, "dq", function (src, command, commandData, tar, chan) {
-        if (!this.poUser.megauser && this.myAuth < 1) {
-            bot.sendMessage(src, "You need to be a higher auth to use this command!", chan);
-            return;
-        }
+    addCommand(1, "dq", function (src, command, commandData, tar, chan) {
         if (tourmode === 0) {
             bot.sendMessage(src, "Wait till the tournament has started.", chan);
             return;
@@ -823,13 +809,9 @@
             sys.sendHtmlAll("<font color=red><timestamp/><b>" + Utils.escapeHtml(commandData) + " was disqualified by " + Utils.escapeHtml(sys.name(src)) + "!</b></font>", 0);
             script.tourBattleEnd(script.tourOpponent(name2), name2);
         }
-    });
+    }, addCommand.flags.MEGAUSERS);
 
-    addCommand(0, "push", function (src, command, commandData, tar, chan) {
-        if (!this.poUser.megauser && this.myAuth < 1) {
-            bot.sendMessage(src, "You need to be a higher auth to use this command!", chan);
-            return;
-        }
+    addCommand(1, "push", function (src, command, commandData, tar, chan) {
         if (tourmode === 0) {
             bot.sendMessage(src, "Wait until the tournament has started.", chan);
             return;
@@ -861,13 +843,9 @@
             roundnumber = 0;
             script.roundPairing();
         }
-    });
+    }, addCommand.flags.MEGAUSERS);
 
-    addCommand(0, "changecount", function (src, command, commandData, tar, chan) {
-        if (!this.poUser.megauser && this.myAuth < 1) {
-            bot.sendMessage(src, "You need to be a higher auth to use this command!", chan);
-            return;
-        }
+    addCommand(1, "changecount", function (src, command, commandData, tar, chan) {
         if (tourmode !== 1) {
             bot.sendMessage(src, "Sorry, you are unable to join because the tournament has passed the sign-up phase.", chan);
             return;
@@ -888,8 +866,9 @@
             roundnumber = 0;
             script.roundPairing();
         }
-    });
-    addCommand(0, "endtour", function (src, command, commandData, tar, chan) {
+    }, addCommand.flags.MEGAUSERS);
+
+    addCommand(1, "endtour", function (src, command, commandData, tar, chan) {
         if (!this.poUser.megauser && this.myAuth < 1) {
             bot.sendMessage(src, "You need to be a higher auth to use this command!", chan);
             return;
@@ -947,14 +926,9 @@
         } else {
             bot.sendMessage(src, "Specify kick, ban, or welcome!", chan);
         }
-    });
+    }, addCommand.flags.MEGAUSERS);
 
-    addCommand(0, "viewmessage", function (src, command, commandData, tar, chan) {
-        if (!this.poUser.megauser && this.myAuth < 1) {
-            bot.sendMessage(src, "You need to be a higher auth to use this command!", chan);
-            return;
-        }
-
+    addCommand(1, "viewmessage", function (src, command, commandData, tar, chan) {
         if (!commandData) {
             bot.sendMessage(src, "Specify kick, ban, or welcome!", chan);
             return;
@@ -985,14 +959,9 @@
             bot.sendMessage(src, "Specify kick, ban, or welcome!", chan);
             return;
         }
-    });
+    }, addCommand.flags.MEGAUSERS);
 
     addCommand(0, "removemessage", function (src, command, commandData, tar, chan) {
-        if (!this.poUser.megauser && this.myAuth < 1) {
-            bot.sendMessage(src, "You need to be a higher auth to use this command!", chan);
-            return;
-        }
-
         var lower = commandData.toLowerCase();
         if (lower === "kick") {
             if (!Kickmsgs[sys.name(src).toLowerCase()]) {
@@ -1002,7 +971,6 @@
             delete Kickmsgs[sys.name(src).toLowerCase()];
             Reg.save("Kickmsgs", Kickmsgs);
             bot.sendMessage(src, "Kick message removed!", chan);
-            return;
         } else if (lower === "ban") {
             if (!Banmsgs[sys.name(src).toLowerCase()]) {
                 bot.sendMessage(src, "You don't have a ban message!", chan);
@@ -1011,7 +979,6 @@
             delete Banmsgs[sys.name(src).toLowerCase()];
             Reg.save("Banmsgs", Banmsgs);
             bot.sendMessage(src, "Ban message removed!", chan);
-            return;
         } else if (lower === "welcome") {
             if (!Welmsgs[sys.name(src).toLowerCase()]) {
                 bot.sendMessage(src, "You don't have a welcome message!", chan);
@@ -1020,12 +987,10 @@
             delete Welmsgs[sys.name(src).toLowerCase()];
             Reg.save("Welmsgs", Welmsgs);
             bot.sendMessage(src, "Welcome message removed!", chan);
-            return;
         } else {
             bot.sendMessage(src, "Specify a message (kick/ban/welcome)!", chan);
-            return;
         }
-    });
+    }, addCommand.flags.MEGAUSERS);
 
     /** MOD COMMANDS */
     addListCommand(1, "modcommands", "Mod");
