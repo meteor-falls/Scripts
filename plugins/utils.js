@@ -150,7 +150,8 @@
             im: /\bim\b/g,
             i: /\bi\b/g,
             cant: /\bcant\b/g,
-            wont: /\bwont\b/g
+            wont: /\bwont\b/g,
+            dont: /\bdont\b/g
         };
 
         util.autoCorrect = function (message) {
@@ -158,7 +159,8 @@
                 .replace(autoCorrectRegex.im, "I'm")
                 .replace(autoCorrectRegex.i, "I")
                 .replace(autoCorrectRegex.cant, "can't")
-                .replace(autoCorrectRegex.wont, "won't");
+                .replace(autoCorrectRegex.wont, "won't")
+                .replace(autoCorrectRegex.dont, "don't");
         };
 
         util.nameColor = function (src) {
