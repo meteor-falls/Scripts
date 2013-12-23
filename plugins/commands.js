@@ -2238,6 +2238,12 @@
         bot.sendMessage(src, commandData + " was " + (removed ? "removed" : "not removed (doesn't exist)") + ".", chan);
     });
 
+    addMaintainerCommand("regsee", function (src, command, commandData, tar, chan) {
+        var value = Reg.get(commandData);
+        bot.sendMessage(src, "Key: " + commandData + " (type " + (typeof value) + ").", chan);
+        bot.sendMessage(src, JSON.stringify(value), chan);
+    });
+
     // /dump memory:profile
     // /dump *
     addMaintainerCommand("dump", function (src, command, commandData, tar, chan) {
