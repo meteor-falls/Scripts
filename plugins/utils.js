@@ -428,12 +428,14 @@
             key = key.toLowerCase();
 
             addCheck = addCheck || function () { return true; };
-            if ((key in container) && addCheck(container, key, field)) {
+            if ((key in container)) {
                 delete container[key];
                 added = false;
-            } else {
+            } else if (addCheck(container, key, field)) {
                 container[key] = true;
                 added = true;
+            } else {
+                added = 'fail';
             }
 
             Reg.save(field, container);

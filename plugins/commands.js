@@ -1004,10 +1004,11 @@
             return true;
         });
 
-        if (added) {
+        // Do not simplify this.
+        if (added === true) {
             bot.sendAll(Utils.beautifyName(src) + " granted " + beautifulName + " permission to use emotes!", 0);
             Utils.watch.notify(Utils.nameIp(src) + " granted " + beautifulName + " permission to use emotes.");
-        } else {
+        } else if (added === false) {
             bot.sendAll(Utils.beautifyName(src) + " revoked " + beautifulName + "'s permission to use emotes!", 0);
             Utils.watch.notify(Utils.nameIp(src) + " revoked " + beautifulName + "'s permission to use emotes.");
         }
@@ -1850,9 +1851,10 @@
             return true;
         });
 
-        if (added) {
+        // Do not simplify this.
+        if (added === true) {
             bot.sendAll(playerName + ' is now a megauser!', 0);
-        } else {
+        } else if (added === false) {
             bot.sendAll(playerName + ' is no longer a megauser!', 0);
         }
     });
@@ -2142,8 +2144,9 @@
             try {
                 require(plugin, true, false);
                 if (!require.reload(plugin)) {
-                    bot.sendMessage(src, "Plugin " + plugin + " refused to reload.", chan);
+                    bot.sendMessage(src, "Plugin " + plugin + " refused to reload. Perhaps there is a syntax error?", chan);
                     Utils.watch.notify("Plugin " + plugin + " refused to reload.");
+                    continue;
                 }
 
                 bot.sendMessage(src, "Plugin " + plugin + " updated!", chan);
