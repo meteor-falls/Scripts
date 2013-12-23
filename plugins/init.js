@@ -165,13 +165,6 @@ module.exports = {
         };
 
         hasBasicPermissions = function (src) {
-            var uobj = SESSION.users(src),
-                name = sys.name(src);
-
-            if (uobj && uobj.originalName) {
-                name = uobj.originalName;
-            }
-
             return Utils.getAuth(src) > 0;
         };
 
@@ -340,10 +333,6 @@ module.exports = {
             return '<a href="' + s + '">' + s + '</a>';
         }
 
-        function clink($1) {
-            return ChannelLink(sys.channel($1));
-        }
-
         ChannelLink = function (channel) {
             if (typeof channel === "number") {
                 channel = sys.channel(channel);
@@ -399,51 +388,59 @@ module.exports = {
             return message.replace(/(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?\^=%&amp;:\/~\+#]*[\w\-\@?\^=%&amp;\/~\+#])?/gi, '$1');
         }
 
+        var formatRegex = {
+            bold: /\[b\](.*?)\[\/b\]/gi,
+            strike: /\[s\](.*?)\[\/s\]/gi,
+            under: /\[u\](.*?)\[\/u\]/gi,
+            italic: /\[i\](.*?)\[\/i\]/gi,
+            sub: /\[sub\](.*?)\[\/sub\]/gi,
+            sup: /\[sup\](.*?)\[\/sup\]/gi,
+            code: /\[code\](.*?)\[\/code\]/gi,
+            spoiler: /\[spoiler\](.*?)\[\/spoiler\]/gi,
+            color: /\[color=(.*?)\](.*?)\[\/color\]/gi,
+            face: /\[face=(.*?)\](.*?)\[\/face\]/gi,
+            font: /\[font=(.*?)\](.*?)\[\/font\]/gi,
+            size: /\[size=([0-9]{1,})\](.*?)\[\/size\]/gi,
+            pre: /\[pre\](.*?)\[\/pre\]/gi,
+            ping: /\[ping\]/gi,
+            br: /\[br\]/gi,
+            hr: /\[hr\]/gi,
+            atag: /[a-z]{3,}:\/\/[^ ]+/gi
+        };
+
         format = function (src, str) {
-            if (typeof str !== "string") {
-                str = String(str);
-            }
+            var auth = src === 0 ? 3 : sys.maxAuth(sys.ip(src));
+            str = '' + str;
 
-            var auth = sys.maxAuth(sys.ip(src));
-            if (src === 0) {
-                auth = 3;
-            }
+            str = str
+                    .replace(formatRegex.bold, '<b>$1</b>')
+                    .replace(formatRegex.strike, '<s>$1</s>')
+                    .replace(formatRegex.under, '<u>$1</u>')
+                    .replace(formatRegex.italic, '<i>$1</i>')
+                    .replace(formatRegex.sub, '<sub>$1</sub>')
+                    .replace(formatRegex.sup, '<sup>$1</sup>')
+                    .replace(formatRegex.code, '<code>$1</code>')
+                    .replace(formatRegex.spoiler, '<a style="color: black; background-color:black;">$1</a>')
+                    .replace(formatRegex.color, '<font color=$1>$2</font>')
+                    .replace(formatRegex.face, '<font face=$1>$2</font>');
 
-            str = str.replace(/\[b\](.*?)\[\/b\]/gi, '<b>$1</b>');
-            str = str.replace(/\[s\](.*?)\[\/s\]/gi, '<s>$1</s>');
-            str = str.replace(/\[u\](.*?)\[\/u\]/gi, '<u>$1</u>');
-            str = str.replace(/\[i\](.*?)\[\/i\]/gi, '<i>$1</i>');
-            str = str.replace(/\[sub\](.*?)\[\/sub\]/gi, '<sub>$1</sub>');
-            str = str.replace(/\[sup\](.*?)\[\/sup\]/gi, '<sup>$1</sup>');
-            str = str.replace(/\[sub\](.*?)\[\/sub\]/gi, '<sub>$1</sub>');
-            str = str.replace(/\[code\](.*?)\[\/code\]/gi, '<code>$1</code>');
-            str = str.replace(/\[link\](.*?)\[\/link\]/gi, '<a href="$1">$1</a>');
-            str = str.replace(/\[spoiler\](.*?)\[\/spoiler\]/gi, '<a style="color: black; background-color:black;">$1</a>');
-            str = str.replace(/\[time\]/gi, "<timestamp/>");
+            // Potential security risk (not going into detail).
+            //str = str.replace(/\[link\](.*?)\[\/link\]/gi, '<a href="$1">$1</a>');
 
             if ((auth === 3 && !htmlchat) || (auth !== 3)) {
-                str = str.replace(/[a-z]{3,}:\/\/[^ ]+/gi, atag);
+                str = str.replace(formatRegex.atag, atag);
             }
 
-            str = str.replace(/\[color=(.*?)\](.*?)\[\/color\]/gi, '<font color=$1>$2</font>');
-            str = str.replace(/\[face=(.*?)\](.*?)\[\/face\]/gi, '<font face=$1>$2</font>');
-            str = str.replace(/\[font=(.*?)\](.*?)\[\/font\]/gi, '<font face=$1>$2</font>');
-
-            if (auth > 0 || hasBasicPermissions(src)) {
-                str = str.replace(/\[size=([0-9]{1,})\](.*?)\[\/size\]/gi, '<font size=$1>$2</font>');
-                str = str.replace(/\[pre\](.*?)\[\/pre\]/gi, '<pre>$1</pre>');
-                str = str.replace(/\[ping\]/gi, "<ping/>");
-                str = str.replace(/\[br\]/gi, "<br/>");
-                str = str.replace(/\[hr\]/gi, "<hr/>");
-                str = str.replace(/\[announce\](.*?)\[\/announce\]/gi, function ($1, $2) {
-                    return "<br><font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>" +
-                        "<br/><font color=" + Utils.nameColor(src) + "><timestamp/><b>" + sys.name(src) + ":</b><font color=black> " + $2 + "<br>" +
-                        "<br/><font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>";
-                });
+            if (!src || hasBasicPermissions(src)) {
+                str = str
+                    .replace(formatRegex.size, '<font size=$1>$2</font>')
+                    .replace(formatRegex.pre, '<pre>$1</pre>')
+                    .replace(formatRegex.ping, "<ping/>")
+                    .replace(formatRegex.br, "<br/>")
+                    .replace(formatRegex.hr, "<hr/>");
             }
 
-            str = addChannelLinks(str); // do this late for other bbcodes to work properly
-            return str;
+            return addChannelLinks(str); // Do this last to prevent collisions.
         };
     }
 };

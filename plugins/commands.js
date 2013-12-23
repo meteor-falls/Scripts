@@ -319,8 +319,7 @@
         BB.add(formatBB("[color=red]Any color[/color]"));
         BB.add(formatBB("[face=arial]Any font[/face] or [font=arial]Any font[/font]"));
         BB.add(formatBB("[spoiler]Spoiler[/spoiler]"));
-        BB.add(formatBB("[link]Link[/link]"));
-        BB.add("[time]A timestamp - <timestamp/>");
+        //BB.add(formatBB("[link]Link[/link]"));
 
         if (hasBasicPermissions(src)) {
             BB.add(formatBB("[pre]Preformatted text[/pre]"));
