@@ -803,6 +803,7 @@
         }
 
         var name = sys.name(src);
+        Utils.watch.notify("Old MOTD: " + Utils.escapeHtml(Reg.get("MOTD")));
         Reg.save("MOTD", commandData);
         bot.sendAll("The MOTD has been changed by " + name + " to:", 0);
         sys.sendHtmlAll(commandData, 0);
