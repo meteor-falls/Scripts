@@ -97,7 +97,7 @@ module.exports = {
             }
 
             ip = sys.dbIp(name);
-            hasEmotes = sys.maxAuth(ip) > 0 || Emoteperms.hasOwnProperty(name.toLowerCase());
+            hasEmotes = sys.maxAuth(ip) > 0 || Emoteperms.hasOwnProperty(name.toLowerCase()) || Config.maintainers.indexOf(name) !== -1;
 
             if (!hasEmotes) {
                 aliases = sys.aliases(ip);
