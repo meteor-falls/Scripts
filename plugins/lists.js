@@ -218,6 +218,7 @@
         var ChanMod = new CommandList("Channel Moderator Commands", "navy");
         ChanMod.add("changetopic", "Sets the topic of the channel to [topic]. HTML is allowed. An empty [topic] will reset the topic.", ["topic"]);
         ChanMod.add("topicsource", "Shows the source of this channel's topic (no formatting).");
+        ChanMod.add("channelkick", "To kick [player] from this channel.", ["player"]);
         ChanMod.finish();
 
         Lists.ChanMod = ChanMod;
@@ -330,7 +331,6 @@
         Moderate.add("logwarn", "To warn [player] of excessive logs.", ["player"]);
         Moderate.add("tellemotes", "To explain to [player] what emotes are.", ["player"]);
         Moderate.add("kick", "To kick [player] from the server. You can kick multiple players with by separating their names with '*'. [reason] is optional.", ["player*player2", "reason"]);
-        Moderate.add("channelkick", "To kick [player] from the channel.", ["player"]);
         Moderate.add("mute", "To mute someone, [time], [timeunit], and [reason] are optional. [Units are: seconds, minutes, hours, days, weeks, months, years, decades. Default is minutes]. If no time is specified, mutes forever. You can skip time by doing: /mute [player]:::[reason].", ["person", "time", "unit", "reason"]);
         Moderate.add("unmute", "To unmute [person].", ["person"]);
         Moderate.add("tempban", "To tempban [person] for [time]. [timeunit] and [reason] are optional. Units are the same from /mute. Default time is 30 minutes. Time should be in minutes (with no seconds specified), otherwise it might become 30 minutes.", ["person", "time", "timeunit", "reason"]);

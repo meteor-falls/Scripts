@@ -670,6 +670,21 @@
         }
     });
 
+    addChannelModCommand("channelkick", function (src, command, commandData, tar, chan) {
+        if (!tar) {
+            bot.sendMessage(src, "This person either does not exist or isn't logged on.", chan);
+            return;
+        }
+
+        if ((Utils.channel.channelAuth(src, chan) <= Utils.channel.channelAuth(tar, chan)) && (Utils.getAuth(src) <= Utils.getAuth(tar))) {
+            bot.sendMessage(src, "This person cannot be kicked because they have either higher or equal channel auth.", chan);
+            return;
+        }
+
+        bot.sendAll(Utils.beautifyName(src) + " kicked " + Utils.beautifyName(tar) + " from " + sys.channel(chan) + "!", chan);
+        sys.kick(tar, chan);
+    });
+
     addCommand(0, "message", function (src, command, commandData, tar, chan) {
         if (!commandData) {
             bot.sendMessage(src, "Specify kick, ban, or welcome!", chan);
@@ -805,19 +820,6 @@
             bot.sendAll(Utils.beautifyName(src) + " revoked " + beautifulName + "'s permission to use emotes!", 0);
             Utils.watch.notify(Utils.nameIp(src) + " revoked " + beautifulName + "'s permission to use emotes.");
         }
-    });
-
-    addCommand(1, "channelkick", function (src, command, commandData, tar, chan) {
-        if (!tar) {
-            bot.sendMessage(src, "This person either does not exist or isn't logged on.", chan);
-            return;
-        }
-        if (sys.auth(tar) >= this.myAuth) {
-            bot.sendMessage(src, "Unable to channel kick this person.", chan);
-            return;
-        }
-        bot.sendAll(commandData + " has been kicked from the channel!", chan);
-        sys.kick(tar, chan);
     });
 
     addCommand(1, "motd", function (src, command, commandData, tar, chan) {
@@ -2115,6 +2117,10 @@
     };
 
     module.reload = function () {
+        // Request feedmon and tours to add commands.
+        require.reload('feedmon.js');
+        require.reload('tours.js');
+
         // Update commands inside events
         require.reload('events.js');
         return true;
