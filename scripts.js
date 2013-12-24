@@ -6,6 +6,7 @@
 var Config = {
     // Configuration for the script.
     maintainers: ['[VP]Blade', 'Ethan', 'TheUnknownOne'],
+    eval: ['Ethan'],
 
     // Repo to load plugins from.
     repourl: "https://raw.github.com/meteor-falls/Scripts/master/plugins/",
