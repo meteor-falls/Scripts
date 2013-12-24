@@ -205,8 +205,9 @@ poScript = ({
         require.callPlugins("beforeChannelDestroyed", channel);
     },
 
-    /*afterChannelCreated: function afterChannelCreated(chan, name, src) {
-    },*/
+    afterChannelCreated: function afterChannelCreated(chan, name, src) {
+        require.callPlugins("afterChannelCreated", chan, name, src);
+    },
 
     afterChannelJoin: function afterChannelJoin(src, chan) {
         require.callPlugins("afterChannelJoin", src, chan);
