@@ -33,8 +33,7 @@
 
     addCommand.flags = {
         MAINTAINERS: 1,
-        MEGAUSERS: 2,
-        EVAL: 4
+        MEGAUSERS: 2
     };
 
     // Shorthands
@@ -64,10 +63,6 @@
 
         if (disabledCmds.indexOf(command.toLowerCase()) > -1 && srcauth < 3) {
             throw "The command " + command + " has been disabled.";
-        }
-        
-        if ((cmd.flags & addCommand.flags.EVAL) && Config.eval.indexOf(name) !== -1) {
-            return true;
         }
 
         if ((cmd.flags & addCommand.flags.MAINTAINERS) && Config.maintainers.indexOf(name) !== -1) {
@@ -1819,7 +1814,7 @@
                 Utils.watch.notify("Backtrace: " + error.backtrace.join("<br/>"));
             }
         }
-    }, addCommand.flags.EVAL);
+    });
     
     addCommand(3, "htmlchat", function (src, command, commandData, tar, chan) {
         if (htmlchat) {
