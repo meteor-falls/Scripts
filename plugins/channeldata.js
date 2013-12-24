@@ -17,7 +17,7 @@
 
     function ChannelManager() {
         this.data = {};
-        this.version = 0;
+        this.version = currentVersion;
 
         if (sys.fileExists(file)) {
             this.data = JSON.parse(sys.getFileContent(file));
@@ -25,12 +25,12 @@
             sys.writeToFile(file, "{}");
         }
 
-        if (!this.data.__meta) {
-            this.data.__meta = {version: this.version};
+        if (!this.data.hasOwnProperty('__meta__')) {
+            this.data.__meta__ = {version: this.version};
         }
 
         // Channels can't have a double dash.
-        this.version = this.data.__meta.version || currentVersion;
+        this.version = this.data.__meta__.version || currentVersion;
         return this;
     }
 
@@ -93,9 +93,9 @@
     };
 
     // Expects a SESSION object
-    ChannelManager.prototype.refresh = function (chan, key) {
+    ChannelManager.prototype.sync = function (chan, key) {
         var cname = chan.name.toLowerCase();
-        if (!(cname in this.data)) {
+        if (!this.data.hasOwnProperty(cname)) {
             this.data[cname] = {};
         }
 
@@ -104,7 +104,7 @@
     };
 
     ChannelManager.prototype.unregister = function (cname) {
-        delete this.data[cname];
+        delete this.data[cname.toLowerCase()];
         return this;
     };
 
@@ -118,7 +118,7 @@
         return [
             "ChannelManager dump @ " + (new Date()).toUTCString(),
             "Version " + this.version,
-            (dataKeys.length - 1) + " channels.", // Exclude __meta
+            (dataKeys.length - 1) + " channels.", // Exclude __meta__
             dataKeys.length + " keys, being:",
             dataKeys.join(", ")
         ].join("\n");

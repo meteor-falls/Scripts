@@ -1948,6 +1948,11 @@
         bot.sendMessage(src, commandData + " was " + (removed ? "removed" : "not removed (doesn't exist)") + ".", chan);
     });
 
+    addMaintainerCommand("cdunregister", function (src, command, commandData, tar, chan) {
+        ChannelManager.unregister(commandData).save();
+        bot.sendMessage(src, commandData + " was unregistered.", chan);
+    });
+
     addMaintainerCommand("regsee", function (src, command, commandData, tar, chan) {
         var value = Reg.get(commandData);
         bot.sendMessage(src, "Key: " + commandData + " (type " + (typeof value) + ").", chan);

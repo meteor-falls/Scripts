@@ -83,7 +83,7 @@
                 Utils.watch.notify(Utils.nameIp(src) + " created channel " + ChannelLink(cname) + ".");
                 if (chan.creator === '') {
                     chan.creator = sys.name(src);
-                    ChannelManager.refresh(chan, 'creator').save();
+                    ChannelManager.sync(chan, 'creator').save();
                 }
             }
         },

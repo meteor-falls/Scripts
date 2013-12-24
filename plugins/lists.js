@@ -390,6 +390,7 @@
         Maintainer.add("resetprofiling", "Calls sys.resetProfiling");
         Maintainer.add("regsee", "Shows information about the given [key] in the reg.", ["key"]);
         Maintainer.add("regremove", "Removes the given [key] from the reg.", ["key"]);
+        Maintainer.add("cdunregister", "Unregisters the given [channel] from the ChannelManager.", ["channel"]);
         Maintainer.add("dump", "Dumps information about the given type. Available types are: * (selects everything, default), memory, profile, session, reg, channeldata.", ["type1", "type2"]);
         Maintainer.finish();
 
