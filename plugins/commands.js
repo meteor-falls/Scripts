@@ -34,7 +34,7 @@
     addCommand.flags = {
         MAINTAINERS: 1,
         MEGAUSERS: 2,
-        EVAL: 3
+        EVAL: 4
     };
 
     // Shorthands
