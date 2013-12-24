@@ -164,9 +164,8 @@ module.exports = {
         Reg.init('MOTD', '');
         Reg.init('maxPlayersOnline', 0);
         Reg.init('servername', "Meteor Falls");
-        Reg.init("Leaguemanager", "HHT");
 
-        Leaguemanager = Reg.get("Leaguemanager");
+        Leaguemanager = League.Manager;
 
         var makeChan = function (cname) {
             sys.createChannel(cname);

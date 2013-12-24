@@ -83,7 +83,7 @@
         var poUser = SESSION.users(src),
             isMuted = poUser.muted,
             originalName = poUser.originalName,
-            isLManager = Leaguemanager === originalName.toLowerCase(),
+            isLManager = League.Manager === originalName.toLowerCase(),
             myAuth = Utils.getAuth(src);
 
         var cmd = commands[command];
@@ -1757,12 +1757,12 @@
     addCommand(3, "leaguemanager", function (src, command, commandData, tar, chan) {
         if (tar === undefined) {
             bot.sendAll(commandData + " is now the league manager!");
-            Reg.save("Leaguemanager", commandData.toLowerCase());
-            Leaguemanager = commandData.toLowerCase();
+            League.Manager = commandData.toLowerCase();
+            Reg.save("League", League);
         } else {
             bot.sendAll(sys.name(tar) + " is now the league manager!");
-            Reg.save("Leaguemanager", sys.name(tar).toLowerCase());
-            Leaguemanager = sys.name(tar).toLowerCase();
+            League.Manager = sys.name(tar).toLowerCase();
+            Reg.save("League", League);
         }
     });
     
