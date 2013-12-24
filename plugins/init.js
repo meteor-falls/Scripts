@@ -255,11 +255,8 @@ module.exports = {
                 index = line.indexOf('#', lastIndex);
             }
 
-            // Add any leftover invalid channel(s).
-            if (!chanName && fullChanName) {
-                str += fullChanName;
-            } else if (chanName && chanName.length < fullChanName.length) {
-                str += fullChanName.substr(chanName.length);
+            if (lastIndex < line.length) {
+                str += line.substr(lastIndex);
             }
 
             return str;
