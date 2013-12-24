@@ -1170,18 +1170,15 @@
 
     addCommand(1, ["tempban", "tb"], function (src, command, commandData, tar, chan) {
         var t = commandData.split(':'),
-            bantime = t[1],
-            timeunit = t[2],
-            reason = t[3],
+            bantime = parseInt(t[1], 10) || 0,
+            timeunit = t[2] || "m",
+            reason = t[3] || "No reason",
             time,
             timestr;
 
-        if (!timeunit) {
-            timeunit = "minutes";
-        }
-
         tar = sys.id(t[0]);
         var tarip = sys.dbIp(t[0]);
+
         if (!tarip) {
             bot.sendMessage(src, "Target doesn't exist!", chan);
             return;
@@ -1193,17 +1190,18 @@
         }
 
         if (Utils.getAuth(t[0]) >= this.myAuth) {
-            bot.sendMessage(src, "You dont have sufficient auth to tempban " + commandData + ".", chan);
+            bot.sendMessage(src, "You dont have sufficient auth to tempban " + t[0] + ".", chan);
             return;
         }
-        if (!bantime) {
+        if (!isNaN(bantime)) {
             bot.sendMessage(src, "Please specify a time.", chan);
             return;
         }
-
-        reason = reason || 'No reason.';
-
         bantime = Number(bantime);
+        if (timeunit[0] === "s") {
+            timeunit = "m";
+        }
+
         if (bantime === 0) {
             time = 30;
             timestr = "30 minutes";
@@ -1218,7 +1216,7 @@
         }
 
         sys.sendHtmlAll("<font color=red><timestamp/><b> " + t[0] + " has been tempbanned by " + Utils.escapeHtml(sys.name(src)) + " for " + timestr + "!</font></b><br><font color=black><timestamp/><b> Reason:</b> " + Utils.escapeHtml(reason), 0);
-        Utils.mod.tempBan(t[0], time / 60);
+        Utils.mod.tempBan(t[0], time);
     });
 
     addCommand(1, "untempban", function (src, command, commandData, tar, chan) {

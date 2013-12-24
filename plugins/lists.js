@@ -331,7 +331,7 @@
         Moderate.add("channelkick", "To kick [player] from the channel.", ["player"]);
         Moderate.add("mute", "To mute someone, [time], [timeunit], and [reason] are optional. [Units are: seconds, minutes, hours, days, weeks, months, years, decades. Default is minutes]. If no time is specified, mutes forever. You can skip time by doing: /mute [player]:::[reason].", ["person", "time", "unit", "reason"]);
         Moderate.add("unmute", "To unmute [person].", ["person"]);
-        Moderate.add("tempban", "To tempban [person] for [time]. [timeunit] and [reason] are optional. Units are the same from /mute. Default time is 30 minutes.", ["person", "time", "timeunit", "reason"]);
+        Moderate.add("tempban", "To tempban [person] for [time]. [timeunit] and [reason] are optional. Units are the same from /mute. Default time is 30 minutes. Time should be in minutes (with no seconds specified), otherwise it might become 30 minutes.", ["person", "time", "timeunit", "reason"]);
         Moderate.add("untempban", "To remove [person]'s tempban.", ["person"]);
         Moderate.add("mutes", "To see a list of muted people.");
         Moderate.add("tempbans", "To see a list of temporarily banned players.");

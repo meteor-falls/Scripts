@@ -644,7 +644,7 @@
                 poUser.caps -= 1;
             }
         },
-        
+
         beforeChallengeIssued: function(src, dest) {
             /*var tier = sys.hasTier(src, "Dream World");
             if (tier) {
@@ -656,7 +656,7 @@
 
             Utils.watch.notify(Utils.nameIp(src) + " challenged " + Utils.nameIp(dest) + ".");
         },
-        
+
         beforeBattleMatchup: function(src, dest, clauses, rated, mode, team1, team2) {
             /*var tier = sys.hasTier(src, sys.tier(team1)),
                 desttier = sys.hasTier(dest, sys.tier(team2));
