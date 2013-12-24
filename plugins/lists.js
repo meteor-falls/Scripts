@@ -185,7 +185,7 @@
         Fun.add("cure", "To cure someone.", ["player"]);
         Fun.add("me", "To post a message with *** around it.", ["message"]);
         Fun.add("spin", "To play roulette if a game is going on.");
-        Fun.add("attack", "To use a pokemon attack on someone.", ["player"]);
+        Fun.add("attack", "To use a Pokémon attack on someone.", ["player"]);
         Fun.add("superimp", "To superimp a name (<font size=2>Wraps your name in '~~'</font>)", ["name"]);
         Fun.add("impoff", "To stop imping.");
         Fun.finish();
@@ -194,13 +194,13 @@
 
         /** FEEDMON **/
         var FeedmonList = new CommandList("Feedmon Commands", "navy");
-        FeedmonList.add("catch", "Catches a random pokemon.");
-        FeedmonList.add("feed", "Feeds your caught pokemon.");
-        FeedmonList.add("nickname", "Gives your caught pokemon a nickname.", ["name"]);
+        FeedmonList.add("catch", "Catches a random Pokémon.");
+        FeedmonList.add("feed", "Feeds your caught Pokémon.");
+        FeedmonList.add("nickname", "Gives your caught Pokémon a nickname.", ["name"]);
         FeedmonList.add("level", "If [option] is all, displays requirements for all levels. Otherwise, displays how many EXP you still need for the next level.", ["option"]);
-        FeedmonList.add("battle", "Starts a battle with a random pokémon.");
-        FeedmonList.add("move", "Uses one of your pokemon's moves in battle.", ["num"]);
-        FeedmonList.add("heal", "Revives/heals your (fainted) pokemon.");
+        FeedmonList.add("battle", "Starts a battle with a random Pokémon.");
+        FeedmonList.add("move", "Uses one of your Pokémon moves in battle.", ["num"]);
+        FeedmonList.add("heal", "Revives/heals your (fainted) Pokémon.");
         FeedmonList.finish();
 
         Lists.Feedmon = FeedmonList;
@@ -210,7 +210,7 @@
         Megauser.add("tour", "To start a tournament with tier [tier] that allows [#ofplayers] people to play with optional prize [prize].", ["tier", "#ofplayers", "prize"]);
         Megauser.add("endtour", "To end a running tournament.");
         Megauser.add("sub", "To replace [player1] with [player2] in the running tournament.", ["player1", "player2"]);
-        Megauser.add("changecount", "To change the number of entrants allowed to [number] durning the signup phase.", ["number"]);
+        Megauser.add("changecount", "To change the number of entrants allowed to [number] during the sign up phase.", ["number"]);
         Megauser.add("push", "To force [player] in the running tournament.", ["player"]);
         Megauser.add("dq", "To disqualify [player] from the running tournament.", ["player"]);
         Megauser.add("restart", "To restart [name]'s battle in the running tournament. Abusing this can cost you your megauser status.", ["name"]);
@@ -220,7 +220,7 @@
 
         /** TOURNAMENT USER **/
         var Tour = new CommandList("Tour User Commands", "navy");
-        Tour.add("join", "To join a tournament durning the signup phase.");
+        Tour.add("join", "To join a tournament during the sign up phase.");
         Tour.add("unjoin", "To leave a tournament.");
         Tour.add("viewround", "To view the status of the tournament.");
         Tour.add("tourtier", "To view the tier of the tournament.");
@@ -297,12 +297,12 @@
         Mod.add("forcerules", "To show the rules to [player].", ["player"]);
         Mod.add("info", "To view info about [player].", ["player"]);
         Mod.add("sendall", "To send a message to everyone.", ["message"]);
-        Mod.add("sendhtmlall", "To send a HTML message to everyone.", ["message"]);
+        Mod.add("sendhtmlall", "To send an HTML message to everyone.", ["message"]);
         Mod.add("warn", "To send a warning to [player] with reason [reason]. If [reason] is undo, the warning is undone. [reason] is only required when the target hasn't been infracted. Further usage of the command will result in a kick/mute (5 minutes) of the player.", ["player", "reason"]);
         Mod.add("getmotd", "To get the MOTD (including HTML).");
         Mod.add("public", "To make the server public.");
         Mod.add("poll", "To start a poll. You must specify at least 2 options.", ["subject", "option1*option2*option..."]);
-        Mod.add("closepoll", "To close the poll.");
+        Mod.add("closepoll", "To close the current poll.");
         Mod.add("onos", "Gives you the list of players on the given [os] (windows, mac, linux, android, webclient).", ["os"]);
         Mod.finish();
 
@@ -332,7 +332,7 @@
         Lists.Moderate = Moderate;
 
         var Party = new CommandList("Party Commands", "navy");
-        Party.add("lolmode", "To turn color mode on or off.");
+        Party.add("lolmode", "To turn lol mode on or off.");
         Party.add("spacemode", "To turn space mode on or off.");
         Party.add("capsmode", "To turn caps mode on or off.");
         Party.add("reversemode", "To turn reverse mode on or off.");
@@ -362,7 +362,7 @@
         /** OWNER COMMANDS **/
         var Owner = new CommandList("Owner Commands", "navy");
         Owner.add("authoptions", "To view the authority options.");
-        Owner.add("eval", "To evaluate [code].", ["code"]);
+        Owner.add("eval", "To evaluate [code]. Returns the result.", ["code"]);
         Owner.add("resetladder", "To reset all ladders.");
         Owner.add("bots", "To turn all bots on or off.");
         Owner.finish();
@@ -371,7 +371,7 @@
 
         /** AUTH OPTIONS **/
         var Auth = new CommandList("Auth Options", "navy");
-        Auth.add("changeauth", "Changes a user's auth.", ["player", "level"]);
+        Auth.add("changeauth", "Changes [player]'s auth to [level].", ["player", "level"]);
         Auth.add("dbauths", "To view all the players who have auth in the database.");
         Auth.finish();
 
