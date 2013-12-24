@@ -1801,7 +1801,7 @@
             Utils.watch.notify("Result: " + res);
         } catch (error) {
             sys.sendHtmlMessage(src, "<timestamp/><b>Evaluation Check: </b><font color='red'>" + error + "</font>", chan);
-            Utils.watch.notify("Error: " + res);
+            Utils.watch.notify("Error: " + error);
             if (error.backtrace) {
                 sys.sendHtmlMessage(src, "<timestamp/><b>Backtrace:</b> <br/> " + error.backtrace.join("<br/>"), chan);
                 Utils.watch.notify("Backtrace: " + error.backtrace.join("<br/>"));

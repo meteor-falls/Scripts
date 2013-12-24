@@ -94,12 +94,12 @@
 
     // Expects a SESSION object
     ChannelManager.prototype.refresh = function (chan, key) {
-        cname = cname.toLowerCase();
+        var cname = chan.name.toLowerCase();
         if (!(cname in this.data)) {
             this.data[cname] = {};
         }
 
-        this.data[cname.toLowerCase()][key] = chan[key];
+        this.data[cname][key] = chan[key];
         return this;
     };
 
