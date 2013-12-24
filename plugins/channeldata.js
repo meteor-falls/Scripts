@@ -17,7 +17,7 @@
 
     function ChannelManager() {
         this.data = {};
-        this.version = -1;
+        this.version = 0;
 
         if (sys.fileExists(file)) {
             this.data = JSON.parse(sys.getFileContent(file));
@@ -84,7 +84,22 @@
 
     ChannelManager.prototype.update = function (cname, key, value) {
         cname = cname.toLowerCase();
+        if (!(cname in this.data)) {
+            this.data[cname] = {};
+        }
+
         this.data[cname][key] = value;
+        return this;
+    };
+
+    // Expects a SESSION object
+    ChannelManager.prototype.refresh = function (chan, key) {
+        cname = cname.toLowerCase();
+        if (!(cname in this.data)) {
+            this.data[cname] = {};
+        }
+
+        this.data[cname.toLowerCase()][key] = chan[key];
         return this;
     };
 

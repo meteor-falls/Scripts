@@ -78,10 +78,13 @@
         afterChannelCreated: function (channel, cname, src) {
             var chan = SESSION.channels(chan);
 
+            ChannelManager.populate(chan);
             if (src) {
                 Utils.watch.notify(Utils.nameIp(src) + " created channel " + ChannelLink(cname) + ".");
-                chan.creator = sys.name(src);
-                ChannelManager.populate(chan);
+                if (chan.creator === '') {
+                    chan.creator = sys.name(src);
+                    ChannelManager.refresh(chan, 'creator').save();
+                }
             }
         },
         beforeChannelDestroyed: function (channel) {
