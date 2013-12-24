@@ -137,6 +137,7 @@ function poChannel(chanId) {
 
     this.creator = '';
     this.topic   = '';
+    this.setBy   = '';
 
     this.members = {};
     this.auth    = {};
@@ -154,7 +155,7 @@ try {
     sys.sendAll("Couldn't load ChannelManager: " + ex);
 }
 
-SESSION.identifyScriptAs("Meteor Falls Script v0.9.3");
+SESSION.identifyScriptAs("Meteor Falls Script v0.9.4");
 SESSION.registerUserFactory(poUser);
 SESSION.registerChannelFactory(poChannel);
 SESSION.refill();

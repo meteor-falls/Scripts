@@ -97,17 +97,15 @@
             Utils.watch.notify("Channel " + ChannelLink(channel) + " was destroyed.");
         },
         afterChannelJoin: function (src, chan) {
-            var channelToLower = sys.channel(chan).toLowerCase();
-            var topic = Channeltopics[channelToLower] || {
-                topic: "No channel topic has been set.",
-                by: null
-            };
+            var poChan = SESSION.channels(chan);
+            var channelToLower = poChan.name.toLowerCase();
+            var topic = poChan.topic;
 
-            if (chan !== 0) {
-                topicbot.sendMessage(src, topic.topic, chan);
+            if (topic) {
+                topicbot.sendMessage(src, topic, chan);
 
-                if (topic.by) {
-                    setbybot.sendMessage(src, topic.by, chan);
+                if (poChan.setBy) {
+                    setbybot.sendMessage(src, poChan.setBy, chan);
                 }
             }
 
@@ -355,7 +353,7 @@
 
                 var tar = sys.id(commandData);
                 try {
-                    if (commands.canUseCommand(src, command)) {
+                    if (commands.canUseCommand(src, command, chan)) {
                         commands.handleCommand(src, message, command, commandData, tar, chan);
                         return;
                     }

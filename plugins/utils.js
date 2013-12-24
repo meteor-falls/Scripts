@@ -268,10 +268,10 @@
 
         util.getAuth = function (id) {
             if (typeof id === "number") {
-                return sys.auth(id);
-            } else {
-                return (sys.id(id) !== undefined) ? sys.auth(sys.id(id)) : 0;
+                id = sys.name(id);
             }
+
+            return sys.dbAuth(id);
         };
 
         util.getTimeString = function (sec) {
@@ -635,6 +635,35 @@
             return Utils.getAuth(src) > 0;
         };
 
+        util.channel = {};
+        util.channel.channelAuth = function (src, chan) {
+            if (typeof src === 'number') {
+                src = sys.name(src);
+            }
+
+            var sess = SESSION.channels(chan),
+                name = src.toLowerCase();
+            var auth = Utils.getAuth(src);
+            var cauth = (sess.creator.toLowerCase() === name) ? 3 : (sess.auth[name] || 0);
+            return auth > cauth ? auth : cauth;
+        };
+
+        util.channel.hasChannelAuth = function (src, chan) {
+            return util.channel.channelAuth(src, chan) > 0;
+        };
+
+        util.channel.isChannelMod = function (src, chan) {
+            return util.channelAuth(src, chan) >= 1;
+        };
+
+        util.channel.isChannelAdmin = function (src, chan) {
+            return util.channelAuth(src, chan) >= 2;
+        };
+
+        util.channel.isChannelOwner = function (src, chan) {
+            return util.channelAuth(src, chan) >= 3;
+        };
+
         util.tier = {};
         util.tier.isCCTier = function(tier) {
             return CCTiers.indexOf(tier) > -1;
@@ -710,7 +739,7 @@
 
             return teams_banned;
         };
-        
+
         util.tier.dreamAbilityCheck = function dreamAbilityCheck(src) {
             var bannedAbilities = {
                 'chandelure': ['shadow tag']

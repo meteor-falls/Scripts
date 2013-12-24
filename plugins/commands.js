@@ -32,8 +32,11 @@
     }
 
     addCommand.flags = {
-        MAINTAINERS: 1,
-        MEGAUSERS: 2
+        MAINTAINERS: 0x1,
+        MEGAUSERS: 0x2,
+        CHANNELMODS: 0x4,
+        CHANNELADMINS: 0x8,
+        CHANNELOWNERS: 0x10
     };
 
     // Shorthands
@@ -51,7 +54,19 @@
         addCommand(3, names, cb, addCommand.flags.MAINTAINERS);
     }
 
-    function canUseCommand(src, command) {
+    function addChannelModCommand(names, cb, flags) {
+        addCommand(0, names, cb, (flags || 0) | addCommand.flags.CHANNELMODS);
+    }
+
+    function addChannelAdminCommand(names, cb, flags) {
+        addCommand(0, names, cb, (flags || 0) | addCommand.flags.CHANNELMODS);
+    }
+
+    function addChannelOwnerCommand(names, cb, flags) {
+        addCommand(0, names, cb, (flags || 0) | addCommand.flags.CHANNELMODS);
+    }
+
+    function canUseCommand(src, command, chan) {
         if (!commands.hasOwnProperty(command)) {
             throw "The command " + command + " doesn't exist.";
         }
@@ -59,17 +74,30 @@
         var srcauth = Utils.getAuth(src),
             poUser = SESSION.users(src),
             name = poUser.originalName,
-            cmd = commands[command];
+            cmd = commands[command],
+            commandFlags = addCommand.flags;
 
         if (disabledCmds.indexOf(command.toLowerCase()) > -1 && srcauth < 3) {
             throw "The command " + command + " has been disabled.";
         }
 
-        if ((cmd.flags & addCommand.flags.MAINTAINERS) && Config.maintainers.indexOf(name) !== -1) {
+        if ((cmd.flags & commandFlags.MAINTAINERS) && Config.maintainers.indexOf(name) !== -1) {
             return true;
         }
 
-        if ((cmd.flags & addCommand.flags.MEGAUSER) && Utils.checkFor(MegaUsers, name)) {
+        if ((cmd.flags & commandFlags.MEGAUSERS) && Utils.checkFor(MegaUsers, name)) {
+            return true;
+        }
+
+        if ((cmd.flags & commandFlags.CHANNELMODS) && Utils.channel.isChannelMod(src, chan)) {
+            return true;
+        }
+
+        if ((cmd.flags & commandFlags.CHANNELADMINS) && Utils.channel.isChannelAdmin(src, chan)) {
+            return true;
+        }
+
+        if ((cmd.flags & commandFlags.CHANNELOWNERS) && Utils.channel.isChannelOwner(src, chan)) {
             return true;
         }
 
@@ -117,6 +145,11 @@
             return false;
         }
     });
+
+    addListCommand(0, "channelcommands", "Channel");
+    addListCommand(0, "chanmodcommands", "ChanMod");
+    addListCommand(0, "chanadmincommands", "ChanAdmin");
+    addListCommand(0, "chanownercommands", "ChanOwner");
 
     addCommand(0, "vote", function (src, command, commandData, tar, chan) {
         if (!Poll.active) {
@@ -253,17 +286,16 @@
                 ghosts += 1;
             }
         }
+
         bot.sendMessage(src, ghosts + " ghosts were kicked.", chan);
     });
 
     addCommand(0, "me", function (src, command, commandData, tar, chan) {
-        if (commandData === undefined) {
+        if (!commandData) {
             bot.sendMessage(src, "You must post a message.", chan);
             return;
         }
-        var color = Utils.nameColor(src);
-        var name = sys.name(src);
-        sys.sendHtmlAll("<font color=" + color + "><timestamp/><b><i>*** " + Utils.escapeHtml(name) + " " + Utils.escapeHtml(commandData) + " ***</font></b></i>", chan);
+        sys.sendHtmlAll("<font color=" + Utils.nameColor(src) + "><timestamp/><b><i>*** " + Utils.escapeHtml(sys.name(src)) + " " + Utils.escapeHtml(commandData) + " ***</font></b></i>", chan);
     });
 
     addListCommand(0, "rules", "Rules");
@@ -587,6 +619,33 @@
         Reg.save("League", League);
     });
 
+    /** CHANNEL COMMANDS **/
+    addChannelModCommand("changetopic", function (src, command, commandData, tar, chan) {
+        var poChan = SESSION.channels(chan);
+        if (!commandData) {
+            if (!poChan.topic) {
+                return bot.sendMessage(src, "There is no topic, no point in resetting it!", chan);
+            }
+
+            poChan.topic = '';
+            poChan.setBy = '';
+            ChannelManager
+                .sync(poChan, 'topic')
+                .sync(poChan, 'setBy')
+                .save();
+            bot.sendAll(Utils.beautifyName(src) + " has reset the channel topic!", chan);
+        } else {
+            poChan.topic = commandData;
+            poChan.setBy = SESSION.users(src).originalName;
+            ChannelManager
+                .sync(poChan, 'topic')
+                .sync(poChan, 'setBy')
+                .save();
+            bot.sendAll(Utils.beautifyName(src) + " has set the channel topic to:", chan);
+            bot.sendAll(commandData);
+        }
+    });
+
     addCommand(0, "message", function (src, command, commandData, tar, chan) {
         if (!commandData) {
             bot.sendMessage(src, "Specify kick, ban, or welcome!", chan);
@@ -809,29 +868,6 @@
         }
 
         Reg.save("FloodIgnore", FloodIgnore);
-    });
-
-    addCommand(1, "removetopic", function (src, command, commandData, tar, chan) {
-        if (!Channeltopics[sys.channel(chan).toLowerCase()]) {
-            bot.sendMessage(src, "This channel doesn't have a topic!", chan);
-            return;
-        }
-        delete Channeltopics[sys.channel(chan).toLowerCase()];
-        bot.sendMessage(src, "Channel topic was removed!", chan);
-    });
-
-    addCommand(1, "changetopic", function (src, command, commandData, tar, chan) {
-        /*if (chan === android) {
-            topicbot.sendMessage(src, "Can't change the topic of the android channel!", chan);
-            return;
-        }*/
-        topicbot.sendAll(sys.name(src) + " changed the topic of this channel to: " + commandData, chan);
-        var channelToLower = sys.channel(chan).toLowerCase();
-        Channeltopics[channelToLower] = {
-            "by": sys.name(src),
-            "topic": commandData
-        };
-        Reg.save("Channeltopics", Channeltopics);
     });
 
     addCommand(1, ["mutes", "mutelist"], function (src, command, commandData, tar, chan) {
@@ -2049,7 +2085,10 @@
         canUseCommand: canUseCommand,
         addCommand: addCommand,
         addListCommand: addListCommand,
-        addMaintainerCommand: addMaintainerCommand
+        addMaintainerCommand: addMaintainerCommand,
+        addChannelModCommand: addChannelModCommand,
+        addChannelAdminCommand: addChannelAdminCommand,
+        addChannelOwnerCommand: addChannelOwnerCommand
     };
 
     module.reload = function () {

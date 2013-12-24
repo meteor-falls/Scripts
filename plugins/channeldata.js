@@ -5,6 +5,7 @@
     var defaultValues = {
         creator: '',
         topic: '',
+        setBy: '',
         members: {},
         auth: {},
         mutes: {},
@@ -13,7 +14,7 @@
         isPublic: true
     };
 
-    var fields = ["creator", "topic", "members", "auth", "mutes", "bans", "bots", "isPublic"];
+    var fields = ["creator", "topic", "setBy", "members", "auth", "mutes", "bans", "bots", "isPublic"];
 
     function ChannelManager() {
         this.data = {};

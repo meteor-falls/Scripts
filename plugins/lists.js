@@ -28,13 +28,11 @@
             this.template += "<i>" + help + "</i><" + listtype + ">";
         }
 
-        this.forCommands = title.indexOf("Commands") > -1 || title.indexOf("Option") > -1;
-        this.isMarkdown = title.indexOf("Markdown") > -1;
         this.listtype = listtype;
     };
 
     CommandList.prototype.add = function (cmd, desc, args) {
-        if (this.forCommands) {
+        if (!desc) {
             if (!args) {
                 cmd = "/<a href='po:send//" + cmd + "' style='text-decoration: none; color: black;'>" + cmd + "</a>";
             } else {
@@ -133,6 +131,7 @@
         var Commands = new CommandList("Commands", "navy");
         Commands.add("usercommands", "To view the commands for <b>users</b>.");
         Commands.add("feedmoncommands", "To view the commands related to <b>feedmon</b>.");
+        Commands.add("channelcommands", "To view the commands related to <b>channels</b>.");
         Commands.add("megausercommands", "To view the commands for <b>megausers</b>.");
         Commands.add("leaguemanagercommands", "To view the commands for <b>leaguemanagers</b>.");
         Commands.add("modcommands", "To view the commands for <b>moderators</b>.");
@@ -204,6 +203,22 @@
         FeedmonList.finish();
 
         Lists.Feedmon = FeedmonList;
+
+        /** CHANNEL */
+        var Channel = new CommandList("Channel Commands", "navy");
+        Channel.add("chanmodcommands", "To view the commands for <b>channel moderators</b>.");
+        Channel.add("chanadmincommands", "To view the commands for <b>channel administrators</b>.");
+        Channel.add("chanownercommands", "To view the commands for <b>channel owners</b>.");
+        Channel.add("<b>Note:</b> As creator of the channel, you will always have channel owner permissions.");
+        Channel.finish();
+
+        Lists.Channel = Channel;
+
+        var ChanMod = new CommandList("Channel Moderator Commands", "navy");
+        ChanMod.add("changetopic", "Sets the topic of the channel to [topic]. HTML is allowed. An empty [topic] will reset the topic.", ["topic"]);
+        ChanMod.finish();
+
+        Lists.ChannelMod = ChannelMod;
 
         /** MEGAUSER **/
         var Megauser = new CommandList("Megauser Commands", "navy");

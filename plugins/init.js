@@ -62,7 +62,6 @@ module.exports = {
         var regVals = {
             "MegaUsers": "Megausers",
             "FloodIgnore": "FloodIgnore",
-            "Channeltopics": "Channeltopics",
             "Mutes": "Mutes",
             "Rangebans": "Rangebans",
             "Kickmsgs": "Kickmsgs",
