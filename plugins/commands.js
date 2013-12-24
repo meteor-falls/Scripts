@@ -4,7 +4,7 @@
     function addCommand(authLevel, name, callback, flags) {
         // Proper checks
         if (typeof authLevel !== "number") {
-            print("Error: command " + name + " doesn't have a minimum authlevel.");
+            print("Error: command " + name + " doesn't have a minimum auth level.");
             return;
         }
 
@@ -1906,7 +1906,7 @@
         sys.makeServerPublic(false);
         sys.sendAll('~~Server~~: The server was made private by ' + sys.name(src) + '.');
     });
-    addCommand(2, "showteam", function (src, command, commandData, tar, chan) {
+    /*addCommand(2, "showteam", function (src, command, commandData, tar, chan) {
         if (!tar) {
             bot.sendMessage(src, "Target doesn't exist!", chan);
             return;
@@ -1958,7 +1958,7 @@
         } else {
             bot.sendMessage(src, "That person doesn't have a valid team.", chan);
         }
-    });
+    });*/
     addCommand(2, ["ban", "sban"], function (src, command, commandData, tar, chan) {
         if (!sys.dbIp(commandData)) {
             bot.sendMessage(src, "No player exists by this name!", chan);
