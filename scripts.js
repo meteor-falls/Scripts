@@ -146,7 +146,7 @@ function poChannel(chanId) {
     this.isPublic = true;
 }
 
-SESSION.identifyScriptAs("Meteor Falls Script v0.9.1");
+SESSION.identifyScriptAs("Meteor Falls Script v0.9.2");
 SESSION.registerUserFactory(poUser);
 SESSION.registerChannelFactory(poChannel);
 SESSION.refill();
