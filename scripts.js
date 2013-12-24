@@ -18,7 +18,7 @@ var Config = {
     // Do not touch unless you are adding a new plugin.
     // Plugins to load on script load.
     // mathjs is loaded dynamically.
-    plugins: ['bot', 'reg', 'utils', 'emotes', 'lists', 'init', 'feedmon', 'commands', 'events', 'tours'],
+    plugins: ['bot', 'reg', 'utils', 'channeldata', 'emotes', 'lists', 'init', 'feedmon', 'commands', 'events', 'tours'],
 
     // Whether or not to load plugins from repourl. If set to false, they will load locally.
     load_from_web: true,
@@ -136,6 +136,7 @@ function poChannel(chanId) {
     this.name = sys.channel(chanId);
 
     this.creator = '';
+    this.topic   = '';
 
     this.members = {};
     this.auth    = {};
@@ -146,7 +147,14 @@ function poChannel(chanId) {
     this.isPublic = true;
 }
 
-SESSION.identifyScriptAs("Meteor Falls Script v0.9.2");
+try {
+    ChannelManager = require('channeldata.js').manager;
+} catch (ex) {
+    ChannelManager = {};
+    sys.sendAll("Couldn't load ChannelManager: " + ex);
+}
+
+SESSION.identifyScriptAs("Meteor Falls Script v0.9.3");
 SESSION.registerUserFactory(poUser);
 SESSION.registerChannelFactory(poChannel);
 SESSION.refill();
@@ -168,7 +176,7 @@ poScript = ({
 
         require.reload('emotes.js');
         require.reload('lists.js');
-        
+
         require.reload('tours.js');
 
         //MathJS = require('mathjs.js');
@@ -248,7 +256,7 @@ poScript = ({
     beforeBattleMatchup: function beforeBattleMatchup(src, dest, clauses, rated, mode, team1, team2) {
         require.callPlugins("beforeBattleMatchup", src, dest, clauses, rated, mode, team1, team2);
     },
-    
+
     afterBattleStarted: function afterBattleStarted(src, dest, info, id, t1, t2) {
         require.callPlugins("afterBattleStarted", src, dest, info, id, t1, t2);
     },
