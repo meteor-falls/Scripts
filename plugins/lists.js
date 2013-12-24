@@ -180,8 +180,8 @@
         var Fun = new CommandList("Fun Commands", "navy");
         Fun.add("burn", "To burn someone.", ["player"]);
         Fun.add("freeze", "To freeze someone.", ["player"]);
-        Fun.add("paralyze", "To burn someone.", ["player"]);
-        Fun.add("poison", "To burn someone.", ["player"]);
+        Fun.add("paralyze", "To paralyze someone.", ["player"]);
+        Fun.add("poison", "To poison someone.", ["player"]);
         Fun.add("cure", "To cure someone.", ["player"]);
         Fun.add("me", "To post a message with *** around it.", ["message"]);
         Fun.add("spin", "To play roulette if a game is going on.");
