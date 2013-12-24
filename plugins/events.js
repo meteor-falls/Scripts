@@ -81,6 +81,7 @@
             if (src) {
                 Utils.watch.notify(Utils.nameIp(src) + " created channel " + ChannelLink(cname) + ".");
                 chan.creator = sys.name(src);
+                ChannelManager.populate(chan);
             }
         },
         beforeChannelDestroyed: function (channel) {
@@ -89,6 +90,7 @@
                 return;
             }
 
+            ChannelManager.absorb(SESSION.channels(channel)).save();
             Utils.watch.notify("Channel " + ChannelLink(channel) + " was destroyed.");
         },
         afterChannelJoin: function (src, chan) {
