@@ -166,13 +166,6 @@ module.exports = {
         Reg.init('servername', "Meteor Falls");
         Reg.init("Leaguemanager", "HHT");
 
-        if (Reg.get("Champ") === undefined) {
-            var LeagueArray = ["Gym1", "Gym2", "Gym3", "Gym4", "Gym5", "Gym6", "Gym7", "Gym8", "Elite1", "Elite2", "Elite3", "Elite4", "Champ"];
-            for (x in LeagueArray) {
-                Reg.init(LeagueArray[x], "");
-            }
-        }
-
         Leaguemanager = Reg.get("Leaguemanager");
 
         var makeChan = function (cname) {
