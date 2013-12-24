@@ -33,7 +33,7 @@ var Config = {
     sys.makeDir(dir);
 
     require = function require(name, webcall, noCache) {
-        if ((name in require.cache) && !webcall && (require.meta[name] ? (!require.meta[name].preferCache && !noCache) : !noCache)) {
+        if ((name in require.cache) && !webcall && !noCache) {
             return require.cache[name];
         }
 

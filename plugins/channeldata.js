@@ -111,7 +111,6 @@
 
     exports.ChannelManager = ChannelManager;
     exports.manager = new ChannelManager();
-    module.preferCache = true;
     module.reload = function () {
         module.exports.manager = new ChannelManager();
         return true;

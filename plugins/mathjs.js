@@ -25,7 +25,6 @@
  * the License.
  */
 
-module.preferCache = true;
 module.reload = function () {
     mathjs = module.exports();
     return true;
