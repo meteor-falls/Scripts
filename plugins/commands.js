@@ -642,7 +642,7 @@
                 .sync(poChan, 'setBy')
                 .save();
             bot.sendAll(Utils.beautifyName(src) + " has set the channel topic to:", chan);
-            bot.sendAll(commandData);
+            bot.sendAll(commandData, chan);
         }
     });
 

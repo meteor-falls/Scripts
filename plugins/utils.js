@@ -632,7 +632,7 @@
         };
 
         util.mod.hasBasicPermissions = function (src) {
-            return Utils.getAuth(src) > 0;
+            return util.getAuth(src) > 0;
         };
 
         util.channel = {};
@@ -643,7 +643,7 @@
 
             var sess = SESSION.channels(chan),
                 name = src.toLowerCase();
-            var auth = Utils.getAuth(src);
+            var auth = util.getAuth(src);
             var cauth = (sess.creator.toLowerCase() === name) ? 3 : (sess.auth[name] || 0);
             return auth > cauth ? auth : cauth;
         };
@@ -653,15 +653,15 @@
         };
 
         util.channel.isChannelMod = function (src, chan) {
-            return util.channelAuth(src, chan) >= 1;
+            return util.channel.channelAuth(src, chan) >= 1;
         };
 
         util.channel.isChannelAdmin = function (src, chan) {
-            return util.channelAuth(src, chan) >= 2;
+            return util.channel.channelAuth(src, chan) >= 2;
         };
 
         util.channel.isChannelOwner = function (src, chan) {
-            return util.channelAuth(src, chan) >= 3;
+            return util.channel.channelAuth(src, chan) >= 3;
         };
 
         util.tier = {};

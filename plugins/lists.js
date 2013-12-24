@@ -32,7 +32,7 @@
     };
 
     CommandList.prototype.add = function (cmd, desc, args) {
-        if (!desc) {
+        if (arguments.length > 1) {
             if (!args) {
                 cmd = "/<a href='po:send//" + cmd + "' style='text-decoration: none; color: black;'>" + cmd + "</a>";
             } else {
@@ -209,7 +209,7 @@
         Channel.add("chanmodcommands", "To view the commands for <b>channel moderators</b>.");
         Channel.add("chanadmincommands", "To view the commands for <b>channel administrators</b>.");
         Channel.add("chanownercommands", "To view the commands for <b>channel owners</b>.");
-        Channel.add("<b>Note:</b> As creator of the channel, you will always have channel owner permissions.");
+        Channel.add("<b>Note:</b> As creator of the channel, you will always have channel owner permissions. Additionally, your channel auth is never lower than your server auth.");
         Channel.finish();
 
         Lists.Channel = Channel;
@@ -218,7 +218,7 @@
         ChanMod.add("changetopic", "Sets the topic of the channel to [topic]. HTML is allowed. An empty [topic] will reset the topic.", ["topic"]);
         ChanMod.finish();
 
-        Lists.ChannelMod = ChannelMod;
+        Lists.ChanMod = ChanMod;
 
         /** MEGAUSER **/
         var Megauser = new CommandList("Megauser Commands", "navy");
