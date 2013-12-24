@@ -70,7 +70,8 @@ module.exports = {
             "Welmsgs": "Welmsgs",
             "Emotetoggles": "Emotetoggles",
             "Emoteperms": "Emoteperms",
-            "Feedmons": "Feedmon"
+            "Feedmons": "Feedmon",
+            "League": "League"
         };
 
         for (var i in regVals) {

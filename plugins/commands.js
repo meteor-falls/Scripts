@@ -181,43 +181,29 @@
     });
 
     addCommand(0, "league", function (src, command, commandData, tar, chan) {
-        var League = new CommandList("<font color=red>League</font>", "navy", "");
-        League.template += "<h2><font color=green>~~Gyms~~</font></h2><ol>";
+        var LeagueTemplate = new CommandList("<font color=red>League</font>", "navy", "");
+        LeagueTemplate.template += "<h2><font color=green>~~Gyms~~</font></h2><ol>";
 
-        var Gym1 = Reg.get("Gym1"),
-            Gym2 = Reg.get("Gym2"),
-            Gym3 = Reg.get("Gym3"),
-            Gym4 = Reg.get("Gym4"),
-            Gym5 = Reg.get("Gym5"),
-            Gym6 = Reg.get("Gym6"),
-            Gym7 = Reg.get("Gym7"),
-            Gym8 = Reg.get("Gym8"),
-            Elite1 = Reg.get("Elite1"),
-            Elite2 = Reg.get("Elite2"),
-            Elite3 = Reg.get("Elite3"),
-            Elite4 = Reg.get("Elite4"),
-            Champ = Reg.get("Champ");
+        LeagueTemplate.add(League.Gym1 || "Open");
+        LeagueTemplate.add(League.Gym2 || "Open");
+        LeagueTemplate.add(League.Gym3 || "Open");
+        LeagueTemplate.add(League.Gym4 || "Open");
+        LeagueTemplate.add(League.Gym5 || "Open");
+        LeagueTemplate.add(League.Gym6 || "Open");
+        LeagueTemplate.add(League.Gym7 || "Open");
+        LeagueTemplate.add(League.Gym8 || "Open");
 
-        League.add(Gym1 || "Open");
-        League.add(Gym2 || "Open");
-        League.add(Gym3 || "Open");
-        League.add(Gym4 || "Open");
-        League.add(Gym5 || "Open");
-        League.add(Gym6 || "Open");
-        League.add(Gym7 || "Open");
-        League.add(Gym8 || "Open");
+        LeagueTemplate.template += "</ol><br><h2><font color=blue>**Elite 4**</font></h2><ol>";
 
-        League.template += "</ol><br><h2><font color=blue>**Elite 4**</font></h2><ol>";
+        LeagueTemplate.add(League.Elite1 || "Open");
+        LeagueTemplate.add(League.Elite2 || "Open");
+        LeagueTemplate.add(League.Elite3 || "Open");
+        LeagueTemplate.add(League.Elite4 || "Open");
 
-        League.add(Elite1 || "Open");
-        League.add(Elite2 || "Open");
-        League.add(Elite3 || "Open");
-        League.add(Elite4 || "Open");
+        LeagueTemplate.template += "</ol><br><h2><font color=red>±±The Champion±±</font></h2><ul><b>" + (League.Champ || "Open") + "</b></ul>";
 
-        League.template += "</ol><br><h2><font color=red>±±The Champion±±</font></h2><ul><b>" + (Champ || "Open") + "</b></ul>";
-
-        League.finish();
-        League.display(src, chan);
+        LeagueTemplate.finish();
+        LeagueTemplate.display(src, chan);
         sys.sendHtmlMessage(src, '<i><b><font color=blue>Type /leaguerules to see the rules of the league!</font>', chan);
     });
 
@@ -551,11 +537,14 @@
 
         if (!player) {
             bot.sendAll("The gym leader " + spot + " spot has been voided.", 0);
-            Reg.save("Gym" + spot, "");
+            League["Gym" + spot] = "";
+            Reg.save("League", League);
             return;
         }
+        
         bot.sendAll(player + " has been made gym leader " + spot + "!", 0);
-        Reg.save("Gym" + spot, player);
+        League["Gym" + spot] = player;
+        Reg.save("League", League);
     });
 
     addCommand(0, "el", function (src, command, commandData, tar, chan) {
@@ -573,11 +562,13 @@
 
         if (!player) {
             bot.sendAll("The elite " + spot + " spot has been voided.", 0);
-            Reg.save("Elite" + spot, "");
+            League["Elite" + spot] = "";
+            Reg.save("League", League);
             return;
         }
         bot.sendAll(player + " has been made elite " + spot + "!", 0);
-        Reg.save("Elite" + spot, player);
+        League["Elite" + spot] = player;
+        Reg.save("League", League);
     });
 
     addCommand(0, "champ", function (src, command, commandData, tar, chan) {
@@ -587,11 +578,13 @@
         }
         if (!commandData) {
             bot.sendAll("The champion spot has been voided.", 0);
-            Reg.save("Champ", "");
+            League.Champ = "";
+            Reg.save("League", League);
             return;
         }
         bot.sendAll(commandData + " has been made the champion!", 0);
-        Reg.save("Champ", commandData);
+        League.Champ = commandData;
+        Reg.save("League", League);
     });
 
     addCommand(0, "message", function (src, command, commandData, tar, chan) {
