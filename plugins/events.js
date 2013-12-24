@@ -235,12 +235,6 @@
                 }
             }
 
-            if (tourmode === 1) {
-                sys.sendHtmlMessage(src, "<br/><center><table width=30% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:11px; font-weight:bold;'>A <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament is in sign-up phase</font><hr width=200/><br><b><i style='color:red; font-weight:bold;'>" + script.tourSpots() + "</i> space(s) are remaining!<br><br>Type <i style='color:red; font-weight:bold;'>/join</i> to join!</b><br/><br/></td></tr></table></center><br/>", defaultChan);
-            } else if (tourmode === 2) {
-                sys.sendHtmlMessage(src, "<br/><center><table width=35% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:11px; font-weight:bold;'>A <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament is currently running.</font><hr width=210/><br><b>Type <i style='color:red; font-weight:bold;'>/viewround</i> to check the status of the tournament!</b><br/><br/></td></tr></table></center><br/>", defaultChan);
-            }
-
             var tier = sys.hasTier(src, "5th Gen OU");
             if (tier) {
                 script.dreamAbilityCheck(src);
@@ -581,62 +575,6 @@
 
                 Utils.watch.notify(Utils.nameIp(src) + " banned " + Utils.nameIp(bpl) + ".");
                 Utils.mod.ban(targetName);
-            }
-        },
-        beforeChallengeIssued: function (src, dest) {
-            /*var tier = sys.hasTier(src, "Dream World");
-            if (tier) {
-                if (script.dreamAbilityCheck(src) || script.dreamAbilityCheck(dest)) {
-                    sys.stopEvent();
-                    return;
-                }
-            }*/
-
-            Utils.watch.notify(Utils.nameIp(src) + " challenged " + Utils.nameIp(dest) + ".");
-
-            if (tourmode === 2) {
-                var name1 = sys.name(src);
-                var name2 = sys.name(dest);
-                if (script.isInTourney(name1)) {
-                    if (script.isInTourney(name2)) {
-                        if (script.tourOpponent(name1) !== name2.toLowerCase()) {
-                            bot.sendMessage(src, "This guy isn't your opponent in the tourney.");
-                            sys.stopEvent();
-                            return;
-                        }
-                    } else {
-                        bot.sendMessage(src, "This guy isn't your opponent in the tourney.");
-                        sys.stopEvent();
-                        return;
-                    }
-                    if (!sys.hasTier(src, tourtier) || !sys.hasTier(sys.id(name2), tourtier)) {
-                        bot.sendMessage(src, "You must be both in the tier " + tourtier + " to battle in the tourney.");
-                        sys.stopEvent();
-                        return;
-                    }
-                } else {
-                    if (script.isInTourney(name2)) {
-                        bot.sendMessage(src, "This guy is in the tournament and you are not, so you can't battle him/her.");
-                        sys.stopEvent();
-                        return;
-                    }
-                }
-            }
-        },
-        beforeBattleMatchup: function (src, dest, clauses, rated, mode, team1, team2) {
-            /*var tier = sys.hasTier(src, sys.tier(team1)),
-                desttier = sys.hasTier(dest, sys.tier(team2));
-            if (tier && desttier) {
-                if (script.dreamAbilityCheck(src) || script.dreamAbilityCheck(dest)) {
-                    sys.stopEvent();
-                }
-            }*/
-
-            Utils.watch.notify(Utils.nameIp(src) + " got matched up via Find Battle with " + Utils.nameIp(dest));
-
-            if (tourmode === 2 && (script.isInTourney(sys.name(src)) || script.isInTourney(sys.name(dest)))) {
-                sys.stopEvent();
-                return;
             }
         },
         afterChatMessage: function (src, message, chan) {

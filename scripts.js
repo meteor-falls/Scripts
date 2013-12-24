@@ -19,7 +19,7 @@ var Config = {
     // Do not touch unless you are adding a new plugin.
     // Plugins to load on script load.
     // mathjs is loaded dynamically.
-    plugins: ['bot', 'reg', 'utils', 'emotes', 'lists', 'init', 'feedmon', 'commands', 'events'],
+    plugins: ['bot', 'reg', 'utils', 'emotes', 'lists', 'init', 'feedmon', 'commands', 'tours', 'events'],
 
     // Whether or not to load plugins from repourl. If set to false, they will load locally.
     load_from_web: true,
@@ -169,6 +169,8 @@ poScript = ({
 
         require.reload('emotes.js');
         require.reload('lists.js');
+        
+        require.reload('tours.js');
 
         //MathJS = require('mathjs.js');
         sys.resetProfiling();
@@ -247,96 +249,13 @@ poScript = ({
     beforeBattleMatchup: function beforeBattleMatchup(src, dest, clauses, rated, mode, team1, team2) {
         require.callPlugins("beforeBattleMatchup", src, dest, clauses, rated, mode, team1, team2);
     },
-
-    tourSpots: function tourSpots() {
-        return tournumber - tourmembers.length;
-    },
-
-    roundPairing: function roundPairing() {
-        roundnumber += 1;
-        battlesStarted = [];
-        tourbattlers = [];
-        battlesLost = [];
-        if (tourmembers.length === 1) {
-            sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><font style='font-size:25px;'>C</font>ongratulations, <i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(tourplayers[tourmembers[0]]) + "!</i></font><hr width=300/><br><b>You won the tournament! You win " + prize + "!</b><br/><br/></td></tr></table></center><br/>", 0);
-            tourmode = 0;
-            isFinals = false;
-            return;
-        }
-        var str;
-        var finals = tourmembers.length === 2;
-        if (!finals) {
-            str = "<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Round <i>" + roundnumber + "</i> of <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament!</font><hr width=300/><i>Current Matchups</i><br/><b>";
-        } else {
-            isFinals = true;
-            str = "<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><font style='font-size:25px;'>F</font>inals of <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament!</font><hr width=300/><i>Matchup</i><br/><b>";
-        }
-        var i = 0;
-        while (tourmembers.length >= 2) {
-            i += 1;
-            var x1 = sys.rand(0, tourmembers.length);
-            tourbattlers.push(tourmembers[x1]);
-            var name1 = tourplayers[tourmembers[x1]];
-            tourmembers.splice(x1, 1);
-            x1 = sys.rand(0, tourmembers.length);
-            tourbattlers.push(tourmembers[x1]);
-            var name2 = tourplayers[tourmembers[x1]];
-            tourmembers.splice(x1, 1);
-            battlesStarted.push(false);
-            str += Utils.escapeHtml(name1) + " vs " + Utils.escapeHtml(name2) + "<br/>";
-        }
-        if (tourmembers.length > 0) {
-            str += "</b><br/><i>" + Utils.escapeHtml(tourplayers[tourmembers[0]]) + " is randomly selected to go next round!<br/>";
-        }
-        str += "<br/></td></tr></table></center><br/>";
-        sys.sendHtmlAll(str, 0);
-    },
-
-    isInTourney: function isInTourney(name) {
-        return tourplayers.hasOwnProperty(name.toLowerCase());
-    },
-
-    tourOpponent: function tourOpponent(nam) {
-        var name = nam.toLowerCase();
-        var x = tourbattlers.indexOf(name);
-        if (x !== -1) {
-            if (x % 2 === 0) {
-                return tourbattlers[x + 1];
-            } else {
-                return tourbattlers[x - 1];
-            }
-        }
-        return "";
-    },
-
-    areOpponentsForTourBattle: function areOpponentsForTourBattle(src, dest) {
-        return script.isInTourney(sys.name(src)) && script.isInTourney(sys.name(dest)) && script.tourOpponent(sys.name(src)) === sys.name(dest).toLowerCase();
-    },
-
-    areOpponentsForTourBattle2: function areOpponentsForTourBattle2(src, dest) {
-        return script.isInTourney(src) && script.isInTourney(dest) && script.tourOpponent(src) === dest.toLowerCase();
-    },
-
-    ongoingTourneyBattle: function ongoingTourneyBattle(name) {
-        return tourbattlers.indexOf(name.toLowerCase()) !== -1 && battlesStarted[Math.floor(tourbattlers.indexOf(name.toLowerCase()) / 2)] === true;
-    },
-
+    
     afterBattleStarted: function afterBattleStarted(src, dest, info, id, t1, t2) {
-        if (tourmode === 2) {
-            if (script.areOpponentsForTourBattle(src, dest)) {
-                if (sys.hasTier(src, tourtier) && sys.hasTier(dest, tourtier)) {
-                    battlesStarted[Math.floor(tourbattlers.indexOf(sys.name(src).toLowerCase()) / 2)] = true;
-                }
-            }
-        }
+        require.callPlugins("afterBattleStarted", src, dest, info, id, t1, t2);
     },
 
     afterBattleEnded: function afterBattleEnded(src, dest, desc) {
-        if (tourmode !== 2 || desc === "tie") {
-            return;
-        }
-
-        script.tourBattleEnd(sys.name(src), sys.name(dest));
+        require.callPlugins("afterBattleEnded", src, dest, desc);
     },
 
     afterChatMessage: function afterChatMessage(src, message, chan) {
@@ -345,39 +264,6 @@ poScript = ({
 
     beforePlayerRegister: function (src) {
         Utils.watch.notify(Utils.nameIp(src) + " registered.");
-    },
-
-    tourBattleEnd: function tourBattleEnd(src, dest) {
-        if (!script.areOpponentsForTourBattle2(src, dest) || !script.ongoingTourneyBattle(src)) {
-            return;
-        }
-
-        battlesLost.push(src);
-        battlesLost.push(dest);
-        var srcL = src.toLowerCase();
-        var destL = dest.toLowerCase();
-        battlesStarted.splice(Math.floor(tourbattlers.indexOf(srcL) / 2), 1);
-        tourbattlers.splice(tourbattlers.indexOf(srcL), 1);
-        tourbattlers.splice(tourbattlers.indexOf(destL), 1);
-        tourmembers.push(srcL);
-        delete tourplayers[destL];
-        var str = "";
-        if (tourbattlers.length !== 0 || tourmembers.length > 1) {
-            str = "<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><font style='font-size:25px;'>B</font>attle <font style='font-size:25px;'>C</font>ompleted!</font><hr width=300/><br>";
-            str += "<b><i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(Utils.toCorrectCase(src)) + "</i> won their battle and moves on to the next round.<br><br><i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(Utils.toCorrectCase(dest)) + "</i> lost their battle and is out of the tournament.</b>";
-        }
-        if (tourbattlers.length > 0) {
-            str += "<br><hr width=300/><br><i style='color:red; font-weight:bold;'>" + tourbattlers.length / 2 + "</i>  battle(s) remaining!";
-            str += "<br/><br/></td></tr></table></center><br/>";
-            sys.sendHtmlAll(str, 0);
-            return;
-        }
-
-        if (str.length > 0) {
-            sys.sendHtmlAll(str + "<br/><br/></td></tr></table></center><br/>", 0);
-        }
-
-        script.roundPairing();
     },
 
     dreamAbilityCheck: function dreamAbilityCheck(src) {
