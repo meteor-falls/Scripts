@@ -10,4 +10,4 @@ Requires 2.4.0 with SESSION fixes. It's expected that our [tiers](https://raw.gi
 * Various new emotes!
 * Much more to come! (Stuff for users as well!)
 
-([View this thread](http://meteorfalls.us/forums/showthread.php?tid=164&action=lastpost) on our forums to see more).
+([View this thread](http://meteorfalls.us/forums/showthread.php?tid=164&action=lastpost) on our forums to see more.)
