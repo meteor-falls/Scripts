@@ -237,7 +237,7 @@
 
             var tier = sys.hasTier(src, "5th Gen OU");
             if (tier) {
-                script.dreamAbilityCheck(src);
+                Utils.tier.dreamAbilityCheck(src);
             }
 
             Utils.watch.notify(Utils.nameIp(src) + " logged in.");
@@ -270,7 +270,7 @@
                 }
             }
             if (newtier === "5th Gen OU") {
-                if (script.dreamAbilityCheck(src)) {
+                if (Utils.tier.dreamAbilityCheck(src)) {
                     sys.stopEvent();
                 }
             }

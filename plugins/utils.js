@@ -710,6 +710,26 @@
 
             return teams_banned;
         };
+        
+        util.tier.dreamAbilityCheck = function dreamAbilityCheck(src) {
+            var bannedAbilities = {
+                'chandelure': ['shadow tag']
+            };
+
+            var i;
+            for (i = 0; i < sys.teamCount(src); i += 1) {
+                var ability = sys.ability(sys.teamPokeAbility(src, i, i));
+                var lability = ability.toLowerCase();
+                var poke = sys.pokemon(sys.teamPoke(src, i, i));
+                var lpoke = poke.toLowerCase();
+                if (bannedAbilities.hasOwnProperty(lpoke) && bannedAbilities[lpoke].indexOf(lability) !== -1) {
+                    bot.sendMessage(src, poke + " is not allowed to have ability " + ability + " in 5th Gen x Tier. Please change it in Teambuilder. You are now in the Random Battle tier.");
+                    return true;
+                }
+            }
+
+            return false;
+        };
 
         return util;
     };

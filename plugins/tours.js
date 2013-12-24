@@ -417,7 +417,7 @@
         beforeChallengeIssued: function (src, dest) {
             /*var tier = sys.hasTier(src, "Dream World");
             if (tier) {
-                if (script.dreamAbilityCheck(src) || script.dreamAbilityCheck(dest)) {
+                if (Utils.tier.dreamAbilityCheck(src) || Utils.tier.dreamAbilityCheck(dest)) {
                     sys.stopEvent();
                     return;
                 }
@@ -459,7 +459,7 @@
             /*var tier = sys.hasTier(src, sys.tier(team1)),
                 desttier = sys.hasTier(dest, sys.tier(team2));
             if (tier && desttier) {
-                if (script.dreamAbilityCheck(src) || script.dreamAbilityCheck(dest)) {
+                if (Utils.tier.dreamAbilityCheck(src) || Utils.tier.dreamAbilityCheck(dest)) {
                     sys.stopEvent();
                 }
             }*/
