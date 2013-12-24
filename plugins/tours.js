@@ -415,16 +415,6 @@
         },
         
         beforeChallengeIssued: function (src, dest) {
-            /*var tier = sys.hasTier(src, "Dream World");
-            if (tier) {
-                if (Utils.tier.dreamAbilityCheck(src) || Utils.tier.dreamAbilityCheck(dest)) {
-                    sys.stopEvent();
-                    return;
-                }
-            }*/
-
-            Utils.watch.notify(Utils.nameIp(src) + " challenged " + Utils.nameIp(dest) + ".");
-
             if (tourmode === 2) {
                 var name1 = sys.name(src);
                 var name2 = sys.name(dest);
@@ -456,16 +446,6 @@
         },
         
         beforeBattleMatchup: function (src, dest, clauses, rated, mode, team1, team2) {
-            /*var tier = sys.hasTier(src, sys.tier(team1)),
-                desttier = sys.hasTier(dest, sys.tier(team2));
-            if (tier && desttier) {
-                if (Utils.tier.dreamAbilityCheck(src) || Utils.tier.dreamAbilityCheck(dest)) {
-                    sys.stopEvent();
-                }
-            }*/
-
-            Utils.watch.notify(Utils.nameIp(src) + " got matched up via Find Battle with " + Utils.nameIp(dest));
-
             if (tourmode === 2 && (isInTourney(sys.name(src)) || isInTourney(sys.name(dest)))) {
                 sys.stopEvent();
                 return;

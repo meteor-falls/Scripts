@@ -645,6 +645,30 @@
             } else if (poUser.caps > 0) {
                 poUser.caps -= 1;
             }
+        },
+        
+        beforeChallengeIssued: function(src, dest) {
+            /*var tier = sys.hasTier(src, "Dream World");
+            if (tier) {
+                if (Utils.tier.dreamAbilityCheck(src) || Utils.tier.dreamAbilityCheck(dest)) {
+                    sys.stopEvent();
+                    return;
+                }
+            }*/
+
+            Utils.watch.notify(Utils.nameIp(src) + " challenged " + Utils.nameIp(dest) + ".");
+        },
+        
+        beforeBattleMatchup: function(src, dest, clauses, rated, mode, team1, team2) {
+            /*var tier = sys.hasTier(src, sys.tier(team1)),
+                desttier = sys.hasTier(dest, sys.tier(team2));
+            if (tier && desttier) {
+                if (Utils.tier.dreamAbilityCheck(src) || Utils.tier.dreamAbilityCheck(dest)) {
+                    sys.stopEvent();
+                }
+            }*/
+
+            Utils.watch.notify(Utils.nameIp(src) + " got matched up via Find Battle with " + Utils.nameIp(dest));
         }
     };
 
