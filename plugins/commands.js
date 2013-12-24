@@ -620,6 +620,30 @@
     });
 
     /** CHANNEL COMMANDS **/
+    addCommand(0, "topic", function (src, command, commandData, tar, chan) {
+        var poChan = SESSION.channels(chan);
+        if (!poChan.topic) {
+            return bot.sendMessage(src, "There is no topic right now.", chan);
+        }
+
+        topicbot.sendMessage(src, poChan.topic, chan);
+        if (poChan.setBy) {
+            setbybot.sendMessage(src, poChan.setBy, chan);
+        }
+    });
+
+    addChannelModCommand("topicsource", function (src, command, commandData, tar, chan) {
+        var poChan = SESSION.channels(chan);
+        if (!poChan.topic) {
+            return bot.sendMessage(src, "There is no topic right now.", chan);
+        }
+
+        topicbot.sendMessage(src, Utils.escapeHtml(poChan.topic), chan);
+        if (poChan.setBy) {
+            setbybot.sendMessage(src, poChan.setBy, chan);
+        }
+    });
+
     addChannelModCommand("changetopic", function (src, command, commandData, tar, chan) {
         var poChan = SESSION.channels(chan);
         if (!commandData) {
@@ -1197,7 +1221,7 @@
             bot.sendMessage(src, "Please specify a time.", chan);
             return;
         }
-        bantime = Number(bantime);
+
         if (timeunit[0] === "s") {
             timeunit = "m";
         }

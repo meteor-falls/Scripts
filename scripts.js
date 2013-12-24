@@ -3,7 +3,7 @@
     Credit to: Max, Lutra
 */
 
-var Config = {
+Config = {
     // Configuration for the script.
     maintainers: ['[VP]Blade', 'Ethan', 'TheUnknownOne'],
 
@@ -18,7 +18,7 @@ var Config = {
     // Do not touch unless you are adding a new plugin.
     // Plugins to load on script load.
     // mathjs is loaded dynamically.
-    plugins: ['bot', 'reg', 'utils', 'channeldata', 'emotes', 'lists', 'init', 'feedmon', 'commands', 'events', 'tours'],
+    plugins: ['bot', 'reg', 'utils', 'channeldata', 'emotes', 'lists', 'init', 'feedmon', 'tours', 'commands', 'events'],
 
     // Whether or not to load plugins from repourl. If set to false, they will load locally.
     load_from_web: true,
@@ -171,14 +171,14 @@ poScript = ({
 
         require.reload('reg.js');
         require.reload('bot.js');
+
         require.reload('feedmon.js');
+        require.reload('tours.js');
 
         require.reload('init.js');
 
         require.reload('emotes.js');
         require.reload('lists.js');
-
-        require.reload('tours.js');
 
         //MathJS = require('mathjs.js');
         sys.resetProfiling();

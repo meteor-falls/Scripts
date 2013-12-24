@@ -206,6 +206,7 @@
 
         /** CHANNEL */
         var Channel = new CommandList("Channel Commands", "navy");
+        Channel.add("topic", "Shows this channel's topic.");
         Channel.add("chanmodcommands", "To view the commands for <b>channel moderators</b>.");
         Channel.add("chanadmincommands", "To view the commands for <b>channel administrators</b>.");
         Channel.add("chanownercommands", "To view the commands for <b>channel owners</b>.");
@@ -216,6 +217,7 @@
 
         var ChanMod = new CommandList("Channel Moderator Commands", "navy");
         ChanMod.add("changetopic", "Sets the topic of the channel to [topic]. HTML is allowed. An empty [topic] will reset the topic.", ["topic"]);
+        ChanMod.add("topicsource", "Shows the source of this channel's topic (no formatting).");
         ChanMod.finish();
 
         Lists.ChanMod = ChanMod;
