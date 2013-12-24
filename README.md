@@ -6,6 +6,7 @@ Scripts for Meteor Falls v0.9
 ### Requires:
 * 2.4.0 with SESSION fixes.
 * OpenSSL (libssl32.dll, libeay32.dll, ssleay32.dll) + Visual C++ 2008 Redistributables if on Windows. (Plugin system)
+* Preferably a GitHub account so that you can manage the plugins.
 
 It's expected that our [tiers](https://raw.github.com/meteor-falls/Server-Shit/master/tiers.xml) are used on the server.
 
