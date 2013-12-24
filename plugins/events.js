@@ -35,10 +35,6 @@
             }
         },
         afterNewMessage: function (message) {
-            if (message.substr(0, 33) === "The name of the server changed to") {
-                servername = message.substring(34, message.lastIndexOf("."));
-                return;
-            }
             if (message === "Script Check: OK") {
                 sys.sendHtmlAll("<b><i><font color=Blue><font size=4>±ScriptBot:</font></b><b><i><font color=Black><font size=4> Scripts were updated!</font></b></i>");
                 script.init();

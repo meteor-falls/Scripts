@@ -1,22 +1,6 @@
 // NOTE: New functions should go in utils.js, old ones should slowly be ported over.
 module.exports = {
     init: function init() {
-        var configFile = sys.getFileContent("config").split("\n"),
-            x,
-            c_conf,
-            serv = /server_name=/,
-            desc = /server_description=/,
-            ann = /server_announcement=/;
-
-        servername = "";
-        for (x in configFile) {
-            c_conf = configFile[x];
-            if (serv.test(c_conf) && !ann.test(c_conf) && !desc.test(c_conf)) {
-                servername = c_conf.substring(12, c_conf.length).replace(/\\xe9/i, "é").replace(/\\xa2/i, "¢").trim();
-                break;
-            }
-        }
-
         randcolor = function () {
             var nums = 5;
             var str = '';
