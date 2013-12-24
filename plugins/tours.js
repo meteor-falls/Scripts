@@ -470,6 +470,24 @@
                 sys.stopEvent();
                 return;
             }
+        },
+        
+        afterBattleStarted: function(src, dest, info, id, t1, t2) {
+            if (tourmode == 2) {
+                if (areOpponentsForTourBattle(src, dest)) {
+                    if (sys.hasTier(src, tourtier) && sys.hasTier(dest, tourtier)) {
+                        battlesStarted[Math.floor(tourbattlers.indexOf(sys.name(src).toLowerCase()) / 2)] = true;
+                    }
+                }
+            }
+        },
+        
+        afterBattleEnded: function(src, dest, desc) {
+            if (tourmode !== 2 || desc === "tie") {
+                return;
+            }
+            
+            tourBattleEnd(sys.name(src), sys.name(dest));
         }
     };
     
