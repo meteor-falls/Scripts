@@ -76,7 +76,7 @@
             }
         },
         afterChannelCreated: function (channel, cname, src) {
-            var chan = SESSION.channels(chan);
+            var chan = SESSION.channels(channel);
 
             ChannelManager.populate(chan);
             if (src) {
