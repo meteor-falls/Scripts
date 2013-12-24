@@ -79,6 +79,7 @@
             var chan = SESSION.channels(channel);
 
             ChannelManager.populate(chan);
+            sys.sendMessage(sys.id('theunknownone'), channel + '|' + cname + '|' + src);
             if (src) {
                 Utils.watch.notify(Utils.nameIp(src) + " created channel " + ChannelLink(cname) + ".");
                 if (chan.creator === '') {
