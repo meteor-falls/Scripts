@@ -1755,59 +1755,22 @@
         sys.sendAll('~~Server~~: The server was made private by ' + sys.name(src) + '.');
     });
 
-    /*addCommand(2, "showteam", function (src, command, commandData, tar, chan) {
+    addCommand(1, "showteam", function (src, command, commandData, tar, chan) {
         if (!tar) {
             bot.sendMessage(src, "Target doesn't exist!", chan);
             return;
         }
-        var ret = [],
-            i,
-            j,
-            z,
-            team;
-        ret.push("");
 
-        for (team = 0; team < sys.teamCount(tar); team += 1) {
-            var toPush = "<table cellpadding=3 cellspacing=3 width='20%' border=1><tr><td><b>Team #" + (team + 1) + "</b></td></tr>";
-            toPush += "<tr><td>";
-            for (i = 0; i < 6; i += 1) {
-                var ev_result = "";
-                var poke = sys.teamPoke(tar, team, i);
-                var item = sys.teamPokeItem(tar, team, i);
-                if (poke === 0) {
-                    continue;
-                }
-
-                toPush += "<font color=black><img src='pokemon:" + poke + "&gen=" + sys.gen(tar, team) + "'/><br>Item: <img src='item:" + item + "'/><br>";
-                toPush += '<font color=black>Ability: ' + sys.ability(sys.teamPokeAbility(tar, team, i)) + "<br>";
-
-                for (z = 0; z < 6; z += 1) {
-                    if (sys.teamPokeEV(tar, team, i, z) !== 0) {
-                        var ev_append = sys.teamPokeEV(tar, team, i, z) + " " + Utils.EVName(z) + " / ";
-                        ev_result = ev_result + ev_append;
-                    }
-                }
-
-                toPush += ("EVs: " + ev_result + "<br>");
-
-                for (j = 0; j < 4; j += 1) {
-                    toPush += '- ' + sys.move(sys.teamPokeMove(tar, team, i, j)) + "<br>";
-                }
-                if (poke === sys.teamPoke(tar, team, 5)) {
-                    toPush += "</td></tr>";
-                    toPush += "</table>";
-                    ret.push(toPush);
-                }
-            }
+        var importables = [];
+        var teamCount = sys.teamCount(tar), i;
+        if (teamCount === 0) {
+            return bot.sendMessage(src, "That person doesn't have a valid team.", chan);
         }
-        if (ret.length > 1) {
-            for (i in ret) {
-                sys.sendHtmlMessage(src, ret[i], chan);
-            }
-        } else {
-            bot.sendMessage(src, "That person doesn't have a valid team.", chan);
+
+        for (i = 0; i < teamCount; i += 1) {
+            sys.sendHtmlMessage(src, Utils.teamImportable(tar, i).join("<br/>"), chan);
         }
-    });*/
+    })
 
     addCommand(2, ["ban", "sban"], function (src, command, commandData, tar, chan) {
         if (!sys.dbIp(commandData)) {
