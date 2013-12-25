@@ -375,7 +375,7 @@
             }
 
             var originalMessage = message;
-            var sentMessage = ((isOwner && htmlchat) ? originalMessage : Utils.escapeHtml(originalMessage, true).replace(/&lt;_&lt;/g, "<_<").replace(/&gt;_&lt;/g, ">_<").replace(/&gt;_&gt;/g, ">_>").replace(/&lt;3/g, "<3")); // no amp
+            var sentMessage = ((isOwner && htmlchat) ? originalMessage : Utils.escapeHtml(originalMessage, true).replace(/&lt;_&lt;/g, "<_<").replace(/&gt;_&lt;/g, ">_<").replace(/&gt;_&gt;/g, ">_>")); // no amp
             var emotes = false;
             sentMessage = Utils.format(src, sentMessage);
 
@@ -385,8 +385,8 @@
                 if (simpleMessage !== sentMessage) {
                     emotes = true;
                 }
-                sentMessage = sentMessage.replace(/<_</g, "&lt;_&lt;").replace(/>_</g, "&gt;_&lt;").replace(/<3/g, "&lt;3");
             }
+            sentMessage = sentMessage.replace(/<_</g, "&lt;_&lt;").replace(/>_</g, "&gt;_&lt;").replace(/<3/g, "&lt;3");
             message = sentMessage;
 
             if (!emotes) {
