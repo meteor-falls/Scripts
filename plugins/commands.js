@@ -1277,7 +1277,7 @@
         }
 
         sys.sendHtmlAll("<font color=red><timestamp/><b> " + t[0] + " has been tempbanned by " + Utils.escapeHtml(sys.name(src)) + " for " + timestr + "!</font></b><br><font color=black><timestamp/><b> Reason:</b> " + Utils.escapeHtml(reason), 0);
-        Utils.mod.tempBan(t[0], time);
+        Utils.mod.tempBan(t[0], time / 60);
     });
 
     addCommand(1, "untempban", function (src, command, commandData, tar, chan) {

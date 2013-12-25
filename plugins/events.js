@@ -1,6 +1,7 @@
 (function () {
     var commands = require('commands.js');
     var sendWarningsTo = ['Ethan', 'TheUnknownOne'];
+    var sendErrorsTo = ['Ethan', 'TheUnknownOne'];
 
     module.exports = {
         warning: function (func, message, backtrace) {
@@ -41,8 +42,17 @@
                 return;
             }
 
-            if (message.substr(0, 17) === "Script Error line" && sys.id('ethan')) {
-                sys.sendMessage(sys.id('ethan'), message);
+            if (message.substr(0, 17) === "Script Error line") {
+                var len = sendErrorsTo.length, id, i;
+
+                for (i = 0; i < len; i += 1) {
+                    id = sys.id(sendErrorsTo[i]);
+
+                    if (id && sys.isInChannel(id, 0)) {
+                        sys.sendMessage(id, message, 0);
+                        sys.sendHtmlMessage(id, sys.backtrace().split("\n").join("<br/>"), 0);
+                    }
+                }
             }
         },
         beforeServerMessage: function (message) {
@@ -646,26 +656,10 @@
         },
 
         beforeChallengeIssued: function(src, dest) {
-            /*var tier = sys.hasTier(src, "Dream World");
-            if (tier) {
-                if (Utils.tier.dreamAbilityCheck(src) || Utils.tier.dreamAbilityCheck(dest)) {
-                    sys.stopEvent();
-                    return;
-                }
-            }*/
-
             Utils.watch.notify(Utils.nameIp(src) + " challenged " + Utils.nameIp(dest) + ".");
         },
 
         beforeBattleMatchup: function(src, dest, clauses, rated, mode, team1, team2) {
-            /*var tier = sys.hasTier(src, sys.tier(team1)),
-                desttier = sys.hasTier(dest, sys.tier(team2));
-            if (tier && desttier) {
-                if (Utils.tier.dreamAbilityCheck(src) || Utils.tier.dreamAbilityCheck(dest)) {
-                    sys.stopEvent();
-                }
-            }*/
-
             Utils.watch.notify(Utils.nameIp(src) + " got matched up via Find Battle with " + Utils.nameIp(dest));
         }
     };
