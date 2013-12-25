@@ -59,11 +59,11 @@
     }
 
     function addChannelAdminCommand(names, cb, flags) {
-        addCommand(0, names, cb, (flags || 0) | addCommand.flags.CHANNELMODS);
+        addCommand(0, names, cb, (flags || 0) | addCommand.flags.CHANNELADMINS);
     }
 
     function addChannelOwnerCommand(names, cb, flags) {
-        addCommand(0, names, cb, (flags || 0) | addCommand.flags.CHANNELMODS);
+        addCommand(0, names, cb, (flags || 0) | addCommand.flags.CHANNELOWNERS);
     }
 
     function canUseCommand(src, command, chan) {
