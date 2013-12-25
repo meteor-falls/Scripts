@@ -316,12 +316,15 @@
             return units.m * time;
         };
 
-        util.getAuth = function (id) {
-            if (typeof id === "number") {
-                id = sys.name(id);
+        util.getAuth = function (src) {
+            var auth = 0;
+            if (typeof src === "string") {
+                id = sys.name(src);
+                auth = (id !== undefined) ? sys.auth(id) : sys.dbAuth(src);
+            } else {
+                auth = sys.auth(src);
             }
-
-            return sys.dbAuth(id);
+            return auth;
         };
 
         util.getTimeString = function (sec) {
