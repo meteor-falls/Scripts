@@ -389,6 +389,7 @@
 
         /** OWNER COMMANDS **/
         var Owner = new CommandList("Owner Commands", "navy");
+        Owner.add("servername", "To change the server name in the reg. Defaults to " + Config.servername, ["name"]);
         Owner.add("authoptions", "To view the authority options.");
         Owner.add("eval", "To evaluate [code]. Returns the result.", ["code"]);
         Owner.add("resetladder", "To reset all ladders.");

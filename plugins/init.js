@@ -162,7 +162,7 @@ module.exports = {
 
         Reg.init('MOTD', '');
         Reg.init('maxPlayersOnline', 0);
-        Reg.init('servername', "Meteor Falls");
+        Reg.init('servername', Config.servername);
 
         Leaguemanager = League.Manager;
 

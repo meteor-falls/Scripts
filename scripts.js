@@ -5,6 +5,8 @@
 
 Config = {
     // Configuration for the script.
+    servername: "Meteor Falls",
+    
     maintainers: ['[VP]Blade', 'Ethan', 'TheUnknownOne'],
 
     // Repo to load plugins from.
@@ -25,7 +27,9 @@ Config = {
     // If HTML should be stripped from channel messages outputted onto the server window.
     stripHtmlFromChannelMessages: true,
     // If emotes are enabled.
-    emotesEnabled: true
+    emotesEnabled: true,
+    // Character limit in messages.
+    characterLimit: 600
 };
 
 (function() {

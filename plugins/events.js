@@ -289,21 +289,22 @@
             }
         },
         beforeChatMessage: function (src, message, chan) {
-            if (!Utils.mod.hasBasicPermissions(src) && message.length > 600) {
-                sys.stopEvent();
-                bot.sendMessage(src, "Sorry, your message has exceeded the 600 character limit.", chan);
-                watchbot.sendAll("User, " + Utils.nameIp(src) + ", has tried to post a message that exceeds the 600 character limit. Take action if need be.", watch);
-                script.afterChatMessage(src, message, chan);
-                return;
-            }
-
             var poUser = SESSION.users(src),
                 isMuted = poUser.muted,
                 originalName = poUser.originalName,
                 isLManager = Leaguemanager === originalName.toLowerCase(),
                 messageToLowerCase = message.toLowerCase(),
                 myAuth = Utils.getAuth(src),
-                isOwner = myAuth === 3;
+                isOwner = myAuth === 3,
+                charLimit = Config.characterLimit;
+            
+            if (!Utils.mod.hasBasicPermissions(src) && message.length > charLimit) {
+                sys.stopEvent();
+                bot.sendMessage(src, "Sorry, your message has exceeded the " + charLimit + " character limit.", chan);
+                //watchbot.sendAll("User, " + Utils.nameIp(src) + ", has tried to post a message that exceeds the " + charLimit + " character limit. Take action if need be.", watch);
+                script.afterChatMessage(src, message, chan);
+                return;
+            }
 
             if (Utils.hasIllegalChars(message) && myAuth < 3) {
                 bot.sendMessage(src, 'WHY DID YOU TRY TO POST THAT, YOU NOOB?!', chan);

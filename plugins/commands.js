@@ -1822,6 +1822,15 @@
 
     /** OWNER COMMANDS */
     addListCommand(3, "ownercommands", "Owner");
+    
+    addCommand(3, "servername", function (src, command, commandData, tar, chan) {
+        if (!commandData) {
+            commandData = Config.servername;
+        }
+        
+        bot.sendAll(Utils.beautifyName(src) + " changed the server name to <b>" + commandData + "</b>!");
+        Reg.save("servername", commandData);
+    });
 
     addCommand(3, ["toggleemotes"], function (src, command, commandData, tar, chan) {
         Config.emotesEnabled = !Config.emotesEnabled;
