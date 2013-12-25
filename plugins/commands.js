@@ -1787,12 +1787,8 @@
             bot.sendMessage(src, "No player exists by this name!", chan);
             return;
         }
-
-        var ipBanList = sys.banList().map(function (name) {
-            return sys.dbIp(name);
-        });
-
-        if (ipBanList.indexOf(target) === -1) {
+        
+        if (!sys.banned(target)) {
             bot.sendMessage(src, "He/she's not banned!", chan);
             return;
         }
