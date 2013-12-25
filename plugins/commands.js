@@ -625,20 +625,18 @@
     /** CHANNEL COMMANDS **/
     addCommand(0, "cauth", function (src, command, commandData, tar, chan) {
         var poChan = SESSION.channels(chan);
-        if (!poChan.auth || Object.keys(poChan.auth).length === 0) {
+        if (Object.keys(poChan.auth).length === 0) {
             return bot.sendMessage(src, "There are no channel auth right now.", chan);
         }
         
         var auths = [],
-            name,
             i;
         
         for (i in poChan.auth) {
-            name = i;
-            auths.push(name);
+            auths.push(i);
         }
         
-        var sortByLevel = function sortByLevel(level) {
+        function sortByLevel(level) {
             return function (name) {
                 return poChan.auth[name] === level;
             }
