@@ -22,14 +22,6 @@
             hr: /\[hr\]/gi,
             atag: /[a-z]{3,}:\/\/[^ ]+/gi
         };
-        var autoCorrectRegex = {
-            im: /\bim\b/g,
-            i: /\bi\b/g,
-            cant: /\bcant\b/g,
-            wont: /\bwont\b/g,
-            dont: /\bdont\b/g,
-            iam: /\biam\b/g
-        };
 
         util.escapeHtml = function (str, noAmp) {
             if (!noAmp) {
@@ -186,16 +178,6 @@
             }
 
             return false;
-        };
-
-        util.autoCorrect = function (message) {
-            return message
-                .replace(autoCorrectRegex.im, "I'm")
-                .replace(autoCorrectRegex.i, "I")
-                .replace(autoCorrectRegex.cant, "can't")
-                .replace(autoCorrectRegex.wont, "won't")
-                .replace(autoCorrectRegex.dont, "don't")
-                .replace(autoCorrectRegex.iam, "I am");
         };
 
         util.nameColor = function (src) {
