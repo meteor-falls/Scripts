@@ -744,7 +744,7 @@
         } else {
             poChan.auth[name.toLowerCase()] = auth;
         }
-        ChannelManager.sync(chan, 'auth').save();
+        ChannelManager.sync(poChan, 'auth').save();
         bot.sendAll(Utils.beautifyName(src) + " changed the channel auth level of " + Utils.beautifyName(name) + " to " + auth + ".", chan);
     });
 
