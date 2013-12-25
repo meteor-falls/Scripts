@@ -223,6 +223,16 @@
 
         Lists.ChanMod = ChanMod;
 
+        var ChanAdmin = new CommandList("Channel Administrator Commands", "navy");
+        ChanAdmin.finish();
+
+        Lists.ChanAdmin = ChanAdmin;
+
+        var ChanOwner = new CommandList("Channel Owner Commands", "navy");
+        ChanOwner.add("cchangeauth", "Changes the channel auth of [player] to [auth]. [auth] must be 0-3.", ["player", "auth"]);
+
+        Lists.ChanOwner = ChanOwner;
+
         /** MEGAUSER **/
         var Megauser = new CommandList("Megauser Commands", "navy");
         Megauser.add("tour", "To start a tournament with tier [tier] that allows [#ofplayers] people to play with optional prize [prize].", ["tier", "#ofplayers", "prize"]);

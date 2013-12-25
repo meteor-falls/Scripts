@@ -685,6 +685,41 @@
         sys.kick(tar, chan);
     });
 
+    addChannelOwnerCommand("cchangeauth", function (src, command, commandData, tar, chan) {
+        var poChan = SESSION.channels(chan),
+            parts = commandData.split(':'),
+            name = parts[0],
+            auth = parseInt(parts[1], 10);
+
+        if (!sys.dbIp(name)) {
+            return bot.sendMessage(src, "This person does not exist.", chan);
+        }
+
+        if (isNaN(auth)) {
+            return bot.sendMessage(src, "That doesn't look like a valid number.", chan);
+        }
+
+        if (auth < 0 || auth > 3) {
+            return bot.sendMessage(src, "The auth level should be 0 or higher, but not any higher than 3.", chan);
+        }
+
+        if (!sys.dbRegistered(name)) {
+            bot.sendMessage(src, "This person is not registered and will not receive auth until they register.", chan);
+            if (sys.id(name)) {
+                bot.sendMessage(sys.id(name), "Please register so you can receive auth.");
+            }
+            return;
+        }
+
+        bot.sendAll(Utils.beautifyName(src) + " changed the channel auth level of " + Utils.beautifyName(name) + " to " + auth + ".", chan);
+        if (auth === 0) {
+            delete poChan.auth[name.toLowerCase()];
+        } else {
+            poChan.auth[name.toLowerCase()] = auth;
+        }
+    });
+
+    /** MEGAUSER COMMANDS **/
     addCommand(0, "message", function (src, command, commandData, tar, chan) {
         if (!commandData) {
             bot.sendMessage(src, "Specify kick, ban, or welcome!", chan);
