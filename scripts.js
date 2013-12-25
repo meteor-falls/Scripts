@@ -273,5 +273,9 @@ poScript = ({
 
     beforePlayerRegister: function (src) {
         Utils.watch.notify(Utils.nameIp(src) + " registered.");
+    },
+    
+    battleConnectionLost: function() {
+        Utils.watch.notify("Connection to the battle server has been lost.");
     }
 });
