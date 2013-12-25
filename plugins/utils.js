@@ -555,11 +555,7 @@
 
         // If a player is banned.
         util.mod.isBanned = function (playerName) {
-            // Return their name. This allows us to accept ids as well.
-            var trueName = (sys.name(playerName) || playerName).toLowerCase(),
-                bans = sys.banList();
-
-            return bans.indexOf(trueName) !== -1;
+            return sys.banned(sys.dbIp(playerName));
         };
 
         // Returns the amount of seconds name is temporary banned for.

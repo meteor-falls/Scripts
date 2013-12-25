@@ -1756,16 +1756,12 @@
             bot.sendMessage(src, "You can't ban this person. What are you thinking!", chan);
             return;
         }
-        var banlist = sys.banList(),
-            a,
-            cmdToL = commandData.toLowerCase();
 
-        for (a in banlist) {
-            if (cmdToL === banlist[a].toLowerCase()) {
-                bot.sendMessage(src, "He/she's already banned!", chan);
-                return;
-            }
+        if (sys.banned(ip)) {
+            bot.sendMessage(src, "He/she's already banned!", chan);
+            return;
         }
+
         if (command === "ban") {
             commandData = Utils.toCorrectCase(commandData);
             var theirmessage = Banmsgs[sys.name(src).toLowerCase()];
@@ -1787,7 +1783,7 @@
             bot.sendMessage(src, "No player exists by this name!", chan);
             return;
         }
-        
+
         if (!sys.banned(target)) {
             bot.sendMessage(src, "He/she's not banned!", chan);
             return;
