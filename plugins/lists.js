@@ -380,7 +380,7 @@
         Admin.add("clearchat", "To clear the chat in the channel [channel]. Default channel is " + sys.channel(0) + ".", ["channel"]);
         Admin.add("supersilence", "To silence all users and mods.");
         Admin.add("unssilence", "To cancel the super silence. Note: double s.");
-        //Admin.add("showteam", "To view a player's team.", ["player"]);
+        Admin.add("showteam", "To view a player's team.", ["player"]);
         Admin.add("megauser", "To give/take [player] megauser status.", ["player"]);
         Admin.add("private", "To make the server private.");
         Admin.finish();

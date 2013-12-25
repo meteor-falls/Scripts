@@ -1756,7 +1756,7 @@
         sys.sendAll('~~Server~~: The server was made private by ' + sys.name(src) + '.');
     });
 
-    addCommand(1, "showteam", function (src, command, commandData, tar, chan) {
+    addCommand(2, "showteam", function (src, command, commandData, tar, chan) {
         if (!tar) {
             bot.sendMessage(src, "Target doesn't exist!", chan);
             return;
