@@ -739,12 +739,13 @@
             return;
         }
 
-        bot.sendAll(Utils.beautifyName(src) + " changed the channel auth level of " + Utils.beautifyName(name) + " to " + auth + ".", chan);
         if (auth === 0) {
             delete poChan.auth[name.toLowerCase()];
         } else {
             poChan.auth[name.toLowerCase()] = auth;
         }
+        ChannelManager.sync(chan, 'auth').save();
+        bot.sendAll(Utils.beautifyName(src) + " changed the channel auth level of " + Utils.beautifyName(name) + " to " + auth + ".", chan);
     });
 
     /** MEGAUSER COMMANDS **/
@@ -1770,7 +1771,7 @@
         for (i = 0; i < teamCount; i += 1) {
             sys.sendHtmlMessage(src, Utils.teamImportable(tar, i).join("<br/>"), chan);
         }
-    })
+    });
 
     addCommand(2, ["ban", "sban"], function (src, command, commandData, tar, chan) {
         if (!sys.dbIp(commandData)) {

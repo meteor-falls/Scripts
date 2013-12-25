@@ -575,6 +575,7 @@
 
             return [formatTime(days, "day"), formatTime(hours, "hour"), formatTime(minutes, "minute"), formatTime(seconds, "second")].filter(this.stripEmpty);
         };
+
         // Creates an importable [array] for src's team, teamId.
         // Importables will have some goodies that will break them for use with PO, disable this with a third argument that is true.
         util.teamImportable = function (src, teamId, compatible) {
