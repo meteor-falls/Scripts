@@ -380,46 +380,49 @@
     });
 
     addCommand(0, "auth", function (src, command, commandData, tar, chan) {
-        var authlist = sys.dbAuths().sort();
-        var x;
+        var authlist = sys.dbAuths().sort(),
+            auths = {};
+        var dbAuth, name, len, i;
+
+        for (i = 0, len = authlist.length; i < len; i += 1) {
+            name = authlist[i];
+            dbAuth = sys.dbAuth(name);
+            auths[dbAuth] = auths[dbAuth] || [];
+            auths[dbAuth].push(name);
+        }
+
+        function outputName(type) {
+            return function (name) {
+                var id = sys.id(name);
+                if (id) {
+                    sys.sendHtmlMessage(src, '<img src="Themes/Classic/Client/' + type + 'Available.png"> <b><font size="2">' + Utils.toCorrectCase(name) + '</font></b>', chan);
+                } else {
+                    sys.sendHtmlMessage(src, '<img src="Themes/Classic/Client/' + type + 'Away.png"> <b><font size="2">' + name + '</font></b>', chan);
+                }
+            };
+        }
 
         sys.sendHtmlMessage(src, "<font color=navy><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br><font color=black><h2>Auth List</h2>", chan);
         sys.sendHtmlMessage(src, "<b><font color=red>**Owners**", chan);
 
-        for (x in authlist) {
-            if (sys.dbAuth(authlist[x]) === 3) {
-                if (!sys.id(authlist[x])) {
-                    sys.sendHtmlMessage(src, "<img src='Themes/Classic/client/OAway.png'><b><font color=black><font size=2> " + authlist[x], chan);
-                } else {
-                    sys.sendHtmlMessage(src, "<img src='Themes/Classic/client/OAvailable.png'><b><font color=black><font size=2> " + sys.name(sys.id(authlist[x])), chan);
-                }
-            }
+        if (auths.hasOwnProperty('3')) {
+            auths[3].forEach(outputName('O'));
         }
 
         sys.sendMessage(src, "", chan);
         sys.sendHtmlMessage(src, "<b><font color=blue><font size=3>**Administrators**", chan);
 
-        for (x in authlist) {
-            if (sys.dbAuth(authlist[x]) === 2) {
-                if (!sys.id(authlist[x])) {
-                    sys.sendHtmlMessage(src, "<img src='Themes/Classic/client/AAway.png'><b><font color=black><font size=2> " + authlist[x], chan);
-                } else {
-                    sys.sendHtmlMessage(src, "<img src='Themes/Classic/client/AAvailable.png'><b><font color=black><font size=2> " + sys.name(sys.id(authlist[x])), chan);
-                }
-            }
+        if (auths.hasOwnProperty('2')) {
+            auths[2].forEach(outputName('A'));
         }
+
         sys.sendMessage(src, "", chan);
         sys.sendHtmlMessage(src, "<b><font color=green><font size=3>**Moderators**", chan);
 
-        for (x in authlist) {
-            if (sys.dbAuth(authlist[x]) === 1) {
-                if (!sys.id(authlist[x])) {
-                    sys.sendHtmlMessage(src, "<img src='Themes/Classic/client/MAway.png'><b><font color=black><font size=2> " + authlist[x], chan);
-                } else {
-                    sys.sendHtmlMessage(src, "<img src='Themes/Classic/client/MAvailable.png'><b><font color=black><font size=2> " + sys.name(sys.id(authlist[x])), chan);
-                }
-            }
+        if (auths.hasOwnProperty('1')) {
+            auths[1].forEach(outputName('M'));
         }
+
         sys.sendMessage(src, "", chan);
         sys.sendHtmlMessage(src, "<font color=navy><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font>", chan);
     });
