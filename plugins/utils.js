@@ -352,6 +352,12 @@
             var name = typeof src === 'number' ? sys.name(src) : src;
             return "<b style='color: " + Utils.nameColor(src) + ";'>" + Utils.escapeHtml(name) + (suffix || "") + "</b>";
         };
+        
+        util.beautifyNames = function (names) {
+            return names.map(function(name) {
+                return util.beautifyName(sys.id(name) || name);
+            });
+        };
 
         // TODO: Remove these unused functions.
         util.randPoke = function () {

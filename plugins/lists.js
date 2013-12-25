@@ -206,6 +206,7 @@
 
         /** CHANNEL */
         var Channel = new CommandList("Channel Commands", "navy");
+        Channel.add("cauth", "Shows this channel's auth.");
         Channel.add("topic", "Shows this channel's topic.");
         Channel.add("chanmodcommands", "To view the commands for <b>channel moderators</b>.");
         Channel.add("chanadmincommands", "To view the commands for <b>channel administrators</b>.");

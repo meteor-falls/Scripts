@@ -623,6 +623,33 @@
     });
 
     /** CHANNEL COMMANDS **/
+    addCommand(0, "cauth", function (src, command, commandData, tar, chan) {
+        var poChan = SESSION.channels(chan);
+        if (!poChan.auth || Object.keys(poChan.auth).length === 0) {
+            return bot.sendMessage(src, "There are no channel auth right now.", chan);
+        }
+        
+        var auths = [],
+            name,
+            i;
+        
+        for (i in poChan.auth) {
+            name = i;
+            auths.push(name);
+        }
+        
+        var sortByLevel = function sortByLevel(level) {
+            return function (name) {
+                return poChan.auth[name] === level;
+            }
+        };
+        
+        bot.sendMessage(src, "Channel auth for " + sys.channel(chan) + ":", chan);
+        bot.sendMessage(src, "Channel owners: " + Utils.beautifyNames(auths.filter(sortByLevel(3))), chan);
+        bot.sendMessage(src, "Channel admins: " + Utils.beautifyNames(auths.filter(sortByLevel(2))), chan);
+        bot.sendMessage(src, "Channel mods: " + Utils.beautifyNames(auths.filter(sortByLevel(1))), chan);
+    });
+    
     addCommand(0, "topic", function (src, command, commandData, tar, chan) {
         var poChan = SESSION.channels(chan);
         if (!poChan.topic) {
