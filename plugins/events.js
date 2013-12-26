@@ -76,7 +76,7 @@
             var user = SESSION.users(src),
                 basicPermissions = Utils.mod.hasBasicPermissions(src);
 
-            if ((channel === staffchannel && !Utils.checkFor(MegaUsers, name) && !basicPermissions) || (channel === watch && !basicPermissions)) {
+            if ((channel === staffchannel && !Utils.checkFor(MegaUsers, user.originalName) && !basicPermissions) || (channel === watch && !basicPermissions)) {
                 if (sys.isInChannel(src, 0)) {
                     guard.sendMessage(src, "HEY! GET AWAY FROM THERE!", 0);
                 }
@@ -297,7 +297,7 @@
                 myAuth = Utils.getAuth(src),
                 isOwner = myAuth === 3,
                 charLimit = Config.characterLimit;
-            
+
             if (!Utils.mod.hasBasicPermissions(src) && message.length > charLimit) {
                 sys.stopEvent();
                 bot.sendMessage(src, "Sorry, your message has exceeded the " + charLimit + " character limit.", chan);
