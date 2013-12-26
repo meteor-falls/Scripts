@@ -1241,6 +1241,8 @@
             if (reason) {
                 sys.sendHtmlAll("<font color=black><timestamp/><b>Reason:</font></b> " + reason, 0);
             }
+        } else {
+            bot.sendMessage(src, "You silently kicked " + tarNames + ".", chan);
         }
 
         Utils.watch.notify(Utils.nameIp(src) + " kicked " + tarNames + ".");
@@ -1382,10 +1384,12 @@
         Reg.save("Mutes", Mutes);
 
         if (command !== "smute") {
-            sys.sendHtmlAll("<font color=blue><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + " muted " + v[0] + " " + timeString + "!</b></font>", 0);
+            sys.sendHtmlAll("<font color=blue><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + " muted " + Utils.beautifyName(v[0]) + " " + timeString + "!</b></font>", 0);
             if (reason) {
                 sys.sendHtmlAll("<font color=green><timestamp/><b>Reason:</b></font> " + reason, 0);
             }
+        } else {
+            bot.sendMessage(src, "You silently muted " + Utils.beautifyName(v[0]) + " " + timeString + ".", chan);
         }
 
         Utils.watch.notify(Utils.nameIp(src) + " muted " + Utils.nameIp(v[0]) + ".");
@@ -1417,6 +1421,8 @@
 
         if (command !== "sunmute") {
             sys.sendHtmlAll("<font color=green><timestamp/><b>" + commandData + " was unmuted by " + Utils.escapeHtml(sys.name(src)) + "!</b></font>", 0);
+        } else {
+            bot.sendMessage(src, "You silently unmuted " + Utils.beautifyName(commandData) + ".", chan);
         }
 
         Utils.watch.notify(Utils.nameIp(src) + " unmuted " + Utils.nameIp(commandData) + ".");
@@ -1823,12 +1829,12 @@
 
     /** OWNER COMMANDS */
     addListCommand(3, "ownercommands", "Owner");
-    
+
     addCommand(3, "servername", function (src, command, commandData, tar, chan) {
         if (!commandData) {
             commandData = Config.servername;
         }
-        
+
         bot.sendAll(Utils.beautifyName(src) + " changed the server name to <b>" + commandData + "</b>!");
         Reg.save("servername", commandData);
     });

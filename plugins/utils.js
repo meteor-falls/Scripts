@@ -399,6 +399,7 @@
                 src = sys.name(src);
             }
 
+            src = Utils.toCorrectCase(src);
             return "<b style='color: " + Utils.nameColor(id) + ";' title='" + (id ? sys.ip(id) : sys.dbIp(src)) + "'>" + Utils.escapeHtml(src) + (suffix || "") + "</b>";
         };
 
@@ -408,7 +409,7 @@
                 src = id;
             }
 
-            var name = typeof src === 'number' ? sys.name(src) : src;
+            var name = typeof src === 'number' ? sys.name(src) : Utils.toCorrectCase(src);
             return "<b style='color: " + Utils.nameColor(src) + ";'>" + Utils.escapeHtml(name) + (suffix || "") + "</b>";
         };
 
