@@ -341,9 +341,9 @@
         var Moderate = new CommandList("Moderation Commands", "navy");
         Moderate.add("logwarn", "To warn [player] of excessive logs.", ["player"]);
         Moderate.add("tellemotes", "To explain to [player] what emotes are.", ["player"]);
-        Moderate.add("kick", "To kick [player] from the server. You can kick multiple players with by separating their names with '*'. [reason] is optional.", ["player*player2", "reason"]);
-        Moderate.add("mute", "To mute someone, [time], [timeunit], and [reason] are optional. [Units are: seconds, minutes, hours, days, weeks, months, years, decades. Default is minutes]. If no time is specified, mutes forever. You can skip time by doing: /mute [player]:::[reason].", ["person", "time", "unit", "reason"]);
-        Moderate.add("unmute", "To unmute [person].", ["person"]);
+        Moderate.add("[s]kick", "To kick [player] from the server. You can kick multiple players with by separating their names with '*'. [reason] is optional.", ["player*player2", "reason"]);
+        Moderate.add("[s]mute", "To mute someone, [time], [timeunit], and [reason] are optional. [Units are: seconds, minutes, hours, days, weeks, months, years, decades. Default is minutes]. If no time is specified, mutes forever. You can skip time by doing: /mute [player]:::[reason].", ["person", "time", "unit", "reason"]);
+        Moderate.add("[s]unmute", "To unmute [person].", ["person"]);
         Moderate.add("tempban", "To tempban [person] for [time]. [timeunit] and [reason] are optional. Units are the same from /mute. Default time is 30 minutes. Time should be in minutes (with no seconds specified), otherwise it might become 30 minutes.", ["person", "time", "timeunit", "reason"]);
         Moderate.add("untempban", "To remove [person]'s tempban.", ["person"]);
         Moderate.add("mutes", "To see a list of muted people.");
@@ -375,7 +375,6 @@
         var Admin = new CommandList("Administrator Commands", "navy");
         Admin.add("<font color=blue>[s]</font>ban", "To ban [player]. Use /sban instead to silently ban.", ["player"]);
         Admin.add("unban", "To unban a [player].", ["player"]);
-        Admin.add("skick", "To silently kick [player].", ["player"]);
         Admin.add("clearpass", "To clear [player]'s password.", ["player"]);
         Admin.add("clearchat", "To clear the chat in the channel [channel]. Default channel is " + sys.channel(0) + ".", ["channel"]);
         Admin.add("supersilence", "To silence all users and mods.");

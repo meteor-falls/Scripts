@@ -393,7 +393,13 @@
         };
 
         util.nameIp = function (src, suffix) {
-            return "<b style='color: " + Utils.nameColor(src) + ";' title='" + sys.ip(src) + "'>" + Utils.escapeHtml(sys.name(src)) + (suffix || "") + "</b>";
+            var id = 0;
+            if (typeof src === "number") {
+                id = src;
+                src = sys.name(src);
+            }
+
+            return "<b style='color: " + Utils.nameColor(id) + ";' title='" + (id ? sys.ip(id) : sys.dbIp(src)) + "'>" + Utils.escapeHtml(src) + (suffix || "") + "</b>";
         };
 
         util.beautifyName = function (src, suffix) {
@@ -405,7 +411,7 @@
             var name = typeof src === 'number' ? sys.name(src) : src;
             return "<b style='color: " + Utils.nameColor(src) + ";'>" + Utils.escapeHtml(name) + (suffix || "") + "</b>";
         };
-        
+
         util.beautifyNames = function (names) {
             return names.map(function(name) {
                 return util.beautifyName(sys.id(name) || name);

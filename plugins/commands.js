@@ -628,26 +628,26 @@
         if (Object.keys(poChan.auth).length === 0) {
             return bot.sendMessage(src, "There are no channel auth right now.", chan);
         }
-        
+
         var auths = [],
             i;
-        
+
         for (i in poChan.auth) {
             auths.push(i);
         }
-        
+
         function sortByLevel(level) {
             return function (name) {
                 return poChan.auth[name] === level;
             }
         };
-        
+
         bot.sendMessage(src, "Channel auth for " + sys.channel(chan) + ":", chan);
         bot.sendMessage(src, "Channel owners: " + Utils.beautifyNames(auths.filter(sortByLevel(3))), chan);
         bot.sendMessage(src, "Channel admins: " + Utils.beautifyNames(auths.filter(sortByLevel(2))), chan);
         bot.sendMessage(src, "Channel mods: " + Utils.beautifyNames(auths.filter(sortByLevel(1))), chan);
     });
-    
+
     addCommand(0, "topic", function (src, command, commandData, tar, chan) {
         var poChan = SESSION.channels(chan);
         if (!poChan.topic) {
@@ -1194,7 +1194,7 @@
         muteall = false;
     });
 
-    addCommand(1, ["kick", "k"], function (src, command, commandData, tar, chan) {
+    addCommand(1, ["kick", "k", "skick"], function (src, command, commandData, tar, chan) {
         if (!commandData) {
             bot.sendMessage(src, "You can't kick nothing!", chan);
             return;
@@ -1228,7 +1228,7 @@
             return;
         }
 
-        var theirmessage = Kickmsgs[sys.name(src).toLowerCase()];
+        var theirmessage = Kickmsgs[Utils.realName(src).toLowerCase()];
         var tarNames = Utils.fancyJoin(toKick);
         var msg = (theirmessage !== undefined) ? theirmessage.message : "<font color='navy'><timestamp/><b>" + tarNames + " " + (toKick.length === 1 ? "was" : "were") + " kicked by " + Utils.escapeHtml(sys.name(src)) + "!";
 
@@ -1236,9 +1236,11 @@
             msg = msg.replace(/\{Target\}/gi, tarNames);
         }
 
-        sys.sendHtmlAll(msg, 0);
-        if (reason) {
-            sys.sendHtmlAll("<font color=black><timestamp/><b>Reason:</font></b> " + reason, 0);
+        if (command !== "skick") {
+            sys.sendHtmlAll(msg, 0);
+            if (reason) {
+                sys.sendHtmlAll("<font color=black><timestamp/><b>Reason:</font></b> " + reason, 0);
+            }
         }
 
         Utils.watch.notify(Utils.nameIp(src) + " kicked " + tarNames + ".");
@@ -1323,7 +1325,7 @@
         sys.unban(commandData);
     });
 
-    addCommand(1, ["mute"], function (src, command, commandData, tar, chan) {
+    addCommand(1, ["mute", "smute"], function (src, command, commandData, tar, chan) {
         var v = commandData.split(':'),
             reason = Utils.cut(v, 3, ":"),
             mutetime = v[1],
@@ -1370,7 +1372,7 @@
         }
 
         var muteHash = {
-            "by": sys.name(src),
+            "by": command === "smute" ? "Anonymous" : sys.name(src),
             "reason": reason,
             "time": trueTime,
             "mutedname": v[0]
@@ -1379,8 +1381,14 @@
         Mutes[tarip] = muteHash;
         Reg.save("Mutes", Mutes);
 
-        sys.sendHtmlAll("<font color=blue><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + " muted " + v[0] + " " + timeString + "!</b></font>");
-        sys.sendHtmlAll("<font color=green><timestamp/><b>Reason:</b></font> " + reason);
+        if (command !== "smute") {
+            sys.sendHtmlAll("<font color=blue><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + " muted " + v[0] + " " + timeString + "!</b></font>", 0);
+            if (reason) {
+                sys.sendHtmlAll("<font color=green><timestamp/><b>Reason:</b></font> " + reason, 0);
+            }
+        }
+
+        Utils.watch.notify(Utils.nameIp(src) + " muted " + Utils.nameIp(v[0]) + ".");
     });
 
     addCommand(1, "m", function (src, command, commandData, tar, chan) {
@@ -1388,7 +1396,7 @@
         commands.mute.callback.call({myAuth: this.myAuth}, src, "mute", commandData + ":5:minutes:No reason.", tar, chan);
     });
 
-    addCommand(1, "unmute", function (src, command, commandData, tar, chan) {
+    addCommand(1, ["unmute", "sunmute"], function (src, command, commandData, tar, chan) {
         var ip = sys.dbIp(commandData);
         if (!ip) {
             bot.sendMessage(src, "Target doesn't exist!", chan);
@@ -1399,13 +1407,19 @@
             bot.sendMessage(src, 'This person is not muted.', chan);
             return;
         }
-        sys.sendHtmlAll("<font color=green><timestamp/><b>" + commandData + " was unmuted by " + Utils.escapeHtml(sys.name(src)) + "!</b></font>");
+
         delete Mutes[ip];
         Reg.save("Mutes", Mutes);
 
         if (tar !== undefined) {
             SESSION.users(tar).muted = false;
         }
+
+        if (command !== "sunmute") {
+            sys.sendHtmlAll("<font color=green><timestamp/><b>" + commandData + " was unmuted by " + Utils.escapeHtml(sys.name(src)) + "!</b></font>", 0);
+        }
+
+        Utils.watch.notify(Utils.nameIp(src) + " unmuted " + Utils.nameIp(commandData) + ".");
     });
 
     addListCommand(1, ["moderationcommands", "moderatecommands"], "Moderate");
@@ -1595,19 +1609,6 @@
 
     /** ADMIN COMMANDS */
     addListCommand(2, "admincommands", "Admin");
-
-    addCommand(2, "skick", function (src, command, commandData, tar, chan) {
-        if (!tar) {
-            bot.sendMessage(src, "Target doesn't exist!", chan);
-            return;
-        }
-        if (this.myAuth <= sys.auth(tar)) {
-            bot.sendMessage(src, "Sorry. Your request has been denied.", chan);
-            return;
-        }
-        bot.sendMessage(src, "You silently kicked " + sys.name(tar) + "!", chan);
-        Utils.mod.kick(tar);
-    });
 
     addCommand(2, "clearpass", function (src, command, commandData, tar, chan) {
         var ip = sys.dbIp(commandData);
