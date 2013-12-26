@@ -393,14 +393,15 @@
         };
 
         util.nameIp = function (src, suffix) {
-            var id = 0;
+            var name = src, id;
             if (typeof src === "number") {
-                id = src;
-                src = sys.name(src);
+                name = sys.name(src);
+            } else if ((id = sys.id(name))) {
+                src = id;
+                name = sys.name(src);
             }
 
-            src = Utils.toCorrectCase(src);
-            return "<b style='color: " + Utils.nameColor(id) + ";' title='" + (id ? sys.ip(id) : sys.dbIp(src)) + "'>" + Utils.escapeHtml(src) + (suffix || "") + "</b>";
+            return "<b style='color: " + Utils.nameColor(src) + "' title='" + (typeof src === "number" ? sys.ip(src) : sys.dbIp(name)) + "'>" + Utils.escapeHtml(name) + (suffix || "") + "</b>";
         };
 
         util.beautifyName = function (src, suffix) {
@@ -409,8 +410,8 @@
                 src = id;
             }
 
-            var name = typeof src === 'number' ? sys.name(src) : Utils.toCorrectCase(src);
-            return "<b style='color: " + Utils.nameColor(src) + ";'>" + Utils.escapeHtml(name) + (suffix || "") + "</b>";
+            var name = typeof src === 'number' ? sys.name(src) : src;
+            return "<b style='color: " + Utils.nameColor(src) + "'>" + Utils.escapeHtml(name) + (suffix || "") + "</b>";
         };
 
         util.beautifyNames = function (names) {
