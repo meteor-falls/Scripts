@@ -2,10 +2,11 @@ module.exports = function () {
     EmoteList = {
         __display__: []
     };
+    
+    var emoteRegex = {};
 
     addEmote = function (alts, code, priority) {
-        var len,
-            i;
+        var alt, len, i;
 
         // data:, icon:, item:
         if (code.charAt(4) === ":") {
@@ -19,7 +20,9 @@ module.exports = function () {
         len = alts.length;
 
         for (i = 0; i < len; i += 1) {
-            EmoteList[alts[i]] = code;
+            alt = alts[i];
+            EmoteList[alt] = code;
+            emoteRegex[alt] = new RegExp(RegExp.quote(alt), "g");
         }
 
         EmoteList.__display__.push(alts.join(" | "));
@@ -75,7 +78,7 @@ module.exports = function () {
 
             // Major speed up.
             if (message.indexOf(i) !== -1) {
-                message = message.replace(new RegExp(RegExp.quote(i), "g"), assignEmote(EmoteList[i]));
+                message = message.replace(emoteRegex[i], assignEmote(EmoteList[i]));
             }
         }
 
