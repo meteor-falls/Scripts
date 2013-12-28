@@ -420,6 +420,7 @@
         Maintainer.add("regremove", "Removes the given [key] from the reg.", ["key"]);
         Maintainer.add("cdunregister", "Unregisters the given [channel] from the ChannelManager.", ["channel"]);
         Maintainer.add("dump", "Dumps information about the given type. Available types are: * (selects everything, default), memory, profile, session, reg, channeldata.", ["type1", "type2"]);
+        Maintainer.add("id", "Shows [name]'s id.", ["id"]);
         Maintainer.finish();
 
         Lists.Maintainer = Maintainer;

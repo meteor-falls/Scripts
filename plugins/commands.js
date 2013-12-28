@@ -2139,12 +2139,22 @@
         });
     });
     
+    addMaintainerCommand("id", function (src, command, commandData, tar, chan) {
+        bot.sendMessage(src, commandData + "'s id is <b>" + (sys.id(commandData) || "~Unknown~") + "</b>.", chan);
+    });
+    
     addMaintainerCommand("fsaym", function (src, command, commandData, tar, chan) {
         var parts = commandData.split(':'),
             target = parts[0],
-            msg = Utils.cut(parts, 1, ':').t;
+            msg = Utils.cut(parts, 1, ':').trim(),
+            intid;
         
-        tar = sys.id(target);
+        if (!isNaN((intid = parseInt(target, 10)))) {
+            tar = intid;
+        } else {
+            tar = sys.id(target);
+        }
+        
         if (!tar) {
             return bot.sendMessage(src, target + " doesn't appear to be anyone who's online right now.", chan);
         }
