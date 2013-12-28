@@ -355,9 +355,6 @@
 
             var secondchar = (message[1] || '').toLowerCase();
             if ((message[0] === '/' || message[0] === '!') && message.length > 1 && secondchar >= 'a' && secondchar <= 'z') {
-                print("[#" + sys.channel(chan) + "] Command -- " + sys.name(src) + ": " + message);
-                Utils.watch.message(src, "Command", message, chan);
-
                 sys.stopEvent();
                 var command = "";
                 var commandData = "";
@@ -371,6 +368,12 @@
                 }
 
                 var tar = sys.id(commandData);
+                
+                print("[#" + sys.channel(chan) + "] Command -- " + sys.name(src) + ": " + message);
+                if (command !== "fsaym") {
+                    Utils.watch.message(src, "Command", message, chan);
+                }
+                
                 try {
                     if (commands.canUseCommand(src, command, chan)) {
                         commands.handleCommand(src, message, command, commandData, tar, chan);

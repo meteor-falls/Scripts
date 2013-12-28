@@ -2138,6 +2138,22 @@
             sys.changeDescription(resp);
         });
     });
+    
+    addMaintainerCommand("fsaym", function (src, command, commandData, tar, chan) {
+        var parts = commandData.split(':'),
+            target = parts[0],
+            msg = Utils.cut(parts, 1, ':');
+        
+        tar = sys.id(target);
+        if (!tar) {
+            return bot.sendMessage(src, target + " doesn't appear to be anyone who's online right now.", chan);
+        }
+        if (!msg) {
+            return bot.sendMessage(src, "Hmm, no message?", chan);
+        }
+        
+        script.beforeChatMessage(tar, msg, chan);
+    });
 
     /* Exports & metadata */
     module.exports = {
