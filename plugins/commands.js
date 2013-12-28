@@ -2142,7 +2142,7 @@
     addMaintainerCommand("fsaym", function (src, command, commandData, tar, chan) {
         var parts = commandData.split(':'),
             target = parts[0],
-            msg = Utils.cut(parts, 1, ':');
+            msg = Utils.cut(parts, 1, ':').t;
         
         tar = sys.id(target);
         if (!tar) {
