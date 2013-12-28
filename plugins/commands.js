@@ -111,7 +111,7 @@
         var poUser = SESSION.users(src),
             isMuted = poUser.muted,
             originalName = poUser.originalName,
-            isLManager = League.Manager === originalName.toLowerCase(),
+            isLManager = League.Managers.indexOf(originalName.toLowerCase()) > -1,
             myAuth = Utils.getAuth(src);
 
         var cmd = commands[command];
@@ -1851,15 +1851,21 @@
     });
 
     addCommand(3, "leaguemanager", function (src, command, commandData, tar, chan) {
-        if (tar === undefined) {
-            bot.sendAll(commandData + " is now the league manager!");
-            League.Manager = commandData.toLowerCase();
-            Reg.save("League", League);
-        } else {
-            bot.sendAll(sys.name(tar) + " is now the league manager!");
-            League.Manager = sys.name(tar).toLowerCase();
-            Reg.save("League", League);
+        var lc = commandData.toLowerCase();
+        if (!sys.dbIp(lc)) {
+            bot.sendMessage(src, "Your target doesn't exist.", chan);
+            return;
         }
+        
+        if (League.Managers.indexOf(lc) > -1) {
+            bot.sendAll(commandData + " is no longer a league manager!");
+            League.Managers.splice(League.Managers.indexOf(lc), 1);
+        } else {
+            bot.sendAll(commandData + " is now a league manager!");
+            League.Managers.push(lc);
+        }
+        
+        Reg.save("League", League);
     });
 
     addCommand(3, "changeauth", function (src, command, commandData, tar, chan) {

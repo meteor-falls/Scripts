@@ -164,8 +164,6 @@ module.exports = {
         Reg.init('maxPlayersOnline', 0);
         Reg.init('servername', Config.servername);
 
-        Leaguemanager = League.Manager;
-
         var makeChan = function (cname) {
             sys.createChannel(cname);
             return sys.channelId(cname);
