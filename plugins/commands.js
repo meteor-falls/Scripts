@@ -144,6 +144,7 @@
             bot.sendMessage(src, 'You need to be a league manager to view these!', chan);
             return false;
         }
+        return true;
     });
 
     addListCommand(0, "channelcommands", "Channel");
