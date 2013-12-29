@@ -640,8 +640,8 @@
         function sortByLevel(level) {
             return function (name) {
                 return poChan.auth[name] === level;
-            }
-        };
+            };
+        }
 
         bot.sendMessage(src, "Channel auth for " + sys.channel(chan) + ":", chan);
         bot.sendMessage(src, "Channel owners: " + Utils.beautifyNames(auths.filter(sortByLevel(3))), chan);
@@ -1179,20 +1179,12 @@
 
     addCommand(1, "silence", function (src, command, commandData, tar, chan) {
         if (muteall) {
-            bot.sendMessage(src, "Silence is already on!", chan);
-            return;
+            sys.sendHtmlAll("<font color=green><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + " ended the silence!</b></font>");
+            muteall = false;
+        } else {
+            sys.sendHtmlAll("<font color=blue><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + " silenced the chat!</b></font>");
+            muteall = true;
         }
-        sys.sendHtmlAll("<font color=blue><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + " silenced the chat!</b></font>");
-        muteall = true;
-    });
-
-    addCommand(1, ["unsilence", "silenceoff"], function (src, command, commandData, tar, chan) {
-        if (!muteall) {
-            bot.sendMessage(src, "Silence isn't going on.", chan);
-            return;
-        }
-        sys.sendHtmlAll("<font color=green><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + " ended the silence!</b></font>");
-        muteall = false;
     });
 
     addCommand(1, ["kick", "k", "skick"], function (src, command, commandData, tar, chan) {
@@ -1738,20 +1730,12 @@
 
     addCommand(2, "supersilence", function (src, command, commandData, tar, chan) {
         if (supersilence) {
-            bot.sendMessage(src, "Super Silence is already on!", chan);
-            return;
+            sys.sendHtmlAll("<font color=green><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + " ended the super silence!</b></font>");
+            supersilence = false;
+        } else {
+            sys.sendHtmlAll("<font color=blue><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + " super silenced the chat!</b></font>");
+            supersilence = true;
         }
-        sys.sendHtmlAll("<font color=blue><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + " super silenced the chat!</b></font>");
-        supersilence = true;
-    });
-
-    addCommand(2, ["unssilence", "ssilenceoff"], function (src, command, commandData, tar, chan) {
-        if (!supersilence) {
-            bot.sendMessage(src, "Super Silence isn't going on.", chan);
-            return;
-        }
-        sys.sendHtmlAll("<font color=green><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + " ended the super silence!</b></font>");
-        supersilence = false;
     });
 
     addCommand(2, "private", function (src, command, commandData, tar, chan) {

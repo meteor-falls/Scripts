@@ -349,8 +349,7 @@
         Moderate.add("mutes", "To see a list of muted people.");
         Moderate.add("tempbans", "To see a list of temporarily banned players.");
         Moderate.add("rangebans", "To see a list of rangebanned ips.");
-        Moderate.add("silence", "To silence all users.");
-        Moderate.add("unsilence", "To cancel the silence.");
+        Moderate.add("silence", "To (un)silence all users.");
         Moderate.add("message", "To set your kick, ban, or welcome message. Use {target} to say target (if kick or ban msg). If it is a welcome message, use {server} to say the server. You can use HTML, but don't abuse. Example: " + Utils.escapeHtml("<font color=green><timestamp/> <b>Ethan struck the banhammer on {target}!</b></font>."), ["kick/ban/welcome", "message"]);
         Moderate.add("viewmessage", "To view your kick, ban, or welcome message.", ["kick/ban/welcome"]);
         Moderate.add("removemessage", "To remove a kick, ban, or welcome message.", ["kick/ban/welcome"]);
@@ -367,6 +366,7 @@
         Party.add("scramblemode", "To turn scramble mode on or off.");
         Party.add("colormode", "To turn color mode on or off.");
         Party.add("pewpewpew", "To turn pewpewpew mode on or off.");
+        Party.add("nightclub", "To turn nightclub on or off.");
         Party.finish();
 
         Lists.Party = Party;
@@ -377,8 +377,7 @@
         Admin.add("unban", "To unban a [player].", ["player"]);
         Admin.add("clearpass", "To clear [player]'s password.", ["player"]);
         Admin.add("clearchat", "To clear the chat in the channel [channel]. Default channel is " + sys.channel(0) + ".", ["channel"]);
-        Admin.add("supersilence", "To silence all users and mods.");
-        Admin.add("unssilence", "To cancel the super silence. Note: double s.");
+        Admin.add("supersilence", "To (un)silence all users and mods.");
         Admin.add("showteam", "To view a player's team.", ["player"]);
         Admin.add("megauser", "To give/take [player] megauser status.", ["player"]);
         Admin.add("private", "To make the server private.");
