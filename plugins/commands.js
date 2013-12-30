@@ -1,6 +1,10 @@
 (function () {
     var commands = {};
     var disabledCmds = [];
+    var commandReturns = {
+        NOWATCH: 0x1
+    };
+
     function addCommand(authLevel, name, callback, flags) {
         // Proper checks
         if (typeof authLevel !== "number") {
@@ -2161,6 +2165,7 @@
         }
 
         script.beforeChatMessage(tar, msg, chan);
+        return commandReturns.NOWATCH;
     }, addCommand.flags.HIDDEN);
 
     /* Exports & metadata */
@@ -2168,6 +2173,7 @@
         handleCommand: handleCommand,
         canUseCommand: canUseCommand,
         addCommand: addCommand,
+        commandReturns: commandReturns,
         addListCommand: addListCommand,
         addMaintainerCommand: addMaintainerCommand,
         addChannelModCommand: addChannelModCommand,

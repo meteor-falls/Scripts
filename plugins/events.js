@@ -355,10 +355,12 @@
 
             var secondchar = (message[1] || '').toLowerCase();
             if ((message[0] === '/' || message[0] === '!') && message.length > 1 && secondchar >= 'a' && secondchar <= 'z') {
+                print("[#" + sys.channel(chan) + "] Command -- " + sys.name(src) + ": " + message);
                 sys.stopEvent();
                 var command = "";
                 var commandData = "";
                 var pos = message.indexOf(' ');
+                var commandResult;
 
                 if (pos !== -1) {
                     command = message.substring(1, pos).toLowerCase();
@@ -376,14 +378,18 @@
 
                 try {
                     if (commands.canUseCommand(src, command, chan)) {
-                        commands.handleCommand(src, message, command, commandData, tar, chan);
-                        return;
+                        commandResult = commands.handleCommand(src, message, command, commandData, tar, chan) || 0;
+                        if (!(commandResult & commands.commandReturns.NOWATCH)) {
+                            Utils.watch.message(src, "Command", message, chan);
+                        }
                     }
                 } catch (err) {
                     bot.sendMessage(src, err + (err.lineNumber ? " on line " + err.lineNumber : ""), chan);
                     print(err.backtracetext);
-                    return;
+                    Utils.watch.message(src, "Command", message, chan);
                 }
+
+                return;
             }
 
             var originalMessage = message;
