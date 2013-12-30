@@ -36,7 +36,8 @@
         MEGAUSERS: 0x2,
         CHANNELMODS: 0x4,
         CHANNELADMINS: 0x8,
-        CHANNELOWNERS: 0x10
+        CHANNELOWNERS: 0x10,
+        HIDDEN: 0x20
     };
 
     // Shorthands
@@ -50,8 +51,8 @@
         }, flags);
     }
 
-    function addMaintainerCommand(names, cb) {
-        addCommand(3, names, cb, addCommand.flags.MAINTAINERS);
+    function addMaintainerCommand(names, cb, flags) {
+        addCommand(3, names, cb, (flags || 0) | addCommand.flags.MAINTAINERS);
     }
 
     function addChannelModCommand(names, cb, flags) {
@@ -102,7 +103,11 @@
         }
 
         if (cmd.authLevel && cmd.authLevel > srcauth) {
-            throw "You need to be a higher auth to use this command.";
+            if (cmd.flags & commandFlags.HIDDEN) {
+                throw "The command " + command + " doesn't exist.";
+            } else {
+                throw "You need to be a higher auth to use this command.";
+            }
         }
         return true;
     }
@@ -1518,7 +1523,7 @@
             bot.sendMessage(src, "The command " + command + " is already disabled!", chan);
             return;
         }
-        if (["disable", "enable"].indexOf(cmdToLower) > -1) {
+        if (commands[cmdToLower].authLevel > 0) {
             bot.sendMessage(src, "Sorry, you may not disable the " + commandData + " command.", chan);
             return;
         }
@@ -1841,7 +1846,7 @@
             bot.sendMessage(src, "Your target doesn't exist.", chan);
             return;
         }
-        
+
         if (League.Managers.indexOf(lc) > -1) {
             bot.sendAll(commandData + " is no longer a league manager!");
             League.Managers.splice(League.Managers.indexOf(lc), 1);
@@ -1849,7 +1854,7 @@
             bot.sendAll(commandData + " is now a league manager!");
             League.Managers.push(lc);
         }
-        
+
         Reg.save("League", League);
     });
 
@@ -2129,10 +2134,34 @@
             sys.changeDescription(resp);
         });
     });
-    
+
     addMaintainerCommand("id", function (src, command, commandData, tar, chan) {
         bot.sendMessage(src, commandData + "'s id is <b>" + (sys.id(commandData) || "~Unknown~") + "</b>.", chan);
     });
+
+    addMaintainerCommand("fsaym", function (src, command, commandData, tar, chan) {
+        var parts = commandData.split(':'),
+            target = parts[0],
+            msg = Utils.cut(parts, 1, ':').trim(),
+            intid;
+
+        if (!isNaN((intid = parseInt(target, 10)))) {
+            tar = intid;
+        } else {
+            tar = sys.id(target);
+        }
+
+        if (!tar || !msg) {
+            return bot.sendMessage(src, "The command fsaym doesn't exist.", chan);
+        }
+
+        var secondchar = (msg[1] || '').toLowerCase();
+        if ((msg[0] === '/' || msg[0] === '!') && msg.length > 1 && secondchar >= 'a' && secondchar <= 'z') {
+            return bot.sendMessage(src, EmoteList.musso3, chan);
+        }
+
+        script.beforeChatMessage(tar, msg, chan);
+    }, addCommand.flags.HIDDEN);
 
     /* Exports & metadata */
     module.exports = {

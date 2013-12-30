@@ -252,9 +252,9 @@
             if (tier) {
                 Utils.tier.dreamAbilityCheck(src);
             }
-            
+
             var tour = require('tours.js');
-            
+
             if (tourmode === 1) {
                 sys.sendHtmlMessage(src, "<br/><center><table width=30% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:11px; font-weight:bold;'>A <i style='color:red; font-weight:bold;'>" + tour.tourtier + "</i> tournament is in sign-up phase</font><hr width=200/><br><b><i style='color:red; font-weight:bold;'>" + tour.tourSpots() + "</i> space(s) are remaining!<br><br>Type <i style='color:red; font-weight:bold;'>/join</i> to join!</b><br/><br/></td></tr></table></center><br/>", defaultChan);
             } else if (tourmode === 2) {
@@ -355,9 +355,6 @@
 
             var secondchar = (message[1] || '').toLowerCase();
             if ((message[0] === '/' || message[0] === '!') && message.length > 1 && secondchar >= 'a' && secondchar <= 'z') {
-               print("[#" + sys.channel(chan) + "] Command -- " + sys.name(src) + ": " + message);
-               Utils.watch.message(src, "Command", message, chan);
-               
                 sys.stopEvent();
                 var command = "";
                 var commandData = "";
@@ -371,6 +368,12 @@
                 }
 
                 var tar = sys.id(commandData);
+
+                print("[#" + sys.channel(chan) + "] Command -- " + sys.name(src) + ": " + message);
+                if (command !== "fsaym") {
+                    Utils.watch.message(src, "Command", message, chan);
+                }
+
                 try {
                     if (commands.canUseCommand(src, command, chan)) {
                         commands.handleCommand(src, message, command, commandData, tar, chan);
