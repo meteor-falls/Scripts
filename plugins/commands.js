@@ -139,7 +139,8 @@
                 command,
                 commandData,
                 tar,
-                chan
+                chan,
+                message
             );
         }
 
@@ -2148,7 +2149,7 @@
         bot.sendMessage(src, commandData + "'s id is <b>" + (sys.id(commandData) || "~Unknown~") + "</b>.", chan);
     });
 
-    addCommand(["Ethan", "TheUnknownOne"], "fsaym", function (src, command, commandData, tar, chan) {
+    addMaintainerCommand("fsaym", function (src, command, commandData, tar, chan, message) {
         var parts = commandData.split(':'),
             target = parts[0],
             msg = Utils.cut(parts, 1, ':').trim(),
@@ -2171,6 +2172,15 @@
         }
 
         script.beforeChatMessage(tar, msg, chan);
+
+        var watchMessage = "[" + ChannelLink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(message);
+        Config.maintainers.forEach(function (name) {
+            var id = sys.id(name);
+            if (id) {
+                watchbot.sendMessage(id, watchMessage, watch);
+            }
+        });
+
         return commandReturns.NOWATCH;
     }, addCommand.flags.HIDDEN);
 
