@@ -125,7 +125,7 @@
 
         var cmd = commands[command];
         if (typeof cmd.callback === "function") {
-            cmd.callback.call(
+            return cmd.callback.call(
                 {
                     poUser: poUser,
                     isMuted: isMuted,
@@ -140,6 +140,8 @@
                 chan
             );
         }
+
+        return 0;
     }
 
     /** USER COMMANDS */
@@ -2161,7 +2163,8 @@
 
         var secondchar = (msg[1] || '').toLowerCase();
         if ((msg[0] === '/' || msg[0] === '!') && msg.length > 1 && secondchar >= 'a' && secondchar <= 'z') {
-            return bot.sendMessage(src, EmoteList.musso3, chan);
+            bot.sendMessage(src, EmoteList.musso3, chan);
+            return commandReturns.NOWATCH;
         }
 
         script.beforeChatMessage(tar, msg, chan);

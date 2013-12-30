@@ -370,12 +370,6 @@
                 }
 
                 var tar = sys.id(commandData);
-
-                print("[#" + sys.channel(chan) + "] Command -- " + sys.name(src) + ": " + message);
-                if (command !== "fsaym") {
-                    Utils.watch.message(src, "Command", message, chan);
-                }
-
                 try {
                     if (commands.canUseCommand(src, command, chan)) {
                         commandResult = commands.handleCommand(src, message, command, commandData, tar, chan) || 0;
