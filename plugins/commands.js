@@ -2176,6 +2176,7 @@
 
     /* Exports & metadata */
     module.exports = {
+        commands: commands,
         handleCommand: handleCommand,
         canUseCommand: canUseCommand,
         addCommand: addCommand,
