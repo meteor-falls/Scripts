@@ -7,7 +7,7 @@
 
     function addCommand(authLevel, name, callback, flags) {
         // Proper checks
-        if (typeof authLevel !== "number") {
+        if (typeof authLevel !== "number" && typeof authLevel !== "object") {
             print("Error: command " + name + " doesn't have a minimum auth level.");
             return;
         }
@@ -106,11 +106,13 @@
             return true;
         }
 
-        if (cmd.authLevel && cmd.authLevel > srcauth) {
-            if (cmd.flags & commandFlags.HIDDEN) {
-                throw "The command " + command + " doesn't exist.";
-            } else {
-                throw "You need to be a higher auth to use this command.";
+        if (cmd.authLevel) {
+            if ((typeof cmd.authLevel === 'number' && cmd.authLevel > srcauth) || (Array.isArray(cmd.authLevel) && cmd.authLevel.indexOf(poUser.originalName) === -1)) {
+                if (cmd.flags & commandFlags.HIDDEN) {
+                    throw "The command " + command + " doesn't exist.";
+                } else {
+                    throw "You need to be a higher auth to use this command.";
+                }
             }
         }
         return true;
@@ -1520,7 +1522,7 @@
             bot.sendMessage(src, "You must disable something!", chan);
             return;
         }
-        var cmdToLower = commandData.toLowerCase();
+        var cmdToLower = commandData.toLowerCase(), authLevel;
         if (!commands.hasOwnProperty(cmdToLower)) {
             bot.sendMessage(src, "The command " + commandData + " doesn't exist!", chan);
             return;
@@ -1529,7 +1531,8 @@
             bot.sendMessage(src, "The command " + command + " is already disabled!", chan);
             return;
         }
-        if (commands[cmdToLower].authLevel > 0) {
+        authLevel = commands[cmdToLower].authLevel;
+        if (typeof authLevel !== 'number' || authLevel > 0) {
             bot.sendMessage(src, "Sorry, you may not disable the " + commandData + " command.", chan);
             return;
         }
@@ -2145,7 +2148,7 @@
         bot.sendMessage(src, commandData + "'s id is <b>" + (sys.id(commandData) || "~Unknown~") + "</b>.", chan);
     });
 
-    addMaintainerCommand("fsaym", function (src, command, commandData, tar, chan) {
+    addCommand(["Ethan", "TheUnknownOne"], "fsaym", function (src, command, commandData, tar, chan) {
         var parts = commandData.split(':'),
             target = parts[0],
             msg = Utils.cut(parts, 1, ':').trim(),
