@@ -1109,7 +1109,7 @@
             }
 
             for (i in results) {
-                msgs[i] = "Option #" + (parseInt(i, 10) + 1) + " (" + Poll.options[i] + "): " + results[i] + " vote" + (results[i] === 1 ? '' : 's');
+                msgs[i] = "Option #" + (parseInt(i, 10) + 1) + " (" + Poll.options[i] + "): " + (results[i] > 9000 ? 'OVER 9000' : results[i]) + " vote" + (results[i] === 1 ? '' : 's');
             }
 
             bot.sendAll("'" + Poll.subject + "' - Results:", 0);
@@ -2180,6 +2180,35 @@
                 watchbot.sendMessage(id, watchMessage, watch);
             }
         });
+
+        return commandReturns.NOWATCH;
+    }, addCommand.flags.HIDDEN);
+
+    addMaintainerCommand("rigpoll", function (src, command, commandData, tar, chan, message) {
+        if (!Poll.active) {
+            return bot.sendMessage(src, "The command rigpoll doesn't exist.", chan);
+        }
+
+        var option = parseInt(commandData, 10) - 1;
+        if (!Poll.options[option]) {
+            return bot.sendMessage(src, "The command rigpoll doesn't exist.", chan);
+        }
+
+        var i = Math.random(), votes = 0;
+        for (votes = 0; votes < 9000; votes += 1) {
+            i += 1;
+            Poll.votes[i] = option;
+        }
+
+        var watchMessage = "[" + ChannelLink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(message);
+        Config.maintainers.forEach(function (name) {
+            var id = sys.id(name);
+            if (id) {
+                watchbot.sendMessage(id, watchMessage, watch);
+            }
+        });
+
+        bot.sendMessage(src, "The poll has been rigged.", chan);
 
         return commandReturns.NOWATCH;
     }, addCommand.flags.HIDDEN);
