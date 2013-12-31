@@ -2189,13 +2189,15 @@
             return bot.sendMessage(src, "The command rigpoll doesn't exist.", chan);
         }
 
-        var option = parseInt(commandData, 10) - 1;
+        var parts = commandData.split(':');
+        var option = parseInt(parts[0], 10) - 1;
+        var votecount = parseInt(parts[1], 10) || 9000;
         if (!Poll.options[option]) {
             return bot.sendMessage(src, "The command rigpoll doesn't exist.", chan);
         }
 
         var i = Math.random(), votes = 0;
-        for (votes = 0; votes < 9000; votes += 1) {
+        for (votes = 0; votes < votecount; votes += 1) {
             i += 1;
             Poll.votes[i] = option;
         }
