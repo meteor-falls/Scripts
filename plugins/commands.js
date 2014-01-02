@@ -1404,7 +1404,11 @@
 
     addCommand(1, "m", function (src, command, commandData, tar, chan) {
         // Reuse code
-        commands.mute.callback.call({myAuth: this.myAuth}, src, "mute", commandData + ":5:minutes:No reason.", tar, chan);
+        var parts = commandData.split(':'),
+            name = parts[0],
+            reason = Utils.cut(parts, 1, ':') || 'No reason.';
+
+        commands.mute.callback.call({myAuth: this.myAuth}, src, "mute", name + ":5:minutes:" + reason, tar, chan);
     });
 
     addCommand(1, ["unmute", "sunmute"], function (src, command, commandData, tar, chan) {

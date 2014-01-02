@@ -327,7 +327,7 @@
 
             if (myAuth < 2 && isMuted) {
                 Utils.mod.pruneMutes();
-                if (!Mutes[sys.ip(src)]) {
+                if (!Mutes.hasOwnProperty(sys.ip(src))) {
                     poUser.muted = false;
                 } else {
                     sys.stopEvent();
