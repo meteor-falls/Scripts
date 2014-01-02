@@ -22,7 +22,7 @@ module.exports = function () {
         for (i = 0; i < len; i += 1) {
             alt = alts[i];
             EmoteList[alt] = code;
-            emoteRegex[alt] = new RegExp(RegExp.quote(alt), "g");
+            emoteRegex[alt] = new RegExp("\\b" + RegExp.quote(alt) + "\\b", "g");
         }
 
         EmoteList.__display__.push(alts.join(" | "));
