@@ -5,6 +5,7 @@ module.exports = function () {
 
     var emoteRegex = {};
     var nonAlpha = /\W/;
+    var marxState = 0;
 
     addEmote = function (alts, code, priority) {
         var regex, alt, len, i;
@@ -69,6 +70,14 @@ module.exports = function () {
                     uobj.lastEmote.push(i);
                 }
 
+                if (marxmode) {
+                    marxState = 1 - marxState;
+                    if (marxState === 1) {
+                        code = EmoteList.marx1;
+                    } else if (marxState === 0) {
+                        code = EmoteList.stalin1;
+                    }
+                }
                 return code;
             };
         }

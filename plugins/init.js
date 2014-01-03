@@ -133,6 +133,7 @@ module.exports = {
             spacemode: false,
             capsmode: false,
             reversemode: false,
+            marxmode: false,
             scramblemode: false,
             colormode: false,
             pewpewpew: false,

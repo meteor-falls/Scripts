@@ -365,6 +365,7 @@
         Party.add("reversemode", "To turn reverse mode on or off.");
         Party.add("scramblemode", "To turn scramble mode on or off.");
         Party.add("colormode", "To turn color mode on or off.");
+        Party.add("marxmode", "To turn Marx mode on or off.");
         Party.add("pewpewpew", "To turn pewpewpew mode on or off.");
         Party.add("nightclub", "To turn nightclub on or off.");
         Party.finish();
