@@ -43,14 +43,14 @@ module.exports = function () {
         var emotes = [],
             uobj = SESSION.users(src),
             perm,
-            timeout,
+            timeout = 4,
             lastEmote = [],
             time = +sys.time(),
             i;
 
         if (src && uobj) {
-            perm = Utils.mod.hasBasicPermissions(src);
-            timeout = perm ? 4 : 7;
+            //perm = Utils.mod.hasBasicPermissions(src);
+            //timeout = perm ? 4 : 7;
             if (uobj.lastEmoteTime && uobj.lastEmoteTime + timeout > time) {
                 lastEmote = uobj.lastEmote || [];
             } else {
