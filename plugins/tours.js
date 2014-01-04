@@ -1,4 +1,9 @@
 (function() {
+
+    if (typeof(tourmode) !== "number") {
+        tourmode = 0;
+    }
+
     function addCommands() {
         var commandsModule = require('commands.js');
         var addListCommand = commandsModule.addListCommand,
@@ -186,12 +191,8 @@
                 bot.sendMessage(src, "You must specify a tournament size of 3 or more.", chan);
                 return;
             }
-            var found = true;
-            if (!Utils.isTier(commandpart[0])) {
-                found = false;
-            }
 
-            if (!found) {
+            if (!Utils.isTier(commandpart[0])) {
                 bot.sendMessage(src, "Sorry, the server does not recognise the " + commandpart[0] + " tier.", chan);
                 return;
             }
@@ -470,6 +471,8 @@
     
     module.exports = events;
     module.exports.addCommands = addCommands;
-    module.exports.tourSpots = tourSpots;
-    module.exports.tourtier = tourtier;
+    if (tourmode > 0) {
+        module.exports.tourSpots = tourSpots;
+        module.exports.tourtier = tourtier;
+    }
 }());
