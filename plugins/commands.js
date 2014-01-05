@@ -257,38 +257,6 @@
 
     addListCommand(0, "leaguerules", "LeagueRules");
 
-    addCommand(0, "superimp", function (src, command, commandData, tar, chan) {
-        if (commandData === "Server") {
-            bot.sendMessage(src, "You may not superimp ~~Server~~!", chan);
-            return;
-        }
-        if (commandData.length > 20) {
-            bot.sendMessage(src, "The name is " + Number(commandData.length - 20) + " characters too long.", chan);
-            return;
-        }
-        if (tar) {
-            bot.sendMessage(src, "It appears as if your target does not appreciate being impersonated.", chan);
-            return;
-        }
-
-        var displayImp = Utils.escapeHtml(commandData);
-        sys.sendHtmlAll('<font color=#8A2BE2><timestamp/><b>' + Utils.escapeHtml(sys.name(src)) + ' has super-impersonated ' + displayImp + '!</font></b>', 0);
-        Utils.watch.notify(Utils.nameIp(src) + " super-impersonated <b style='color: " + Utils.nameColor(src) + "'>~~" + displayImp + "~~</b>.");
-
-        sys.changeName(src, '~~' + commandData + '~~');
-    });
-
-    addCommand(0, ["impoff", "unimp"], function (src, command, commandData, tar, chan) {
-        if (sys.name(src) === this.originalName) {
-            bot.sendMessage(src, "You aren't imping!", chan);
-            return;
-        }
-
-        sys.sendHtmlAll('<font color=#8A2BE2><timestamp/><b>' + this.originalName + ' changed their name back!</font></b>', 0);
-        Utils.watch.notify(Utils.nameIp(src) + " changed their name back to <b style='color: " + Utils.nameColor(src) + "'>" + this.originalName + "</b>.");
-        sys.changeName(src, this.originalName);
-    });
-
     addCommand(0, ["selfkick", "ghostkick", "sk"], function (src, command, commandData, tar, chan) {
         var xlist, c;
         var ip = sys.ip(src);
@@ -1459,6 +1427,17 @@
         Utils.watch.notify(Utils.nameIp(src) + " impersonated <b style='color: " + Utils.nameColor(src) + "'>" + displayImp + "</b>.");
 
         sys.changeName(src, commandData);
+    });
+
+    addCommand(1, ["impoff", "unimp"], function (src, command, commandData, tar, chan) {
+        if (sys.name(src) === this.originalName) {
+            bot.sendMessage(src, "You aren't imping!", chan);
+            return;
+        }
+
+        sys.sendHtmlAll('<font color=#8A2BE2><timestamp/><b>' + this.originalName + ' changed their name back!</font></b>', 0);
+        Utils.watch.notify(Utils.nameIp(src) + " changed their name back to <b style='color: " + Utils.nameColor(src) + "'>" + this.originalName + "</b>.");
+        sys.changeName(src, this.originalName);
     });
 
     addCommand(1, "roulette", function (src, command, commandData, tar, chan) {

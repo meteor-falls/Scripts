@@ -185,8 +185,6 @@
         Fun.add("me", "To post a message with *** around it.", ["message"]);
         Fun.add("spin", "To play roulette if a game is going on.");
         Fun.add("attack", "To use a Pokémon attack on someone.", ["player"]);
-        Fun.add("superimp", "To superimp a name (<font size=2>Wraps your name in '~~'</font>)", ["name"]);
-        Fun.add("impoff", "To stop imping.");
         Fun.finish();
 
         Lists.Fun = Fun;
@@ -321,6 +319,7 @@
         Mod.add("floodignore", "Toggles [name]'s flood ignore privilege.", ["name"]);
         Mod.add("emoteperms", "To add/remove [name] from the emote permission list.", ["name"]);
         Mod.add("imp", "To change your name to [name].", ["name"]);
+        Mod.add("impoff", "To stop imping.");
         Mod.add("motd", "To change the Message of the Day to [message].", ["message"]);
         Mod.add("roulette", "To start or end a roulette (/spin) game. Types can include: pokemons, items, emotes, avatars. By default, all 4 are enabled. It is separated with a comma followed by a space (, ).", ["type1, type2"]);
         Mod.add("forcerules", "To show the rules to [player].", ["player"]);
