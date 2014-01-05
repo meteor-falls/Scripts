@@ -1275,10 +1275,17 @@
             timeunit = t[2] || "m",
             reason = t[3] || "No reason",
             time,
-            timestr;
+            timestr,
+            trueName = t[0];
 
         tar = sys.id(t[0]);
-        var tarip = sys.dbIp(t[0]);
+        var tarip;
+        if (tar !== undefined) {
+            trueName = Utils.realName(tar);
+            tarip = sys.ip(tar);
+        } else {
+            tarip = sys.dbIp(t[0]);
+        }
 
         if (!tarip) {
             bot.sendMessage(src, "Target doesn't exist!", chan);
@@ -1294,7 +1301,7 @@
             bot.sendMessage(src, "You dont have sufficient auth to tempban " + t[0] + ".", chan);
             return;
         }
-        if (!isNaN(bantime)) {
+        if (isNaN(bantime)) {
             bot.sendMessage(src, "Please specify a time.", chan);
             return;
         }
@@ -1317,7 +1324,7 @@
         }
 
         sys.sendHtmlAll("<font color=red><timestamp/><b> " + t[0] + " has been tempbanned by " + Utils.escapeHtml(sys.name(src)) + " for " + timestr + "!</font></b><br><font color=black><timestamp/><b> Reason:</b> " + Utils.escapeHtml(reason), 0);
-        Utils.mod.tempBan(t[0], time / 60);
+        Utils.mod.tempBan(trueName, time / 60);
     });
 
     addCommand(1, "untempban", function (src, command, commandData, tar, chan) {
