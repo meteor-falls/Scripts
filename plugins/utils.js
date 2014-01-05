@@ -840,7 +840,7 @@
             time = Math.round(time);
 
             sys.tempBan(name, time);
-            util.mod.kickIp(sys.ip(name));
+            util.mod.kickIp(sys.ip(sys.id(name)));
         };
 
         util.mod.kickIp = function (ip) {
