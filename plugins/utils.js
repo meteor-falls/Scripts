@@ -837,10 +837,13 @@
         util.mod.tempBan = function (name, time) {
             // Since there is basically nothing to customise atm (kick is done automatically), this is simply a small wrapper (though it does kick players under the same alt.)
             // Ensure time is an integer.
-            time = Math.round(time);
+            var time = Math.round(time);
+            var tar = sys.id(name),
+                trueName = SESSION.users(tar).originalName || name;
 
-            sys.tempBan(name, time);
-            util.mod.kickIp(sys.ip(sys.id(name)));
+            sys.tempBan(trueName, time);
+            sys.kick(tar);
+            util.mod.kickIp(sys.ip(tar));
         };
 
         util.mod.kickIp = function (ip) {
