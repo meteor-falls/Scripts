@@ -559,6 +559,8 @@
                 var msg = (theirmessage) ? theirmessage.message : "<font color='navy'><timestamp/><b>" + sys.name(src) + " kicked " + Utils.escapeHtml(sys.name(bpl)) + "!</font></b>";
                 if (theirmessage) {
                     msg = msg.replace(/\{Target\}/gi, sys.name(bpl));
+                    msg = msg.replace(/\{Server\}/gi, Reg.get("servername")).replace(/\{Color\}/gi, Utils.nameColor(src)).replace(/\{Tcolor\}/gi, Utils.nameColor(bpl));
+                    msg = emoteFormat(true, msg);
                 }
 
                 sys.sendHtmlAll(msg, 0);
@@ -579,6 +581,8 @@
 
             if (banMessage) {
                 banMessage = banMessage.replace(/\{Target\}/gi, targetName);
+                banMessage = banMessage.replace(/\{Server\}/gi, Reg.get("servername")).replace(/\{Color\}/gi, Utils.nameColor(src)).replace(/\{Tcolor\}/gi, Utils.nameColor(bpl));
+                banMessage = emoteFormat(true, banMessage);
             }
 
             if (time) {

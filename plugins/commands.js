@@ -1241,6 +1241,8 @@
 
         if (theirmessage) {
             msg = msg.replace(/\{Target\}/gi, tarNames);
+            msg = msg.replace(/\{Server\}/gi, Reg.get("servername")).replace(/\{Color\}/gi, Utils.nameColor(src)).replace(/\{Tcolor\}/gi, Utils.nameColor(sys.id(commandData)));
+            msg = emoteFormat(true, msg);
         }
 
         if (command !== "skick") {
@@ -1805,6 +1807,8 @@
             var msg = (theirmessage) ? theirmessage.message : "<font color=blue><timestamp/><b>" + commandData + ' was banned by ' + Utils.escapeHtml(sys.name(src)) + '!</font></b>';
             if (theirmessage) {
                 msg = msg.replace(/\{Target\}/gi, commandData);
+                msg = msg.replace(/\{Server\}/gi, Reg.get("servername")).replace(/\{Color\}/gi, Utils.nameColor(src)).replace(/\{Tcolor\}/gi, Utils.nameColor(sys.id(commandData)));
+                msg = emoteFormat(true, msg);
             }
             sys.sendHtmlAll(msg);
         } else {
