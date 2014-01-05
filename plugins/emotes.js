@@ -58,19 +58,19 @@ module.exports = function () {
             }
         }
 
-        function assignEmote(code) {
+        function assignEmote(emote, code) {
             return function ($1) {
-                if (limit && (emotes.length > 4 || lastEmote.indexOf(i) !== -1)) {
+                if (limit && (emotes.length > 4 || lastEmote.indexOf(emote) !== -1)) {
                     return Utils.escapeHtml($1);
                 }
 
-                emotes.push(i);
+                emotes.push(emote);
 
                 if (uobj && uobj.lastEmote) {
-                    uobj.lastEmote.push(i);
+                    uobj.lastEmote.push(emote);
                 }
 
-                if (marxmode) {
+                if (marxmode && emote !== "marx1" && emote !== "stalin1") {
                     marxState = 1 - marxState;
                     if (marxState === 1) {
                         code = EmoteList.marx1;
@@ -93,7 +93,7 @@ module.exports = function () {
 
             // Major speed up.
             if (message.indexOf(i) !== -1) {
-                message = message.replace(emoteRegex[i], assignEmote(EmoteList[i]));
+                message = message.replace(emoteRegex[i], assignEmote(i, EmoteList[i]));
             }
         }
 
