@@ -303,7 +303,7 @@
             var poUser = SESSION.users(src),
                 isMuted = poUser.muted,
                 originalName = poUser.originalName,
-                isLManager = Leaguemanager === originalName.toLowerCase(),
+                isLManager = League.Managers.indexOf(originalName.toLowerCase()) > -1,
                 messageToLowerCase = message.toLowerCase(),
                 myAuth = Utils.getAuth(src),
                 isOwner = myAuth === 3,
@@ -577,7 +577,7 @@
             }
 
             var targetName = sys.name(bpl), timeString;
-            var banMessage = Banmsgs[Utils.realName(src).toLowerCase()];
+            var banMessage = Banmsgs[Utils.realName(src).toLowerCase()].message;
 
             if (banMessage) {
                 banMessage = banMessage.replace(/\{Target\}/gi, targetName);
