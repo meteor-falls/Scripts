@@ -30,10 +30,14 @@
         this.version = this.data.version || currentVersion;
 
         this.save = function (key, value) {
-            if (this.data[key] !== value) {
-                this.data[key] = value;
-                this.saveData();
-            }
+            // Not sure if this solution is advantageous...
+            /*if (typeof(this.data[key]) === "string" && typeof(value) === "string") {
+                if (this.data[key] === value) {
+                    return;
+                }
+            }*/
+            this.data[key] = value;
+            this.saveData();
         };
 
         this.init = function (key, value) {
