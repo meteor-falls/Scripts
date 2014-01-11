@@ -1473,7 +1473,7 @@
         }
     });
 
-    addCommand(1, ["spacemode", "capsmode", "reversemode", "lolmode", "scramblemode", "colormode", "marxmode", "pewpewpew"], function (src, command, commandData, tar, chan) {
+    addCommand(1, ["spacemode", "capsmode", "reversemode", "lolmode", "scramblemode", "colormode", "marxmode", "comicmode", "pewpewpew"], function (src, command, commandData, tar, chan) {
         var word = (global[command] = !(global[command])) ? "on" : "off";
         var name = command.indexOf("mode") > -1 ? command.split("mode")[0] : command;
         name = name.substr(0, 1).toUpperCase() + name.substr(1);
