@@ -66,7 +66,10 @@ module.exports = function () {
 
                 emotes.push(emote);
 
-                Emotestats.stats[emote] = Emotestats.stats[emote] || {};
+                if (!Emotestats.stats.hasOwnProperty(emote)) {
+                    Emotestats.stats[emote] = 0;
+                }
+
                 Emotestats.stats[emote] += 1;
                 Reg.save('Emotestats', Emotestats);
 

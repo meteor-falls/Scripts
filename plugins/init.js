@@ -84,7 +84,7 @@ module.exports = {
             }
         }
 
-        if (!("stats" in Emotestats)) {
+        if (!Emotestats.hasOwnProperty("stats")) {
             Emotestats.stats = {};
             Emotestats.time = +sys.time();
         }
