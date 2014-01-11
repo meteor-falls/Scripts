@@ -1963,7 +1963,7 @@
         }
 
         var plugins = commandData.trim().split(" ");
-        var plugin, len, i;
+        var plugin, len, i, oldPlugin;
         for (i = 0, len = plugins.length; i < len; i += 1) {
             plugin = plugins[i];
             if (plugin.indexOf(".js") === -1) {
@@ -1973,10 +1973,13 @@
             bot.sendMessage(src, "Updating plugin " + plugin + "...", chan);
             Utils.watch.notify("Updating plugin " + plugin + "...");
             try {
+                oldPlugin = {exports: require.cache[plugin], meta: require.meta[plugin]};
                 require(plugin, true, false);
                 if (!require.reload(plugin)) {
                     bot.sendMessage(src, "Plugin " + plugin + " refused to reload. Perhaps there is a syntax error?", chan);
                     Utils.watch.notify("Plugin " + plugin + " refused to reload.");
+                    require.cache[plugin] = oldPlugin.exports;
+                    require.meta[plugin] = oldPlugin.meta;
                     continue;
                 }
 
