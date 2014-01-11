@@ -430,6 +430,8 @@
                 }
             }
 
+            message = Utils.youtube(message);
+
             var sendStr = "<font color='" + Utils.nameColor(src) + "'" + (comicmode ? " face='comic sans'" : "") + "><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + ": </b></font>" + message;
             if (sys.auth(src) > 0 && sys.auth(src) < 4) {
                 sendStr = "<font color='" + Utils.nameColor(src) + "'" + (comicmode ? " face='comic sans'" : "") + "><timestamp/>+<i><b>" + Utils.escapeHtml(sys.name(src)) + ": </b></i></font>" + message;

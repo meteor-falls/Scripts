@@ -22,6 +22,7 @@
             hr: /\[hr\]/gi,
             atag: /[a-z]{3,}:\/\/[^ ]+/gi
         };
+        var youtubeUrl = /.*(?:youtu.be\/|youtube.*v=|youtube.*\/embed\/|youtube.*\/v\/|youtube.*videos\/)([^#\&\?]*)/g;
         // Various importable stuff.
         var natureNames = {
             24: "Quirky</b> Nature",
@@ -585,6 +586,24 @@
             };
 
             return [formatTime(days, "day"), formatTime(hours, "hour"), formatTime(minutes, "minute"), formatTime(seconds, "second")].filter(this.stripEmpty);
+        };
+
+        util.youtube = function (msg) {
+            if (msg.indexOf('youtu') === -1) {
+                return msg;
+            }
+
+            // TODO: Multiple links
+            var match = msg.match(youtubeUrl);
+            if (match && match[1]) {
+                try {
+                    json = JSON.parse(sys.synchronousWebCall('https://gdata.youtube.com/feeds/api/videos/'+name+'?alt=json'));
+                    msg = msg.replace(match[0], "<a href='" + match[0] + "'>YouTube: " + json.entry.title.$t + "</a>");
+                } catch (ex) {
+                }
+            }
+
+            return msg;
         };
 
         // Creates an importable [array] for src's team, teamId.
