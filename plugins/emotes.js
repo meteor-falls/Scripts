@@ -7,6 +7,10 @@ module.exports = function () {
     var nonAlpha = /\W/;
     var marxState = 0;
 
+    sys.setTimer(function () {
+        Reg.save('Emotestats', Emotestats);
+    }, 300 * 1000, true); // 5 minutes
+
     addEmote = function (alts, code, priority) {
         var regex, alt, len, i;
 
@@ -66,13 +70,6 @@ module.exports = function () {
 
                 emotes.push(emote);
 
-                if (!Emotestats.stats.hasOwnProperty(emote)) {
-                    Emotestats.stats[emote] = 0;
-                }
-
-                Emotestats.stats[emote] += 1;
-                Reg.save('Emotestats', Emotestats);
-
                 if (uobj && uobj.lastEmote) {
                     uobj.lastEmote.push(emote);
                 }
@@ -103,6 +100,11 @@ module.exports = function () {
 
             // Major speed up.
             if (message.indexOf(i) !== -1) {
+                if (!Emotestats.stats.hasOwnProperty(i)) {
+                    Emotestats.stats[i] = 0;
+                }
+
+                Emotestats.stats[i] += 1;
                 message = message.replace(emoteRegex[i], assignEmote(i, EmoteList[i]));
             }
         }
