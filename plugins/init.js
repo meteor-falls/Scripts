@@ -69,6 +69,7 @@ module.exports = {
             "Welmsgs": "Welmsgs",
             "Emotetoggles": "Emotetoggles",
             "Emoteperms": "Emoteperms",
+            "Emotestats": "Emotestats",
             "Feedmons": "Feedmon",
             "League": "League"
         };
@@ -81,6 +82,11 @@ module.exports = {
             } catch (e) {
                 global[i] = {};
             }
+        }
+
+        if (!("stats" in Emotestats)) {
+            Emotestats.stats = {};
+            Emotestats.time = +sys.time();
         }
 
         hasEmotePerms = function (name) {

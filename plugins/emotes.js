@@ -66,6 +66,10 @@ module.exports = function () {
 
                 emotes.push(emote);
 
+                Emotestats.stats[emote] = Emotestats.stats[emote] || {};
+                Emotestats.stats[emote] += 1;
+                Reg.save('Emotestats', Emotestats);
+
                 if (uobj && uobj.lastEmote) {
                     uobj.lastEmote.push(emote);
                 }
