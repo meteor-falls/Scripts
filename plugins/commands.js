@@ -1765,12 +1765,13 @@
     });
 
     addCommand(2, ["ban", "sban"], function (src, command, commandData, tar, chan) {
-        if (!sys.dbIp(commandData)) {
+        var ip = sys.dbIp(commandData);
+        if (!ip) {
             bot.sendMessage(src, "No player exists by this name!", chan);
             return;
         }
-        var ip = sys.dbIp(commandData);
-        if (this.myAuth <= Utils.getAuth(commandData)) {
+        
+        if (this.myAuth <= sys.maxAuth(ip)) {
             bot.sendMessage(src, "You can't ban this person. What are you thinking!", chan);
             return;
         }
