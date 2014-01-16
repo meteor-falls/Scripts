@@ -60,15 +60,15 @@
     }
 
     function addChannelModCommand(names, cb, flags) {
-        addCommand(0, names, cb, (flags || 0) | addCommand.flags.CHANNELMODS);
+        addCommand(1, names, cb, (flags || 0) | addCommand.flags.CHANNELMODS);
     }
 
     function addChannelAdminCommand(names, cb, flags) {
-        addCommand(0, names, cb, (flags || 0) | addCommand.flags.CHANNELADMINS);
+        addCommand(2, names, cb, (flags || 0) | addCommand.flags.CHANNELADMINS);
     }
 
     function addChannelOwnerCommand(names, cb, flags) {
-        addCommand(0, names, cb, (flags || 0) | addCommand.flags.CHANNELOWNERS);
+        addCommand(3, names, cb, (flags || 0) | addCommand.flags.CHANNELOWNERS);
     }
 
     function canUseCommand(src, command, chan) {
