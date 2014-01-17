@@ -264,7 +264,7 @@
             ghosts = 0;
         for (xlist in playerIdList) {
             c = playerIdList[xlist];
-            if (c !== src && ip === sys.ip(c)) {
+            if (ip === sys.ip(c) && sys.loggedIn(c) && c !== src) {
                 sys.kick(c);
                 ghosts += 1;
             }
