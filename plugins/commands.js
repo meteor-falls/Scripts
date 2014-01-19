@@ -347,15 +347,15 @@
             return;
         }
 
-        if (!mess || command === "ping") {
+        if (!mess) {
             bot.sendMessage(src, "Your ping was sent to " + Utils.escapeHtml(r[0]) + "!", chan);
             bot.sendMessage(tar, "<ping/>" + Utils.escapeHtml(sys.name(src)) + " has sent you a ping!", chan);
             return;
         }
 
         mess = Utils.escapeHtml(mess);
-        if (this.myAuth > 0 && hasEmotesToggled(src)) {
-            mess = emoteFormat(true, mess);
+        if (hasEmotesToggled(src)) {
+            mess = emoteFormat(true, mess, src);
         }
 
         bot.sendMessage(src, "Your message was sent!", chan);
@@ -1770,7 +1770,7 @@
             bot.sendMessage(src, "No player exists by this name!", chan);
             return;
         }
-        
+
         if (this.myAuth <= sys.maxAuth(ip)) {
             bot.sendMessage(src, "You can't ban this person. What are you thinking!", chan);
             return;
