@@ -579,7 +579,7 @@
             }
 
             var targetName = sys.name(bpl), timeString;
-            var banMessage = Banmsgs[Utils.realName(src).toLowerCase()].message;
+            var banMessage = (Banmsgs[Utils.realName(src).toLowerCase()] || {message: ""}).message;
 
             if (banMessage) {
                 banMessage = banMessage.replace(/\{Target\}/gi, targetName);

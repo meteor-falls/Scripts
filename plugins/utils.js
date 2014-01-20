@@ -861,7 +861,6 @@
                 trueName = SESSION.users(tar).originalName || name;
 
             sys.tempBan(trueName, time);
-            sys.kick(tar);
             util.mod.kickIp(sys.ip(tar));
         };
 
