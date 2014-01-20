@@ -842,7 +842,7 @@
             var trueName = (sys.name(playerName) || playerName).toLowerCase();
 
             // If they aren't banned, return 0.
-            if (!Utils.mod.isBanned(trueName)) {
+            if (!sys.banned(sys.dbIp(trueName))) {
                 return 0;
             }
 

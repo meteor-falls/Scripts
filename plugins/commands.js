@@ -1295,7 +1295,7 @@
             bot.sendMessage(src, "Target doesn't exist!", chan);
             return;
         }
-        if (!Utils.mod.tempBanTime(tip)) {
+        if (Utils.mod.tempBanTime(tip) === 0) {
             bot.sendMessage(src, "This person isn't tempbanned.", chan);
             return;
         }
