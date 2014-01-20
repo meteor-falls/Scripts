@@ -664,6 +664,7 @@
                 if (poUser.caps >= limit && !poUser.muted) {
                     capsbot.sendAll(sys.name(src) + " was muted for 5 minutes for CAPS.", 0);
                     poUser.muted = true;
+                    poUser.caps = 0;
                     Mutes[srcip] = {
                         "by": capsbot.name,
                         "mutedname": sys.name(src),
