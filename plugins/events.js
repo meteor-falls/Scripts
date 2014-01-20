@@ -211,19 +211,19 @@
                 bot.sendMessage(src, "You are muted for " + muteStr + ". By: " + myMute.by + ". Reason: " + myMute.reason, defaultChan);
             }
 
-            if (!poUser.muted) {
-                var hasWelcomeMessage = Welmsgs.hasOwnProperty(sys.name(src).toLowerCase());
-                if (sys.numPlayers() < 30 && !hasWelcomeMessage && os !== "android") {
+            var hasWelcomeMessage = Welmsgs.hasOwnProperty(sys.name(src).toLowerCase());
+            if (!hasWelcomeMessage || poUser.muted) {
+                if (sys.numPlayers() < 30 && os !== "android") {
                     Utils.loginMessage(sys.name(src), Utils.nameColor(src));
-                } else if (hasWelcomeMessage) {
-                    var theirmessage = Welmsgs[sys.name(src).toLowerCase()];
-                    var msg = (theirmessage) ? theirmessage.message : Utils.loginMessage(sys.name(src), Utils.nameColor(src));
-                    if (theirmessage) {
-                        msg = msg.replace(/\{Server\}/gi, Reg.get("servername")).replace(/\{Color\}/gi, Utils.nameColor(src));
-                        msg = emoteFormat(true, msg);
-                    }
-                    sys.sendHtmlAll(msg, 0);
                 }
+            } else {
+                var theirmessage = Welmsgs[sys.name(src).toLowerCase()];
+                var msg = (theirmessage) ? theirmessage.message : Utils.loginMessage(sys.name(src), Utils.nameColor(src));
+                if (theirmessage) {
+                    msg = msg.replace(/\{Server\}/gi, Reg.get("servername")).replace(/\{Color\}/gi, Utils.nameColor(src));
+                    msg = emoteFormat(true, msg);
+                }
+                sys.sendHtmlAll(msg, 0);
             }
 
             var i;
