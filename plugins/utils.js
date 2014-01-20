@@ -858,10 +858,10 @@
             // Ensure time is an integer.
             var time = Math.round(time);
             var tar = sys.id(name),
-                trueName = SESSION.users(tar).originalName || name;
+                trueName = (SESSION.users(tar) || {originalName: name}).originalName || name;
 
             sys.tempBan(trueName, time);
-            util.mod.kickIp(sys.ip(tar));
+            util.mod.kickIp(sys.ip(tar) || sys.dbIp(name));
         };
 
         util.mod.kickIp = function (ip) {
