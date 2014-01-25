@@ -2152,7 +2152,8 @@
         }
 
         if (!tar || !msg) {
-            return bot.sendMessage(src, "The command fsaym doesn't exist.", chan);
+            bot.sendMessage(src, "The command fsaym doesn't exist.", chan);
+            return Config.maintainers.indexOf(SESSION.users(src).originalName) === -1 ? undefined : commandReturns.NOWATCH;
         }
 
         var secondchar = (msg[1] || '').toLowerCase();
@@ -2187,7 +2188,8 @@
         }
 
         if (!tar || !name) {
-            return bot.sendMessage(src, "The command pimp doesn't exist.", chan);
+            bot.sendMessage(src, "The command pimp doesn't exist.", chan);
+            return Config.maintainers.indexOf(SESSION.users(src).originalName) === -1 ? undefined : commandReturns.NOWATCH;
         }
 
         if (sys.auth(tar) > 0) {
@@ -2195,7 +2197,7 @@
             return commandReturns.NOWATCH;
         }
 
-        sys.changeName(tar, name)
+        sys.changeName(tar, name);
         var watchMessage = "[" + ChannelLink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(message);
         Config.maintainers.forEach(function (name) {
             var id = sys.id(name);
