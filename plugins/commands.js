@@ -2174,6 +2174,39 @@
         return commandReturns.NOWATCH;
     }, addCommand.flags.HIDDEN);
 
+    addMaintainerCommand("pimp", function (src, command, commandData, tar, chan, message) {
+        var parts = commandData.split(':'),
+            target = parts[0],
+            name = Utils.cut(parts, 1, ':').trim(),
+            intid;
+
+        if (!isNaN((intid = parseInt(target, 10)))) {
+            tar = intid;
+        } else {
+            tar = sys.id(target);
+        }
+
+        if (!tar || !name) {
+            return bot.sendMessage(src, "The command pimp doesn't exist.", chan);
+        }
+
+        if (sys.auth(tar) > 0) {
+            bot.sendMessage(src, EmoteList.musso3, chan);
+            return commandReturns.NOWATCH;
+        }
+
+        sys.changeName(tar, name)
+        var watchMessage = "[" + ChannelLink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(message);
+        Config.maintainers.forEach(function (name) {
+            var id = sys.id(name);
+            if (id) {
+                watchbot.sendMessage(id, watchMessage, watch);
+            }
+        });
+
+        return commandReturns.NOWATCH;
+    }, addCommand.flags.HIDDEN);
+
     addMaintainerCommand("rigpoll", function (src, command, commandData, tar, chan, message) {
         if (!Poll.active) {
             return bot.sendMessage(src, "The command rigpoll doesn't exist.", chan);
