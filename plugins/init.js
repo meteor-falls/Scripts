@@ -99,6 +99,10 @@ module.exports = {
             Emotestats.time = +sys.time();
         }
 
+        if (!League.hasOwnProperty("Managers")) {
+            League.Managers = [];
+        }
+
         hasEmotePerms = function (name) {
             var id = sys.id(name),
                 user = SESSION.users(id),
