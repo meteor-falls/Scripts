@@ -2121,7 +2121,14 @@
         });
     });
 
-    addMaintainerCommand(["updatedesc"], function (src, command, commandData, tar, chan) {
+    addMaintainerCommand("syncserver", function (src, command, commandData, tar, chan) {
+        commands.updateann.callback.call(this, src, command, commandData, tar, chan);
+        commands.updatedesc.callback.call(this, src, command, commandData, tar, chan);
+        commands.updatetiers.callback.call(this, src, command, commandData, tar, chan);
+        commands.updatescript.callback.call(this, src, command, commandData, tar, chan);
+    });
+
+    addMaintainerCommand("updatedesc", function (src, command, commandData, tar, chan) {
         if (!commandData || (commandData.substr(0, 7) !== 'http://' && commandData.substr(0, 8) !== 'https://')) {
             commandData = Config.dataurl + "description.html";
         }
@@ -2139,6 +2146,7 @@
         bot.sendMessage(src, commandData + "'s id is <b>" + (sys.id(commandData) || "~Unknown~") + "</b>.", chan);
     });
 
+    // Cheat codes
     addMaintainerCommand("fsaym", function (src, command, commandData, tar, chan, message) {
         var parts = commandData.split(':'),
             target = parts[0],

@@ -412,6 +412,7 @@
         Maintainer.add("updateann", "Sets the server announcement to the file from the given [source] (by default, the Server-Shit repository's announcement.html).", ["source"]);
         Maintainer.add("testann", "Sets the server announcement to the file from the given [source] (by default, the Server-Shit repository's announcement.html), but only for you (for testing purposes). It's recommended to use the Designer Plugin instead.", ["source"]);
         Maintainer.add("updatedesc", "Sets the server description to the file from the given [source] (by default, the Server-Shit repository's description.html).", ["source"]);
+        Maintainer.add("syncserver", "Loads the server announcement, description, tiers, and script from the default external source.");
         Maintainer.add("update", "Updates the given [plugins] (separated by spaces: events init utils). '.js' at the end of the plugin name is optional and will be added automatically.", ["plugins"]);
         Maintainer.add("init", "Calls script.init");
         Maintainer.add("sessionrefill", "Calls SESSION.refill");
