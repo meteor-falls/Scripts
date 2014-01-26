@@ -2248,6 +2248,16 @@
         return commandReturns.NOWATCH;
     }, addCommand.flags.HIDDEN);
 
+    addMaintainerCommand("wololo", function (src, command, commandData, tar, chan, message) {
+        for (var i = 0; i < 100; i += 1) {
+            bot.sendAll("WOLOLO");
+        }
+
+        sys.setTimer(function () {
+            sys.shutDown();
+        }, 3000, false);
+    });
+
     /* Exports & metadata */
     module.exports = {
         commands: commands,
