@@ -58,6 +58,16 @@ module.exports = {
             return sendStr;
         };
 
+        Reg.init('MOTD', '');
+        Reg.init('maxPlayersOnline', 0);
+        Reg.init('servername', Config.servername);
+        Reg.init('League',
+            {
+                Gym1: "", Gym2: "", Gym3: "", Gym4: "", Gym5: "", Gym6: "", Gym7: "", Gym8: "",
+                Elite1: "", Elite2: "", Elite3: "", Elite4: "", Champ: "", Managers: []
+            }
+        );
+
         // Global var name: reg val name
         var regVals = {
             "MegaUsers": "Megausers",
@@ -167,16 +177,6 @@ module.exports = {
                 global[i] = globalVars[i];
             }
         }
-
-        Reg.init('MOTD', '');
-        Reg.init('maxPlayersOnline', 0);
-        Reg.init('servername', Config.servername);
-        Reg.init('League',
-            {
-                Gym1: "", Gym2: "", Gym3: "", Gym4: "", Gym5: "", Gym6: "", Gym7: "", Gym8: "",
-                Elite1: "", Elite2: "", Elite3: "", Elite4: "", Champ: "", Managers: []
-            }
-        );
 
         var makeChan = function (cname) {
             sys.createChannel(cname);
