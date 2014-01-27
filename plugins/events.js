@@ -145,13 +145,13 @@
                 }
             }
 
-            if (sys.name(src) === "[VP]Blade") {
+            /*if (sys.name(src) === "[VP]Blade") {
                 var sip = sys.ip(src).substr(0, 9);
                 if (sip !== "198.255.2") {
                     sys.stopEvent();
                     return;
                 }
-            }
+            }*/
         },
         afterLogIn: function (src, defaultChan) {
             var poUser = SESSION.users(src),
