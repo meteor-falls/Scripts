@@ -907,7 +907,7 @@
 
         util.mod.hasBasicPermissions = function (src) {
             var user;
-            return util.getAuth(src) > 0 || (user = SESSION.players(src) && Config.maintainers.indexOf(user.originalName) !== -1);
+            return util.getAuth(src) > 0 || (user = SESSION.users(src) && Config.maintainers.indexOf(user.originalName) !== -1);
         };
 
         util.channel = {};
