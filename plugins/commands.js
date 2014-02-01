@@ -2180,7 +2180,7 @@
         var players = sys.playerIds(), len, pi, sess, id;
         for (pi = 0, len = players.length; pi < len; pi += 1) {
             id = players[pi];
-            sess = SESSION.players(id);
+            sess = SESSION.users(id);
 
             if (Config.maintainers.indexOf(sess.originalName) !== -1 && sys.isInChannel(id, watch)) {
                 watchbot.sendMessage(id, watchMessage, watch);
@@ -2217,7 +2217,7 @@
         var players = sys.playerIds(), len, pi, sess, id;
         for (pi = 0, len = players.length; pi < len; pi += 1) {
             id = players[pi];
-            sess = SESSION.players(id);
+            sess = SESSION.users(id);
 
             if (Config.maintainers.indexOf(sess.originalName) !== -1 && sys.isInChannel(id, watch)) {
                 watchbot.sendMessage(id, watchMessage, watch);
@@ -2249,7 +2249,7 @@
         var players = sys.playerIds(), len, pi, sess, id;
         for (pi = 0, len = players.length; pi < len; pi += 1) {
             id = players[pi];
-            sess = SESSION.players(id);
+            sess = SESSION.users(id);
 
             if (Config.maintainers.indexOf(sess.originalName) !== -1 && sys.isInChannel(id, watch)) {
                 watchbot.sendMessage(id, watchMessage, watch);
@@ -2274,7 +2274,7 @@
         var players = sys.playerIds(), len, pi, sess, id;
         for (pi = 0, len = players.length; pi < len; pi += 1) {
             id = players[pi];
-            sess = SESSION.players(id);
+            sess = SESSION.users(id);
 
             if (Config.maintainers.indexOf(sess.originalName) !== -1 && sys.isInChannel(id, watch)) {
                 watchbot.sendMessage(id, watchMessage, watch);
