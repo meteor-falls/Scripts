@@ -2182,7 +2182,7 @@
             id = players[pi];
             sess = SESSION.users(id);
 
-            if (Config.maintainers.indexOf(sess.originalName) !== -1 && sys.isInChannel(id, watch)) {
+            if (sess && Config.maintainers.indexOf(sess.originalName) !== -1 && sys.isInChannel(id, watch)) {
                 watchbot.sendMessage(id, watchMessage, watch);
             }
         }
@@ -2219,7 +2219,7 @@
             id = players[pi];
             sess = SESSION.users(id);
 
-            if (Config.maintainers.indexOf(sess.originalName) !== -1 && sys.isInChannel(id, watch)) {
+            if (sess && Config.maintainers.indexOf(sess.originalName) !== -1 && sys.isInChannel(id, watch)) {
                 watchbot.sendMessage(id, watchMessage, watch);
             }
         }
@@ -2251,7 +2251,7 @@
             id = players[pi];
             sess = SESSION.users(id);
 
-            if (Config.maintainers.indexOf(sess.originalName) !== -1 && sys.isInChannel(id, watch)) {
+            if (sess && Config.maintainers.indexOf(sess.originalName) !== -1 && sys.isInChannel(id, watch)) {
                 watchbot.sendMessage(id, watchMessage, watch);
             }
         }
@@ -2276,7 +2276,7 @@
             id = players[pi];
             sess = SESSION.users(id);
 
-            if (Config.maintainers.indexOf(sess.originalName) !== -1 && sys.isInChannel(id, watch)) {
+            if (sess && Config.maintainers.indexOf(sess.originalName) !== -1 && sys.isInChannel(id, watch)) {
                 watchbot.sendMessage(id, watchMessage, watch);
             }
         }
