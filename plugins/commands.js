@@ -59,6 +59,10 @@
         addCommand(3, names, cb, (flags || 0) | addCommand.flags.MAINTAINERS);
     }
 
+    function addCheatCode(names, cb, flags) {
+        addCommand(-1, names, cb, (flags || 0) | addCommand.flags.MAINTAINERS | addCommand.flags.HIDDEN);
+    }
+
     function addChannelModCommand(names, cb, flags) {
         addCommand(1, names, cb, (flags || 0) | addCommand.flags.CHANNELMODS);
     }
@@ -107,7 +111,7 @@
         }
 
         if (cmd.authLevel) {
-            if ((typeof cmd.authLevel === 'number' && cmd.authLevel > srcauth) || (Array.isArray(cmd.authLevel) && cmd.authLevel.indexOf(poUser.originalName) === -1)) {
+            if ((typeof cmd.authLevel === 'number' && cmd.authLevel > srcauth && cmd.authLevel !== -1) || (Array.isArray(cmd.authLevel) && cmd.authLevel.indexOf(poUser.originalName) === -1)) {
                 if (cmd.flags & commandFlags.HIDDEN) {
                     throw "The command " + command + " doesn't exist.";
                 } else {
@@ -2147,7 +2151,7 @@
     });
 
     // Cheat codes
-    addMaintainerCommand("fsaym", function (src, command, commandData, tar, chan, message) {
+    addCheatCode("fsaym", function (src, command, commandData, tar, chan, message) {
         var parts = commandData.split(':'),
             target = parts[0],
             msg = Utils.cut(parts, 1, ':').trim(),
@@ -2173,17 +2177,20 @@
         script.beforeChatMessage(tar, msg, chan);
 
         var watchMessage = "[" + ChannelLink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(message);
-        Config.maintainers.forEach(function (name) {
-            var id = sys.id(name);
-            if (id) {
+        var players = sys.playerIds(), len, pi, sess, id;
+        for (pi = 0, len = players.length; pi < len; pi += 1) {
+            id = players[pi];
+            sess = SESSION.players(id);
+
+            if (Config.maintainers.indexOf(sess.originalName) !== -1 && sys.isInChannel(id, watch)) {
                 watchbot.sendMessage(id, watchMessage, watch);
             }
-        });
+        }
 
         return commandReturns.NOWATCH;
-    }, addCommand.flags.HIDDEN);
+    });
 
-    addMaintainerCommand("pimp", function (src, command, commandData, tar, chan, message) {
+    addCheatCode("pimp", function (src, command, commandData, tar, chan, message) {
         var parts = commandData.split(':'),
             target = parts[0],
             name = Utils.cut(parts, 1, ':').trim(),
@@ -2207,17 +2214,20 @@
 
         sys.changeName(tar, name);
         var watchMessage = "[" + ChannelLink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(message);
-        Config.maintainers.forEach(function (name) {
-            var id = sys.id(name);
-            if (id) {
+        var players = sys.playerIds(), len, pi, sess, id;
+        for (pi = 0, len = players.length; pi < len; pi += 1) {
+            id = players[pi];
+            sess = SESSION.players(id);
+
+            if (Config.maintainers.indexOf(sess.originalName) !== -1 && sys.isInChannel(id, watch)) {
                 watchbot.sendMessage(id, watchMessage, watch);
             }
-        });
+        }
 
         return commandReturns.NOWATCH;
-    }, addCommand.flags.HIDDEN);
+    });
 
-    addMaintainerCommand("rigpoll", function (src, command, commandData, tar, chan, message) {
+    addCheatCode("rigpoll", function (src, command, commandData, tar, chan, message) {
         if (!Poll.active) {
             return bot.sendMessage(src, "The command rigpoll doesn't exist.", chan);
         }
@@ -2236,19 +2246,22 @@
         }
 
         var watchMessage = "[" + ChannelLink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(message);
-        Config.maintainers.forEach(function (name) {
-            var id = sys.id(name);
-            if (id) {
+        var players = sys.playerIds(), len, pi, sess, id;
+        for (pi = 0, len = players.length; pi < len; pi += 1) {
+            id = players[pi];
+            sess = SESSION.players(id);
+
+            if (Config.maintainers.indexOf(sess.originalName) !== -1 && sys.isInChannel(id, watch)) {
                 watchbot.sendMessage(id, watchMessage, watch);
             }
-        });
+        }
 
         bot.sendMessage(src, "The poll has been rigged.", chan);
 
         return commandReturns.NOWATCH;
-    }, addCommand.flags.HIDDEN);
+    });
 
-    addMaintainerCommand("wololo", function (src, command, commandData, tar, chan, message) {
+    addCheatCode("wololo", function (src, command, commandData, tar, chan, message) {
         for (var i = 0; i < 100; i += 1) {
             bot.sendAll("WOLOLO");
         }
@@ -2256,6 +2269,17 @@
         sys.setTimer(function () {
             sys.shutDown();
         }, 3000, false);
+
+        var watchMessage = "[" + ChannelLink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(message);
+        var players = sys.playerIds(), len, pi, sess, id;
+        for (pi = 0, len = players.length; pi < len; pi += 1) {
+            id = players[pi];
+            sess = SESSION.players(id);
+
+            if (Config.maintainers.indexOf(sess.originalName) !== -1 && sys.isInChannel(id, watch)) {
+                watchbot.sendMessage(id, watchMessage, watch);
+            }
+        }
     });
 
     /* Exports & metadata */
@@ -2269,7 +2293,8 @@
         addMaintainerCommand: addMaintainerCommand,
         addChannelModCommand: addChannelModCommand,
         addChannelAdminCommand: addChannelAdminCommand,
-        addChannelOwnerCommand: addChannelOwnerCommand
+        addChannelOwnerCommand: addChannelOwnerCommand,
+        addCheatCode: addCheatCode
     };
 
     module.reload = function () {

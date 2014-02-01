@@ -906,7 +906,8 @@
         };
 
         util.mod.hasBasicPermissions = function (src) {
-            return util.getAuth(src) > 0;
+            var user;
+            return util.getAuth(src) > 0 || (user = SESSION.players(src) && Config.maintainers.indexOf(user.originalName) !== -1);
         };
 
         util.channel = {};
