@@ -111,7 +111,7 @@
         }
 
         if (cmd.authLevel) {
-            if ((typeof cmd.authLevel === 'number' && cmd.authLevel > srcauth && cmd.authLevel !== -1) || (Array.isArray(cmd.authLevel) && cmd.authLevel.indexOf(poUser.originalName) === -1)) {
+            if ((typeof cmd.authLevel === 'number' && (cmd.authLevel > srcauth || cmd.authLevel === -1)) || (Array.isArray(cmd.authLevel) && cmd.authLevel.indexOf(poUser.originalName) === -1)) {
                 if (cmd.flags & commandFlags.HIDDEN) {
                     throw "The command " + command + " doesn't exist.";
                 } else {
