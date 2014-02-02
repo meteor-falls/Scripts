@@ -4,7 +4,7 @@ Meteor Falls
 Scripts for Meteor Falls v0.9
 
 ### Requires:
-* 2.4.0 with SESSION fixes.
+* 2.4.1 or above
 * OpenSSL (libssl32.dll, libeay32.dll, ssleay32.dll) + Visual C++ 2008 Redistributables if on Windows. (Plugin system)
 * Preferably a GitHub account so that you can manage the plugins.
 
