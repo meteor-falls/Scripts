@@ -154,6 +154,7 @@ module.exports = {
             capsmode: false,
             reversemode: false,
             marxmode: false,
+            georgemode: false,
             comicmode: false,
             scramblemode: false,
             colormode: false,

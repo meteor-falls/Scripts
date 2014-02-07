@@ -84,7 +84,10 @@ module.exports = function () {
                         code = EmoteList.lenin1;
                         marxState = 0;
                     }
+                } else if (georgemode) {
+                    code = EmoteList.george1;
                 }
+                
                 return code;
             };
         }
