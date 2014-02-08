@@ -1213,7 +1213,7 @@
 
         if (theirmessage) {
             msg = msg.replace(/\{Target\}/gi, tarNames);
-            msg = msg.replace(/\{Server\}/gi, Reg.get("servername")).replace(/\{Color\}/gi, Utils.nameColor(src)).replace(/\{Tcolor\}/gi, Utils.nameColor(sys.id(commandData)));
+            msg = msg.replace(/\{Server\}/gi, Reg.get("servername")).replace(/\{Color\}/gi, Utils.nameColor(src)).replace(/\{Tcolor\}/gi, Utils.nameColor(sys.id(t[0])));
             msg = emoteFormat(true, msg);
         }
 
