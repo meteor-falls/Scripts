@@ -1885,23 +1885,6 @@
         sys.changeAuth(sys.id(name), level);
     });
 
-    addCommand(3, "eval", function (src, command, commandData, tar, chan) {
-        bot.sendMessage(src, "You evaluated: " + Utils.escapeHtml(commandData), chan);
-        try {
-            var res = sys.eval(commandData);
-            sys.sendHtmlMessage(src, "<timestamp/><b>Evaluation Check: </b><font color='green'>OK</font>", chan);
-            sys.sendHtmlMessage(src, "<timestamp/><b>Result: </b> " + res, chan);
-            Utils.watch.notify("Result: " + res);
-        } catch (error) {
-            sys.sendHtmlMessage(src, "<timestamp/><b>Evaluation Check: </b><font color='red'>" + error + "</font>", chan);
-            Utils.watch.notify("Error: " + error);
-            if (error.backtrace) {
-                sys.sendHtmlMessage(src, "<timestamp/><b>Backtrace:</b> <br/> " + error.backtrace.join("<br/>"), chan);
-                Utils.watch.notify("Backtrace: " + error.backtrace.join("<br/>"));
-            }
-        }
-    });
-
     addCommand(3, "htmlchat", function (src, command, commandData, tar, chan) {
         if (htmlchat) {
             bot.sendMessage(src, "HTML Chat has been disabled!", chan);
@@ -2146,8 +2129,21 @@
         });
     });
 
-    addMaintainerCommand("id", function (src, command, commandData, tar, chan) {
-        bot.sendMessage(src, commandData + "'s id is <b>" + (sys.id(commandData) || "~Unknown~") + "</b>.", chan);
+    addMaintainerCommand("eval", function (src, command, commandData, tar, chan) {
+        bot.sendMessage(src, "You evaluated: " + Utils.escapeHtml(commandData), chan);
+        try {
+            var res = sys.eval(commandData);
+            sys.sendHtmlMessage(src, "<timestamp/><b>Evaluation Check: </b><font color='green'>OK</font>", chan);
+            sys.sendHtmlMessage(src, "<timestamp/><b>Result: </b> " + res, chan);
+            Utils.watch.notify("Result: " + res);
+        } catch (error) {
+            sys.sendHtmlMessage(src, "<timestamp/><b>Evaluation Check: </b><font color='red'>" + error + "</font>", chan);
+            Utils.watch.notify("Error: " + error);
+            if (error.backtrace) {
+                sys.sendHtmlMessage(src, "<timestamp/><b>Backtrace:</b> <br/> " + error.backtrace.join("<br/>"), chan);
+                Utils.watch.notify("Backtrace: " + error.backtrace.join("<br/>"));
+            }
+        }
     });
 
     // Cheat codes
