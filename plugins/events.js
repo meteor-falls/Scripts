@@ -446,10 +446,14 @@
             }
 
             sys.stopEvent();
-            sys.sendHtmlAll(sendStr, chan);
-
-            if (chan !== watch) {
-                Utils.watch.message(src, "Message", originalMessage, chan);
+            if (poUser.semuted) {
+                sys.sendHtmlMessage(src, sendStr, chan);
+                Utils.watch.message(src, "Sessage", originalMessage, chan);
+            } else {
+                sys.sendHtmlAll(sendStr, chan);
+                if (chan !== watch) {
+                    Utils.watch.message(src, "Message", originalMessage, chan);
+                }
             }
 
             script.afterChatMessage(src, originalMessage, chan);

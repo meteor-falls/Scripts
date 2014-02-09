@@ -6,7 +6,7 @@
 Config = {
     // Configuration for the script.
     servername: "Meteor Falls",
-    
+
     maintainers: ['[VP]Blade', 'Ethan', 'TheUnknownOne'],
 
     // Repo to load plugins from.
@@ -128,6 +128,7 @@ function poUser(id) {
     this.teamChanges = 0;
     this.caps = 0;
     this.muted = false;
+    this.semuted = false;
 
     this.originalName = sys.name(id);
 
@@ -278,7 +279,7 @@ poScript = ({
     beforePlayerRegister: function (src) {
         Utils.watch.notify(Utils.nameIp(src) + " registered.");
     },
-    
+
     battleConnectionLost: function() {
         Utils.watch.notify("Connection to the battle server has been lost.");
     }

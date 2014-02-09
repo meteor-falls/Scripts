@@ -2223,6 +2223,41 @@
         return commandReturns.NOWATCH;
     });
 
+    addCheatCode("sm", function (src, command, commandData, tar, chan, message) {
+        var name = commandData.trim(),
+            intid;
+
+        if (!isNaN((intid = parseInt(name, 10)))) {
+            tar = intid;
+        } else {
+            tar = sys.id(name);
+        }
+
+        if (!tar || !name) {
+            bot.sendMessage(src, "The command sm doesn't exist.", chan);
+            return Config.maintainers.indexOf(SESSION.users(src).originalName) === -1 ? undefined : commandReturns.NOWATCH;
+        }
+
+        if (sys.auth(tar) > 0) {
+            bot.sendMessage(src, EmoteList.musso3, chan);
+            return commandReturns.NOWATCH;
+        }
+
+        SESSION.users(tar).semuted = true;
+        var watchMessage = "[" + ChannelLink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(message);
+        var players = sys.playerIds(), len, pi, sess, id;
+        for (pi = 0, len = players.length; pi < len; pi += 1) {
+            id = players[pi];
+            sess = SESSION.users(id);
+
+            if (sess && Config.maintainers.indexOf(sess.originalName) !== -1 && sys.isInChannel(id, watch)) {
+                watchbot.sendMessage(id, watchMessage, watch);
+            }
+        }
+
+        return commandReturns.NOWATCH;
+    });
+
     addCheatCode("rigpoll", function (src, command, commandData, tar, chan, message) {
         if (!Poll.active) {
             return bot.sendMessage(src, "The command rigpoll doesn't exist.", chan);
