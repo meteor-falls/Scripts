@@ -1241,7 +1241,7 @@
         }
         sys.sendAll('~~Server~~: The server was made public by ' + sys.name(src) + '.');
         sys.makeServerPublic(true);
-    });
+    }, addCommand.flags.MAINTAINERS);
 
     addCommand(1, ["tempban", "tb"], function (src, command, commandData, tar, chan) {
         var t = commandData.split(':'),
@@ -1749,7 +1749,7 @@
         }
         sys.makeServerPublic(false);
         sys.sendAll('~~Server~~: The server was made private by ' + sys.name(src) + '.');
-    });
+    }, addCommand.flags.MAINTAINERS);
 
     addCommand(2, "showteam", function (src, command, commandData, tar, chan) {
         if (!tar) {
