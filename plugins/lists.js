@@ -329,6 +329,7 @@
         Mod.add("warn", "To send a warning to [player] with reason [reason]. If [reason] is undo, the warning is undone. [reason] is only required when the target hasn't been infracted. Further usage of the command will result in a kick/mute (5 minutes) of the player.", ["player", "reason"]);
         Mod.add("getmotd", "To get the MOTD (including HTML).");
         Mod.add("public", "To make the server public.");
+        Mod.add("regfix", "Re-connects the server to the registry.");
         Mod.add("poll", "To start a poll. You must specify at least 2 options.", ["subject", "option1*option2*option..."]);
         Mod.add("closepoll", "To close the current poll.");
         Mod.add("onos", "Gives you the list of players on the given [os] (windows, mac, linux, android, webclient).", ["os"]);

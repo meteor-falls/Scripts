@@ -1242,6 +1242,12 @@
         sys.makeServerPublic(true);
     }, addCommand.flags.MAINTAINERS);
 
+    addCommand(1, "regfix", function (src, command, commandData, tar, chan) {
+        sys.makeServerPublic(false);
+        sys.makeServerPublic(true);
+        sys.sendAll('~~Server~~: ' + sys.name(src) + ' made the server re-connect to the registry!');
+    }, addCommand.flags.MAINTAINERS);
+
     addCommand(1, ["tempban", "tb"], function (src, command, commandData, tar, chan) {
         var t = commandData.split(':'),
             bantime = parseInt(t[1], 10) || 0,
