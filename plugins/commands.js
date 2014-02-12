@@ -1236,7 +1236,6 @@
     addCommand(1, "public", function (src, command, commandData, tar, chan) {
         if (!sys.isServerPrivate()) {
             sys.sendMessage(src, "~~Server~~: The server is already public.");
-            sys.stopEvent();
             return;
         }
         sys.sendAll('~~Server~~: The server was made public by ' + sys.name(src) + '.');
@@ -1744,7 +1743,6 @@
     addCommand(2, "private", function (src, command, commandData, tar, chan) {
         if (sys.isServerPrivate()) {
             sys.sendMessage(src, "~~Server~~: The server is already private.");
-            sys.stopEvent();
             return;
         }
         sys.makeServerPublic(false);
