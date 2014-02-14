@@ -1458,17 +1458,23 @@
             sys.sendHtmlAll('<font color=black><timestamp/><b><font color=black>' + Utils.escapeHtml(sys.name(src)) + ' ended the roulette game.', chan);
             sys.sendHtmlAll('<font color=blue><timestamp/><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»', chan);
         } else {
+            var dupeCheck = {};
             var types = (commandData || "").split(",").map(function (val) {
                 return val.toLowerCase().trim();
             }).filter(function (val, index, array) {
-                return (val === "pokemons" || val === "items" || val === "emotes" || val === "trainers" || val === "avatars") && array.indexOf(val) === -1;
+                var pass = (val === "pokemons" || val === "items" || val === "emotes" || val === "trainers" || val === "avatars") && !dupeCheck.hasOwnProperty(val);
+                if (pass) {
+                    dupeCheck[val] = true;
+                }
+
+                return pass;
             });
 
             if ((types.indexOf('trainers') !== -1) && (types.indexOf('avatars') !== -1)) {
                 types.splice(types.indexOf('trainers'), 1);
             }
 
-            if (types.length) {
+            if (types.length !== 0) {
                 spinTypes = types;
             } else {
                 spinTypes = ['pokemons', 'items', 'emotes', 'avatars'];
