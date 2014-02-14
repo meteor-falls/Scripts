@@ -1458,8 +1458,8 @@
             sys.sendHtmlAll('<font color=black><timestamp/><b><font color=black>' + Utils.escapeHtml(sys.name(src)) + ' ended the roulette game.', chan);
             sys.sendHtmlAll('<font color=blue><timestamp/><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»', chan);
         } else {
-            var types = commandData.split(", ").map(function (val) {
-                return val.toLowerCase();
+            var types = (commandData || "").split(",").map(function (val) {
+                return val.toLowerCase().trim();
             }).filter(function (val, index, array) {
                 return (val === "pokemons" || val === "items" || val === "emotes" || val === "trainers" || val === "avatars") && array.indexOf(val) === -1;
             });
