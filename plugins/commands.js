@@ -1421,8 +1421,8 @@
     addListCommand(1, ["partycommands", "funmodcommands"], "Party");
 
     addCommand(1, "imp", function (src, command, commandData, tar, chan) {
-        if (commandData.length < 3) {
-            bot.sendMessage(src, "Thou cannot impersonate the void (longer name, please)!", chan);
+        if (commandData.length < 3 || commandData.length > 20) {
+            bot.sendMessage(src, "Your desired name is either too short or too long.", chan);
             return;
         }
 
