@@ -86,10 +86,6 @@
             cmd = commands[command],
             commandFlags = addCommand.flags;
 
-        if (disabledCmds.indexOf(command.toLowerCase()) > -1 && srcauth < 3) {
-            throw "The command " + command + " has been disabled.";
-        }
-
         if ((cmd.flags & commandFlags.MAINTAINERS) && Config.maintainers.indexOf(name) !== -1) {
             return true;
         }
@@ -117,6 +113,9 @@
                 } else {
                     throw "You need to be a higher auth to use this command.";
                 }
+            }
+            if (disabledCmds.indexOf(command.toLowerCase()) > -1 && srcauth < 1) {
+                throw "The command " + command + " has been disabled.";
             }
         }
         return true;
