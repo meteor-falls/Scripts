@@ -1532,7 +1532,7 @@
             return;
         }
         authLevel = commands[cmdToLower].authLevel;
-        if (typeof authLevel !== 'number' || authLevel > 0) {
+        if (typeof authLevel !== 'number' || authLevel !== 0) {
             bot.sendMessage(src, "Sorry, you may not disable the " + commandData + " command.", chan);
             return;
         }
