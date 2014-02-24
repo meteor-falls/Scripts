@@ -2335,7 +2335,8 @@
         addChannelModCommand: addChannelModCommand,
         addChannelAdminCommand: addChannelAdminCommand,
         addChannelOwnerCommand: addChannelOwnerCommand,
-        addCheatCode: addCheatCode
+        addCheatCode: addCheatCode,
+        disabledCmds: disabledCmds
     };
 
     module.reload = function () {
