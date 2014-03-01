@@ -124,24 +124,27 @@
             }
         },
         beforeLogIn: function (src) {
-            var srcip = sys.ip(src);
-
-            var poUser = SESSION.users(src),
-                cu_rb,
+            var srcip = sys.ip(src),
+                poUser = SESSION.users(src),
+                auth = sys.auth(src),
                 t_n = +sys.time(),
-                x;
+                ip;
 
-            if (sys.auth(src) < 3) {
-                for (x in Rangebans) {
-                    if (x === srcip.substr(0, x.length)) {
-                        sys.stopEvent();
-                        watchbot.sendAll("Rangebanned IP [" + sys.ip(src) + "] tried to log in.", watch);
-                        return;
+            if (auth < 1) {
+                for (ip in Rangebans) {
+                    if (ip === srcip.substr(0, ip.length)) {
+                        watchbot.sendAll("Rangebanned IP [" + srcip + "] tried to log in.", watch);
+                        return sys.stopEvent();
                     }
                 }
+                if (reconnectTrolls.hasOwnProperty(ip)) {
+                    return sys.stopEvent();
+                }
+            }
+
+            if (auth < 3) {
                 if (Utils.hasIllegalChars(sys.name(src))) {
-                    sys.stopEvent();
-                    return;
+                    return sys.stopEvent();
                 }
             }
 
