@@ -1916,6 +1916,15 @@
             sys.changeAway(sys.id(commandData), false);
         }
     });
+    
+    addCommand(3, "ti", function(src, command, commandData, chan) {
+        if (sys.id(commandData) === undefined) {
+            bot.sendMessage(src, "Invalid target.", chan);
+        } else {
+            bot.sendMessage(src, "" + commandData + "'s trainer info is:", chan);
+            bot.sendMessage(src, Utils.escapeHtml(sys.info(sys.id(commandData))), chan);
+        }
+    });
 
     addCommand(3, "resetladder", function (src, command, commandData, tar, chan) {
         var tiers = sys.getTierList(),
