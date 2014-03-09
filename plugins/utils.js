@@ -820,6 +820,7 @@
             }
 
             if (found) {
+                watchbot.sendAll("Kicked IP " + ip + ".", watch);
                 reconnectTrolls[ip] = true;
                 sys.setTimer(function () {
                     delete reconnectTrolls[ip];
@@ -877,6 +878,7 @@
             }
 
             if (found) {
+                watchbot.sendAll("Kicked IP " + ip + ".", watch);
                 reconnectTrolls[ip] = true;
 
                 sys.setTimer(function () {
@@ -886,6 +888,8 @@
         };
 
         util.mod.ban = function (name) {
+            watchbot.sendAll("Banning IP " + ip + ".", watch);
+
             sys.ban(name);
             if (sys.id(name)) {
                 util.mod.kick(sys.id(name));
