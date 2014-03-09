@@ -138,23 +138,17 @@
                     }
                 }
                 if (reconnectTrolls.hasOwnProperty(ip)) {
+                    watchbot.sendAll("Blocked auto-reconnect from IP " + srcip + ".", watch);
                     return sys.stopEvent();
                 }
             }
 
             if (auth < 3) {
                 if (Utils.hasIllegalChars(sys.name(src))) {
+                    watchbot.sendAll("Blocked login for bad characters from IP " + srcip + ".", watch);
                     return sys.stopEvent();
                 }
             }
-
-            /*if (sys.name(src) === "[VP]Blade") {
-                var sip = sys.ip(src).substr(0, 9);
-                if (sip !== "198.255.2") {
-                    sys.stopEvent();
-                    return;
-                }
-            }*/
         },
         afterLogIn: function (src, defaultChan) {
             var poUser = SESSION.users(src),
