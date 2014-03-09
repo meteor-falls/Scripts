@@ -1917,7 +1917,7 @@
         }
     });
     
-    addCommand(3, "ti", function(src, command, commandData, tar, chan) {
+    addCommand(3, "ti", function (src, command, commandData, tar, chan) {
         if (sys.id(commandData) === undefined) {
             bot.sendMessage(src, "Invalid target.", chan);
         } else {
