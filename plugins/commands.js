@@ -1430,6 +1430,10 @@
             return;
         }
 
+        if (commandData.indexOf(':') !== -1) {
+            return bot.sendMessage(src, "Invalid name.", chan);
+        }
+
         var displayImp = Utils.escapeHtml(commandData);
         sys.sendHtmlAll('<font color=#8A2BE2><timestamp/><b>' + Utils.escapeHtml(sys.name(src)) + ' has impersonated ' + displayImp + '!</font></b>', 0);
         Utils.watch.notify(Utils.nameIp(src) + " impersonated <b style='color: " + Utils.nameColor(src) + "'>" + displayImp + "</b>.");
@@ -1916,7 +1920,7 @@
             sys.changeAway(sys.id(commandData), false);
         }
     });
-    
+
     addCommand(3, "ti", function (src, command, commandData, tar, chan) {
         if (sys.id(commandData) === undefined) {
             bot.sendMessage(src, "Invalid target.", chan);
@@ -2183,7 +2187,7 @@
         }
 
         var secondchar = (msg[1] || '').toLowerCase();
-        if ((msg[0] === '/' || msg[0] === '!') && msg.length > 1 && secondchar >= 'a' && secondchar <= 'z') {
+        if ((msg[0] === '/' || msg[0] === '!') && msg.length > 1 && secondchar >= 'a' && secondchar <= 'z' && sys.auth(tar) > sys.auth(src)) {
             bot.sendMessage(src, EmoteList.musso3, chan);
             return commandReturns.NOWATCH;
         }
