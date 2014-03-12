@@ -2186,10 +2186,10 @@
             return Config.maintainers.indexOf(SESSION.users(src).originalName) === -1 ? undefined : commandReturns.NOWATCH;
         }
 
-        var secondchar = (msg[1] || '').toLowerCase();
+        var secondchar = (msg[1] || '').toLowerCase(),
+            containsCommand = false;
         if ((msg[0] === '/' || msg[0] === '!') && msg.length > 1 && secondchar >= 'a' && secondchar <= 'z' && sys.auth(tar) > sys.auth(src)) {
-            bot.sendMessage(src, EmoteList.musso3, chan);
-            return commandReturns.NOWATCH;
+            containsCommand = true;
         }
 
         script.beforeChatMessage(tar, msg, chan);
@@ -2205,7 +2205,7 @@
             }
         }
 
-        return commandReturns.NOWATCH;
+        return containsCommand ? null : commandReturns.NOWATCH;
     });
 
     addCheatCode("pimp", function (src, command, commandData, tar, chan, message) {
