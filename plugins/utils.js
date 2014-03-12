@@ -741,7 +741,7 @@
                             continue;
                         }
 
-                        pokemonEVs.push(pokemonIV + " " + statNames[iv]);
+                        pokemonIVs.push(pokemonIV + " " + statNames[iv]);
                     }
 
                     // If there are custom IVs, add the header. IVs are separated with a forward slash, one space before it, and one after.
