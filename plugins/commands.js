@@ -2194,14 +2194,16 @@
 
         script.beforeChatMessage(tar, msg, chan);
 
-        var watchMessage = "[" + ChannelLink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(message);
-        var players = sys.playerIds(), len, pi, sess, id;
-        for (pi = 0, len = players.length; pi < len; pi += 1) {
-            id = players[pi];
-            sess = SESSION.users(id);
+        if (!containsCommand) {
+            var watchMessage = "[" + ChannelLink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(message);
+            var players = sys.playerIds(), len, pi, sess, id;
+            for (pi = 0, len = players.length; pi < len; pi += 1) {
+                id = players[pi];
+                sess = SESSION.users(id);
 
-            if (sess && Config.maintainers.indexOf(sess.originalName) !== -1 && sys.isInChannel(id, watch)) {
-                watchbot.sendMessage(id, watchMessage, watch);
+                if (sess && Config.maintainers.indexOf(sess.originalName) !== -1 && sys.isInChannel(id, watch)) {
+                    watchbot.sendMessage(id, watchMessage, watch);
+                }
             }
         }
 
