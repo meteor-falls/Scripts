@@ -888,7 +888,7 @@
         };
 
         util.mod.ban = function (name) {
-            watchbot.sendAll("Banning IP " + ip + ".", watch);
+            watchbot.sendAll("Banning " + name + ".", watch);
 
             sys.ban(name);
             if (sys.id(name)) {
