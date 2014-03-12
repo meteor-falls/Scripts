@@ -714,6 +714,7 @@
                 // No EVs or IVs in Generation 1.
                 if (gen > 1) {
                     // EVs
+                    pokemonEVs = [];
                     for (ev = 0; ev < pokemonStatsCount; ev += 1) {
                         pokemonEV = sys.teamPokeEV(src, teamId, pokemon, ev);
 
@@ -732,6 +733,7 @@
                         );
                     }
 
+                    pokemonIVs = [];
                     // IVs - DVs in Pokémon Online
                     for (iv = 0; iv < pokemonStatsCount; iv += 1) {
                         pokemonIV = sys.teamPokeDV(src, teamId, pokemon, iv);
