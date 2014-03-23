@@ -114,9 +114,10 @@
                     throw "You need to be a higher auth to use this command.";
                 }
             }
-            if (disabledCmds.indexOf(command.toLowerCase()) > -1 && srcauth < 1) {
-                throw "The command " + command + " has been disabled.";
-            }
+        }
+
+        if (disabledCmds.indexOf(command.toLowerCase()) > -1 && srcauth < 1) {
+            throw "The command " + command + " has been disabled.";
         }
         return true;
     }
@@ -414,21 +415,20 @@
     });
 
     addCommand(0, "attack", function (src, command, commandData, tar, chan) {
+        var randColors = ["blue", "darkblue", "green", "darkgreen", "red", "darkred", "orange", "skyblue", "purple", "violet", "black", "lightsteelblue", "navy", "burlywood", "DarkSlateGrey", "darkviolet", "Gold", "Lawngreen", "silver"];
+
         function randomColor(text) {
-            var randColors = ["blue", "darkblue", "green", "darkgreen", "red", "darkred", "orange", "skyblue", "purple", "violet", "black", "lightsteelblue", "navy", "burlywood", "DarkSlateGrey", "darkviolet", "Gold", "Lawngreen", "silver"];
-
             var selectedColor = sys.rand(0, randColors.length);
-
-            return "<font color='" + randColors[selectedColor] + "'>" + text + "</font>";
+            return "<font color=" + randColors[selectedColor] + ">" + text + "</font>";
         }
 
         if (!tar) {
-            bot.sendMessage(src, 'Target doesn\'t exist!', chan);
+            bot.sendMessage(src, "Target doesn't exist!", chan);
             return;
         }
 
         var move = sys.rand(1, 559);
-        sys.sendHtmlAll("<font color=green><timestamp/><b><i><font color=green>+AttackBot: </i></font><b><font color=" + Utils.nameColor(src) + ">" + Utils.escapeHtml(sys.name(src)) + " </b><font color=black>has used <b>" + randomColor(sys.move(move)) + " </b><font color=black>on <b><font color=" + Utils.nameColor(tar) + ">" + Utils.escapeHtml(sys.name(tar)) + "!</font>", chan);
+        sys.sendHtmlAll("<font color=green><timestamp/><b><i>+AttackBot:</i></b></font> <b><font color=" + Utils.nameColor(src) + ">" + Utils.escapeHtml(sys.name(src)) + " </b></font> as used <b>" + randomColor(sys.move(move)) + "</b> on <b><font color=" + Utils.nameColor(tar) + ">" + Utils.escapeHtml(sys.name(tar)) + "!</font></b>", chan);
     });
 
     addCommand(0, "emotetoggle", function (src, command, commandData, tar, chan) {
@@ -1525,13 +1525,13 @@
             bot.sendMessage(src, "You must disable something!", chan);
             return;
         }
-        var cmdToLower = commandData.toLowerCase(), authLevel;
+        var cmdToLower = commandData.toLowerCase().trim(), authLevel;
         if (!commands.hasOwnProperty(cmdToLower)) {
             bot.sendMessage(src, "The command " + commandData + " doesn't exist!", chan);
             return;
         }
         if (disabledCmds.indexOf(cmdToLower) > -1) {
-            bot.sendMessage(src, "The command " + command + " is already disabled!", chan);
+            bot.sendMessage(src, "The command " + commandData + " is already disabled!", chan);
             return;
         }
         authLevel = commands[cmdToLower].authLevel;
@@ -1542,12 +1542,13 @@
         disabledCmds.push(cmdToLower);
         bot.sendAll(sys.name(src) + " disabled /" + cmdToLower + "!");
     });
+
     addCommand(1, "enable", function (src, command, commandData, tar, chan) {
         if (commandData === undefined) {
             bot.sendMessage(src, "You must enable something!", chan);
             return;
         }
-        var cmdToLower = commandData.toLowerCase();
+        var cmdToLower = commandData.toLowerCase().trim();
         if (!commands.hasOwnProperty(cmdToLower)) {
             bot.sendMessage(src, "The command " + commandData + " doesn't exist!", chan);
             return;
