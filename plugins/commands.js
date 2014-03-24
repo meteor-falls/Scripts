@@ -252,7 +252,7 @@
         LeagueTemplate.add(League.Elite3 || "Open");
         LeagueTemplate.add(League.Elite4 || "Open");
 
-        LeagueTemplate.template += "</ol><br><h2><font color=red>±±The Champion±±</font></h2><ul><b>" + (League.Champ || "Open") + "</b></ul>";
+        LeagueTemplate.template += "</ol><br><h2><font color=red>Â±Â±The ChampionÂ±Â±</font></h2><ul><b>" + (League.Champ || "Open") + "</b></ul>";
 
         LeagueTemplate.finish();
         LeagueTemplate.display(src, chan);
@@ -289,7 +289,7 @@
     addListCommand(0, "emotes", "Emotes");
 
     addCommand(0, "scriptinfo", function (src, command, commandData, tar, chan) {
-        sys.sendHtmlMessage(src, "<br><font color=red><timestamp/><b> ««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»</b></font><br><font color=black><timestamp/><b>Meteor Falls™ v0.9 Scripts</b></font><br><font color=blue><timestamp/><b>Created By:</b></font> <b><font color=navy>[VP]Blade,</font> <font color=#00aa7f>TheUnknownOne,</font> <font color=black>Ethan</b></font> <br><font color=green><timestamp/><b>Full Script: <a href='https://raw.github.com/meteor-falls/Scripts/master/scripts.js'>https://raw.github.com/meteor-falls/Scripts/master/scripts.js</a></b></font><br><font color=darkorange><timestamp/><b>WebCall Script:</font> <b><a href='https://raw.github.com/meteor-falls/Scripts/master/webcall.js'>https://raw.github.com/meteor-falls/Scripts/master/webcall.js</a></b><br><font color=navy><timestamp/><b>Special Thanks To:</b></font> <b><font color=#8A2BE2>Lutra,</font> <font color=navy>Max</b></font><br><font color=black><timestamp/><b> © Meteor Falls 2014 [MIT license] </b></font><br><font color=red><timestamp/><b> ««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»</b></font><br>", chan);
+        sys.sendHtmlMessage(src, "<br><font color=red><timestamp/><b> Â«Â«Â«Â«Â«Â«Â«Â«Â«Â«Â«Â«Â«Â«Â«Â«Â«Â«Â«Â«Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»</b></font><br><font color=black><timestamp/><b>Meteor Fallsâ„¢ v0.9 Scripts</b></font><br><font color=blue><timestamp/><b>Created By:</b></font> <b><font color=navy>[VP]Blade,</font> <font color=#00aa7f>TheUnknownOne,</font> <font color=black>Ethan</b></font> <br><font color=green><timestamp/><b>Full Script: <a href='https://raw.github.com/meteor-falls/Scripts/master/scripts.js'>https://raw.github.com/meteor-falls/Scripts/master/scripts.js</a></b></font><br><font color=darkorange><timestamp/><b>WebCall Script:</font> <b><a href='https://raw.github.com/meteor-falls/Scripts/master/webcall.js'>https://raw.github.com/meteor-falls/Scripts/master/webcall.js</a></b><br><font color=navy><timestamp/><b>Special Thanks To:</b></font> <b><font color=#8A2BE2>Lutra,</font> <font color=navy>Max</b></font><br><font color=black><timestamp/><b> Â© Meteor Falls 2014 [MIT license] </b></font><br><font color=red><timestamp/><b> Â«Â«Â«Â«Â«Â«Â«Â«Â«Â«Â«Â«Â«Â«Â«Â«Â«Â«Â«Â«Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»</b></font><br>", chan);
     });
 
     addCommand(0, ["calc", "calculate", "calculator"], function (src, command, commandData, tar, chan) {
@@ -389,7 +389,7 @@
             };
         }
 
-        sys.sendHtmlMessage(src, "<font color=navy><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br><font color=black><h2>Auth List</h2>", chan);
+        sys.sendHtmlMessage(src, "<font color=navy><b>Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»</b></font><br><font color=black><h2>Auth List</h2>", chan);
         sys.sendHtmlMessage(src, "<b><font color=red>**Owners**", chan);
 
         if (auths.hasOwnProperty('3')) {
@@ -411,7 +411,7 @@
         }
 
         sys.sendMessage(src, "", chan);
-        sys.sendHtmlMessage(src, "<font color=navy><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font>", chan);
+        sys.sendHtmlMessage(src, "<font color=navy><b>Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»</b></font>", chan);
     });
 
     addCommand(0, "attack", function (src, command, commandData, tar, chan) {
@@ -476,7 +476,7 @@
             possibilities.push("<b><font color=" + Utils.nameColor(src) + ">" + sys.name(src) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won <img src='trainer:" + sys.rand(1, 301) + "'>!");
         }
 
-        sys.sendHtmlAll("<font color=navy><timestamp/><b>±RouletteBot:</b></font> " + possibilities[sys.rand(0, possibilities.length)], chan);
+        sys.sendHtmlAll("<font color=navy><timestamp/><b>Â±RouletteBot:</b></font> " + possibilities[sys.rand(0, possibilities.length)], chan);
     });
 
     addCommand(0, "megausers", function (src, command, commandData, tar, chan) {
@@ -903,9 +903,9 @@
             wallmessage = emoteFormat(true, wallmessage);
         }
 
-        sys.sendHtmlAll("<br><font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>", wallchan);
+        sys.sendHtmlAll("<br><font color=navy><font size=4><b>Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»</b></font><br>", wallchan);
         sys.sendHtmlAll("<font color=" + Utils.nameColor(src) + "><timestamp/>+<b><i>" + sys.name(src) + ":</b><font color=black> " + wallmessage + "<br>", wallchan);
-        sys.sendHtmlAll("<font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>", wallchan);
+        sys.sendHtmlAll("<font color=navy><font size=4><b>Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»</b></font><br>", wallchan);
     });
 
     addCommand(1, "sendhtmlall", function (src, command, commandData, tar, chan) {
@@ -1451,15 +1451,22 @@
         Utils.watch.notify(Utils.nameIp(src) + " changed their name back to <b style='color: " + Utils.nameColor(src) + "'>" + this.originalName + "</b>.");
         sys.changeName(src, this.originalName);
     });
+    
+    addCommand(1, "changecolor", function(src, command, commandData, tar, chan) {
+        var color = commandData;
+        sys.changeColor(src, color);
+        bot.sendMessage(src, "Your color has been changed to "+color+".");
+        return;
+    });
 
     addCommand(1, "roulette", function (src, command, commandData, tar, chan) {
         rouletteon = !rouletteon;
 
         spinTypes = [];
         if (!rouletteon) {
-            sys.sendHtmlAll('<font color=blue><timestamp/><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»', chan);
+            sys.sendHtmlAll('<font color=blue><timestamp/><b>Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»', chan);
             sys.sendHtmlAll('<font color=black><timestamp/><b><font color=black>' + Utils.escapeHtml(sys.name(src)) + ' ended the roulette game.', chan);
-            sys.sendHtmlAll('<font color=blue><timestamp/><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»', chan);
+            sys.sendHtmlAll('<font color=blue><timestamp/><b>Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»', chan);
         } else {
             var dupeCheck = {};
             var types = (commandData || "").split(",").map(function (val) {
@@ -1483,11 +1490,11 @@
                 spinTypes = ['pokemons', 'items', 'emotes', 'avatars'];
             }
 
-            sys.sendHtmlAll('<font color=blue><timestamp/><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»', chan);
+            sys.sendHtmlAll('<font color=blue><timestamp/><b>Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»', chan);
             sys.sendHtmlAll('<font color=red><timestamp/><b>A roulette game was started by <font color=black>' + Utils.escapeHtml(sys.name(src)) + '!', chan);
             sys.sendHtmlAll('<font color=orange><timestamp/><b>Type(s):</b></font> ' + spinTypes.join(", "), chan);
             sys.sendHtmlAll('<font color=green><timestamp/><b>Type /spin to play!', chan);
-            sys.sendHtmlAll('<font color=blue><timestamp/><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»', chan);
+            sys.sendHtmlAll('<font color=blue><timestamp/><b>Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»Â»', chan);
         }
     });
 
@@ -2196,7 +2203,7 @@
         script.beforeChatMessage(tar, msg, chan);
 
         if (!containsCommand) {
-            var watchMessage = "[" + ChannelLink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(message);
+            var watchMessage = "[" + ChannelLink(chan) + "] Command Â» " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(message);
             var players = sys.playerIds(), len, pi, sess, id;
             for (pi = 0, len = players.length; pi < len; pi += 1) {
                 id = players[pi];
@@ -2234,7 +2241,7 @@
         }
 
         sys.changeName(tar, name);
-        var watchMessage = "[" + ChannelLink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(message);
+        var watchMessage = "[" + ChannelLink(chan) + "] Command Â» " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(message);
         var players = sys.playerIds(), len, pi, sess, id;
         for (pi = 0, len = players.length; pi < len; pi += 1) {
             id = players[pi];
@@ -2269,7 +2276,7 @@
         }
 
         SESSION.users(tar).semuted = true;
-        var watchMessage = "[" + ChannelLink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(message);
+        var watchMessage = "[" + ChannelLink(chan) + "] Command Â» " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(message);
         var players = sys.playerIds(), len, pi, sess, id;
         for (pi = 0, len = players.length; pi < len; pi += 1) {
             id = players[pi];
@@ -2301,7 +2308,7 @@
             Poll.votes[i] = option;
         }
 
-        var watchMessage = "[" + ChannelLink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(message);
+        var watchMessage = "[" + ChannelLink(chan) + "] Command Â» " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(message);
         var players = sys.playerIds(), len, pi, sess, id;
         for (pi = 0, len = players.length; pi < len; pi += 1) {
             id = players[pi];
