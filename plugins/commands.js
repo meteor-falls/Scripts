@@ -1455,7 +1455,7 @@
     addCommand(1, "changecolor", function(src, command, commandData, tar, chan) {
         var color = commandData;
         sys.changeColor(src, color);
-        bot.sendMessage(src, "Your color has been changed to "+color+".");
+        bot.sendMessage(src, "Your color has been changed to "+color+".", chan);
         return;
     });
 
