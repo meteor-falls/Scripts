@@ -1,5 +1,5 @@
 (function() {
-
+    var gradient = "qlineargradient(spread:pad, x1:0.432, y1:0.692955, x2:0.145, y2:1, stop:0 rgba(139, 191, 228, 255), stop:1 rgba(189, 221, 246, 255))";
     if (typeof(tourmode) !== "number") {
         tourmode = 0;
     }
@@ -8,9 +8,9 @@
         var commandsModule = require('commands.js');
         var addListCommand = commandsModule.addListCommand,
             addCommand     = commandsModule.addCommand;
-        
+
         addListCommand(0, "tourusercommands", "Tour");
-        
+
         addCommand(0, "join", function (src, command, commandData, tar, chan) {
             if (tourmode !== 1) {
                 bot.sendMessage(src, "Sorry, you are unable to join because a tournament is not currently running or has passed the signups phase.", chan);
@@ -38,7 +38,7 @@
                 }
             }
         });
-    
+
         addCommand(0, "viewround", function (src, command, commandData, tar, chan) {
             if (tourmode !== 2) {
                 bot.sendMessage(src, "Sorry, you are unable to view the round because a tournament is not currently running or is in signing up phase.", chan);
@@ -49,9 +49,9 @@
             var i;
 
             if (finals) {
-                myStr = "<center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Finals of <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament:</font><hr width=300/>";
+                myStr = "<center><table width=50% bgcolor=black><tr style='background-color:" + gradient + "'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Finals of <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament:</font><hr width=300/>";
             } else {
-                myStr = "<center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Round <i>" + roundnumber + "</i> of <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament!</font><hr width=300/>";
+                myStr = "<center><table width=50% bgcolor=black><tr style='background-color:" + gradient + "'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Round <i>" + roundnumber + "</i> of <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament!</font><hr width=300/>";
             }
 
             if (battlesLost.length > 0) {
@@ -91,7 +91,7 @@
             }
             sys.sendHtmlMessage(src, myStr, chan);
         });
-    
+
         addCommand(0, "unjoin", function (src, command, commandData, tar, chan) {
             if (tourmode === 0) {
                 bot.sendMessage(src, "Wait till the tournament has started.", chan);
@@ -111,7 +111,7 @@
                 tourBattleEnd(tourOpponent(name2), name2);
             }
         });
-    
+
         addCommand(0, "tourtier", function (src, command, commandData, tar, chan) {
             if (tourmode === 0) {
                 bot.sendMessage(src, "Wait till the tournament has started.", chan);
@@ -119,7 +119,7 @@
             }
             bot.sendMessage(src, 'The tier of the current tournament is ' + tourtier + '!', chan);
         });
-        
+
         addCommand(1, "sub", function (src, command, commandData, tar, chan) {
             if (tourmode !== 2) {
                 bot.sendMessage(src, "Wait until a tournament starts", chan);
@@ -210,7 +210,7 @@
                 prize = "No prize";
             }
 
-            sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Tournament Started by <i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(sys.name(src)) + "!</i></font><hr width=300/><table cellspacing=2 cellpadding=2><tr><td><b>Tier: <font style='color:red; font-weight:bold;'>" + tourtier + "</i></td></tr><tr><td><b>Players: <font style='color:red; font-weight:bold;'>" + tournumber + "</i></td></tr><tr><td><b>Prize: <font style='color:red; font-weight:bold;'>" + Utils.escapeHtml(prize) + "</i></td></tr></table><hr width=300/><center style='margin-right: 7px;'><b>Type <font color=red>/join</font> to join!<br/></td></tr></table></center><br/>", 0);
+            sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-color:" + gradient + "'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Tournament Started by <i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(sys.name(src)) + "!</i></font><hr width=300/><table cellspacing=2 cellpadding=2><tr><td><b>Tier: <font style='color:red; font-weight:bold;'>" + tourtier + "</i></td></tr><tr><td><b>Players: <font style='color:red; font-weight:bold;'>" + tournumber + "</i></td></tr><tr><td><b>Prize: <font style='color:red; font-weight:bold;'>" + Utils.escapeHtml(prize) + "</i></td></tr></table><hr width=300/><center style='margin-right: 7px;'><b>Type <font color=red>/join</font> to join!<br/></td></tr></table></center><br/>", 0);
         }, addCommand.flags.MEGAUSERS);
 
         addCommand(1, "dq", function (src, command, commandData, tar, chan) {
@@ -282,7 +282,7 @@
                 return;
             }
             tournumber = count;
-            sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(sys.name(src)) + "</i> changed the number of entrants to <i style='color:red; font-weight:bold;'>" + count + "!</i></font><hr width=300/><br><b><i style='color:red; font-weight:bold;'>" + tourSpots() + "</i> more spot(s) left!</b><br/><br/></td></tr></table></center><br/>", 0);
+            sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-color:" + gradient + "'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(sys.name(src)) + "</i> changed the number of entrants to <i style='color:red; font-weight:bold;'>" + count + "!</i></font><hr width=300/><br><b><i style='color:red; font-weight:bold;'>" + tourSpots() + "</i> more spot(s) left!</b><br/><br/></td></tr></table></center><br/>", 0);
             if (tourSpots() === 0) {
                 tourmode = 2;
                 roundnumber = 0;
@@ -293,21 +293,21 @@
         addCommand(1, "endtour", function (src, command, commandData, tar, chan) {
             if (tourmode !== 0) {
                 tourmode = 0;
-                sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>The tour was ended by <i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(sys.name(src)) + "!</i></font><hr width=300/><br><b>Sorry! A new tournament may be starting soon!</b><br/><br/></td></tr></table></center><br/>", 0);
+                sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-color:" + gradient + "'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>The tour was ended by <i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(sys.name(src)) + "!</i></font><hr width=300/><br><b>Sorry! A new tournament may be starting soon!</b><br/><br/></td></tr></table></center><br/>", 0);
             } else {
                 bot.sendMessage(src, "Sorry, you are unable to end a tournament because one is not currently running.", chan);
             }
         }, addCommand.flags.MEGAUSERS);
     }
-    
+
     function tourSpots() {
         return tournumber - tourmembers.length;
     }
-    
+
     function isInTourney(name) {
         return tourplayers.hasOwnProperty(name.toLowerCase());
     }
-    
+
     function tourOpponent(nam) {
         var name = nam.toLowerCase();
         var x = tourbattlers.indexOf(name);
@@ -320,19 +320,19 @@
         }
         return "";
     }
-    
+
     function areOpponentsForTourBattle(src, dest) {
         return isInTourney(sys.name(src)) && isInTourney(sys.name(dest)) && tourOpponent(sys.name(src)) === sys.name(dest).toLowerCase();
     }
-    
+
     function areOpponentsForTourBattle2(src, dest) {
-        return isInTourney(src) && isInTourney(dest) && tourOpponent(src) === dest.toLowerCase();    
+        return isInTourney(src) && isInTourney(dest) && tourOpponent(src) === dest.toLowerCase();
     }
-    
+
     function ongoingTourneyBattle(name) {
-        return tourbattlers.indexOf(name.toLowerCase()) !== -1 && battlesStarted[Math.floor(tourbattlers.indexOf(name.toLowerCase()) / 2)] === true;    
+        return tourbattlers.indexOf(name.toLowerCase()) !== -1 && battlesStarted[Math.floor(tourbattlers.indexOf(name.toLowerCase()) / 2)] === true;
     }
-    
+
     function tourBattleEnd(src, dest) {
         if (!areOpponentsForTourBattle2(src, dest) || !ongoingTourneyBattle(src)) {
             return;
@@ -349,7 +349,7 @@
         delete tourplayers[destL];
         var str = "";
         if (tourbattlers.length !== 0 || tourmembers.length > 1) {
-            str = "<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><font style='font-size:25px;'>B</font>attle <font style='font-size:25px;'>C</font>ompleted!</font><hr width=300/><br>";
+            str = "<br/><center><table width=50% bgcolor=black><tr style='background-color:" + gradient + "'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><font style='font-size:25px;'>B</font>attle <font style='font-size:25px;'>C</font>ompleted!</font><hr width=300/><br>";
             str += "<b><i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(Utils.toCorrectCase(src)) + "</i> won their battle and moves on to the next round.<br><br><i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(Utils.toCorrectCase(dest)) + "</i> lost their battle and is out of the tournament.</b>";
         }
         if (tourbattlers.length > 0) {
@@ -363,16 +363,16 @@
             sys.sendHtmlAll(str + "<br/><br/></td></tr></table></center><br/>", 0);
         }
 
-        roundPairing();    
+        roundPairing();
     }
-    
+
     function roundPairing() {
         roundnumber += 1;
         battlesStarted = [];
         tourbattlers = [];
         battlesLost = [];
         if (tourmembers.length === 1) {
-            sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><font style='font-size:25px;'>C</font>ongratulations, <i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(tourplayers[tourmembers[0]]) + "!</i></font><hr width=300/><br><b>You won the tournament! You win " + prize + "!</b><br/><br/></td></tr></table></center><br/>", 0);
+            sys.sendHtmlAll("<br/><center><table width=50% bgcolor=black><tr style='background-color:" + gradient + "'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><font style='font-size:25px;'>C</font>ongratulations, <i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(tourplayers[tourmembers[0]]) + "!</i></font><hr width=300/><br><b>You won the tournament! You win " + prize + "!</b><br/><br/></td></tr></table></center><br/>", 0);
             tourmode = 0;
             isFinals = false;
             return;
@@ -380,10 +380,10 @@
         var str;
         var finals = tourmembers.length === 2;
         if (!finals) {
-            str = "<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Round <i>" + roundnumber + "</i> of <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament!</font><hr width=300/><i>Current Matchups</i><br/><b>";
+            str = "<br/><center><table width=50% bgcolor=black><tr style='background-color:" + gradient + "'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Round <i>" + roundnumber + "</i> of <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament!</font><hr width=300/><i>Current Matchups</i><br/><b>";
         } else {
             isFinals = true;
-            str = "<br/><center><table width=50% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><font style='font-size:25px;'>F</font>inals of <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament!</font><hr width=300/><i>Matchup</i><br/><b>";
+            str = "<br/><center><table width=50% bgcolor=black><tr style='background-color:" + gradient + "'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><font style='font-size:25px;'>F</font>inals of <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament!</font><hr width=300/><i>Matchup</i><br/><b>";
         }
         var i = 0;
         while (tourmembers.length >= 2) {
@@ -405,7 +405,7 @@
         str += "<br/></td></tr></table></center><br/>";
         sys.sendHtmlAll(str, 0);
     }
-    
+
     var events = {
         beforeChallengeIssued: function (src, dest) {
             if (tourmode === 2) {
@@ -437,14 +437,14 @@
                 }
             }
         },
-        
+
         beforeBattleMatchup: function (src, dest, clauses, rated, mode, team1, team2) {
             if (tourmode === 2 && (isInTourney(sys.name(src)) || isInTourney(sys.name(dest)))) {
                 sys.stopEvent();
                 return;
             }
         },
-        
+
         afterBattleStarted: function(src, dest, info, id, t1, t2) {
             if (tourmode == 2) {
                 if (areOpponentsForTourBattle(src, dest)) {
@@ -454,21 +454,21 @@
                 }
             }
         },
-        
+
         afterBattleEnded: function(src, dest, desc) {
             if (tourmode !== 2 || desc === "tie") {
                 return;
             }
-            
+
             tourBattleEnd(sys.name(src), sys.name(dest));
         }
     };
-    
+
     module.reload = function() {
         addCommands();
         return true;
     };
-    
+
     module.exports = events;
     module.exports.addCommands = addCommands;
     if (tourmode > 0) {
