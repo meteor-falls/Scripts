@@ -111,7 +111,7 @@ module.exports = function () {
         message = message.replace(/:\(/g, "<img src='item:177'>");
         message = message.replace(/:charimang:/g, "<img src='pokemon:6&gen=2'>");
         message = message.replace(/:mukmang:/g, "<img src='pokemon:89&gen=1'>");
-        message = message.replace(/:paper:/g, "<img src='' width='50' height='50'>");
+        message = message.replace(/:feralimang:/g, "<img src='pokemon:160&gen=2'>");
 
         if (uobj && uobj.lastEmote && lastEmote.toString() !== uobj.lastEmote.toString()) {
             uobj.lastEmoteTime = time;
