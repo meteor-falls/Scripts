@@ -749,16 +749,17 @@
         var which = commandData[0];
         var message = Utils.cut(commandData, 1, ":");
         var whichl = which.toLowerCase();
+        var srcname = sys.name(src);
 
         if (whichl === "kick") {
             bot.sendMessage(src, "Set kick message to: " + Utils.escapeHtml(message) + "!", chan);
-            Kickmsgs[sys.name(src).toLowerCase()] = {
+            Kickmsgs[srcname] = {
                 "message": message
             };
             Reg.save("Kickmsgs", Kickmsgs);
         } else if (whichl === "welcome") {
             bot.sendMessage(src, "Set welcome message to: " + Utils.escapeHtml(message) + "!", chan);
-            Welmsgs[sys.name(src).toLowerCase()] = {
+            Welmsgs[srcname] = {
                 "message": message
             };
             Reg.save("Welmsgs", Welmsgs);
@@ -768,7 +769,7 @@
                 return;
             }
             bot.sendMessage(src, "Set ban message to: " + Utils.escapeHtml(message) + "!", chan);
-            Banmsgs[sys.name(src).toLowerCase()] = {
+            Banmsgs[srcname] = {
                 "message": message
             };
             Reg.save("Banmsgs", Banmsgs);
@@ -778,62 +779,61 @@
     }, addCommand.flags.MEGAUSERS);
 
     addCommand(1, "viewmessage", function (src, command, commandData, tar, chan) {
+        var srcname = sys.name(src);
         if (!commandData) {
             bot.sendMessage(src, "Specify kick, ban, or welcome!", chan);
             return;
         }
 
         if (commandData === "kick") {
-            if (!Kickmsgs[sys.name(src).toLowerCase()]) {
+            if (!Kickmsgs[srcname]) {
                 bot.sendMessage(src, "You currently do not have a kick message, please go make one!", chan);
                 return;
             }
-            bot.sendMessage(src, "Your kick message is set to: " + Utils.escapeHtml(Kickmsgs[sys.name(src).toLowerCase()].message), chan);
-            return;
+            bot.sendMessage(src, "Your kick message is set to: " + Utils.escapeHtml(Kickmsgs[srcname].message), chan);
         } else if (commandData === "welcome") {
-            if (!Welmsgs[sys.name(src).toLowerCase()]) {
+            if (!Welmsgs[srcname]) {
                 bot.sendMessage(src, "You currently do not have a welcome message, please go make one!", chan);
                 return;
             }
-            bot.sendMessage(src, "Your welcome message is set to: " + Utils.escapeHtml(Welmsgs[sys.name(src).toLowerCase()].message), chan);
-            return;
+            bot.sendMessage(src, "Your welcome message is set to: " + Utils.escapeHtml(Welmsgs[srcname].message), chan);
         } else if (commandData === "ban") {
-            if (this.myAuth < 2 || !Banmsgs[sys.name(src).toLowerCase()]) {
+            if (this.myAuth < 2 || !Banmsgs[srcname]) {
                 bot.sendMessage(src, "You either cannot have a ban message or you do not have one, go make one if you can!", chan);
                 return;
             }
-            bot.sendMessage(src, "Your ban message is set to: " + Utils.escapeHtml(Banmsgs[sys.name(src).toLowerCase()].message), chan);
-            return;
+            bot.sendMessage(src, "Your ban message is set to: " + Utils.escapeHtml(Banmsgs[srcname].message), chan);
         } else {
             bot.sendMessage(src, "Specify kick, ban, or welcome!", chan);
-            return;
         }
     }, addCommand.flags.MEGAUSERS);
 
     addCommand(0, "removemessage", function (src, command, commandData, tar, chan) {
-        var lower = commandData.toLowerCase();
+        var lower = commandData.toLowerCase(),
+            srcname = sys.name(src).toLowerCase();
+
         if (lower === "kick") {
-            if (!Kickmsgs[sys.name(src).toLowerCase()]) {
+            if (!Kickmsgs[srcname]) {
                 bot.sendMessage(src, "You don't have a kick message!", chan);
                 return;
             }
-            delete Kickmsgs[sys.name(src).toLowerCase()];
+            delete Kickmsgs[srcname];
             Reg.save("Kickmsgs", Kickmsgs);
             bot.sendMessage(src, "Kick message removed!", chan);
         } else if (lower === "ban") {
-            if (!Banmsgs[sys.name(src).toLowerCase()]) {
+            if (!Banmsgs[srcname]) {
                 bot.sendMessage(src, "You don't have a ban message!", chan);
                 return;
             }
-            delete Banmsgs[sys.name(src).toLowerCase()];
+            delete Banmsgs[srcname];
             Reg.save("Banmsgs", Banmsgs);
             bot.sendMessage(src, "Ban message removed!", chan);
         } else if (lower === "welcome") {
-            if (!Welmsgs[sys.name(src).toLowerCase()]) {
+            if (!Welmsgs[srcname]) {
                 bot.sendMessage(src, "You don't have a welcome message!", chan);
                 return;
             }
-            delete Welmsgs[sys.name(src).toLowerCase()];
+            delete Welmsgs[srcname];
             Reg.save("Welmsgs", Welmsgs);
             bot.sendMessage(src, "Welcome message removed!", chan);
         } else {
@@ -1451,7 +1451,7 @@
         Utils.watch.notify(Utils.nameIp(src) + " changed their name back to <b style='color: " + Utils.nameColor(src) + "'>" + this.originalName + "</b>.");
         sys.changeName(src, this.originalName);
     });
-    
+
     addCommand(1, "changecolor", function(src, command, commandData, tar, chan) {
         var color = commandData;
         sys.changeColor(src, color);
@@ -1950,7 +1950,7 @@
 
     addListCommand(3, "authoptions", "Auth");
 
-    addCommand(3, "setwelcomemessage", function(src, command, commandData, tar, chan) {
+    addCommand(3, "setwelcomemessage", function (src, command, commandData, tar, chan) {
         var r = commandData.split(':'),
             mess = Utils.cut(r, 1, ':'),
             name = r[0];
