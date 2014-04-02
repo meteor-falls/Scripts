@@ -385,6 +385,7 @@
                     Utils.watch.message(src, "Command", message, chan);
                 }
 
+                script.afterChatMessage(src, message, chan);
                 return;
             }
 
