@@ -6,6 +6,14 @@ module.exports = function () {
     var emoteRegex = {};
     var nonAlpha = /\W/;
     var marxState = 0;
+    var emojiRegex = /:([a-z0-9\+\-_]+):/;
+    var emojiFile = sys.getFileContent(Config.datadir + 'emoji.json');
+    var emojis = {};
+
+    if (emojiFile.length) {
+        emojis = JSON.parse(emojiFile);
+    }
+
     addEmote = function (alts, code, priority) {
         var regex, alt, len, i;
 
@@ -40,6 +48,7 @@ module.exports = function () {
         }
 
         var emotes = [],
+            emojiCount = 0,
             uobj = SESSION.users(src),
             perm,
             timeout = 3,
@@ -106,14 +115,26 @@ module.exports = function () {
         // pokemon:subtitute also works.
         // pokemon:30&cropped=true
         // etc
-        message = message.replace(/((trainer|icon|item|pokemon):([(\d|\-)&=(gen|shiny|gender|back|cropped|num|substitute|true|false)]+))/g, "<img src='$1'>");
+        message = message.replace(/((trainer|icon|item|pokemon):([(\d|\-)&=(gen|shiny|gender|back|cropped|num|substitute|true|false)]+))/g, "<img src='$1'>")
+            .replace(/:\(/g, "<img src='item:177'>")
+            .replace(/:charimang:/g, "<img src='pokemon:6&gen=2'>")
+            .replace(/:mukmang:/g, "<img src='pokemon:89&gen=1'>")
+            .replace(/:feralimang:/g, "<img src='pokemon:160&gen=2'>")
+            .replace(/oprah1/g, "<img src='pokemon:124&gen=1'>")
+            .replace(/oprah2/g, "<img src='pokemon:124&gen=2'>");
 
-        message = message.replace(/:\(/g, "<img src='item:177'>");
-        message = message.replace(/:charimang:/g, "<img src='pokemon:6&gen=2'>");
-        message = message.replace(/:mukmang:/g, "<img src='pokemon:89&gen=1'>");
-        message = message.replace(/:feralimang:/g, "<img src='pokemon:160&gen=2'>");
-        message = message.replace(/oprah1/g, "<img src='pokemon:124&gen=1'>");
-        message = message.replace(/oprah2/g, "<img src='pokemon:124&gen=2'>");
+        message = message.replace(emojiRegex, function (name) {
+            if (emotes.length + emojiCount > 5) {
+                return name;
+            }
+
+            if (emojis.hasOwnProperty(name)) {
+                emojiCount += 1;
+                return emojis[name];
+            }
+
+            return name;
+        });
 
         if (uobj && uobj.lastEmote && lastEmote.toString() !== uobj.lastEmote.toString()) {
             uobj.lastEmoteTime = time;

@@ -16,11 +16,13 @@ Config = {
 
     // Plugin directory.
     plugindir: "plugins/",
+    datadir: "data/",
 
     // Do not touch unless you are adding a new plugin.
     // Plugins to load on script load.
     // mathjs is loaded dynamically.
     plugins: ['bot', 'reg', 'utils', 'channeldata', 'emotes', 'lists', 'init', 'feedmon', 'tours', 'commands', 'events'],
+    data: ['emoji'],
 
     // Whether or not to load plugins from repourl. If set to false, they will load locally.
     load_from_web: true,
@@ -33,8 +35,10 @@ Config = {
 };
 
 (function() {
-    var dir = Config.plugindir;
+    var dir = Config.plugindir,
+        datadir = Config.datadir;
     sys.makeDir(dir);
+    sys.makeDir(datadir);
 
     require = function require(name, webcall, noCache) {
         if ((name in require.cache) && !webcall && !noCache) {
@@ -108,12 +112,19 @@ Config = {
         }
     };
 
-    var plugin,
-        i;
+    var plugin, data, resp, i;
 
     for (i = 0; i < Config.plugins.length; i += 1) {
         plugin = Config.plugins[i] + ".js";
         require(plugin, Config.load_from_web);
+    }
+    for (i = 0; i < Config.data.length; i += 1) {
+        data = Config.data[i] + ".json";
+
+        if (!sys.fileExists(datadir + data)) {
+            resp = sys.synchronousWebCall(Config.repourl + "data/" + data);
+            sys.writeToFile(datadir + data, resp);
+        }
     }
 }());
 
