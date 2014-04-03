@@ -10,7 +10,7 @@ Config = {
     maintainers: ['[VP]Blade', 'Ethan', 'TheUnknownOne'],
 
     // Repo to load plugins from.
-    repourl: "https://raw.github.com/meteor-falls/Scripts/master/plugins/",
+    repourl: "https://raw.github.com/meteor-falls/Scripts/master/",
     // Repo to load data (announcement/description + tiers) from.
     dataurl: "https://raw.github.com/meteor-falls/Server-Shit/master/",
 
@@ -49,7 +49,7 @@ Config = {
             resp;
 
         if (webcall) {
-            resp = sys.synchronousWebCall(Config.repourl + name);
+            resp = sys.synchronousWebCall(Config.repourl + "plugins/" + name);
             sys.writeToFile(dir + name, resp);
         }
 
