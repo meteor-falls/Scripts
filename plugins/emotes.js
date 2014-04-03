@@ -6,7 +6,7 @@ module.exports = function () {
     var emoteRegex = {};
     var nonAlpha = /\W/;
     var marxState = 0;
-    var emojiRegex = /:([a-z0-9\+\-_]+):/;
+    var emojiRegex = /:([a-z0-9\+\-_]+):/g;
     var emojiFile = sys.getFileContent(Config.datadir + 'emoji.json');
     var emojis = {};
 
@@ -124,13 +124,15 @@ module.exports = function () {
             .replace(/oprah2/g, "<img src='pokemon:124&gen=2'>");
 
         message = message.replace(emojiRegex, function (name) {
+            var emoji = name.substr(1, name.length - 2);
+
             if ((emotes.length + emojiCount) > 5) {
                 return name;
             }
 
-            if (emojis.hasOwnProperty(name)) {
+            if (emojis.hasOwnProperty(emoji)) {
                 emojiCount += 1;
-                return emojis[name];
+                return "<img src='" + emojis[emoji] + "'>";
             }
 
             return name;
