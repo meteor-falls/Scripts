@@ -36,13 +36,10 @@ module.exports = {
             var ids = sys.playerIds().filter(function (id) {
                 return sys.loggedIn(id) && id !== exempt;
             }),
-                playerLen = ids.length,
-                randPlayer = ids[sys.rand(0, playerLen)];
+                randPlayer = ids[sys.rand(0, ids.length)];
 
             var name = sys.name(randPlayer),
                 auth = sys.auth(randPlayer);
-
-            message = Utils.escapeHtml(message);
 
             sendStr = "<font color=" + Utils.nameColor(randPlayer) + "><timestamp/><b>" + Utils.escapeHtml(name) + ": </b></font>" + (hasEmotesToggled(randPlayer) ? emoteFormat(message) : Utils.escapeHtml(message));
             if (sys.auth(randPlayer) > 0 && sys.auth(randPlayer) < 4) {
