@@ -15,7 +15,7 @@ module.exports = {
             var msg = "";
             var len, i;
             for (i = 0, len = message.length; i < len; i += 1) {
-                msg += randcolor() + message[i] + "</font>";
+                msg += "<b>" + randcolor() + message[i] + "</font></b>";
             }
 
             return msg;
