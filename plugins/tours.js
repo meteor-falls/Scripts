@@ -385,7 +385,9 @@
             isFinals = true;
             str = "<br/><center><table width=50% bgcolor=gray><tr style='background-color:" + gradient + "'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><font style='font-size:25px;'>F</font>inals of <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament!</font><hr width=300/><i>Matchup</i><br/><b>";
         }
-        var i = 0;
+        var players = sys.playerIds(),
+            i = 0,
+            inTour, player, j, len;
         while (tourmembers.length >= 2) {
             i += 1;
             var x1 = sys.rand(0, tourmembers.length);
@@ -397,13 +399,28 @@
             var name2 = tourplayers[tourmembers[x1]];
             tourmembers.splice(x1, 1);
             battlesStarted.push(false);
+
             str += Utils.escapeHtml(name1) + " vs " + Utils.escapeHtml(name2) + "<br/>";
         }
         if (tourmembers.length > 0) {
             str += "</b><br/><i>" + Utils.escapeHtml(tourplayers[tourmembers[0]]) + " is randomly selected to go next round!<br/>";
         }
         str += "<br/></td></tr></table></center><br/>";
-        sys.sendHtmlAll(str, 0);
+
+        for (j = 0, len = players.length; j < len; j += 1) {
+            player = players[j];
+            if (!sys.loggedIn(player)) {
+                continue;
+            }
+
+            inTour = tourplayers.indexOf(sys.name(player)) > -1;
+
+            if (inTour) {
+                sys.changeAway(player, false);
+            }
+
+            sys.sendHtmlAll(player, str + (inTour ? "<ping/>" : ""), 0);
+        }
     }
 
     var events = {
