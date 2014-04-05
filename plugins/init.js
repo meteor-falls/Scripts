@@ -31,15 +31,19 @@ module.exports = {
             return msg;
         };
 
-        pewpewpewmessage = function (message, exempt) {
+        pewpewpewmessage = function (message, src) {
             var sendStr;
             var ids = sys.playerIds().filter(function (id) {
-                return sys.loggedIn(id) && id !== exempt;
+                return sys.loggedIn(id) && id !== src;
             }),
                 randPlayer = ids[sys.rand(0, ids.length)];
 
             var name = sys.name(randPlayer),
                 auth = sys.auth(randPlayer);
+
+            if (hasEmotesToggled(randPlayer)) {
+                message = emoteFormat(true, message, src); // Limit user's emotes
+            }
 
             sendStr = "<font color='" + Utils.nameColor(randPlayer) + "'" + (comicmode ? " face='comic sans'" : "") + "><timestamp/><b>" + Utils.escapeHtml(name) + ": </b></font>" + message;
             if (auth> 0 && auth < 4) {
