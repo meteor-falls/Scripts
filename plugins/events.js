@@ -427,7 +427,7 @@
                 }
 
                 if (colormode) {
-                    message = colormodemessage(message);
+                    message = "<b>" + colormodemessage(message) + "</b>";
                 }
             }
 

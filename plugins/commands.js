@@ -289,7 +289,18 @@
     addListCommand(0, "emotes", "Emotes");
 
     addCommand(0, "scriptinfo", function (src, command, commandData, tar, chan) {
-        sys.sendHtmlMessage(src, "<br><font color=red><timestamp/><b> ««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»</b></font><br><font color=black><timestamp/><b>Meteor Falls™ v0.9 Scripts</b></font><br><font color=blue><timestamp/><b>Created By:</b></font> <b><font color=navy>[VP]Blade,</font> <font color=#00aa7f>TheUnknownOne,</font> <font color=black>Ethan</b></font> <br><font color=green><timestamp/><b>Full Script: <a href='https://raw.github.com/meteor-falls/Scripts/master/scripts.js'>https://raw.github.com/meteor-falls/Scripts/master/scripts.js</a></b></font><br><font color=darkorange><timestamp/><b>WebCall Script:</font> <b><a href='https://raw.github.com/meteor-falls/Scripts/master/webcall.js'>https://raw.github.com/meteor-falls/Scripts/master/webcall.js</a></b><br><font color=navy><timestamp/><b>Special Thanks To:</b></font> <b><font color=#8A2BE2>Lutra,</font> <font color=navy>Max</b></font><br><font color=black><timestamp/><b> © Meteor Falls 2014 [MIT license] </b></font><br><font color=red><timestamp/><b> ««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»</b></font><br>", chan);
+        sys.sendHtmlMessage(src, [
+            "",
+            "<font color=red><timestamp/><b> ««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»</b></font>",
+            "<font color=black><timestamp/><b>Meteor Falls™ v0.9 Scripts</b></font>",
+            "<font color=blue><timestamp/><b>Created By:</b></font> <b><font color=navy>[VP]Blade,</font> <font color=#00aa7f>TheUnknownOne,</font> <font color=black>Ethan</b></font>",
+            "<font color=skyblue><timestamp/> <b>Maintainers:</b></font> " + Config.maintainers.join(",") + ".",
+            "<font color=green><timestamp/><b>Full Script: <a href='https://raw.github.com/meteor-falls/Scripts/master/scripts.js'>https://raw.github.com/meteor-falls/Scripts/master/scripts.js</a></b></font>",
+            "<font color=darkorange><timestamp/><b>WebCall Script:</font> <b><a href='https://raw.github.com/meteor-falls/Scripts/master/webcall.js'>https://raw.github.com/meteor-falls/Scripts/master/webcall.js</a></b>",
+            "<font color=navy><timestamp/><b>Special Thanks To:</b></font> <b><font color=#8A2BE2>Lutra,</font> <font color=navy>Max</b></font>",
+            "<font color=black><timestamp/><b> © Meteor Falls 2014 [MIT license] </b></font>",
+            "<font color=red><timestamp/><b> ««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»</b></font><br>"
+        ].join("<br>"), chan);
     });
 
     addCommand(0, ["calc", "calculate", "calculator"], function (src, command, commandData, tar, chan) {
