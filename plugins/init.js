@@ -41,13 +41,9 @@ module.exports = {
             var name = sys.name(randPlayer),
                 auth = sys.auth(randPlayer);
 
-            sendStr = "<font color=" + Utils.nameColor(randPlayer) + "><timestamp/><b>" + Utils.escapeHtml(name) + ": </b></font>" + (hasEmotesToggled(randPlayer) ? emoteFormat(message) : Utils.escapeHtml(message));
-            if (sys.auth(randPlayer) > 0 && sys.auth(randPlayer) < 4) {
-                sendStr = "<font color=" + Utils.nameColor(randPlayer) + "><timestamp/>+<i><b>" + Utils.escapeHtml(name) + ": </b></i></font>" + (hasEmotesToggled(randPlayer) ? emoteFormat(message) : message);
-            }
-
-            if (nightclub) {
-                sendStr = Utils.nightclub.rainbowify("(" + Utils.escapeHtml(name) + "): " + message);
+            sendStr = "<font color='" + Utils.nameColor(randPlayer) + "'" + (comicmode ? " face='comic sans'" : "") + "><timestamp/><b>" + Utils.escapeHtml(name) + ": </b></font>" + message;
+            if (auth> 0 && auth < 4) {
+                sendStr = "<font color='" + Utils.nameColor(randPlayer) + "'" + (comicmode ? " face='comic sans'" : "") + "><timestamp/>+<i><b>" + Utils.escapeHtml(name) + ": </b></i></font>" + message;
             }
 
             return sendStr;

@@ -436,7 +436,7 @@
             if (pewpewpew) {
                 sendStr = pewpewpewmessage(message, src);
             } else if (nightclub) {
-                sendStr = Utils.nightclub.rainbowify("(" + sys.name(src) + "): " + message);
+                sendStr = Utils.nightclub.rainbowify("(" + sys.name(src) + "): " + originalMessage);
             } else {
                 sendStr = "<font color='" + Utils.nameColor(src) + "'" + (comicmode ? " face='comic sans'" : "") + "><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + ": </b></font>" + message;
                 if (sys.auth(src) > 0 && sys.auth(src) < 4) {
