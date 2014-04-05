@@ -790,7 +790,7 @@
     }, addCommand.flags.MEGAUSERS);
 
     addCommand(1, "viewmessage", function (src, command, commandData, tar, chan) {
-        var srcname = sys.name(src);
+        var srcname = sys.name(src).toLowerCase();
         if (!commandData) {
             bot.sendMessage(src, "Specify kick, ban, or welcome!", chan);
             return;
