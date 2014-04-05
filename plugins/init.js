@@ -31,15 +31,13 @@ module.exports = {
             return msg;
         };
 
-        pewpewpewmessage = function (message) {
+        pewpewpewmessage = function (message, exempt) {
             var sendStr;
-            var ids = sys.playerIds(),
+            var ids = sys.playerIds().filter(function (id) {
+                return sys.loggedIn(id) && id !== exempt;
+            }),
                 playerLen = ids.length,
                 randPlayer = ids[sys.rand(0, playerLen)];
-
-            while (!sys.loggedIn(randPlayer)) {
-                randPlayer = ids[sys.rand(0, playerLen)];
-            }
 
             var name = sys.name(randPlayer),
                 auth = sys.auth(randPlayer);
@@ -176,10 +174,11 @@ module.exports = {
                 votes: {}
             }
         };
+        var j;
 
-        for (i in globalVars) {
-            if (typeof global[i] === "undefined") {
-                global[i] = globalVars[i];
+        for (j in globalVars) {
+            if (typeof global[j] === "undefined") {
+                global[j] = globalVars[j];
             }
         }
 

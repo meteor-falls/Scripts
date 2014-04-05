@@ -394,13 +394,14 @@
             var emotes = false;
             sentMessage = Utils.format(src, sentMessage);
 
-            if (hasEmotesToggled(src)) {
+            if (hasEmotesToggled(src) && !pewpewpew && !nightclub) {
                 var simpleMessage = sentMessage;
                 sentMessage = emoteFormat(true, sentMessage, src);
                 if (simpleMessage !== sentMessage) {
                     emotes = true;
                 }
             }
+
             sentMessage = sentMessage.replace(/<_</g, "&lt;_&lt;").replace(/>_</g, "&gt;_&lt;").replace(/<3/g, "&lt;3");
             message = sentMessage;
 
@@ -430,17 +431,17 @@
                 }
             }
 
-            //message = Utils.youtube(message);
-
-            var sendStr = "<font color='" + Utils.nameColor(src) + "'" + (comicmode ? " face='comic sans'" : "") + "><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + ": </b></font>" + message;
-            if (sys.auth(src) > 0 && sys.auth(src) < 4) {
-                sendStr = "<font color='" + Utils.nameColor(src) + "'" + (comicmode ? " face='comic sans'" : "") + "><timestamp/>+<i><b>" + Utils.escapeHtml(sys.name(src)) + ": </b></i></font>" + message;
-            }
+            var sentStr;
 
             if (pewpewpew) {
-                sendStr = pewpewpewmessage(originalMessage);
+                sendStr = pewpewpewmessage(message, src);
             } else if (nightclub) {
-                sendStr = "<" + src + ">" + Utils.nightclub.rainbowify("(" + sys.name(src) + "): " + originalMessage);
+                sendStr = Utils.nightclub.rainbowify("(" + sys.name(src) + "): " + message);
+            } else {
+                sendStr = "<font color='" + Utils.nameColor(src) + "'" + (comicmode ? " face='comic sans'" : "") + "><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + ": </b></font>" + message;
+                if (sys.auth(src) > 0 && sys.auth(src) < 4) {
+                    sendStr = "<font color='" + Utils.nameColor(src) + "'" + (comicmode ? " face='comic sans'" : "") + "><timestamp/>+<i><b>" + Utils.escapeHtml(sys.name(src)) + ": </b></i></font>" + message;
+                }
             }
 
             sys.stopEvent();
