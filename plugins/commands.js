@@ -760,7 +760,7 @@
         var which = commandData[0];
         var message = Utils.cut(commandData, 1, ":");
         var whichl = which.toLowerCase();
-        var srcname = sys.name(src);
+        var srcname = sys.name(src).toLowerCase();
 
         if (whichl === "kick") {
             bot.sendMessage(src, "Set kick message to: " + Utils.escapeHtml(message) + "!", chan);
