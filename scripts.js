@@ -13,6 +13,7 @@ Config = {
     repourl: "https://raw.github.com/meteor-falls/Scripts/master/",
     // Repo to load data (announcement/description + tiers) from.
     dataurl: "https://raw.github.com/meteor-falls/Server-Shit/master/",
+    emotesurl: 'http://meteor-falls.github.io/Emotes/emotes.json',
 
     // Plugin directory.
     plugindir: "plugins/",
