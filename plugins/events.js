@@ -3,6 +3,7 @@
     var sendWarningsTo = ['Ethan', 'TheUnknownOne'];
     var sendErrorsTo = ['Ethan', 'TheUnknownOne'];
 
+    var ignoreNext = false;
     module.exports = {
         warning: function (func, message, backtrace) {
             var len = sendWarningsTo.length, id, i;
@@ -17,13 +18,16 @@
             }
         },
         beforeNewMessage: function (message) {
-            if (ignoreNextChanMsg) {
+            if (ignoreNext) {
+                ignoreNext = false;
+                return sys.stopEvent();
+            } else if (ignoreNextChanMsg) {
                 // Don't call sys.stopEvent here
                 ignoreNextChanMsg = false;
                 return;
             }
 
-            if (message.substr(0, 16) === "[#Watch] ±Watch:") {
+            if (message.substr(0, 8) === "[#Watch]") {
                 return sys.stopEvent();
             }
 
@@ -53,6 +57,11 @@
                         sys.sendHtmlMessage(id, sys.backtrace().split("\n").join("<br/>"), 0);
                     }
                 }
+            }
+
+            ignoreNext = true;
+            if (typeof watch !== 'undefined' && typeof watchbot !== 'undefined') {
+                watchbot.sendAll(message, watch);
             }
         },
         beforeServerMessage: function (message) {
