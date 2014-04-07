@@ -2180,14 +2180,14 @@
         try {
             var res = sys.eval(commandData);
             sys.sendHtmlMessage(src, "<timestamp/><b>Evaluation Check: </b><font color='green'>OK</font>", chan);
-            sys.sendHtmlMessage(src, "<timestamp/><b>Result: </b> " + res, chan);
-            Utils.watch.notify("Result: " + res);
+            sys.sendHtmlMessage(src, "<timestamp/><b>Result: </b> " + Util.escapeHtml(res), chan);
+            Utils.watch.notify("Result: " + Util.escapeHtml(res));
         } catch (error) {
             sys.sendHtmlMessage(src, "<timestamp/><b>Evaluation Check: </b><font color='red'>" + error + "</font>", chan);
             Utils.watch.notify("Error: " + error);
             if (error.backtrace) {
-                sys.sendHtmlMessage(src, "<timestamp/><b>Backtrace:</b> <br/> " + error.backtrace.join("<br/>"), chan);
-                Utils.watch.notify("Backtrace: " + error.backtrace.join("<br/>"));
+                sys.sendHtmlMessage(src, "<timestamp/><b>Backtrace:</b> <br/> " + Util.escapeHtml(error.backtrace.join("<br/>")), chan);
+                Utils.watch.notify("Backtrace: " + Util.escapeHtml(error.backtrace.join("<br/>")));
             }
         }
     });
