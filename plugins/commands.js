@@ -369,8 +369,8 @@
         }
 
         mess = Utils.escapeHtml(mess);
-        if (hasEmotesToggled(src)) {
-            mess = emoteFormat(true, mess, src);
+        if (Emotes.enabledFor(src)) {
+            mess = Emotes.format(mess, Emotes.ratelimit, src);
         }
 
         bot.sendMessage(src, "Your message was sent!", chan);
@@ -443,18 +443,21 @@
     });
 
     addCommand(0, "emotetoggle", function (src, command, commandData, tar, chan) {
-        if (this.myAuth < 1 && !hasEmotePerms(sys.name(src))) {
+        if (this.myAuth < 1 && !Emotes.hasPermission(sys.name(src))) {
             bot.sendMessage(src, "You cannot use emotes.", chan);
             return;
         }
-        var word = (hasEmotesToggled(src)) ? "off" : "on";
-        bot.sendMessage(src, "Emotes are now toggled " + word + ".", chan);
-        if (hasEmotesToggled(src)) {
+
+        var toggled = Emotes.enabledFor(src),
+            word = (toggled ? "off" : "on");
+
+        if (toggled) {
             delete Emotetoggles[sys.name(src).toLowerCase()];
         } else {
             Emotetoggles[sys.name(src).toLowerCase()] = true;
         }
         Reg.save("Emotetoggles", Emotetoggles);
+        bot.sendMessage(src, "Emotes are now toggled " + word + ".", chan);
     });
 
     addCommand(0, "spin", function (src, command, commandData, tar, chan) {
@@ -464,9 +467,7 @@
         }
         var num = sys.rand(1, 279);
         var numb = sys.rand(1, 646);
-        var emotes = Object.keys(EmoteList);
-        emotes.splice(emotes.indexOf("__display__"), 1);
-
+        var emotes = Object.keys(Emotes.list);
         var randomEmote = emotes[Math.floor(Math.random() * emotes.length)];
 
         var possibilities = [];
@@ -480,7 +481,7 @@
         }
 
         if (spinTypes.indexOf('emotes') !== -1) {
-            possibilities.push("<b><font color=" + Utils.nameColor(src) + ">" + sys.name(src) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won " + EmoteList[randomEmote] + "!");
+            possibilities.push("<b><font color=" + Utils.nameColor(src) + ">" + sys.name(src) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won " + Emotes.list[randomEmote] + "!");
         }
 
         if ((spinTypes.indexOf('avatars') !== -1) || (spinTypes.indexOf('trainers') !== -1)) {
@@ -910,8 +911,8 @@
 
         var wallmessage = Utils.escapeHtml(commandData);
 
-        if (hasEmotesToggled(src)) {
-            wallmessage = emoteFormat(true, wallmessage);
+        if (Emotes.enabledFor(src)) {
+            wallmessage = Emotes.format(wallmessage, Emotes.ratelimit, src);
         }
 
         sys.sendHtmlAll("<br><font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>", wallchan);
@@ -1224,7 +1225,7 @@
         if (theirmessage) {
             msg = msg.replace(/\{Target\}/gi, tarNames);
             msg = msg.replace(/\{Server\}/gi, Reg.get("servername")).replace(/\{Color\}/gi, Utils.nameColor(src)).replace(/\{Tcolor\}/gi, Utils.nameColor(sys.id(t[0])));
-            msg = emoteFormat(true, msg);
+            msg = Emotes.format(msg, Emotes.ratelimit, src);
         }
 
         if (command !== "skick") {
@@ -1824,7 +1825,7 @@
             if (theirmessage) {
                 msg = msg.replace(/\{Target\}/gi, commandData);
                 msg = msg.replace(/\{Server\}/gi, Reg.get("servername")).replace(/\{Color\}/gi, Utils.nameColor(src)).replace(/\{Tcolor\}/gi, Utils.nameColor(sys.id(commandData)));
-                msg = emoteFormat(true, msg);
+                msg = Emotes.format(msg, Emotes.ratelimit, src);
             }
             sys.sendHtmlAll(msg);
         } else {
@@ -2247,7 +2248,7 @@
         }
 
         if (sys.auth(tar) > 0) {
-            bot.sendMessage(src, EmoteList.musso3, chan);
+            bot.sendMessage(src, Emotes.code("musso3"), chan);
             return commandReturns.NOWATCH;
         }
 
@@ -2282,7 +2283,7 @@
         }
 
         if (sys.auth(tar) > 0) {
-            bot.sendMessage(src, EmoteList.musso3, chan);
+            bot.sendMessage(src, Emotes.code("musso3"), chan);
             return commandReturns.NOWATCH;
         }
 

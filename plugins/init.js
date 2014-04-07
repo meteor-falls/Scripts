@@ -41,8 +41,8 @@ module.exports = {
             var name = sys.name(randPlayer),
                 auth = sys.auth(randPlayer);
 
-            if (hasEmotesToggled(randPlayer)) {
-                message = emoteFormat(true, message, src); // Limit user's emotes
+            if (Emotes.enabledFor(randPlayer)) {
+                message = Emotes.format(message, Emotes.ratelimit, src);
             }
 
             sendStr = "<font color='" + Utils.nameColor(randPlayer) + "'" + (comicmode ? " face='comic sans'" : "") + "><timestamp/><b>" + Utils.escapeHtml(name) + ": </b></font>" + message;
@@ -97,44 +97,6 @@ module.exports = {
         if (!League.hasOwnProperty("Managers")) {
             League.Managers = [];
         }
-
-        hasEmotePerms = function (name) {
-            var id = sys.id(name),
-                user = SESSION.users(id),
-                hasEmotes,
-                ip,
-                aliases,
-                len,
-                i;
-
-            if (id && user && user.originalName) {
-                name = user.originalName;
-            }
-
-            ip = sys.dbIp(name);
-            hasEmotes = sys.maxAuth(ip) > 0 || Emoteperms.hasOwnProperty(name.toLowerCase()) || Config.maintainers.indexOf(name) !== -1;
-
-            if (!hasEmotes) {
-                aliases = sys.aliases(ip);
-
-                if (!aliases || (len = aliases.length) === 1) {
-                    return false;
-                }
-
-                for (i = 0; i < len; i += 1) {
-                    if (Emoteperms.hasOwnProperty(aliases[i].toLowerCase())) {
-                        return true;
-                    }
-                }
-            }
-
-            return hasEmotes;
-        };
-
-        hasEmotesToggled = function (src) {
-            var name = SESSION.users(src).originalName.toLowerCase();
-            return (Utils.mod.hasBasicPermissions(src) || hasEmotePerms(name)) && Emotetoggles.hasOwnProperty(name);
-        };
 
         var globalVars = {
             border: "<font color=green><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</b></font>",

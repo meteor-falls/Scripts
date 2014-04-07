@@ -219,7 +219,7 @@
                     var msg = (theirmessage) ? theirmessage.message : Utils.loginMessage(sys.name(src), Utils.nameColor(src));
                     if (theirmessage) {
                         msg = msg.replace(/\{Server\}/gi, Reg.get("servername")).replace(/\{Color\}/gi, Utils.nameColor(src));
-                        msg = emoteFormat(true, msg);
+                        msg = Emotes.format(msg, Emotes.ratelimit, src);
                     }
                     sys.sendHtmlAll(msg, 0);
                 }
@@ -394,9 +394,9 @@
             var emotes = false;
             sentMessage = Utils.format(src, sentMessage);
 
-            if (hasEmotesToggled(src) && !pewpewpew && !nightclub) {
+            if (Emotes.enabledFor(src) && !pewpewpew && !nightclub) {
                 var simpleMessage = sentMessage;
-                sentMessage = emoteFormat(true, sentMessage, src);
+                sentMessage = Emotes.format(sentMessage, Emotes.ratelimit, src);
                 if (simpleMessage !== sentMessage) {
                     emotes = true;
                 }
@@ -567,7 +567,7 @@
                 if (theirmessage) {
                     msg = msg.replace(/\{Target\}/gi, sys.name(bpl));
                     msg = msg.replace(/\{Server\}/gi, Reg.get("servername")).replace(/\{Color\}/gi, Utils.nameColor(src)).replace(/\{Tcolor\}/gi, Utils.nameColor(bpl));
-                    msg = emoteFormat(true, msg);
+                    msg = Emotes.format(msg, Emotes.ratelimit, src);
                 }
 
                 sys.sendHtmlAll(msg, 0);
@@ -589,7 +589,7 @@
             if (banMessage) {
                 banMessage = banMessage.replace(/\{Target\}/gi, targetName);
                 banMessage = banMessage.replace(/\{Server\}/gi, Reg.get("servername")).replace(/\{Color\}/gi, Utils.nameColor(src)).replace(/\{Tcolor\}/gi, Utils.nameColor(bpl));
-                banMessage = emoteFormat(true, banMessage);
+                banMessage = Emotes.format(banMessage, Emotes.ratelimit, src);
             }
 
             if (time) {

@@ -1,8 +1,9 @@
-module.exports = function () {
-    EmoteList = {
-        __display__: []
-    };
+var Emotes = {
+    list: {},
+    display: []
+};
 
+(function () {
     var emoteRegex = {};
     var nonAlpha = /\W/;
     var marxState = 0;
@@ -15,11 +16,11 @@ module.exports = function () {
         emojis = JSON.parse(emojiFile);
     }
 
-    var emoteSource = JSON.parse(sys.synchronousWebCall(Config.emotesurl)),
-        emote;
-    delete emoteSource["@NOTICE"];
+    Emotes.code = function (name) {
+        return Emotes.list[name];
+    };
 
-    addEmote = function (alts, code) {
+    Emotes.add = function (alts, code) {
         var regex, alt, len, i;
 
         // data:, icon:, item:
@@ -35,7 +36,7 @@ module.exports = function () {
 
         for (i = 0; i < len; i += 1) {
             alt = alts[i];
-            EmoteList[alt] = code;
+            Emotes.list[alt] = code;
 
             regex = RegExp.quote(alt);
             if (!nonAlpha.test(alt)) {
@@ -44,10 +45,10 @@ module.exports = function () {
             emoteRegex[alt] = new RegExp(regex, "g");
         }
 
-        EmoteList.__display__.push(alts.join(" | "));
+        Emotes.display.push(alts.join(" | "));
     };
 
-    emoteFormat = function (limit, message, src) {
+    Emotes.format = function (message, limit, src) {
         if (!Config.emotesEnabled) {
             return message;
         }
@@ -55,11 +56,10 @@ module.exports = function () {
         var emotes = [],
             emojiCount = 0,
             uobj = SESSION.users(src),
-            perm,
             timeout = 3,
             lastEmote = [],
             time = +sys.time(),
-            i;
+            perm, i;
 
         if (src && uobj) {
             //perm = Utils.mod.hasBasicPermissions(src);
@@ -86,40 +86,35 @@ module.exports = function () {
                 if (marxmode && emote !== "marx1" && emote !== "stalin1" && emote !== "lenin1") {
                     marxState += 1;
                     if (marxState === 1) {
-                        code = EmoteList.marx1;
+                        code = Emotes.code("marx1");
                     } else if (marxState === 2) {
-                        code = EmoteList.stalin1;
+                        code = Emotes.code("stalin1");
                     } else {
-                        code = EmoteList.lenin1;
+                        code = Emotes.code("lenin1");
                         marxState = 0;
                     }
                 } else if (georgemode) {
-                    code = EmoteList.george1;
+                    code = Emotes.code("george1");
                 }
 
                 return code;
             };
         }
 
-        for (i in EmoteList) {
+        for (i in Emotes.list) {
             if (limit && emotes.length > 4) {
                 break;
             }
 
-            if (i === "__display__") {
-                continue;
-            }
-
             // Major speed up.
             if (message.indexOf(i) !== -1) {
-                message = message.replace(emoteRegex[i], assignEmote(i, EmoteList[i]));
+                message = message.replace(emoteRegex[i], assignEmote(i, Emotes.list[i]));
             }
         }
 
         // Misc "emotes". Pokemons, icons, items, and avatars.
         // pokemon:subtitute also works.
         // pokemon:30&cropped=true
-        // etc
         message = message.replace(/((trainer|icon|item|pokemon):([(\d|\-)&=(gen|shiny|gender|back|cropped|num|substitute|true|false)]+))/g, "<img src='$1'>")
             .replace(/:\(/g, "<img src='item:177'>")
             .replace(/:charimang:/g, "<img src='pokemon:6&gen=2'>")
@@ -150,15 +145,65 @@ module.exports = function () {
         return message;
     };
 
-    emoteFormat.emojis = emojis;
+    // Enum for Emotes.format, not literally rate limiting all the time
+    Emotes.ratelimit = true;
 
-    for (emote in emoteSource) {
-        addEmote(emote.split(','), emoteSource[emote]);
-    }
-};
+    // Accepts either a name (the player must be online) or id
+    Emotes.hasPermission = function (name) {
+        var id = sys.id(name) || name,
+            user = SESSION.users(id),
+            ip, aliases,
+            len, i;
+
+        if (id && user && user.originalName) {
+            name = user.originalName;
+        }
+
+        ip = sys.dbIp(name);
+        if (sys.maxAuth(ip) > 0 || Emoteperms.hasOwnProperty(name.toLowerCase()) || Config.maintainers.indexOf(name) !== -1) {
+            return true;
+        }
+
+        aliases = sys.aliases(ip);
+
+        if (!aliases || (len = aliases.length) === 1) {
+            return false;
+        }
+
+        for (i = 0; i < len; i += 1) {
+            if (Emoteperms.hasOwnProperty(aliases[i].toLowerCase())) {
+                return true;
+            }
+        }
+
+        return false;
+    };
+
+    // Accepts either a name (the player must be online) or id
+    Emotes.enabledFor = function (src) {
+        var id = sys.id(src) || src,
+            name = SESSION.users(id).originalName.toLowerCase();
+        return (Utils.mod.hasBasicPermissions(id) || Emotes.hasPermission(id)) && Emotetoggles.hasOwnProperty(name);
+    };
+
+    Emotes.load = function () {
+        var emoteSource = JSON.parse(sys.synchronousWebCall(Config.emotesurl)),
+            emote;
+        delete emoteSource["@NOTICE"];
+
+        Emotes.list = {};
+        Emotes.display = [];
+
+        for (emote in emoteSource) {
+            Emotes.add(emote.split(','), emoteSource[emote]);
+        }
+    };
+
+    Emotes.emoji = emojis;
+}());
 
 module.reload = function () {
-    module.exports();
+    Emotes.load();
     require.reload('lists.js');
     return true;
 };

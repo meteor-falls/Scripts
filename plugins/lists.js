@@ -256,28 +256,28 @@
         Lists.Tour = Tour;
 
         /** EMOTES **/
-        var Emotes = new TableList("Emotes", "stripe", 1, 2, "navy");
+        var EmoteList = new TableList("Emotes", "stripe", 1, 2, "navy");
 
         var emotesToAdd = [],
             len,
             i;
 
-        for (i = 0, len = EmoteList.__display__.length; i < len; i += 1) {
-            emotesToAdd.push(Utils.escapeHtml(EmoteList.__display__[i]));
+        for (i = 0, len = Emotes.display.length; i < len; i += 1) {
+            emotesToAdd.push(Utils.escapeHtml(Emotes.display[i]));
 
             if (emotesToAdd.length >= 8) {
-                Emotes.add(emotesToAdd, false);
+                EmoteList.add(emotesToAdd, false);
                 emotesToAdd = [];
             }
         }
 
         if (emotesToAdd.length) {
-            Emotes.add(emotesToAdd, false);
+            EmoteList.add(emotesToAdd, false);
         }
 
-        Emotes.finish();
+        EmoteList.finish();
 
-        Lists.Emotes = Emotes;
+        Lists.EmoteList = EmoteList;
 
         /** RULES **/
         var Rules = new CommandList("Rules", "navy", "Please follow the rules or risk punishment:", "ol");
