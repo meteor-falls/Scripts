@@ -194,6 +194,19 @@ global.Emotes = {
         }
     };
 
+    Emotes.interpolate = function (src, msg, vars, checkEnabled) {
+        var i;
+        for (i in vars) {
+            msg = msg.replace(new RegExp(RegExp.quote(i), "gi"), vars[i]);
+        }
+
+        if ((!checkEnabled) || (checkEnabled && Emotes.enabledFor(src))) {
+            msg = Emotes.format(msg, Emotes.ratelimit, src);
+        }
+
+        return msg;
+    };
+    Emotes.always = false;
     Emotes.emoji = emojis;
 }());
 

@@ -350,9 +350,9 @@
         Moderate.add("tempbans", "To see a list of temporarily banned players.");
         Moderate.add("rangebans", "To see a list of rangebanned ips.");
         Moderate.add("silence", "To (un)silence all users.");
-        Moderate.add("message", "To set your kick, ban, or welcome message. Use {target} to say target (if kick or ban msg). If it is a welcome message, use {server} to say the server. You can use HTML, but don't abuse. Example: " + Utils.escapeHtml("<font color=green><timestamp/> <b>Ethan struck the banhammer on {target}!</b></font>."), ["kick/ban/welcome", "message"]);
+        Moderate.add("message", "To set your kick, ban, or welcome message. Use {target} for your target (for kick or ban messages). For your own color, use {color}, and for your target's color (in the case of a kick or ban), use {tcolor}. You can use HTML, but don't abuse. Example: " + Utils.escapeHtml("<font color=green><timestamp/> <b>Ethan struck the banhammer on {target}!</b></font>."), ["kick/ban/welcome", "message"]);
         Moderate.add("viewmessage", "To view your kick, ban, or welcome message.", ["kick/ban/welcome"]);
-        Moderate.add("removemessage", "To remove a kick, ban, or welcome message.", ["kick/ban/welcome"]);
+        Moderate.add("removemessage", "To remove your kick, ban, or welcome message.", ["kick/ban/welcome"]);
 
         Moderate.finish();
 

@@ -916,7 +916,7 @@
         }
 
         sys.sendHtmlAll("<br><font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>", wallchan);
-        sys.sendHtmlAll("<font color=" + Utils.nameColor(src) + "><timestamp/>+<b><i>" + sys.name(src) + ":</b><font color=black> " + wallmessage + "<br>", wallchan);
+        sys.sendHtmlAll("<font color=" + Utils.nameColor(src) + "><timestamp/>+<b><i>" + sys.name(src) + ":</i></b></font> " + wallmessage + "<br>", wallchan);
         sys.sendHtmlAll("<font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>", wallchan);
     });
 
@@ -1223,9 +1223,11 @@
         var msg = (theirmessage !== undefined) ? theirmessage.message : "<font color='navy'><timestamp/><b>" + tarNames + " " + (toKick.length === 1 ? "was" : "were") + " kicked by " + Utils.escapeHtml(sys.name(src)) + "!";
 
         if (theirmessage) {
-            msg = msg.replace(/\{Target\}/gi, tarNames);
-            msg = msg.replace(/\{Server\}/gi, Reg.get("servername")).replace(/\{Color\}/gi, Utils.nameColor(src)).replace(/\{Tcolor\}/gi, Utils.nameColor(sys.id(t[0])));
-            msg = Emotes.format(msg, Emotes.ratelimit, src);
+            msg = Emotes.interpolate(src, msg, {
+                "{Target}": tarNames,
+                "{Color}": Utils.nameColor(src),
+                "{TColor}": Utils.nameColor(sys.id(toKick[0]))
+            }, Emotes.always);
         }
 
         if (command !== "skick") {
@@ -1823,9 +1825,11 @@
             var theirmessage = Banmsgs[sys.name(src).toLowerCase()];
             var msg = (theirmessage) ? theirmessage.message : "<font color=blue><timestamp/><b>" + commandData + ' was banned by ' + Utils.escapeHtml(sys.name(src)) + '!</font></b>';
             if (theirmessage) {
-                msg = msg.replace(/\{Target\}/gi, commandData);
-                msg = msg.replace(/\{Server\}/gi, Reg.get("servername")).replace(/\{Color\}/gi, Utils.nameColor(src)).replace(/\{Tcolor\}/gi, Utils.nameColor(sys.id(commandData)));
-                msg = Emotes.format(msg, Emotes.ratelimit, src);
+                msg = Emotes.interpolate(src, msg, {
+                    "{Target}": commandData,
+                    "{Color}": Utils.nameColor(src),
+                    "{TColor}": Utils.nameColor(sys.id(commandData))
+                }, Emotes.always);
             }
             sys.sendHtmlAll(msg);
         } else {

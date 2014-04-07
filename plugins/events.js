@@ -218,8 +218,9 @@
                     var theirmessage = Welmsgs[sys.name(src).toLowerCase()];
                     var msg = (theirmessage) ? theirmessage.message : Utils.loginMessage(sys.name(src), Utils.nameColor(src));
                     if (theirmessage) {
-                        msg = msg.replace(/\{Server\}/gi, Reg.get("servername")).replace(/\{Color\}/gi, Utils.nameColor(src));
-                        msg = Emotes.format(msg, Emotes.ratelimit, src);
+                        msg = Emotes.interpolate(src, msg, {
+                            "{Color}": Utils.nameColor(src)
+                        }, Emotes.always);
                     }
                     sys.sendHtmlAll(msg, 0);
                 }
@@ -565,9 +566,11 @@
                 var theirmessage = Kickmsgs[Utils.realName(src).toLowerCase()];
                 var msg = (theirmessage) ? theirmessage.message : "<font color='navy'><timestamp/><b>" + sys.name(src) + " kicked " + Utils.escapeHtml(sys.name(bpl)) + "!</font></b>";
                 if (theirmessage) {
-                    msg = msg.replace(/\{Target\}/gi, sys.name(bpl));
-                    msg = msg.replace(/\{Server\}/gi, Reg.get("servername")).replace(/\{Color\}/gi, Utils.nameColor(src)).replace(/\{Tcolor\}/gi, Utils.nameColor(bpl));
-                    msg = Emotes.format(msg, Emotes.ratelimit, src);
+                    msg = Emotes.interpolate(src, msg, {
+                        "{Target}": sys.name(bpl),
+                        "{Color}": Utils.nameColor(src),
+                        "{TColor}": Utils.nameColor(bpl)
+                    }, Emotes.always);
                 }
 
                 sys.sendHtmlAll(msg, 0);
@@ -587,9 +590,11 @@
             var banMessage = (Banmsgs[Utils.realName(src).toLowerCase()] || {message: ""}).message;
 
             if (banMessage) {
-                banMessage = banMessage.replace(/\{Target\}/gi, targetName);
-                banMessage = banMessage.replace(/\{Server\}/gi, Reg.get("servername")).replace(/\{Color\}/gi, Utils.nameColor(src)).replace(/\{Tcolor\}/gi, Utils.nameColor(bpl));
-                banMessage = Emotes.format(banMessage, Emotes.ratelimit, src);
+                banMessage = Emotes.interpolate(src, banMessage, {
+                    "{Target}": targetName,
+                    "{Color}": Utils.nameColor(src),
+                    "{TColor}": Utils.nameColor(bpl)
+                }, Emotes.always);
             }
 
             if (time) {
