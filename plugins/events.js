@@ -317,7 +317,7 @@
                 return;
             }
 
-            if (Utils.hasIllegalChars(message) && myAuth < 3) {
+            if (Utils.hasIllegalChars(message) && myAuth < 1) {
                 bot.sendMessage(src, 'WHY DID YOU TRY TO POST THAT, YOU NOOB?!', chan);
                 watchbot.sendAll(Utils.nameIp(src) + ' TRIED TO POST A BAD CODE! KILL IT!', watch);
                 sys.stopEvent();
