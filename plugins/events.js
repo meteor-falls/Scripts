@@ -60,7 +60,7 @@
             }
 
             ignoreNext = true;
-            if (typeof watch !== 'undefined' && typeof watchbot !== 'undefined') {
+            if (typeof watch !== 'undefined' && typeof watchbot !== 'undefined' && message.substr(0, 2) !== '[#' && message.substr(0, 2) !== '<f') {
                 watchbot.sendAll(message, watch);
             }
         },
