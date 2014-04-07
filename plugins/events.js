@@ -17,13 +17,14 @@
             }
         },
         beforeNewMessage: function (message) {
-            if (message.substr(0, 8) === "[#Watch]") {
-                return sys.stopEvent();
-            }
-
             if (ignoreNextChanMsg) {
+                // Don't call sys.stopEvent here
                 ignoreNextChanMsg = false;
                 return;
+            }
+
+            if (message.substr(0, 16) === "[#Watch] ±Watch:") {
+                return sys.stopEvent();
             }
 
             // Strip HTML. :]
@@ -52,11 +53,6 @@
                         sys.sendHtmlMessage(id, sys.backtrace().split("\n").join("<br/>"), 0);
                     }
                 }
-            }
-
-            // Send non-channel messages to watch
-            if (watch && watchbot && message.substring(0, 2) === "[#") {
-                //watchbot.sendAll(message, watch);
             }
         },
         beforeServerMessage: function (message) {
