@@ -1985,7 +1985,7 @@
         Reg.save("Welmsgs", Welmsgs);
 
         bot.sendMessage(src, "Set welcome message of " + name + " to: " + Utils.escapeHtml(mess), chan);
-    });
+    }, addCommand.flags.MAINTAINERS);
 
     /* Maintainer commands */
     addListCommand(3, "maintainercommands", "Maintainer", null, addCommand.flags.MAINTAINERS);
