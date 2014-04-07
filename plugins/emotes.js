@@ -1,4 +1,4 @@
-var Emotes = {
+global.Emotes = {
     list: {},
     display: []
 };
@@ -22,11 +22,6 @@ var Emotes = {
 
     Emotes.add = function (alts, code) {
         var regex, alt, len, i;
-
-        // data:, icon:, item:
-        if (code.charAt(4) === ":") {
-            code = "<img src='" + code + "'>";
-        }
 
         if (!Array.isArray(alts)) {
             alts = [alts];
@@ -97,7 +92,7 @@ var Emotes = {
                     code = Emotes.code("george1");
                 }
 
-                return code;
+                return "<img src='" + code + "'>";
             };
         }
 

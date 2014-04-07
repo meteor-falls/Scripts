@@ -74,7 +74,6 @@ module.exports = {
             "Welmsgs": "Welmsgs",
             "Emotetoggles": "Emotetoggles",
             "Emoteperms": "Emoteperms",
-            "Emotestats": "Emotestats",
             "Feedmons": "Feedmon",
             "League": "League"
         };
@@ -87,11 +86,6 @@ module.exports = {
             } catch (e) {
                 global[i] = {};
             }
-        }
-
-        if (!Emotestats.hasOwnProperty("stats")) {
-            Emotestats.stats = {};
-            Emotestats.time = +sys.time();
         }
 
         if (!League.hasOwnProperty("Managers")) {

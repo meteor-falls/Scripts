@@ -195,7 +195,8 @@ poScript = ({
         require.reload('init.js');
 
         require.reload('emotes.js');
-        require.reload('lists.js');
+        // lists.js reloaded by emotes.js
+        //require.reload('lists.js');
 
         //MathJS = require('mathjs.js');
         sys.resetProfiling();
