@@ -7,7 +7,7 @@ Config = {
     // Configuration for the script.
     servername: "Meteor Falls",
 
-    maintainers: ['[VP]Blade', 'Ethan', 'TheUnknownOne'],
+    maintainers: ['[VP]Blade', 'Ethan', 'TheUnknownOne', '[ᴠᴘ]ʙʟᴀᴅᴇ'],
 
     // Repo to load plugins from.
     repourl: "https://raw.github.com/meteor-falls/Scripts/master/",
