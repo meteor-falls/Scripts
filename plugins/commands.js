@@ -286,7 +286,7 @@
     });
 
     addListCommand(0, "rules", "Rules");
-    addListCommand(0, "emotes", "Emotes");
+    addListCommand(0, "emotes", "EmoteList");
 
     addCommand(0, "scriptinfo", function (src, command, commandData, tar, chan) {
         sys.sendHtmlMessage(src, [
