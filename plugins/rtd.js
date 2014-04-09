@@ -73,7 +73,6 @@ module.exports.load = function () {
         if (typeof timeout !== 'function') {
             timeout = function () {
                 rtdbot.sendAll(sys.name(id) + "'s effect ended.", 0);
-                RTD.takeEffect(id);
             };
         }
 
