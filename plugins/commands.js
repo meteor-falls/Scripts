@@ -499,7 +499,7 @@
 
         effect = RTD.giveEffect(src);
         rtdbot.sendAll(RTD.rollString(src, effect), 0);
-        watchbot.sendAll(sys.name(src) + " rolled " + RTD.effects[effect].name + ".", watchbot);
+        watchbot.sendAll(sys.name(src) + " rolled " + RTD.effects[effect].name + ".", watch);
     });
 
     addCommand(0, "megausers", function (src, command, commandData, tar, chan) {

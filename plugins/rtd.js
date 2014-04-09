@@ -1,5 +1,5 @@
-var RTD = {};
-(function () {
+module.exports.load = function () {
+    global.RTD = {};
     var playerEffects = {};
     var MIN_COOLDOWN = 90; // 1m30s
     var MAX_COOLDOWN = 130; // 2m10s
@@ -36,11 +36,13 @@ var RTD = {};
         blank_emotes: {
             name: 'Blank Emotes',
             chance: 1/18,
+            duration: 30,
             type: 'negative'
         },
         bigger_emotes: {
             name: 'Bigger Emotes',
             chance: 1/20,
+            duration: 20,
             type: 'neutral'
         }
     };
@@ -65,6 +67,10 @@ var RTD = {};
     RTD.giveEffect = function (id, timeout, effect) {
         if (typeof timeout === 'string') {
             effect = timeout;
+            timeout = null;
+        }
+
+        if (typeof timeout !== 'function') {
             timeout = function () {
                 rtdbot.sendAll(sys.name(id) + "'s effect ended.", 0);
                 RTD.takeEffect(id);
@@ -80,7 +86,7 @@ var RTD = {};
             cooldown: sys.rand(MIN_COOLDOWN, MAX_COOLDOWN)
         };
 
-        playerEffects[id].timer = sys.setTimer(timeout, effects[effect].duration, false);
+        playerEffects[id].timer = sys.setTimer(timeout, effects[effect].duration * 1000, false);
         return effect;
     };
 
@@ -106,15 +112,16 @@ var RTD = {};
             return false;
         }
 
-        sys.unsetTimer(playerEffects.timer);
+        sys.unsetTimer(playerEffects[id].timer);
         return (delete playerEffects[id]);
     };
 
     RTD.effects = effects;
     RTD.MIN_COOLDOWN = MIN_COOLDOWN;
     RTD.MAX_COOLDOWN = MAX_COOLDOWN;
-}());
+};
 
 module.reload = function () {
+    module.exports.load();
     return true;
 };
