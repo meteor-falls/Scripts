@@ -43,11 +43,17 @@ module.exports.load = function () {
             name: 'Bigger Emotes',
             chance: 1/20,
             duration: 20,
-            type: 'neutral'
+            type: 'positive'
         },
         nobody_cares: {
             name: 'Nobody Cares',
             chance: 1/15,
+            duration: 30,
+            type: 'neutral'
+        },
+        im_blue: {
+            name: "I'm Blue",
+            chance: 1/23,
             duration: 30,
             type: 'neutral'
         }
@@ -70,7 +76,7 @@ module.exports.load = function () {
         return randomSample(effects);
     };
 
-    RTD.giveEffect = function (id, timeout, effect) {
+    RTD.giveEffect = function (id, timeout, effect, duration) {
         if (typeof timeout === 'string') {
             effect = timeout;
             timeout = null;
@@ -88,20 +94,23 @@ module.exports.load = function () {
         }
 
         effect = effect || RTD.rollTheDice();
+        duration = duration || effects[effect].duration;
 
         playerEffects[id] = {
             effect: effect,
             timer: -1,
             at: +sys.time(),
+            duration: duration,
             cooldown: sys.rand(MIN_COOLDOWN, MAX_COOLDOWN)
         };
 
-        playerEffects[id].timer = sys.setTimer(timeout, effects[effect].duration * 1000, false);
+        playerEffects[id].timer = sys.setTimer(timeout, duration * 1000, false);
         return effect;
     };
 
     RTD.hasEffect = function (id, effect) {
-        return playerEffects.hasOwnProperty(id) && playerEffects[id].effect === effect && (playerEffects[id].at + effects[effect].duration) >= +sys.time();
+        var peffect = playerEffects[id];
+        return peffect && peffect.effect === effect && (peffect.at + peffect.duration) >= +sys.time();
     };
 
     // If the result of this function <= 0, the player may roll the dice again.

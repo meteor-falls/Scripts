@@ -257,10 +257,14 @@
 
         util.nameColor = function (src) {
             if (typeof src !== 'number') { // Random colors
-                src = Math.round(Math.random() * (Math.random() * 1000));
+                src = 1;
             }
 
             var getColor = sys.getColor(src);
+            if (src && RTD && RTD.hasEffect(src, 'im_blue')) {
+                return 'blue';
+            }
+
             if (getColor === '#000000' || !getColor) {
                 return clist[src % clist.length];
             }
