@@ -126,16 +126,30 @@ global.Emotes = {
             .replace(/oprah1/g, "<img src='pokemon:124&gen=1'>")
             .replace(/oprah2/g, "<img src='pokemon:124&gen=2'>");
 
+
+        // Emoji effects
+        if (src && RTD.hasEffect(src, 'bigger_emotes')) {
+            size = " width='44' height='44'";
+        }
+
         message = message.replace(emojiRegex, function (name) {
-            var emoji = name.substr(1, name.length - 2);
+            var emoji = name.substr(1, name.length - 2),
+                code;
 
             if ((emotes.length + emojiCount) > 5) {
                 return name;
             }
 
             if (emojis.hasOwnProperty(emoji)) {
+                code = emojis[emoji];
+
+                if (src && RTD.hasEffect(src, 'blank_emotes')) {
+                    code = "invalid";
+                    size = " width='22' height='22'";
+                }
+
                 emojiCount += 1;
-                return "<img src='" + emojis[emoji] + "'>";
+                return "<img src='" + code + "'" + size + ">";
             }
 
             return name;
