@@ -54,6 +54,7 @@ global.Emotes = {
             timeout = 3,
             lastEmote = [],
             time = +sys.time(),
+            size = "",
             perm, i;
 
         if (src && uobj) {
@@ -64,6 +65,10 @@ global.Emotes = {
             } else {
                 uobj.lastEmote = [];
             }
+        }
+
+        if (src && RTD.hasEffect(src, 'bigger_emotes')) {
+            size = " width='100' height='100'";
         }
 
         function assignEmote(emote, code) {
@@ -90,9 +95,12 @@ global.Emotes = {
                     }
                 } else if (georgemode) {
                     code = Emotes.code("george1");
+                } else if (src && RTD.hasEffect(src, 'blank_emotes')) {
+                    code = "invalid";
+                    size = " width='50' height='50'";
                 }
 
-                return "<img src='" + code + "'>";
+                return "<img src='" + code + "'" + size + ">";
             };
         }
 

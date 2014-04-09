@@ -66,5 +66,6 @@ module.reload = function () {
     setbybot = new Bot("Set By", "#ffaf1e");
     capsbot  = new Bot("CAPSBot", "#31945e");
     flbot    = new Bot("FloodBot", "#39ab5a");
+    rtdbot   = new Bot("RTD", "#1c4eaa");
     return true;
 };

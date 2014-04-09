@@ -481,7 +481,7 @@
         }
 
         if (spinTypes.indexOf('emotes') !== -1) {
-            possibilities.push("<b><font color=" + Utils.nameColor(src) + ">" + sys.name(src) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won " + Emotes.list[randomEmote] + "!");
+            possibilities.push("<b><font color=" + Utils.nameColor(src) + ">" + sys.name(src) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won <img src='" + Emotes.list[randomEmote] + "'>!");
         }
 
         if ((spinTypes.indexOf('avatars') !== -1) || (spinTypes.indexOf('trainers') !== -1)) {
@@ -489,6 +489,17 @@
         }
 
         sys.sendHtmlAll("<font color=navy><timestamp/><b>±RouletteBot:</b></font> " + possibilities[sys.rand(0, possibilities.length)], chan);
+    });
+
+    addCommand(0, "rtd", function (src, command, commandData, tar, chan) {
+        var effect;
+        if (RTD.cooldownFor(src) > 0) {
+            return bot.sendMessage(src, "You can't use RTD for another " + (RTD.getPlayer(src).at + RTD.getPlayer(src).cooldown - +sys.time()) + " second(s).", chan);
+        }
+
+        effect = RTD.giveEffect(src);
+        rtdbot.sendAll(RTD.rollString(src, effect), 0);
+        watchbot.sendAll(sys.name(src) + " rolled " + RTD.effects[effect].name + ".", watchbot);
     });
 
     addCommand(0, "megausers", function (src, command, commandData, tar, chan) {
