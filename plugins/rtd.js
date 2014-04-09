@@ -76,12 +76,7 @@ module.exports.load = function () {
         return randomSample(effects);
     };
 
-    RTD.giveEffect = function (id, timeout, effect, duration) {
-        if (typeof timeout === 'string') {
-            effect = timeout;
-            timeout = null;
-        }
-
+    RTD.giveEffect = function (id, effect, duration, timeout) {
         if (typeof timeout !== 'function') {
             timeout = function () {
                 var name = sys.name(id);
