@@ -112,7 +112,6 @@ module.exports.load = function () {
             return false;
         }
 
-        sys.unsetTimer(playerEffects[id].timer);
         return (delete playerEffects[id]);
     };
 
