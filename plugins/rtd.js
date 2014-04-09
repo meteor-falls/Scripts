@@ -44,6 +44,12 @@ module.exports.load = function () {
             chance: 1/20,
             duration: 20,
             type: 'neutral'
+        },
+        nobody_cares: {
+            name: 'Nobody Cares',
+            chance: 1/15,
+            duration: 30,
+            type: 'neutral'
         }
     };
 
@@ -72,7 +78,12 @@ module.exports.load = function () {
 
         if (typeof timeout !== 'function') {
             timeout = function () {
-                rtdbot.sendAll(sys.name(id) + "'s effect ended.", 0);
+                var name = sys.name(id);
+                if (!name) { // player left
+                    return;
+                }
+
+                rtdbot.sendAll(name + "'s effect ended.", 0);
             };
         }
 
