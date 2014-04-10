@@ -70,6 +70,9 @@ global.Emotes = {
         if (src && RTD.hasEffect(src, 'bigger_emotes')) {
             size = " width='100' height='100'";
         }
+        if (src && RTD.hasEffect(src, 'mega_emotes')) {
+            size = " width='200' height='200'";
+        }
 
         function assignEmote(emote, code) {
             return function ($1) {
@@ -138,6 +141,9 @@ global.Emotes = {
         // Emoji effects
         if (src && RTD.hasEffect(src, 'bigger_emotes')) {
             size = " width='44' height='44'";
+        }
+        if (src && RTD.hasEffect(src, 'mega_emotes')) {
+            size = " width='88' height='88'";
         }
 
         message = message.replace(emojiRegex, function (name) {

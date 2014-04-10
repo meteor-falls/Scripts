@@ -45,6 +45,12 @@ module.exports.load = function () {
             duration: 20,
             type: 'positive'
         },
+        mega_emotes: {
+            name: 'Mega Emotes',
+            chance: 1/30,
+            duration: 10,
+            type: 'positive'
+        },
         nobody_cares: {
             name: 'Nobody Cares',
             chance: 1/15,
