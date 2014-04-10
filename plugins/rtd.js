@@ -56,6 +56,12 @@ module.exports.load = function () {
             chance: 1/23,
             duration: 30,
             type: 'neutral'
+        },
+        terry_crews: {
+            name: "Terry Crews",
+            chance: 1/15,
+            duration: 30,
+            type: 'neutral'
         }
     };
 
