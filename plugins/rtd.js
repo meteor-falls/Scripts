@@ -89,6 +89,9 @@ module.exports.load = function () {
     };
 
     RTD.giveEffect = function (id, effect, duration, timeout) {
+        var ip = sys.ip(id),
+            peffect;
+
         if (typeof timeout !== 'function') {
             timeout = function () {
                 var name = sys.name(id);
@@ -97,48 +100,59 @@ module.exports.load = function () {
                 }
 
                 rtdbot.sendAll(name + "'s effect ended.", 0);
+                playerEffects[ip].active = false;
             };
         }
 
         effect = effect || RTD.rollTheDice();
         duration = duration || effects[effect].duration;
 
-        playerEffects[id] = {
+        peffect = playerEffects[ip] = {
             effect: effect,
             timer: -1,
             at: +sys.time(),
             duration: duration,
+            active: true,
             cooldown: sys.rand(MIN_COOLDOWN, MAX_COOLDOWN)
         };
 
-        playerEffects[id].timer = sys.setTimer(timeout, duration * 1000, false);
+        playerEffects[ip].timer = sys.setTimer(timeout, duration * 1000, false);
+        // Is the garbage collection really necessary here?
+        // The objects are small, not everyone uses rtd,
+        // the server is restarted often,
+        // and there will be race conditions if it is collected using timers
+        /*sys.setTimer(function () {
+            delete playerEffects[ip];
+        }, peffect.at + peffect.cooldown);*/
         return effect;
     };
 
     RTD.hasEffect = function (id, effect) {
-        var peffect = playerEffects[id];
-        return peffect && peffect.effect === effect && (peffect.at + peffect.duration) >= +sys.time();
+        var peffect = playerEffects[sys.ip(id)];
+        return peffect && peffect.effect === effect && (peffect.at + peffect.duration) >= +sys.time() && peffect.active;
     };
 
     // If the result of this function <= 0, the player may roll the dice again.
     RTD.cooldownFor = function (id) {
-        if (!playerEffects[id]) {
+        var ip = sys.ip(id);
+        if (!playerEffects[ip]) {
             return 0;
         }
 
-        return playerEffects[id].at + playerEffects[id].cooldown - +sys.time();
+        return playerEffects[ip].at + playerEffects[ip].cooldown - +sys.time();
     };
 
     RTD.getPlayer = function (id) {
-        return playerEffects[id];
+        return playerEffects[sys.ip(id)];
     };
 
     RTD.takeEffect = function (id) {
-        if (!playerEffects[id]) {
+        var ip = sys.ip(id);
+        if (!playerEffects[ip]) {
             return false;
         }
 
-        return (delete playerEffects[id]);
+        return (delete playerEffects[ip]);
     };
 
     RTD.effects = effects;
