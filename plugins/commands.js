@@ -494,7 +494,7 @@
     addCommand(0, "rtd", function (src, command, commandData, tar, chan) {
         var effect;
         if (RTD.cooldownFor(src) > 0) {
-            return bot.sendMessage(src, "You can't use RTD for another " + (RTD.getPlayer(src).at + RTD.getPlayer(src).cooldown - +sys.time()) + " second(s).", chan);
+            return bot.sendMessage(src, "You can't use RTD for another " + Utils.getTimeString(RTD.getPlayer(src).at + RTD.getPlayer(src).cooldown - +sys.time()) + ".", chan);
         }
 
         effect = RTD.giveEffect(src);

@@ -32,6 +32,14 @@
     };
 
     CommandList.prototype.add = function (cmd, desc, args) {
+        var len, i;
+        if (Array.isArray(cmd)) {
+            for (i = 0, len = cmd.length; i < len; i += 1) {
+                this.add.apply(this, cmd[i]);
+            }
+            return this;
+        }
+
         if (arguments.length > 1) {
             if (!args) {
                 cmd = "/<a href='po:send//" + cmd + "' style='text-decoration: none; color: black;'>" + cmd + "</a>";
@@ -43,10 +51,13 @@
         } else {
             this.template += "<li><b>" + cmd + "</b></li>";
         }
+
+        return this;
     };
 
     CommandList.prototype.finish = function () {
         this.template += "</" + this.listtype + "><br/><font color='" + this.bordercolor + "' size='4'><b>" + listBorder + "</b></font>";
+        return this;
     };
 
     CommandList.prototype.display = function (player, channel) {
@@ -96,6 +107,7 @@
 
         out += "</tr>";
         this.template += out;
+        return this;
     };
 
     TableList.prototype.addEvery = function (elements, isBold, every, remainingIsBold) {
@@ -115,10 +127,12 @@
         if (out.length) {
             this.add(out, remainingIsBold === undefined ? isBold : remainingIsBold);
         }
+        return this;
     };
 
     TableList.prototype.finish = function () {
         this.template += "</table><br><br/><font color='" + this.borderColor + "' size='4'><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font>";
+        return this;
     };
 
     TableList.prototype.display = function (player, channel) {
@@ -128,19 +142,17 @@
     function generateLists() {
         var Lists = {};
 
-        var Commands = new CommandList("Commands", "navy");
-        Commands.add("usercommands", "To view the commands for <b>users</b>.");
-        Commands.add("feedmoncommands", "To view the commands related to <b>feedmon</b>.");
-        Commands.add("channelcommands", "To view the commands related to <b>channels</b>.");
-        Commands.add("megausercommands", "To view the commands for <b>megausers</b>.");
-        Commands.add("leaguemanagercommands", "To view the commands for <b>leaguemanagers</b>.");
-        Commands.add("modcommands", "To view the commands for <b>moderators</b>.");
-        Commands.add("admincommands", "To view the commands for <b>administrators</b>.");
-        Commands.add("ownercommands", "To view the commands for <b>owners</b>.");
-        Commands.add("maintainercommands", "To view commands for <b>maintainers</b>.");
-        Commands.finish();
-
-        Lists.Commands = Commands;
+        Lists.Commands = new CommandList("Commands", "navy").add([
+            ["usercommands", "To view the commands for <b>users</b>."],
+            ["feedmoncommands", "To view the commands related to <b>feedmon</b>."],
+            ["channelcommands", "To view the commands related to <b>channels</b>."],
+            ["megausercommands", "To view the commands for <b>megausers</b>."],
+            ["leaguemanagercommands", "To view the commands for <b>leaguemanagers</b>."],
+            ["modcommands", "To view the commands for <b>moderators</b>."],
+            ["admincommands", "To view the commands for <b>administrators</b>."],
+            ["ownercommands", "To view the commands for <b>owners</b>."],
+            ["maintainercommands", "To view commands for <b>maintainers</b>."]
+        ]).finish();
 
         /** USER COMMANDS **/
         var User = new CommandList("User Commands", "navy");
