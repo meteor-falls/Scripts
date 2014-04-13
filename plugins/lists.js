@@ -274,18 +274,17 @@
         Lists.EmoteList = emotesList;
 
         /** RULES **/
-        var Rules = new CommandList("Rules", "navy", "Please follow the rules or risk punishment:", "ol");
-        Rules.add("Keep disrespectful statements to a minimum. Jokes shouldn't go too far and direct disrespect may warrant punishment depending on its severity. Continued negativity might result in a ban.");
-        Rules.add("Asking for authority is not allowed. This includes ranks such as megauser and permissions such as emotes (requesting said permissions on your new IP/name is allowed, but do not overuse this exception). If you have good reasoning, we might consider you.");
-        Rules.add("Do not spam or flood the chat (3-4 lines in a row is generally flood). CAPS are not allowed either. Unless you have permission to do so, you should post a link to a pastebin or similar.");
-        Rules.add("It is not allowed to post the same message over and over again. If you are trying to contact someone directly, use the PM system or ping them.");
-        Rules.add("Do not advertise your server. Advertising will give your server a bad reputation. This rule is strictly enforced.");
-        Rules.add("No sexual or harmful content whatsoever. This includes porn sites, viruses, sexual ASCII art, etc. Additionally, use inappropriate comments sparingly.");
-        Rules.add("Discrimination, sexism, racism, homophobia, and similar is not allowed and may be punished for severely depending on context.");
-        Rules.add("Listen to the auth. If an auth tells you to stop misbehaving, you must listen or your punishment is their choice (as long as it's reasonable).");
-        Rules.add("Ban evasion is strictly forbidden and will be punished with a direct (range)ban. Appeals can be made on the forum.");
+        var Rules = new CommandList("Rules", "navy", "Please follow the rules or risk punishment: <small>(revision 3)</small>", "ol").add([
+            ["Do not spam or flood the chat (3 lines in a row is generally flood). CAPS are not allowed either, neither is posting the exact same message (you may be punished even if you post this twice in a row, in a short timespan)."],
+            ["Listen to the auth. If an auth tells you to stop misbehaving, you must listen or your punishment is their choice (as long as it's reasonable). Shouting 'abuse' when you've clearly broken the rules will bring you in more trouble."],
+            ["Keep disrespectful statements to a minimum; Jokes shouldn't go too far."],
+            ["No sexual or harmful content whatsoever. This includes porn sites, viruses, sexual ASCII art, &c."],
+            ["Asking for authority is not allowed. This includes ranks such as megauser and permissions such as emotes (requesting said permissions on your new IP/name is allowed, but do not overuse this exception). If you have good reasoning, we might consider you."],
+            ["Do not advertise your server. Advertising will give your server a bad reputation. This rule is strictly enforced."],
+            ["Ban evasion will just grant you yet another ban."]
+        ]);
 
-        Rules.template += "</ol>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Follow all the rules above and you will have no problem having a good time at " + Reg.get("servername") + "! <small>rev 2</small><br>";
+        Rules.template += "</ol>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Follow all the rules above and you will have no problem having a good time at " + Reg.get("servername") + "!<br>";
         Rules.finish();
 
         Lists.Rules = Rules;
