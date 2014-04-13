@@ -139,6 +139,9 @@
         sys.sendHtmlMessage(player, this.template, channel);
     };
 
+    global.CommandList = CommandList;
+    global.TableList = TableList;
+
     function generateLists() {
         var Lists = {};
 
