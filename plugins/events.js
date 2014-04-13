@@ -453,9 +453,9 @@
             } else if (nightclub) {
                 sendStr = Utils.nightclub.rainbowify("(" + sys.name(src) + "): " + originalMessage);
             } else {
-                sendStr = "<font color='" + Utils.nameColor(src) + "' size='" + fontsize + "' face='" + fontface + "'><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + ":</b></font> " + message;
+                sendStr = "<font color='" + Utils.nameColor(src) + "' face='" + fontface + "'><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + ":</b></font> <font size='" + fontsize + '>" + message + "</font>";
                 if (sys.auth(src) > 0 && sys.auth(src) < 4) {
-                    sendStr = "<font color='" + Utils.nameColor(src) + "' size='" + fontsize + "' face='" + fontface + "'><timestamp/>+<i><b>" + Utils.escapeHtml(sys.name(src)) + ":</b></i></font> " + message;
+                    sendStr = "<font color='" + Utils.nameColor(src) + "' face='" + fontface + "'><timestamp/>+<i><b>" + Utils.escapeHtml(sys.name(src)) + ":</b></i></font> <font size='" + fontsize + '>" + message + "</font>";
                 }
             }
 
