@@ -1,8 +1,8 @@
 module.exports.load = function () {
     global.RTD = {};
     var playerEffects = {};
-    var MIN_COOLDOWN = 90; // 1m30s
-    var MAX_COOLDOWN = 130; // 2m10s
+    var MIN_COOLDOWN = 120; // 2m
+    var MAX_COOLDOWN = 145; // 2m25s
 
     function randomSample(hash) {
         var cum = 0;
@@ -39,26 +39,42 @@ module.exports.load = function () {
         this.type = type;
     }
 
+    var Positive, Neutral, Negative;
+    Effect.positive = Positive = 0;
+    Effect.neutral  = Neutral  = 1;
+    Effect.negative = Negative = 2;
+
+    var Short, Medium, Long;
+    Effect.short  = Short  = 10;
+    Effect.medium = Medium = 20;
+    Effect.long   = Long   = 30;
+
+    var VeryCommon, Common, Uncommon, Rare, VeryRare;
+    Effect.veryCommon = VeryCommon = 1/15;
+    Effect.common     = Common     = 1/18;
+    Effect.uncommon   = Uncommon   = 1/23;
+    Effect.rare       = Rare       = 1/25;
+    Effect.veryRare   = VeryRare   = 1/30;
+
     var effects = {
         // Emotes
-        blank_emotes: new Effect('Blank Emotes', 1/18, 30, 'negative'),
-        smaller_emotes: new Effect('Smaller Emotes', 1/17, 30, 'negative'),
-        bigger_emotes: new Effect('Bigger Emotes', 1/20, 20, 'positive'),
-        mega_emotes: new Effect('Mega Emotes', 1/30, 10, 'positive'),
-        nobody_cares: new Effect('Nobody Cares', 1/15, 30, 'neutral'),
-        terry_crews: new Effect('Terry Crews', 1/15, 30, 'neutral'),
-        im_blue: new Effect("I'm Blue", 1/23, 30, 'neutral'),
+        bigger_emotes: new Effect('Bigger Emotes', Uncommon, Medium, Positive),
+        mega_emotes: new Effect('Mega Emotes', VeryRare, Short, Positive),
+
+        nobody_cares: new Effect('Nobody Cares', Common, Long, Neutral),
+        terry_crews: new Effect('Terry Crews', VeryCommon, Long, Neutral),
+        im_blue: new Effect("I'm Blue", Rare, Long, Neutral),
+
+        blank_emotes: new Effect('Blank Emotes', Common, Long, Negative),
+        smaller_emotes: new Effect('Smaller Emotes', Common, Long, Negative),
 
         // Chat text
-        big_text: new Effect('Big Text', 1/24, 20, 'positive')
+        big_text: new Effect('Big Text', Rare, Medium, Positive)
     };
 
     RTD.getTypeColor = function (type) {
-        return {
-            'negative': '#e41a28',
-            'neutral': '#0a281f',
-            'positive': '#2de727'
-        }[type];
+        // positive neutral negative
+        return ['#2de727', '#0a281f', '#e41a28'][type];
     };
 
     RTD.rollString = function (id, effect) {
