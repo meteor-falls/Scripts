@@ -914,20 +914,20 @@
 
     addCommand(1, ["wall", "cwall"], function (src, command, commandData, tar, chan) {
         var wallchan = (command === "cwall" ? chan : undefined);
-
         if (!commandData) {
             bot.sendMessage(src, "Please post a message.", chan);
             return;
         }
 
-        var wallmessage = Utils.escapeHtml(commandData);
+        var wallmessage = Utils.format(src, commandData);
+        //var wallmessage = Utils.escapeHtml(commandData);
 
         if (Emotes.enabledFor(src)) {
             wallmessage = Emotes.format(wallmessage, Emotes.ratelimit, src);
         }
 
         sys.sendHtmlAll("<br><font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>", wallchan);
-        sys.sendHtmlAll("<font color=" + Utils.nameColor(src) + "><timestamp/>+<b><i>" + sys.name(src) + ":</i></b></font> " + wallmessage + "<br>", wallchan);
+        sys.sendHtmlAll("<font color=" + Utils.nameColor(src) + "><timestamp/>+<b><i>" + Utils.escapeHtml(sys.name(src)) + ":</i></b></font> " + wallmessage + "<br>", wallchan);
         sys.sendHtmlAll("<font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>", wallchan);
     });
 

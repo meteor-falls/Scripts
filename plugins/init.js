@@ -167,46 +167,6 @@ module.exports = {
             return "<a href='po:join/" + channel + "'>#" + channel + "</a>";
         };
 
-        addChannelLinks = function (line) {
-            var index = line.indexOf('#');
-            if (index === -1) {
-                return line;
-            }
-
-            var str = '', fullChanName, chanName, chr, lastIndex = 0, pos, i;
-            var channelNames = Utils.channelNames(true); // lower case names
-
-            while (index !== -1) {
-                str += line.substring(lastIndex, index);
-                lastIndex = index + 1; // Skip over the '#'
-
-                fullChanName = '';
-                chanName = '';
-
-                for (i = 0, pos = lastIndex; i < 20 && (chr = line[pos]); i += 1, pos += 1) {
-                    fullChanName += chr;
-                    if (channelNames.indexOf(fullChanName.toLowerCase()) !== -1) {
-                        chanName = fullChanName;
-                    }
-                }
-
-                if (chanName) {
-                    str += "<a href='po:join/" + chanName + "'>#" + chanName + "</a>";
-                    lastIndex += chanName.length;
-                } else {
-                    str += '#';
-                }
-
-                index = line.indexOf('#', lastIndex);
-            }
-
-            if (lastIndex < line.length) {
-                str += line.substr(lastIndex);
-            }
-
-            return str;
-        };
-
         /*function formatLinks(message) {
             return message.replace(/(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?\^=%&amp;:\/~\+#]*[\w\-\@?\^=%&amp;\/~\+#])?/gi, '$1');
         }*/
