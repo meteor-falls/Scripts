@@ -39,6 +39,12 @@ module.exports.load = function () {
             duration: 30,
             type: 'negative'
         },
+        smaller_emotes: {
+            name: 'Smaller Emotes',
+            chance: 1/17,
+            duration: 30,
+            type: 'negative'
+        },
         bigger_emotes: {
             name: 'Bigger Emotes',
             chance: 1/20,
@@ -57,15 +63,15 @@ module.exports.load = function () {
             duration: 30,
             type: 'neutral'
         },
-        im_blue: {
-            name: "I'm Blue",
-            chance: 1/23,
-            duration: 30,
-            type: 'neutral'
-        },
         terry_crews: {
             name: "Terry Crews",
             chance: 1/15,
+            duration: 30,
+            type: 'neutral'
+        },
+        im_blue: {
+            name: "I'm Blue",
+            chance: 1/23,
             duration: 30,
             type: 'neutral'
         }
