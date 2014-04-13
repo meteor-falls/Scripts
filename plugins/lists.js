@@ -29,7 +29,7 @@
         }
 
         this.listtype = listtype;
-    };
+    }
 
     CommandList.prototype.add = function (cmd, desc, args) {
         var len, i;
@@ -77,7 +77,7 @@
         this.template += "<table border='" + border + "' cellpadding='" + padding + "'>";
 
         this._zebra = true;
-    };
+    }
 
     TableList.prototype.bgcolor = function () {
         var color = this.color.toLowerCase();
