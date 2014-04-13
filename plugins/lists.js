@@ -185,6 +185,7 @@
         Fun.add("me", "To post a message with *** around it.", ["message"]);
         Fun.add("spin", "To play roulette if a game is going on.");
         Fun.add("attack", "To use a Pokémon attack on someone.", ["player"]);
+        Fun.add("rtd", "Roll the dice! You will receive a special effect.");
         Fun.finish();
 
         Lists.Fun = Fun;
