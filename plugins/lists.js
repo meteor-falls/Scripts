@@ -11,7 +11,7 @@
         }).join(":");
     }
 
-    CommandList = function (title, bordercolor, help, listtype) {
+    function CommandList(title, bordercolor, help, listtype) {
         this.title = title;
         this.bordercolor = bordercolor;
         this.template = "<font color='" + this.bordercolor + "' size='4'><b>" + listBorder + "</b></font><br/><h2>" + title + "</h2>";
@@ -66,7 +66,7 @@
 
     // Default border: 2
     // Default padding: 5
-    TableList = function (name, color, border, padding, borderColor) {
+    function TableList(name, color, border, padding, borderColor) {
         this.name = name;
         this.color = color;
         this.border = border;
@@ -155,118 +155,99 @@
         ]).finish();
 
         /** USER COMMANDS **/
-        var User = new CommandList("User Commands", "navy");
-        User.add("funcommands", "To view the fun commands.");
-        User.add("rules", "To view the rules.");
-        User.add("scriptinfo", "To view script information.");
-        User.add("auth", "To view the authlist.");
-        User.add("megausers", "To view the list of people who can make tournaments.");
-        User.add("floodignorelist", "To view the users who can't be flood kicked");
-        User.add("emotepermlist", "To view the users who have emote permissions.");
-        User.add("league", "To view the list of gym leaders, elites, and the champion.");
-        User.add("leaguerules", "To view the rules for the League.");
-        User.add("tourusercommands", "To view the tournament commands for users.");
-        User.add("sendto", "To send a message to a certain person. To ping, just type /sendto [person].", ["person", "message"]);
-        User.add("emotes", "To view a list of emotes. For moderators and above only.");
-        User.add("emotetoggle", "To toggle emotes on or off for you.");
-        User.add("bbcode", "To view a list of bbcodes.");
-        User.add("selfkick", "Kicks all the ghosts on your ip.");
-        User.add("vote", "To vote on a poll option.", ["option"]);
-        User.add("calc", "Evaluates a mathematical expression (10 / 2 * 4 ^ pi!). Full documentation <a href='https://github.com/josdejong/mathjs/blob/master/README.md'>here</a>.", ["expression"]);
-        User.add("players", "Tells you how many players there are online on the given [os] (windows, mac, linux, android, webclient). If not specified, tells you how many players there are online regardless of OS.", ["os"]);
-        User.finish();
-
-        Lists.User = User;
+        Lists.User = new CommandList("User Commands", "navy").add([
+            ["funcommands", "To view the fun commands."],
+            ["rules", "To view the rules."],
+            ["scriptinfo", "To view script information."],
+            ["auth", "To view the authlist."],
+            ["megausers", "To view the list of people who can make tournaments."],
+            ["floodignorelist", "To view the users who can't be flood kicked"],
+            ["emotepermlist", "To view the users who have emote permissions."],
+            ["league", "To view the list of gym leaders, elites, and the champion."],
+            ["leaguerules", "To view the rules for the League."],
+            ["tourusercommands", "To view the tournament commands for users."],
+            ["sendto", "To send a message to a certain person. To ping, just type /sendto [person].", ["person", "message"]],
+            ["emotes", "To view a list of emotes. For moderators and above only."],
+            ["emotetoggle", "To toggle emotes on or off for you."],
+            ["bbcode", "To view a list of bbcodes."],
+            ["selfkick", "Kicks all the ghosts on your ip."],
+            ["vote", "To vote on a poll option.", ["option"]],
+            ["calc", "Evaluates a mathematical expression (10 / 2 * 4 ^ pi!). Full documentation <a href='https://github.com/josdejong/mathjs/blob/master/README.md'>here</a>.", ["expression"]],
+            ["players", "Tells you how many players there are online on the given [os] (windows, mac, linux, android, webclient). If not specified, tells you how many players there are online regardless of OS.", ["os"]]
+        ]).finish();
 
         /** LEAGUE MANAGER **/
-        var LeagueManager = new CommandList("League Manager Commands", "navy");
-        LeagueManager.add("gl", "To make someone the [spot] gym leader. [spot] can be 1-8. Removes gym leader [spot] if [player] is empty.", ["player", "spot"]);
-        LeagueManager.add("el", "To make someone the [spot] elite. [spot] can be 1-4. Removes elite [spot] if [player] is empty.", ["player", "spot"]);
-        LeagueManager.add("champ", "To make someone the champion. Removes the champion if [player] is empty.", ["player"]);
-        LeagueManager.finish();
-
-        Lists.LeagueManager = LeagueManager;
+        Lists.LeagueManager = new CommandList("League Manager Commands", "navy").add([
+            ["gl", "To make someone the [spot] gym leader. [spot] can be 1-8. Removes gym leader [spot] if [player] is empty.", ["player", "spot"]],
+            ["el", "To make someone the [spot] elite. [spot] can be 1-4. Removes elite [spot] if [player] is empty.", ["player", "spot"]],
+            ["champ", "To make someone the champion. Removes the champion if [player] is empty.", ["player"]]
+        ]).finish();
 
         /** FUN **/
-        var Fun = new CommandList("Fun Commands", "navy");
-        Fun.add("burn", "To burn someone.", ["player"]);
-        Fun.add("freeze", "To freeze someone.", ["player"]);
-        Fun.add("paralyze", "To paralyze someone.", ["player"]);
-        Fun.add("poison", "To poison someone.", ["player"]);
-        Fun.add("cure", "To cure someone.", ["player"]);
-        Fun.add("me", "To post a message with *** around it.", ["message"]);
-        Fun.add("spin", "To play roulette if a game is going on.");
-        Fun.add("attack", "To use a Pokémon attack on someone.", ["player"]);
-        Fun.add("rtd", "Roll the dice! You will receive a special effect.");
-        Fun.finish();
-
-        Lists.Fun = Fun;
+        Lists.Fun = new CommandList("Fun Commands", "navy").add([
+            ["burn", "To burn someone.", ["player"]],
+            ["freeze", "To freeze someone.", ["player"]],
+            ["paralyze", "To paralyze someone.", ["player"]],
+            ["poison", "To poison someone.", ["player"]],
+            ["cure", "To cure someone.", ["player"]],
+            ["me", "To post a message with *** around it.", ["message"]],
+            ["spin", "To play roulette if a game is going on."],
+            ["attack", "To use a Pokémon attack on someone.", ["player"]],
+            ["rtd", "Roll the dice! You will receive a special effect."]
+        ]).finish();
 
         /** FEEDMON **/
-        var FeedmonList = new CommandList("Feedmon Commands", "navy");
-        FeedmonList.add("catch", "Catches a random Pokémon.");
-        FeedmonList.add("feed", "Feeds your caught Pokémon.");
-        FeedmonList.add("nickname", "Gives your caught Pokémon a nickname.", ["name"]);
-        FeedmonList.add("level", "If [option] is all, displays requirements for all levels. Otherwise, displays how many EXP you still need for the next level.", ["option"]);
-        FeedmonList.add("battle", "Starts a battle with a random Pokémon.");
-        FeedmonList.add("move", "Uses one of your Pokémon moves in battle.", ["num"]);
-        FeedmonList.add("heal", "Revives/heals your (fainted) Pokémon.");
-        FeedmonList.finish();
-
-        Lists.Feedmon = FeedmonList;
+        Lists.Feedmon = new CommandList("Feedmon Commands", "navy").add([
+            ["catch", "Catches a random Pokémon."],
+            ["feed", "Feeds your caught Pokémon."],
+            ["nickname", "Gives your caught Pokémon a nickname.", ["name"]],
+            ["level", "If [option] is all, displays requirements for all levels. Otherwise, displays how many EXP you still need for the next level.", ["option"]],
+            ["battle", "Starts a battle with a random Pokémon."],
+            ["move", "Uses one of your Pokémon moves in battle.", ["num"]],
+            ["heal", "Revives/heals your (fainted) Pokémon."]
+        ]).finish();
 
         /** CHANNEL */
-        var Channel = new CommandList("Channel Commands", "navy");
-        Channel.add("cauth", "Shows this channel's auth.");
-        Channel.add("topic", "Shows this channel's topic.");
-        Channel.add("chanmodcommands", "To view the commands for <b>channel moderators</b>.");
-        Channel.add("chanadmincommands", "To view the commands for <b>channel administrators</b>.");
-        Channel.add("chanownercommands", "To view the commands for <b>channel owners</b>.");
-        Channel.add("<b>Note:</b> As creator of the channel, you will always have channel owner permissions. Additionally, your channel auth is never lower than your server auth.");
-        Channel.finish();
+        Lists.Channel = new CommandList("Channel Commands", "navy").add([
+            ["cauth", "Shows this channel's auth."],
+            ["topic", "Shows this channel's topic."],
+            ["chanmodcommands", "To view the commands for <b>channel moderators</b>."],
+            ["chanadmincommands", "To view the commands for <b>channel administrators</b>."],
+            ["chanownercommands", "To view the commands for <b>channel owners</b>."],
+            ["<b>Note:</b> As creator of the channel, you will always have channel owner permissions. Additionally, your channel auth is never lower than your server auth."]
+        ]).finish();
 
-        Lists.Channel = Channel;
+        Lists.ChanMod = new CommandList("Channel Moderator Commands", "navy").add([
+            ["changetopic", "Sets the topic of the channel to [topic]. HTML is allowed. An empty [topic] will reset the topic.", ["topic"]],
+            ["topicsource", "Shows the source of this channel's topic (no formatting)."],
+            ["channelkick", "To kick [player] from this channel.", ["player"]]
+        ]).finish();
 
-        var ChanMod = new CommandList("Channel Moderator Commands", "navy");
-        ChanMod.add("changetopic", "Sets the topic of the channel to [topic]. HTML is allowed. An empty [topic] will reset the topic.", ["topic"]);
-        ChanMod.add("topicsource", "Shows the source of this channel's topic (no formatting).");
-        ChanMod.add("channelkick", "To kick [player] from this channel.", ["player"]);
-        ChanMod.finish();
+        Lists.ChanAdmin = new CommandList("Channel Administrator Commands", "navy").add([
+        ]).finish();
 
-        Lists.ChanMod = ChanMod;
-
-        var ChanAdmin = new CommandList("Channel Administrator Commands", "navy");
-        ChanAdmin.finish();
-
-        Lists.ChanAdmin = ChanAdmin;
-
-        var ChanOwner = new CommandList("Channel Owner Commands", "navy");
-        ChanOwner.add("cchangeauth", "Changes the channel auth of [player] to [auth]. [auth] must be 0-3.", ["player", "auth"]);
-
-        Lists.ChanOwner = ChanOwner;
+        Lists.ChanOwner = new CommandList("Channel Owner Commands", "navy").add([
+            ["cchangeauth", "Changes the channel auth of [player] to [auth]. [auth] must be 0-3.", ["player", "auth"]]
+        ]).finish();
 
         /** MEGAUSER **/
-        var Megauser = new CommandList("Megauser Commands", "navy");
-        Megauser.add("tour", "To start a tournament with tier [tier] that allows [#ofplayers] people to play with optional prize [prize].", ["tier", "#ofplayers", "prize"]);
-        Megauser.add("endtour", "To end a running tournament.");
-        Megauser.add("sub", "To replace [player1] with [player2] in the running tournament.", ["player1", "player2"]);
-        Megauser.add("changecount", "To change the number of entrants allowed to [number] during the sign up phase.", ["number"]);
-        Megauser.add("push", "To force [player] in the running tournament.", ["player"]);
-        Megauser.add("dq", "To disqualify [player] from the running tournament.", ["player"]);
-        Megauser.add("restart", "To restart [name]'s battle in the running tournament. Abusing this can cost you your megauser status.", ["name"]);
-        Megauser.finish();
-
-        Lists.Megauser = Megauser;
+        Lists.Megauser = new CommandList("Megauser Commands", "navy").add([
+            ["tour", "To start a tournament with tier [tier] that allows [#ofplayers] people to play with optional prize [prize].", ["tier", "#ofplayers", "prize"]],
+            ["endtour", "To end a running tournament."],
+            ["sub", "To replace [player1] with [player2] in the running tournament.", ["player1", "player2"]],
+            ["changecount", "To change the number of entrants allowed to [number] during the sign up phase.", ["number"]],
+            ["push", "To force [player] in the running tournament.", ["player"]],
+            ["dq", "To disqualify [player] from the running tournament.", ["player"]],
+            ["restart", "To restart [name]'s battle in the running tournament. Abusing this can cost you your megauser status.", ["name"]]
+        ]).finish();
 
         /** TOURNAMENT USER **/
-        var Tour = new CommandList("Tour User Commands", "navy");
-        Tour.add("join", "To join a tournament during the sign up phase.");
-        Tour.add("unjoin", "To leave a tournament.");
-        Tour.add("viewround", "To view the status of the tournament.");
-        Tour.add("tourtier", "To view the tier of the tournament.");
-        Tour.finish();
-
-        Lists.Tour = Tour;
+        Lists.Tour = new CommandList("Tour User Commands", "navy").add([
+            ["join", "To join a tournament during the sign up phase."],
+            ["unjoin", "To leave a tournament."],
+            ["viewround", "To view the status of the tournament."],
+            ["tourtier", "To view the tier of the tournament."]
+        ]).finish();
 
         /** EMOTES **/
         var emotesList = new TableList("Emotes", "stripe", 1, 2, "navy");
