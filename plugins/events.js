@@ -442,15 +442,20 @@
             }
 
             var sentStr;
+            var fontface = comicmode ? 'comic sans' : '';
+            var fontsize = 3;
+            if (RTD.hasEffect(src, 'big_text')) {
+                fontsize = 6;
+            }
 
             if (pewpewpew) {
                 sendStr = pewpewpewmessage(message, src);
             } else if (nightclub) {
                 sendStr = Utils.nightclub.rainbowify("(" + sys.name(src) + "): " + originalMessage);
             } else {
-                sendStr = "<font color='" + Utils.nameColor(src) + "'" + (comicmode ? " face='comic sans'" : "") + "><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + ": </b></font>" + message;
+                sendStr = "<font color='" + Utils.nameColor(src) + "' size='" + fontsize + "' face='" + fontface + "'><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + ":</b></font> " + message;
                 if (sys.auth(src) > 0 && sys.auth(src) < 4) {
-                    sendStr = "<font color='" + Utils.nameColor(src) + "'" + (comicmode ? " face='comic sans'" : "") + "><timestamp/>+<i><b>" + Utils.escapeHtml(sys.name(src)) + ": </b></i></font>" + message;
+                    sendStr = "<font color='" + Utils.nameColor(src) + "' size='" + fontsize + "' face='" + fontface + "'><timestamp/>+<i><b>" + Utils.escapeHtml(sys.name(src)) + ":</b></i></font> " + message;
                 }
             }
 

@@ -32,49 +32,25 @@ module.exports.load = function () {
         }
     }
 
+    function Effect(name, chance, duration, type) {
+        this.name = name;
+        this.chance = chance;
+        this.duration = duration;
+        this.type = type;
+    }
+
     var effects = {
-        blank_emotes: {
-            name: 'Blank Emotes',
-            chance: 1/18,
-            duration: 30,
-            type: 'negative'
-        },
-        smaller_emotes: {
-            name: 'Smaller Emotes',
-            chance: 1/17,
-            duration: 30,
-            type: 'negative'
-        },
-        bigger_emotes: {
-            name: 'Bigger Emotes',
-            chance: 1/20,
-            duration: 20,
-            type: 'positive'
-        },
-        mega_emotes: {
-            name: 'Mega Emotes',
-            chance: 1/30,
-            duration: 10,
-            type: 'positive'
-        },
-        nobody_cares: {
-            name: 'Nobody Cares',
-            chance: 1/15,
-            duration: 30,
-            type: 'neutral'
-        },
-        terry_crews: {
-            name: "Terry Crews",
-            chance: 1/15,
-            duration: 30,
-            type: 'neutral'
-        },
-        im_blue: {
-            name: "I'm Blue",
-            chance: 1/23,
-            duration: 30,
-            type: 'neutral'
-        }
+        // Emotes
+        blank_emotes: new Effect('Blank Emotes', 1/18, 30, 'negative'),
+        smaller_emotes: new Effect('Smaller Emotes', 1/17, 30, 'negative'),
+        bigger_emotes: new Effect('Bigger Emotes', 1/20, 20, 'positive'),
+        mega_emotes: new Effect('Mega Emotes', 1/30, 10, 'positive'),
+        nobody_cares: new Effect('Nobody Cares', 1/15, 30, 'neutral'),
+        terry_crews: new Effect('Terry Crews', 1/15, 30, 'neutral'),
+        im_blue: new Effect("I'm Blue", 1/23, 30, 'neutral'),
+
+        // Chat text
+        big_text: new Effect('Big Text', 1/24, 20, 'positive')
     };
 
     RTD.getTypeColor = function (type) {
@@ -113,6 +89,7 @@ module.exports.load = function () {
         effect = effect || RTD.rollTheDice();
         duration = duration || effects[effect].duration;
 
+        // NOTE: These are not garbage collected, it's not necessary and keeps things simple.
         peffect = playerEffects[ip] = {
             effect: effect,
             timer: -1,
@@ -123,13 +100,6 @@ module.exports.load = function () {
         };
 
         playerEffects[ip].timer = sys.setTimer(timeout, duration * 1000, false);
-        // Is the garbage collection really necessary here?
-        // The objects are small, not everyone uses rtd,
-        // the server is restarted often,
-        // and there will be race conditions if it is collected using timers
-        /*sys.setTimer(function () {
-            delete playerEffects[ip];
-        }, peffect.at + peffect.cooldown);*/
         return effect;
     };
 
