@@ -1,7 +1,7 @@
 Meteor Falls
 =======
 
-Scripts for Meteor Falls v0.9
+Scripts for Meteor Falls v0.10.0
 
 ### Requires:
 * 2.4.1 or above

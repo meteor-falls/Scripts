@@ -1,4 +1,4 @@
-/* Meteor Falls v0.9 Scripts.
+/* Meteor Falls v0.10 Scripts.
     By: [VP]Blade, TheUnknownOne, Ethan
     Credit to: Max, Lutra
 */
@@ -172,7 +172,7 @@ try {
     sys.sendAll("Couldn't load ChannelManager: " + ex);
 }
 
-SESSION.identifyScriptAs("Meteor Falls Script v0.9.4");
+SESSION.identifyScriptAs("Meteor Falls Script v0.10.0");
 SESSION.registerUserFactory(poUser);
 SESSION.registerChannelFactory(poChannel);
 SESSION.refill();
