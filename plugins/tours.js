@@ -417,9 +417,10 @@
 
             if (inTour) {
                 sys.changeAway(player, false);
+                bot.sendMessage(src, "You have been unidled for the tournament.", 0);
             }
 
-            sys.sendHtmlAll(player, str + (inTour ? "<ping/>" : ""), 0);
+            sys.sendHtmlMessage(player, str + (inTour ? "<ping/>" : ""), 0);
         }
     }
 
