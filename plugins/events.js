@@ -441,21 +441,41 @@
                 }
             }
 
-            var sentStr;
-            var fontface = comicmode ? 'comic sans' : '';
-            var fontsize = 3;
-            if (RTD.hasEffect(src, 'big_text')) {
-                fontsize = 6;
-            }
+            var sendStr = "";
+            var visibleAuth = sys.auth(src) > 0 && sys.auth(src) < 4;
 
             if (pewpewpew) {
                 sendStr = pewpewpewmessage(message, src);
             } else if (nightclub) {
                 sendStr = Utils.nightclub.rainbowify("(" + sys.name(src) + "): " + originalMessage);
             } else {
-                sendStr = "<font color='" + Utils.nameColor(src) + "' face='" + fontface + "'><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + ":</b></font> <font size='" + fontsize + '>" + message + "</font>";
-                if (sys.auth(src) > 0 && sys.auth(src) < 4) {
-                    sendStr = "<font color='" + Utils.nameColor(src) + "' face='" + fontface + "'><timestamp/>+<i><b>" + Utils.escapeHtml(sys.name(src)) + ":</b></i></font> <font size='" + fontsize + '>" + message + "</font>";
+                if (comicmode) {
+                    sendStr += "<font face='comic sans'>";
+                }
+
+                sendStr += "<font color=" + Utils.nameColor(src) + "><timestamp/>";
+                if (visibleAuth) {
+                    sendStr += "+<i>";
+                }
+
+                sendStr += "<b>" + Utils.escapeHtml(sys.name(src)) + ":</b>";
+                if (visibleAuth) {
+                    sendStr += "</i>";
+                }
+
+                sendStr += "</font> ";
+                if (RTD.hasEffect(src, 'big_text')) {
+                    sendStr += "<font size=6>";
+                }
+
+                sendStr += message;
+
+                if (RTD.hasEffect(src, 'big_text')) {
+                    sendStr += "</font>";
+                }
+
+                if (comicmode) {
+                    sendStr += "</font>";
                 }
             }
 
