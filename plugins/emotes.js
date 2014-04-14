@@ -57,7 +57,7 @@ global.Emotes = {
             size = "",
             perm, i;
 
-        if (src && uobj) {
+        if (limit && src && uobj) {
             //perm = Utils.mod.hasBasicPermissions(src);
             //timeout = perm ? 4 : 7;
             if (uobj.lastEmoteTime && uobj.lastEmoteTime + timeout > time) {
@@ -79,13 +79,13 @@ global.Emotes = {
 
         function assignEmote(emote, code) {
             return function ($1) {
-                if (limit && (emotes.length > 4 || lastEmote.indexOf(emote) !== -1)) {
+                if (emotes.length > 4 || (limit && lastEmote.indexOf(emote) !== -1)) {
                     return Utils.escapeHtml($1);
                 }
 
                 emotes.push(emote);
 
-                if (uobj && uobj.lastEmote) {
+                if (limit && uobj && uobj.lastEmote) {
                     uobj.lastEmote.push(emote);
                 }
 
@@ -119,7 +119,7 @@ global.Emotes = {
         }
 
         for (i in Emotes.list) {
-            if (limit && emotes.length > 4) {
+            if (emotes.length > 4) {
                 break;
             }
 
@@ -175,7 +175,7 @@ global.Emotes = {
             return name;
         });
 
-        if (uobj && uobj.lastEmote && lastEmote.toString() !== uobj.lastEmote.toString()) {
+        if (limit && uobj && uobj.lastEmote && lastEmote.toString() !== uobj.lastEmote.toString()) {
             uobj.lastEmoteTime = time;
         }
 
