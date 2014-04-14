@@ -71,8 +71,8 @@ module.reload = function () {
     rtdbot   = new Bot("RTD", "#1c4eaa");
 
     // Then there are also lesser used bots, as static properties on Bot
-    Bot.kick = new Bot("Kick", "#cc000f");
-    Bot.mute = new Bot("Mute", "#0a39ff");
-    Bot.reason = new Bot("Reason", "#42a3a7");
+    Bot.kick = new Bot("Kick", "#d6000f");
+    Bot.mute = new Bot("Mute", "#5b1eff");
+    Bot.reason = new Bot("Reason", "#000ff4");
     return true;
 };
