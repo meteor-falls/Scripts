@@ -1231,7 +1231,7 @@
 
         var theirmessage = Kickmsgs[Utils.realName(src).toLowerCase()];
         var tarNames = Utils.fancyJoin(Utils.beautifyNames(toKick));
-        var msg = (theirmessage !== undefined) ? theirmessage.message : "<timestamp/><b>" + tarNames + " " + (toKick.length === 1 ? "was" : "were") + " kicked by " + Utils.beautifyName(src) + "</b>!";
+        var msg = (theirmessage !== undefined) ? theirmessage.message : "<font color='#ff211e'><timestamp/><b>" + tarNames + " " + (toKick.length === 1 ? "was" : "were") + " kicked by " + Utils.beautifyName(src) + "!</b></font>";
 
         if (theirmessage) {
             msg = Emotes.interpolate(src, msg, {
@@ -1393,7 +1393,7 @@
         Reg.save("Mutes", Mutes);
 
         if (command !== "smute") {
-            sys.sendHtmlAll("<timestamp/><b>" + Utils.beautifyName(sys.name(src)) + " muted " + Utils.beautifyName(v[0]) + " " + timeString + "</b>!", 0);
+            sys.sendHtmlAll("<font color='#143fff'><timestamp/><b>" + Utils.beautifyName(sys.name(src)) + " muted " + Utils.beautifyName(v[0]) + " " + timeString + "</b>!</font>", 0);
             if (reason) {
                 sys.sendHtmlAll("<font color=green><timestamp/><b>Reason:</b></font> " + reason, 0);
             }
