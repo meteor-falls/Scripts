@@ -236,7 +236,7 @@ global.Emotes = {
         }
     };
 
-    Emotes.interpolate = function (src, msg, vars, checkEnabled, ratelimit) {
+    Emotes.interpolate = function (src, msg, vars, checkEnabled, rateLimit) {
         var i;
         for (i in vars) {
             msg = msg.replace(new RegExp(RegExp.quote(i), "gi"), vars[i]);
