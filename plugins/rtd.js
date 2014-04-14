@@ -63,10 +63,10 @@ module.exports.load = function () {
 
         nobody_cares: new Effect('Nobody Cares', Common, Long, Neutral),
         terry_crews: new Effect('Terry Crews', VeryCommon, Long, Neutral),
-        im_blue: new Effect("I'm Blue", Rare, Long, Neutral),
+        im_blue: new Effect("I'm Blue", Common, Long, Neutral),
 
-        blank_emotes: new Effect('Blank Emotes', Common, Long, Negative),
-        smaller_emotes: new Effect('Smaller Emotes', Common, Long, Negative),
+        blank_emotes: new Effect('Blank Emotes', VeryCommon, Long, Negative),
+        smaller_emotes: new Effect('Smaller Emotes', VeryCommon, Long, Negative),
 
         // Chat text
         big_text: new Effect('Big Text', Rare, Medium, Positive)
