@@ -36,9 +36,9 @@ Bot.prototype.sendMessage = function (player, message, channel) {
 
     var markup = this.markup(message);
     if (channel === undefined) {
-        sys.sendHtmlMessage(player, message_format);
+        sys.sendHtmlMessage(player, markup);
     } else {
-        sys.sendHtmlMessage(player, message_format, channel);
+        sys.sendHtmlMessage(player, markup, channel);
     }
 };
 
