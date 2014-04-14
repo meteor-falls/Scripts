@@ -73,6 +73,7 @@ module.reload = function () {
     // Then there are also lesser used bots, as static properties on Bot
     Bot.kick = new Bot("Kick", "#d6000f");
     Bot.mute = new Bot("Mute", "#5b1eff");
+    Bot.unmute = new Bot("Unmute", "#089107");
     Bot.reason = new Bot("Reason", "#000ff4");
     return true;
 };

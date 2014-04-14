@@ -1393,7 +1393,7 @@
         Reg.save("Mutes", Mutes);
 
         if (command !== "smute") {
-            Bot.mute.sendAll(Utils.beautifyName(sys.name(src)) + " muted " + Utils.beautifyName(v[0]) + " " + timeString, 0);
+            Bot.mute.sendAll(Utils.beautifyName(sys.name(src)) + " muted " + Utils.beautifyName(v[0]) + " " + timeString + "!", 0);
             if (reason) {
                 Bot.reason.sendAll(Emotes.format(reason), 0);
             }
@@ -1433,7 +1433,7 @@
         }
 
         if (command !== "sunmute") {
-            sys.sendHtmlAll("<font color=green><timestamp/><b>" + commandData + " was unmuted by " + Utils.escapeHtml(sys.name(src)) + "!</b></font>", 0);
+            Bot.unmute.sendAll(Utils.beautifyName(src) + " unmuted " + Utils.beautifyName(commandData) + "!", 0);
         } else {
             bot.sendMessage(src, "You silently unmuted " + Utils.beautifyName(commandData) + ".", chan);
         }
