@@ -70,6 +70,7 @@ module.exports = {
             "Mutes": "Mutes",
             "Rangebans": "Rangebans",
             "Kickmsgs": "Kickmsgs",
+            "Mutemsgs": "Mutemsgs",
             "Banmsgs": "Banmsgs",
             "Welmsgs": "Welmsgs",
             "Emotetoggles": "Emotetoggles",

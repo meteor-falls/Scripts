@@ -766,7 +766,7 @@
 
         commandData = commandData.split(":");
         if (!commandData[1]) {
-            bot.sendMessage(src, "Usage of this command is: [kick/ban/welcome]:[message]", chan);
+            bot.sendMessage(src, "Usage of this command is: [kick/mute/ban/welcome]:[message]", chan);
             return;
         }
         var which = commandData[0];
@@ -780,6 +780,17 @@
                 "message": message
             };
             Reg.save("Kickmsgs", Kickmsgs);
+        } else if (whichl === "mute") {
+            if (message.toLowerCase().indexOf('{duration}') === -1) {
+                bot.sendMessage(src, "Your mute message needs to contain the mute duration, use {Duration}.", chan);
+                return;
+            }
+
+            bot.sendMessage(src, "Set mute message to: " + Utils.escapeHtml(message) + "!", chan);
+            Mutemsgs[srcname] = {
+                "message": message
+            };
+            Reg.save("Mutemsgs", Mutemsgs);
         } else if (whichl === "welcome") {
             bot.sendMessage(src, "Set welcome message to: " + Utils.escapeHtml(message) + "!", chan);
             Welmsgs[srcname] = {
@@ -808,12 +819,19 @@
             return;
         }
 
+        commandData = commandData.toLowerCase();
         if (commandData === "kick") {
             if (!Kickmsgs[srcname]) {
                 bot.sendMessage(src, "You currently do not have a kick message, please go make one!", chan);
                 return;
             }
             bot.sendMessage(src, "Your kick message is set to: " + Utils.escapeHtml(Kickmsgs[srcname].message), chan);
+        } else if (commandData === "mute") {
+            if (!Mutemsgs[srcname]) {
+                bot.sendMessage(src, "You currently do not have a mute message, please go make one!", chan);
+                return;
+            }
+            bot.sendMessage(src, "Your mute message is set to: " + Utils.escapeHtml(Mutemsgs[srcname].message), chan);
         } else if (commandData === "welcome") {
             if (!Welmsgs[srcname]) {
                 bot.sendMessage(src, "You currently do not have a welcome message, please go make one!", chan);
@@ -843,6 +861,14 @@
             delete Kickmsgs[srcname];
             Reg.save("Kickmsgs", Kickmsgs);
             bot.sendMessage(src, "Kick message removed!", chan);
+        } else if (lower === "mute") {
+            if (!Mutemsgs[srcname]) {
+                bot.sendMessage(src, "You don't have a mute message!", chan);
+                return;
+            }
+            delete Mutemsgs[srcname];
+            Reg.save("Mutemsgs", Mutemsgs);
+            bot.sendMessage(src, "Mute message removed!", chan);
         } else if (lower === "ban") {
             if (!Banmsgs[srcname]) {
                 bot.sendMessage(src, "You don't have a ban message!", chan);
@@ -1392,8 +1418,19 @@
         Mutes[tarip] = muteHash;
         Reg.save("Mutes", Mutes);
 
+        var msg = Utils.beautifyName(sys.name(src)) + " muted " + Utils.beautifyName(v[0]) + " " + timeString + "!";
+        var mutemsg = Mutemsgs[sys.name(src).toLowerCase()];
+        if (mutemsg) {
+            msg = Emotes.interpolate(src, mutemsg.message, {
+                "{Target}": v[0],
+                "{Color}": Utils.nameColor(src),
+                "{TColor}": Utils.nameColor(sys.id(v[0])),
+                "{Duration}": timeString
+            }, Emotes.always, false, false);
+        }
+
         if (command !== "smute") {
-            Bot.mute.sendAll(Utils.beautifyName(sys.name(src)) + " muted " + Utils.beautifyName(v[0]) + " " + timeString + "!", 0);
+            Bot.mute.sendAll(msg, 0);
             if (reason) {
                 Bot.reason.sendAll(Emotes.format(reason), 0);
             }
