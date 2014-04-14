@@ -1231,10 +1231,10 @@
 
         var theirmessage = Kickmsgs[Utils.realName(src).toLowerCase()];
         var tarNames = Utils.fancyJoin(Utils.beautifyNames(toKick));
-        var msg = (theirmessage !== undefined) ? theirmessage.message : "<font color='#ff211e'><timestamp/><b>" + tarNames + " " + (toKick.length === 1 ? "was" : "were") + " kicked by " + Utils.beautifyName(src) + "!</b></font>";
+        var msg = Bot.kick.markup(tarNames + " " + (toKick.length === 1 ? "was" : "were") + " kicked by " + Utils.beautifyName(src) + "!");
 
         if (theirmessage) {
-            msg = Emotes.interpolate(src, msg, {
+            msg = Emotes.interpolate(src, theirmessage.message, {
                 "{Target}": tarNames,
                 "{Color}": Utils.nameColor(src),
                 "{TColor}": Utils.nameColor(sys.id(toKick[0]))
@@ -1244,7 +1244,7 @@
         if (command !== "skick") {
             sys.sendHtmlAll(msg, 0);
             if (reason) {
-                sys.sendHtmlAll("<font color=black><timestamp/><b>Reason:</font></b> " + reason, 0);
+                Bot.reason.sendAll(Emotes.format(reason), 0);
             }
         } else {
             bot.sendMessage(src, "You silently kicked " + tarNames + ".", chan);
@@ -1393,9 +1393,9 @@
         Reg.save("Mutes", Mutes);
 
         if (command !== "smute") {
-            sys.sendHtmlAll("<font color='#143fff'><timestamp/><b>" + Utils.beautifyName(sys.name(src)) + " muted " + Utils.beautifyName(v[0]) + " " + timeString + "</b>!</font>", 0);
+            Bot.mute.sendAll(Utils.beautifyName(sys.name(src)) + " muted " + Utils.beautifyName(v[0]) + " " + timeString, 0);
             if (reason) {
-                sys.sendHtmlAll("<font color=green><timestamp/><b>Reason:</b></font> " + reason, 0);
+                Bot.reason.sendAll(Emotes.format(reason), 0);
             }
         } else {
             bot.sendMessage(src, "You silently muted " + Utils.beautifyName(v[0]) + " " + timeString + ".", chan);

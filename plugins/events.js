@@ -604,21 +604,21 @@
             if (Utils.getAuth(bpl) >= Utils.getAuth(src)) {
                 bot.sendMessage(src, "You may not kick this person!");
                 return;
-            } else {
-                var theirmessage = Kickmsgs[Utils.realName(src).toLowerCase()];
-                var msg = (theirmessage) ? theirmessage.message : "<font color='navy'><timestamp/><b>" + sys.name(src) + " kicked " + Utils.escapeHtml(sys.name(bpl)) + "!</font></b>";
-                if (theirmessage) {
-                    msg = Emotes.interpolate(src, msg, {
-                        "{Target}": sys.name(bpl),
-                        "{Color}": Utils.nameColor(src),
-                        "{TColor}": Utils.nameColor(bpl)
-                    }, Emotes.always, false, false);
-                }
-
-                sys.sendHtmlAll(msg, 0);
-                Utils.watch.notify(Utils.nameIp(src) + " kicked " + Utils.nameIp(bpl) + ".");
-                Utils.mod.kick(bpl);
             }
+
+            var theirmessage = Kickmsgs[Utils.realName(src).toLowerCase()];
+            var msg = Bot.kick.markup(Utils.beautifyName(src) + " kicked " + Utils.beautifyName(bpl) + "!");
+            if (theirmessage) {
+                msg = Emotes.interpolate(src, theirmessage.message, {
+                    "{Target}": sys.name(bpl),
+                    "{Color}": Utils.nameColor(src),
+                    "{TColor}": Utils.nameColor(bpl)
+                }, Emotes.always, false, false);
+            }
+
+            sys.sendHtmlAll(msg, 0);
+            Utils.watch.notify(Utils.nameIp(src) + " kicked " + Utils.nameIp(bpl) + ".");
+            Utils.mod.kick(bpl);
         },
         beforePlayerBan: function (src, bpl, time) {
             sys.stopEvent();

@@ -10,18 +10,21 @@ Bot = function (name, color, prefix, italics) {
     this.italicsPart = italics ? ["<i>", "</i>"] : ["", ""];
 };
 
+Bot.prototype.markup = function (message) {
+    return "<font color='" + this.color + "'><timestamp/>" + this.prefix + "<b>" + this.italicsPart[0] + this.name + ":" + this.italicsPart[1] + "</b></font> " + message;
+};
+
 Bot.prototype.sendAll = function (message, channel) {
     if (message === "") {
         sys.sendAll(message, channel);
         return;
     }
 
-    var message_format = "<font color='" + this.color + "'><timestamp/>" + this.prefix + "<b>" + this.italicsPart[0] + this.name + ":" + this.italicsPart[1] + "</b></font> " + message;
-
+    var markup = this.markup(message);
     if (channel === undefined) {
-        sys.sendHtmlAll(message_format);
+        sys.sendHtmlAll(markup);
     } else {
-        sys.sendHtmlAll(message_format, channel);
+        sys.sendHtmlAll(markup, channel);
     }
 };
 
@@ -31,8 +34,7 @@ Bot.prototype.sendMessage = function (player, message, channel) {
         return;
     }
 
-    var message_format = "<font color='" + this.color + "'><timestamp/>" + this.prefix + "<b>" + this.italicsPart[0] + this.name + ":" + this.italicsPart[1] + "</b></font> " + message;
-
+    var markup = this.markup(message);
     if (channel === undefined) {
         sys.sendHtmlMessage(player, message_format);
     } else {
@@ -67,5 +69,10 @@ module.reload = function () {
     capsbot  = new Bot("CAPSBot", "#31945e");
     flbot    = new Bot("FloodBot", "#39ab5a");
     rtdbot   = new Bot("RTD", "#1c4eaa");
+
+    // Then there are also lesser used bots, as static properties on Bot
+    Bot.kick = new Bot("Kick", "#cc000f");
+    Bot.mute = new Bot("Mute", "#0a39ff");
+    Bot.reason = new Bot("Reason", "#42a3a7");
     return true;
 };
