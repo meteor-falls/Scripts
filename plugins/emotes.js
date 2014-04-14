@@ -236,14 +236,18 @@ global.Emotes = {
         }
     };
 
-    Emotes.interpolate = function (src, msg, vars, checkEnabled) {
+    Emotes.interpolate = function (src, msg, vars, checkEnabled, ratelimit) {
         var i;
         for (i in vars) {
             msg = msg.replace(new RegExp(RegExp.quote(i), "gi"), vars[i]);
         }
 
+        if (rateLimit !== false) {
+            rateLimit = Emotes.ratelimit;
+        }
+
         if ((!checkEnabled) || (checkEnabled && Emotes.enabledFor(src))) {
-            msg = Emotes.format(msg, Emotes.ratelimit, src);
+            msg = Emotes.format(msg, rateLimit, src);
         }
 
         return msg;

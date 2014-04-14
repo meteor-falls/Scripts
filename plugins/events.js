@@ -612,7 +612,7 @@
                         "{Target}": sys.name(bpl),
                         "{Color}": Utils.nameColor(src),
                         "{TColor}": Utils.nameColor(bpl)
-                    }, Emotes.always);
+                    }, Emotes.always, false, false);
                 }
 
                 sys.sendHtmlAll(msg, 0);
@@ -636,7 +636,7 @@
                     "{Target}": targetName,
                     "{Color}": Utils.nameColor(src),
                     "{TColor}": Utils.nameColor(bpl)
-                }, Emotes.always);
+                }, Emotes.always, false, false);
             }
 
             if (time) {

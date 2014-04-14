@@ -1238,7 +1238,7 @@
                 "{Target}": tarNames,
                 "{Color}": Utils.nameColor(src),
                 "{TColor}": Utils.nameColor(sys.id(toKick[0]))
-            }, Emotes.always);
+            }, Emotes.always, false, false);
         }
 
         if (command !== "skick") {
@@ -1840,7 +1840,7 @@
                     "{Target}": commandData,
                     "{Color}": Utils.nameColor(src),
                     "{TColor}": Utils.nameColor(sys.id(commandData))
-                }, Emotes.always);
+                }, Emotes.always, false, false);
             }
             sys.sendHtmlAll(msg);
         } else {
