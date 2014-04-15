@@ -283,7 +283,7 @@
         },
 
         beforeChangeTier: function (src, team, oldtier, newtier) {
-            if (!Utils.tier.hasOneUsablePoke(src, team) && !Utils.tier.isCCTIer(newtier)) {
+            if (!Utils.tier.hasOneUsablePoke(src, team) && !Utils.tier.isCCTier(newtier)) {
                 sys.stopEvent();
                 bot.sendMessage(src, "Sorry, you do not have a valid team for the " + newtier + " tier.");
                 bot.sendMessage(src, "You have been placed into 'Challenge Cup'.");
