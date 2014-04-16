@@ -41,7 +41,7 @@
         },
         afterNewMessage: function (message) {
             if (message === "Script Check: OK") {
-                sys.sendHtmlAll("<b><i><font color=Blue><font size=4>±ScriptBot:</font></b><b><i><font color=Black><font size=4> Scripts were updated!</font></b></i>");
+                sys.sendHtmlAll("<font size=4><b><font color=blue>±Scripts:</font></b> Scripts were updated!</font>");
                 script.init();
                 return;
             }

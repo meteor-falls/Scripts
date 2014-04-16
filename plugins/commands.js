@@ -1152,35 +1152,59 @@
     });
 
     addCommand(1, "info", function (src, command, commandData, tar, chan) {
-        if (!sys.dbIp(commandData)) {
-            bot.sendMessage(src, 'You need to put a real person!', chan);
-            return;
-        }
         var tarip = sys.dbIp(commandData);
-        var tarauth = sys.dbAuth(commandData);
-        var aliases = sys.aliases(tarip);
-        var registered = sys.dbRegistered(commandData) ? "yes" : "no";
-        var loggedon = sys.loggedIn(tar) ? "yes" : "no";
-        sys.sendMessage(src, "", chan);
+        if (!tarip) {
+            return bot.sendMessage(src, "<b>" + Utils.escapeHtml(commandData) + "</b> has never been on the server.", chan);
+        }
 
-        bot.sendMessage(src, "Information of player <font color=" + Utils.nameColor(tar) + "><b>" + Utils.toCorrectCase(commandData) + "</b></font>:", chan);
-        sys.sendHtmlMessage(src, "<timestamp/><font color=purple><b>IP:</b></font> " + tarip, chan);
-        sys.sendHtmlMessage(src, "<timestamp/><font color=black><b>Auth Level:</b></font> " + tarauth, chan);
-        sys.sendHtmlMessage(src, "<timestamp/><font color=purple><b>Aliases:</b></font> " + aliases, chan);
-        sys.sendHtmlMessage(src, "<timestamp/><font color=black><b>Number of aliases:</b></font> " + aliases.length, chan);
-        sys.sendHtmlMessage(src, "<timestamp/><font color=purple><b>Registered:</b></font> " + registered, chan);
-        sys.sendHtmlMessage(src, "<timestamp/><font color=black><b>Logged In:</b></font> " + loggedon, chan);
+        var tarauth = sys.dbAuth(commandData),
+            aliases = sys.aliases(tarip),
+            regstr = sys.dbRegistered(commandData) ? "Registered" : "Not Registered",
+            loggedIn = sys.loggedIn(tar),
+            logstr = loggedIn ? "Online" : "Offline",
+            cookie = sys.cookie(tar),
+            chans;
 
-        if (loggedon === "yes") {
-            var lengths;
-            var arrays = [];
-            var channelU = sys.channelsOfPlayer(tar);
-            for (lengths in channelU) {
-                arrays.push(sys.channel(channelU[lengths]));
+        var colors = ["#27619b", "#a18f77"],
+            pos = 0;
+        function color() {
+            var c;
+
+            c = colors[pos];
+            pos += 1;
+            if (pos >= colors.length) {
+                pos = 0;
             }
-            sys.sendHtmlMessage(src, "<timestamp/><font color=purple><b>Channels of Player:</b></font> " + arrays.join(", "), chan);
+            return c;
+        }
+        function header(name, msg) {
+            sys.sendHtmlMessage(src, "<font color=" + color() + "><timestamp/><b>" + name + ":</b></font> " + msg, chan);
+        }
+
+        sys.sendMessage(src, "", chan);
+        sys.sendHtmlMessage(src, "<timestamp/> Player " + Utils.beautifyName(commandData) + " (<b>" + logstr + "</b>; <b>" + regstr + "</b>):", chan);
+
+        if (loggedIn) {
+            header("OS", sys.os(tar));
+        }
+
+        header("Auth", tarauth);
+        header("Aliases [" + aliases.length + "]", aliases.map(function (name) {
+            return "<small>" + name + "</small>";
+        }).join(", "));
+
+        if (loggedIn) {
+            chans = sys.channelsOfPlayer(tar).map(function (chan) {
+                return sys.channel(chan);
+            });
+
+            header("Inside Channels [" + chans.length + "]", chans.join(", "));
+            header("Logged in", Utils.getTimeString(+sys.time() - SESSION.users(tar).loginTime) + " ago");
+            if (cookie) {
+                header("Cookie", cookie);
+            }
         } else {
-            sys.sendHtmlMessage(src, "<timestamp/><font color=purple><b>Last On:</b></font> " + sys.dbLastOn(commandData), chan);
+            header("Last Online", sys.dbLastOn(commandData));
         }
 
         sys.sendMessage(src, "", chan);

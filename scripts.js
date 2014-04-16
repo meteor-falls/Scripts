@@ -143,6 +143,7 @@ function poUser(id) {
     this.semuted = false;
 
     this.originalName = sys.name(id);
+    this.loginTime = +sys.time();
 
     // This is an array so we can track multiple emotes in their last message.
     this.lastEmote = [];
@@ -172,7 +173,7 @@ try {
     sys.sendAll("Couldn't load ChannelManager: " + ex);
 }
 
-SESSION.identifyScriptAs("Meteor Falls Script v0.10.0");
+SESSION.identifyScriptAs("Meteor Falls Script v0.10.1");
 SESSION.registerUserFactory(poUser);
 SESSION.registerChannelFactory(poChannel);
 SESSION.refill();
