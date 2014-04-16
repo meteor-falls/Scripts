@@ -1453,7 +1453,7 @@
         }
 
         if (command !== "smute") {
-            sys.sendHtmlAll((mutemsg ? Bot.mute.markup() : "") + msg, 0);
+            sys.sendHtmlAll((mutemsg ? "" : "<timestamp/>" + Bot.mute.markup()) + msg, 0);
             if (reason) {
                 Bot.reason.sendAll(Emotes.format(reason), 0);
             }
