@@ -1,5 +1,6 @@
 global.Emotes = {
     list: {},
+    names: [],
     display: []
 };
 
@@ -20,6 +21,10 @@ global.Emotes = {
         return Emotes.list[name];
     };
 
+    Emotes.random = function () {
+        return Emotes.names[sys.rand(0, Emotes.names.length)];
+    };
+
     Emotes.add = function (alts, code) {
         var regex, alt, len, i;
 
@@ -31,6 +36,7 @@ global.Emotes = {
 
         for (i = 0; i < len; i += 1) {
             alt = alts[i];
+            Emotes.names.push(alt);
             Emotes.list[alt] = code;
 
             regex = RegExp.quote(alt);
@@ -110,7 +116,9 @@ global.Emotes = {
                     } else if (RTD.hasEffect(src, 'im_blue')) {
                         code = "data:image/png;base64,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";
                     } else if (RTD.hasEffect(src, 'terry_crews')) {
-                        code = Emotes.code("terry" + sys.rand(1, 6));
+                        code = Emotes.code("terry" + sys.rand(1, 7));
+                    } else if (RTD.hasEffect(src, 'random_emotes')) {
+                        code = Emotes.code(Emotes.random());
                     }
                 }
 
@@ -229,6 +237,7 @@ global.Emotes = {
         delete emoteSource["@NOTICE"];
 
         Emotes.list = {};
+        Emotes.names = [];
         Emotes.display = [];
 
         for (emote in emoteSource) {

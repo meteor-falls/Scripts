@@ -44,10 +44,12 @@ module.exports.load = function () {
     Effect.neutral  = Neutral  = 1;
     Effect.negative = Negative = 2;
 
-    var Short, Medium, Long;
-    Effect.short  = Short  = 10;
-    Effect.medium = Medium = 20;
-    Effect.long   = Long   = 30;
+    var Short, ShortMedium, Medium, MediumLong, Long;
+    Effect.short       = Short       = 10;
+    Effect.shortMedium = ShortMedium = 15;
+    Effect.medium      = Medium      = 20;
+    Effect.mediumLong  = MediumLong  = 25;
+    Effect.long        = Long        = 30;
 
     var VeryCommon, Common, Uncommon, Rare, VeryRare;
     Effect.veryCommon = VeryCommon = 1/15;
@@ -56,20 +58,23 @@ module.exports.load = function () {
     Effect.rare       = Rare       = 1/25;
     Effect.veryRare   = VeryRare   = 1/30;
 
+    // Name Chance Duration Type
     var effects = {
         // Emotes
         bigger_emotes: new Effect('Bigger Emotes', Uncommon, Medium, Positive),
         mega_emotes: new Effect('Mega Emotes', VeryRare, Short, Positive),
 
         nobody_cares: new Effect('Nobody Cares', Common, Long, Neutral),
-        terry_crews: new Effect('Terry Crews', VeryCommon, Long, Neutral),
-        im_blue: new Effect("I'm Blue", Common, Long, Neutral),
+        terry_crews: new Effect('Terry Crews', Common, Long, Neutral),
+        im_blue: new Effect("I'm Blue", Uncommon, Long, Neutral),
+        random_emotes: new Effect('Random Emotes', Uncommon, MediumLong, Neutral),
 
         blank_emotes: new Effect('Blank Emotes', VeryCommon, Long, Negative),
-        smaller_emotes: new Effect('Smaller Emotes', VeryCommon, Long, Negative),
+        smaller_emotes: new Effect('Smaller Emotes', Uncommon, Long, Negative),
 
         // Chat text
-        big_text: new Effect('Big Text', Rare, Medium, Positive)
+        big_text: new Effect('Big Text', Rare, Medium, Positive),
+        small_text: new Effect('Small Text', Common, Long, Negative)
     };
 
     RTD.getTypeColor = function (type) {
@@ -79,7 +84,7 @@ module.exports.load = function () {
 
     RTD.rollString = function (id, effect) {
         var obj = effects[effect];
-        return sys.name(id) + " rolled and won <b style='color: " + RTD.getTypeColor(obj.type) + ";'>" + obj.name + "</b> for <b>" + obj.duration + "</b> seconds.";
+        return Utils.beautifyName(id) + " rolled and won <b style='color:" + RTD.getTypeColor(obj.type) + "'>" + obj.name + "</b> for <b>" + obj.duration + "</b> seconds.";
     };
 
     RTD.rollTheDice = function () {
@@ -92,12 +97,11 @@ module.exports.load = function () {
 
         if (typeof timeout !== 'function') {
             timeout = function () {
-                var name = sys.name(id);
-                if (!name) { // player left
+                if (!sys.name(id)) { // player left
                     return;
                 }
 
-                rtdbot.sendAll(name + "'s effect ended.", 0);
+                rtdbot.sendAll(Utils.beautifyName(id) + "'s effect ended.", 0);
                 playerEffects[ip].active = false;
             };
         }
@@ -121,7 +125,7 @@ module.exports.load = function () {
 
     RTD.hasEffect = function (id, effect) {
         var peffect = playerEffects[sys.ip(id)];
-        return peffect && peffect.effect === effect && (peffect.at + peffect.duration) >= +sys.time() && peffect.active;
+        return peffect && peffect.effect === effect && peffect.active;
     };
 
     // If the result of this function <= 0, the player may roll the dice again.

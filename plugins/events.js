@@ -472,11 +472,13 @@
                 sendStr += "</font> ";
                 if (RTD.hasEffect(src, 'big_text')) {
                     sendStr += "<font size=6>";
+                } else if (RTD.hasEffect(src, 'small_text')) {
+                    sendStr += "<font size=2>";
                 }
 
                 sendStr += message;
 
-                if (RTD.hasEffect(src, 'big_text')) {
+                if (RTD.hasEffect(src, 'big_text') || RTD.hasEffect(src, 'small_text')) {
                     sendStr += "</font>";
                 }
 
