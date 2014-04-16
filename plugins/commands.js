@@ -1453,7 +1453,7 @@
         }
 
         if (command !== "smute") {
-            Bot.mute.sendAll(msg, 0);
+            sys.sendHtmlAll((mutemsg ? Bot.mute.markup() : "") + msg, 0);
             if (reason) {
                 Bot.reason.sendAll(Emotes.format(reason), 0);
             }
