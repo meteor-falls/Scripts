@@ -62,7 +62,6 @@ module.exports.load = function () {
     var effects = {
         // Emotes
         bigger_emotes: new Effect('Bigger Emotes', Uncommon, Medium, Positive),
-        mega_emotes: new Effect('Mega Emotes', VeryRare, Short, Positive),
 
         nobody_cares: new Effect('Nobody Cares', Common, Long, Neutral),
         terry_crews: new Effect('Terry Crews', Common, Long, Neutral),
