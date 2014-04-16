@@ -1212,37 +1212,34 @@
 
     addCommand(1, "logwarn", function (src, command, commandData, tar, chan) {
         if (!tar) {
-            bot.sendMessage(src, "This person doesn't exist.", chan);
-            return;
+            return bot.sendMessage(src, "This person doesn't exist.", chan);
         }
-        if (this.myAuth <= Utils.getAuth(tar) && this.myAuth < 3) {
-            bot.sendMessage(src, "Can't warn someone with higher or equal auth.", chan);
-            return;
+        if (Utils.getAuth(tar) > 0) {
+            return bot.sendMessage(src, Emotes.code("musso3"), chan);
         }
-        var warning = "@" + commandData + ": If you have a log over (or at) 5 lines, please use http://pastebin.com to show the log. Otherwise, you might be kicked by the Flood Bot, or muted by a Moderator/or you may be temporarily banned. This is your last warning.";
-        sys.sendAll(sys.name(src) + ": " + warning, chan);
+
+        sys.sendAll(sys.name(src) + ": @" + commandData + ": If you have a log over (or at) 5 lines, please use http://pastebin.com to show the log. Otherwise, you might be kicked by the Flood Bot, or muted by a Moderator/or you may be temporarily banned. This is your last warning.", chan);
     });
 
     addCommand(1, "tellemotes", function (src, command, commandData, tar, chan) {
         if (!tar) {
-            bot.sendMessage(src, "This person doesn't exist.", chan);
-            return;
+            return bot.sendMessage(src, "This person doesn't exist.", chan);
         }
-        if (this.myAuth <= Utils.getAuth(tar) && this.myAuth < 3) {
-            bot.sendMessage(src, "Can't tell someone with higher or equal auth to update.", chan);
-            return;
+        if (Utils.getAuth(tar) > 0) {
+            return bot.sendMessage(src, Emotes.code("musso3"), chan);
         }
+
         sys.sendAll(sys.name(src) + ": Hey, " + commandData + ", the thing you are confused about is an emote. An emote is basically an emoticon but with a picture put in. Since we tend to enjoy emotes you might see one of us using the emote alot or the chat may be filled with emotes. We are sorry if we use any that is weird and creeps you out. To be able to use emotes you need seniority. To get 'seniority' you need to participate in the chat and our forums! The link to the forums is in the banner above, be sure to check it out. Good day!", chan);
     });
 
     addCommand(1, "silence", function (src, command, commandData, tar, chan) {
         if (muteall) {
             sys.sendHtmlAll("<font color=green><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + " ended the silence!</b></font>");
-            muteall = false;
         } else {
             sys.sendHtmlAll("<font color=blue><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + " silenced the chat!</b></font>");
-            muteall = true;
         }
+
+        muteall = !muteall;
     });
 
     addCommand(1, ["kick", "k", "skick"], function (src, command, commandData, tar, chan) {
@@ -1262,12 +1259,12 @@
             tar = sys.id(tars[i]);
 
             if (tar === undefined) {
-                bot.sendMessage(src, "This person (" + tars[i] + ") doesn't exist.", chan);
+                bot.sendMessage(src, tars[i] + " doesn't exist.", chan);
                 continue;
             }
 
             if (this.myAuth <= Utils.getAuth(tar) && this.myAuth < 3) {
-                bot.sendMessage(src, "Can't kick someone (" + tars[i] + ") with higher or equal auth.", chan);
+                bot.sendMessage(src, "Can't kick " + tars[i] + ", as they have higher or equal auth.", chan);
                 continue;
             }
 
@@ -1275,7 +1272,9 @@
         }
 
         if (!toKick.length) {
-            bot.sendMessage(src, "No one to kick.", chan);
+            if (tars.length !== 1) {
+                bot.sendMessage(src, "No one to kick.", chan);
+            }
             return;
         }
 
@@ -1539,10 +1538,8 @@
     });
 
     addCommand(1, "changecolor", function(src, command, commandData, tar, chan) {
-        var color = commandData;
-        sys.changeColor(src, color);
-        bot.sendMessage(src, "Your color has been changed to "+color+".", chan);
-        return;
+        sys.changeColor(src, commandData);
+        bot.sendMessage(src, "Your color has been changed to " + commandData + ".", chan);
     });
 
     addCommand(1, "roulette", function (src, command, commandData, tar, chan) {
@@ -1864,8 +1861,9 @@
             return;
         }
 
-        var importables = [];
-        var teamCount = sys.teamCount(tar), i;
+        var importables = [],
+            teamCount = sys.teamCount(tar),
+            i;
         if (teamCount === 0) {
             return bot.sendMessage(src, "That person doesn't have a valid team.", chan);
         }
@@ -2010,20 +2008,20 @@
 
     addCommand(3, "unidle", function (src, command, commandData, tar, chan) {
         if (!tar) {
-            bot.sendMessage(src, "Invalid target.", chan);
-        } else {
-            bot.sendMessage(src, "You have made " + commandData + " unidle.", chan);
-            sys.changeAway(sys.id(commandData), false);
+            return bot.sendMessage(src, "Invalid target.", chan);
         }
+
+        bot.sendMessage(src, "You have made " + commandData + " unidle.", chan);
+        sys.changeAway(tar, false);
     });
 
     addCommand(3, "ti", function (src, command, commandData, tar, chan) {
-        if (sys.id(commandData) === undefined) {
-            bot.sendMessage(src, "Invalid target.", chan);
-        } else {
-            bot.sendMessage(src, "" + commandData + "'s trainer info is:", chan);
-            bot.sendMessage(src, Utils.escapeHtml(sys.info(sys.id(commandData))), chan);
+        if (!tar) {
+            return bot.sendMessage(src, "Invalid target.", chan);
         }
+
+        bot.sendMessage(src, commandData + "'s trainer info is:", chan);
+        bot.sendMessage(src, Utils.escapeHtml(sys.info(tar)), chan);
     });
 
     addCommand(3, "resetladder", function (src, command, commandData, tar, chan) {
