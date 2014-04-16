@@ -93,12 +93,7 @@
         };
 
         util.escapeHtml = function (str, noAmp) {
-            if (str == null) {
-                str = 'null';
-            }
-
-            str = str.toString();
-
+            str = '' + str;
             if (!noAmp) {
                 str = str.replace(/\&/g, "&amp;");
             }
