@@ -439,7 +439,7 @@
         }
 
         var move = sys.rand(1, 559);
-        sys.sendHtmlAll("<font color=green><timestamp/><b><i>+AttackBot:</i></b></font> <b><font color=" + Utils.nameColor(src) + ">" + Utils.escapeHtml(sys.name(src)) + " </b></font> as used <b>" + randomColor(sys.move(move)) + "</b> on <b><font color=" + Utils.nameColor(tar) + ">" + Utils.escapeHtml(sys.name(tar)) + "!</font></b>", chan);
+        sys.sendHtmlAll("<font color=green><timestamp/><b><i>+AttackBot:</i></b></font> <b><font color=" + Utils.nameColor(src) + ">" + Utils.escapeHtml(sys.name(src)) + " </b></font> has used <b>" + randomColor(sys.move(move)) + "</b> on <b><font color=" + Utils.nameColor(tar) + ">" + Utils.escapeHtml(sys.name(tar)) + "!</font></b>", chan);
     });
 
     addCommand(0, "emotetoggle", function (src, command, commandData, tar, chan) {
