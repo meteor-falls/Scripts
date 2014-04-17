@@ -96,12 +96,11 @@ module.exports.load = function () {
 
         if (typeof timeout !== 'function') {
             timeout = function () {
-                if (!sys.name(id)) { // player left
-                    return;
-                }
-
-                rtdbot.sendAll(Utils.beautifyName(id) + "'s effect ended.", 0);
                 playerEffects[ip].active = false;
+
+                if (sys.name(id)) {
+                    rtdbot.sendAll(Utils.beautifyName(id) + "'s effect ended.", 0);
+                }
             };
         }
 
