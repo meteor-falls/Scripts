@@ -337,6 +337,7 @@
         var Moderate = new CommandList("Moderation Commands", "navy");
         Moderate.add("logwarn", "To warn [player] of excessive logs.", ["player"]);
         Moderate.add("tellemotes", "To explain to [player] what emotes are.", ["player"]);
+        Moderate.add("tellandroid", "To explain to [player] how to use the android application.", ["player"]);
         Moderate.add("[s]kick", "To kick [player] from the server. You can kick multiple players with by separating their names with '*'. [reason] is optional.", ["player*player2", "reason"]);
         Moderate.add("[s]mute", "To mute someone, [time], [timeunit], and [reason] are optional. [Units are: seconds, minutes, hours, days, weeks, months, years, decades. Default is minutes]. If no time is specified, mutes forever. You can skip time by doing: /mute [player]:::[reason].", ["person", "time", "unit", "reason"]);
         Moderate.add("[s]unmute", "To unmute [person].", ["person"]);
