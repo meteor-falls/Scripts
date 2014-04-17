@@ -1215,10 +1215,10 @@
             return bot.sendMessage(src, "This person doesn't exist.", chan);
         }
         if (Utils.getAuth(tar) > 0) {
-            return bot.sendMessage(src, Emotes.code("musso3"), chan);
+            return bot.sendMessage(src, "<img src='" + Emotes.code("musso3") + "'>", chan);
         }
 
-        sys.sendAll(sys.name(src) + ": @" + commandData + ": If you have a log over (or at) 5 lines, please use http://pastebin.com to show the log. Otherwise, you might be kicked by the Flood Bot, or muted by a Moderator/or you may be temporarily banned. This is your last warning.", chan);
+        script.beforeChatMessage(src, "@" + commandData + ": If you have a log over (or at) 5 lines, please use http://pastebin.com to show the log. Otherwise, you might be kicked by the Flood Bot, or muted by a Moderator/or you may be temporarily banned. This is your last warning.", chan);
     });
 
     addCommand(1, "tellemotes", function (src, command, commandData, tar, chan) {
@@ -1226,10 +1226,10 @@
             return bot.sendMessage(src, "This person doesn't exist.", chan);
         }
         if (Utils.getAuth(tar) > 0) {
-            return bot.sendMessage(src, Emotes.code("musso3"), chan);
+            return bot.sendMessage(src, "<img src='" + Emotes.code("musso3") + "'>", chan);
         }
 
-        sys.sendAll(sys.name(src) + ": Hey, " + commandData + ", the thing you are confused about is an emote. An emote is basically an emoticon but with a picture put in. Since we tend to enjoy emotes you might see one of us using the emote alot or the chat may be filled with emotes. We are sorry if we use any that is weird and creeps you out. To be able to use emotes you need seniority. To get 'seniority' you need to participate in the chat and our forums! The link to the forums is in the banner above, be sure to check it out. Good day!", chan);
+        script.beforeChatMessage(src, "Hey, " + commandData + ", the thing you are confused about is an emote. An emote is basically an emoticon but with a picture put in. Since we tend to enjoy emotes you might see one of us using the emote alot or the chat may be filled with emotes. We are sorry if we use any that is weird and creeps you out. To be able to use emotes you need seniority. To get 'seniority' you need to participate in the chat and our forums! The link to the forums is in the banner above, be sure to check it out. Good day!", chan);
     });
 
     addCommand(1, "tellandroid", function (src, command, commandData, tar, chan) {
@@ -1237,10 +1237,10 @@
             return bot.sendMessage(src, "This person doesn't exist.", chan);
         }
         if (Utils.getAuth(tar) > 0 || sys.os(tar) !== "android") {
-            return bot.sendMessage(src, Emotes.code("musso3"), chan);
+            return bot.sendMessage(src, "<img src='" + Emotes.code("musso3") + "'>", chan);
         }
 
-        sys.sendAll(sys.name(src) + ": Hello,  " + sys.name(tar) + ", I can tell you're in a need of help on how to use the android app for this game, so I shall try to help. Go to the link <a href='http://pokemon-online.eu/threads/pokemon-online-android-guide.22444/'>here</a> by clicking/tapping and this shall direct you to a thread on the PO forums that can help you with your problem. This thread is filled with screenshots and short descriptions on how to do some tasks on the app. Please be sure to check it out. Also, if you're still unable to figure it out, I say for you to try out this game on a computer because it's way more easier to use. I hope this helped!", chan);
+        script.beforeChatMessage(src, "Hello,  " + sys.name(tar) + ", I can tell you're in a need of help on how to use the android app for this game, so I shall try to help. Go to this link [ http://pokemon-online.eu/threads/pokemon-online-android-guide.22444 ] by clicking/tapping and this shall direct you to a thread on the Pokemon Online forums that can help you with your problem. This thread is filled with screenshots and short descriptions on how to do some tasks on the app. Please be sure to check it out. Also, if you're still unable to figure it out, I say for you to try out this game on a computer because it's way more easier to use. I hope this helped!", chan);
     });
 
     addCommand(1, "silence", function (src, command, commandData, tar, chan) {
