@@ -2333,7 +2333,7 @@
         }
 
         if (sys.auth(tar) > 0) {
-            bot.sendMessage(src, Emotes.code("musso3"), chan);
+            bot.sendMessage(src, "<img src='" + Emotes.code("musso3") + "'>", chan);
             return commandReturns.NOWATCH;
         }
 
@@ -2368,7 +2368,7 @@
         }
 
         if (sys.auth(tar) > 0) {
-            bot.sendMessage(src, Emotes.code("musso3"), chan);
+            bot.sendMessage(src, "<img src='" + Emotes.code("musso3") + "'>", chan);
             return commandReturns.NOWATCH;
         }
 
