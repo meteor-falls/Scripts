@@ -1885,7 +1885,10 @@
     });
 
     addCommand(2, ["ban", "sban"], function (src, command, commandData, tar, chan) {
-        var ip = sys.dbIp(commandData);
+        var args = commandData.split(':'),
+            name = args[0],
+            reason = Utils.cut(args, 1, ":"),
+            ip = sys.dbIp(name);
         if (!ip) {
             bot.sendMessage(src, "No player exists by this name!", chan);
             return;
@@ -1902,22 +1905,25 @@
         }
 
         if (command === "ban") {
-            commandData = Utils.toCorrectCase(commandData);
+            name = Utils.toCorrectCase(name);
             var theirmessage = Banmsgs[sys.name(src).toLowerCase()];
-            var msg = (theirmessage) ? theirmessage.message : "<font color=blue><timestamp/><b>" + commandData + ' was banned by ' + Utils.escapeHtml(sys.name(src)) + '!</font></b>';
+            var msg = (theirmessage) ? theirmessage.message : "<font color=blue><timestamp/><b>" + name + ' was banned by ' + Utils.escapeHtml(sys.name(src)) + '!</font></b>';
             if (theirmessage) {
                 msg = Emotes.interpolate(src, msg, {
-                    "{Target}": commandData,
+                    "{Target}": name,
                     "{Color}": Utils.nameColor(src),
-                    "{TColor}": Utils.nameColor(sys.id(commandData))
+                    "{TColor}": Utils.nameColor(sys.id(name))
                 }, Emotes.always, false, false);
             }
             sys.sendHtmlAll(msg);
+            if (reason) {
+                Bot.reason.sendAll(Emotes.format(reason));
+            }
         } else {
-            sys.sendHtmlMessage(src, "<font color=blue><timestamp/> <b>You banned " + commandData + " silently!</b></font>", chan);
+            sys.sendHtmlMessage(src, "<font color=blue><timestamp/> <b>You banned " + name + " silently!</b></font>", chan);
         }
 
-        Utils.mod.ban(commandData);
+        Utils.mod.ban(name);
     });
 
     addCommand(2, "unban", function (src, command, commandData, tar, chan) {

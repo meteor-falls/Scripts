@@ -372,7 +372,7 @@
 
         /** ADMIN COMMANDS **/
         var Admin = new CommandList("Administrator Commands", "navy");
-        Admin.add("<font color=blue>[s]</font>ban", "To ban [player]. Use /sban instead to silently ban.", ["player"]);
+        Admin.add("<font color=blue>[s]</font>ban", "To ban [player] with an optional [reason]. Use /sban instead to silently ban.", ["player", "reason"]);
         Admin.add("unban", "To unban a [player].", ["player"]);
         Admin.add("clearpass", "To clear [player]'s password.", ["player"]);
         Admin.add("clearchat", "To clear the chat in the channel [channel]. Default channel is " + sys.channel(0) + ".", ["channel"]);
