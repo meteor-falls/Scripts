@@ -94,7 +94,7 @@ module.exports = {
         }
 
         var globalVars = {
-            border: "<font color=green><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</b></font>",
+            border: "<font color=blue><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</b></font>",
             tourmode: 0,
             spinTypes: [], // can contain: items, emotes, pokemons
             muteall: false,

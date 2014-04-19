@@ -1126,10 +1126,18 @@
         }
 
         var self = sys.name(src);
+
+        sys.sendHtmlAll(border + "<br>", 0);
         bot.sendAll(self + " closed the poll (started by " + Poll.by + ")!", 0);
 
         if (Object.keys(Poll.votes).length !== 0) {
-            var results = {}, msgs = {}, choice, i, total, winner, most = 0;
+            var results = {},
+                msgs = {},
+                winner = [],
+                most = 0,
+                choice, total,
+                i;
+
             for (i in Poll.votes) {
                 choice = Poll.votes[i];
                 if (!(choice in results)) {
@@ -1138,8 +1146,12 @@
                     results[choice] += 1;
                 }
 
-                if (results[choice] > most) {
-                    winner = choice;
+                if (results[choice] >= most) {
+                    if (results[choice] > most) {
+                        winner = [];
+                    }
+
+                    winner.push(choice);
                     most = results[choice];
                 }
             }
@@ -1157,8 +1169,17 @@
             }
 
             sys.sendAll("", 0);
-            bot.sendAll("Winner: Option #" + (winner + 1) + " (" + Poll.options[winner] + ") with " + results[winner] + " vote" + (results.winner === 1 ? '' : 's') + ".", 0);
+            if (winner.length === 1) {
+                winner = winner[0];
+                bot.sendAll("Winner: Option #" + (winner + 1) + " (" + Poll.options[winner] + ") with " + results[winner] + " vote" + (results.winner === 1 ? '' : 's') + ".", 0);
+            } else {
+                bot.sendAll("Tie between option " + Utils.fancyJoin(winner.map(function (id) {
+                    return "#" + id + " (" + Poll.options[winner[0] + ")";
+                })) + "  with " + results[winner] + " vote" + (results.winner === 1 ? '' : 's') + " each.", 0);
+            }
         }
+
+        sys.sendHtmlAll("<br>" + border, 0);
 
         Poll.active = false;
         Poll.subject = '';
