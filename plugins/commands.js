@@ -176,11 +176,21 @@
         }
 
         var option = parseInt(commandData, 10) - 1;
+        if (isNaN(option)) {
+            option = -1;
+        }
+
         if (!Poll.options[option]) {
             return bot.sendMessage(src, "There is no such option as " + (option + 1) + " available.", chan);
+        } else if (Poll.by === sys.name(src)) {
+            return bot.sendMessage(src, "As starter of the poll, you aren't allowed to vote.", chan);
         }
 
         var ip = sys.ip(src);
+        if (ip in Poll.votes && Poll.votes[ip] === option) {
+            return bot.sendMessage(src, "You can't vote for the same thing twice. Vote for something else to change your vote!", chan);
+        }
+
         bot.sendMessage(src, "You voted for option #" + (option + 1) + ": " + Poll.options[option], chan);
 
         if (ip in Poll.votes) {
