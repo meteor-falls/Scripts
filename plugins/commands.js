@@ -1072,7 +1072,7 @@
         list.display(src, chan);
     });
 
-    addCommand(1, "poll", function (src, command, commandData, tar, chan) {
+    addCommand(1, ["ynpoll", "poll"], function (src, command, commandData, tar, chan) {
         if (Poll.active) {
             return bot.sendMessage(src, "There is already a poll. Close it with /closepoll.", chan);
         }
@@ -1080,6 +1080,10 @@
         var parts = commandData.split(':');
         var subject = parts[0];
         var options = Utils.cut(parts, 1, ':').split('*');
+
+        if (command === "ynpoll") {
+            options = ["Yes", "No"];
+        }
 
         if (!subject) {
             return bot.sendMessage(src, "You need to give a subject!", chan);
@@ -1095,13 +1099,15 @@
         Poll.by = self;
         Poll.options = options;
 
+        sys.sendHtmlAll(border + "<br>", 0);
         bot.sendAll(self + " started a poll!", 0);
         bot.sendAll(subject, 0);
         bot.sendAll("Options:", 0);
         for (i = 0, len = options.length; i < len; i += 1) {
             bot.sendAll((i + 1) + ". " + options[i], 0);
         }
-        bot.sendAll("Vote with /vote [option]!", 0);
+        bot.sendAll("Vote with /vote [option number]!", 0);
+        sys.sendHtmlAll("<br>" + border, 0);
     });
 
     addCommand(1, "closepoll", function (src, command, commandData, tar, chan) {
