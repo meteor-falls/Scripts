@@ -1110,12 +1110,17 @@
         Poll.options = options;
 
         sys.sendHtmlAll(border + "<br>", 0);
-        bot.sendAll(self + " started a poll!", 0);
+        bot.sendAll(self + " started a poll!<ping/>", 0);
         bot.sendAll(subject, 0);
         bot.sendAll("Options:", 0);
+
+        var html = [];
         for (i = 0, len = options.length; i < len; i += 1) {
-            bot.sendAll((i + 1) + ". " + options[i], 0);
+            html.push("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>" + (i + 1) + "</b>. " + options[i]);
         }
+        sys.sendHtmlAll(html.join("<br>"), 0);
+
+        sys.sendAll("", 0);
         bot.sendAll("Vote with /vote [option number]!", 0);
         sys.sendHtmlAll("<br>" + border, 0);
     });
