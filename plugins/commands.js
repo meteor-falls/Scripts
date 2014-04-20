@@ -1092,6 +1092,7 @@
         var options = Utils.cut(parts, 1, ':').split('*');
 
         if (command === "ynpoll") {
+            subject = commandData;
             options = ["Yes", "No"];
         }
 
