@@ -1646,9 +1646,9 @@
     addCommand(1, "nightclub", function (src, command, commandData, tar, chan) {
         nightclub = !nightclub;
         if (nightclub) {
-            sys.sendHtmlAll("<br/>" + Utils.nightclub.rainbowify("Let the Night Club commence!"), chan);
+            sys.sendHtmlAll("<br/>" + Utils.nightclub.format("Let the Night Club commence!"), chan);
         } else {
-            sys.sendHtmlAll(Utils.nightclub.rainbowify("Kay, Night Club times are over...") + "<br/>", chan);
+            sys.sendHtmlAll(Utils.nightclub.format("Kay, Night Club times are over...") + "<br/>", chan);
         }
     });
 

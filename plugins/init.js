@@ -12,13 +12,7 @@ module.exports = {
         };
 
         colormodemessage = function (message) {
-            var msg = "";
-            var len, i;
-            for (i = 0, len = message.length; i < len; i += 1) {
-                msg += randcolor() + message[i] + "</font>";
-            }
-
-            return msg;
+            return Utils.nightclub.rainbowify(message);
         };
 
         lolmessage = function (message) {

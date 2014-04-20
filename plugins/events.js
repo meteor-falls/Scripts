@@ -453,7 +453,7 @@
             if (pewpewpew) {
                 sendStr = pewpewpewmessage(message, src);
             } else if (nightclub) {
-                sendStr = Utils.nightclub.rainbowify("(" + sys.name(src) + "): " + originalMessage);
+                sendStr = Utils.nightclub.format("(" + sys.name(src) + "): " + originalMessage);
             } else {
                 if (comicmode) {
                     sendStr += "<font face='comic sans'>";

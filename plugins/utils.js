@@ -205,11 +205,15 @@
                     base += 1;
                     html += "<font color='" + colors[(base + step) % numcolors] + "'>" + util.escapeHtml(text[i]) + "</font>";
                 }
-                return "<table cellpadding='12' cellspacing='0' width='100%' " +
-                       "bgcolor='black' style='margin: -12'><tr><td><b>" + html +
-                       "</b></td></tr></table>";
+                return html;
             };
         }());
+
+        util.nightclub.format = function (msg) {
+            return "<table cellpadding='12' cellspacing='0' width='100%' " +
+                       "bgcolor='black' style='margin: -12'><tr><td><b>" + util.nightclub.rainbowify(msg) +
+                       "</b></td></tr></table>";
+        };
 
         util.loginMessage = function (name, color) {
             sys.sendHtmlAll("<font color='#0c5959'><timestamp/>±<b>WelcomeBot:</b></font> <b><font color=" + color + ">" + name + "</font></b> joined <b>" + Reg.get('servername') + "</b>!", 0);
