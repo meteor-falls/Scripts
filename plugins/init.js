@@ -12,7 +12,7 @@ module.exports = {
         };
 
         colormodemessage = function (message) {
-            return Utils.nightclub.rainbowify(message);
+            return Utils.nightclub.rainbowify(message, 200);
         };
 
         lolmessage = function (message) {

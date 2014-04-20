@@ -198,9 +198,9 @@
                 colors.push(util.nightclub.hsv2rgb((i % 360) / 360, 1, 1));
             }
 
-            return function (text) {
+            return function (text, step) {
                 var html = "";
-                var step = sys.rand(0, 30);
+                step = step || sys.rand(0, 30);
                 for (i = 0; i < text.length; i += 1) {
                     base += 1;
                     html += "<font color='" + colors[(base + step) % numcolors] + "'>" + util.escapeHtml(text[i]) + "</font>";
