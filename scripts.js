@@ -10,9 +10,9 @@ Config = {
     maintainers: ['[VP]Blade', 'Ethan', 'TheUnknownOne', '[ᴠᴘ]ʙʟᴀᴅᴇ'],
 
     // Repo to load plugins from.
-    repourl: "https://raw.github.com/meteor-falls/Scripts/master/",
+    repourl: "https://raw.githubusercontent.com/meteor-falls/Scripts/master/",
     // Repo to load data (announcement/description + tiers) from.
-    dataurl: "https://raw.github.com/meteor-falls/Server-Shit/master/",
+    dataurl: "https://raw.githubusercontent.com/meteor-falls/Server-Shit/master/",
     emotesurl: 'http://meteor-falls.github.io/Emotes/emotes.json',
 
     // Plugin directory.

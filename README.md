@@ -8,7 +8,7 @@ Scripts for Meteor Falls v0.10.0
 * OpenSSL (libssl32.dll, libeay32.dll, ssleay32.dll) + Visual C++ 2008 Redistributables if on Windows. (Plugin system)
 * Preferably a GitHub account so that you can manage the plugins.
 
-It's expected that our [tiers](https://raw.github.com/meteor-falls/Server-Shit/master/tiers.xml) are used on the server.
+It's expected that our [tiers](https://raw.githubusercontent.com/meteor-falls/Server-Shit/master/tiers.xml) are used on the server.
 
 ### Includes:
 * Completely overhauled Watch channel, with a much better design.
