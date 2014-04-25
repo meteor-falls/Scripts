@@ -2171,7 +2171,7 @@
     addMaintainerCommand(["webcall", "updatescript"], function (src, command, commandData, tar, chan) {
         bot.sendAll(Utils.beautifyName(src) + " reloaded the scripts!", 0);
         if (!commandData) {
-            commandData = "https://raw.githubusercontent.com/meteor-falls/Scripts/master/scripts.js";
+            commandData = Config.repourl + "scripts.js";
         }
         sys.webCall(commandData, function (resp) {
             try {
