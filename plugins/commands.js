@@ -1205,7 +1205,7 @@
             regstr = sys.dbRegistered(commandData) ? "Registered" : "Not Registered",
             loggedIn = sys.loggedIn(tar),
             logstr = loggedIn ? "Online" : "Offline",
-            cookie = sys.cookie(tar),
+            cookie = tar ? (sys.cookie(tar) || '') : '',
             chans;
 
         var colors = ["#27619b", "#a18f77"],
