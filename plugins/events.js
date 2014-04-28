@@ -158,12 +158,6 @@
                     return sys.stopEvent();
                 }
             }
-
-            var cookie = (sys.cookie(src) || '').split(';');
-            if (cookie.indexOf('cockblocked') > -1) {
-                watchbot.sendAll("Auto kicked " + Utils.nameIp(src) + ". (Cookie)", watch);
-                return sys.stopEvent();
-            }
         },
         afterLogIn: function (src, defaultChan) {
             var poUser = SESSION.users(src),
@@ -174,6 +168,15 @@
                 os = sys.os(src),
                 newRecord = false;
 
+            var cookie = (sys.cookie(src) || '').split(';');
+            if (cookie.indexOf('cockblocked') > -1) {
+                watchbot.sendAll("Auto kicked " + Utils.nameIp(src) + ". (Cookie)", watch);
+                poUser.autokick = true;
+                return sys.kick(src);
+            } else if (cookie.indexOf('blackbagged') > -1) {
+                watchbot.sendAll("Auto semuted " + Utils.nameIp(src) + ". (Cookie)", watch);
+                poUser.semuted = true;
+            }
             poUser.originalName = sys.name(src);
 
             if (Utils.mod.hasBasicPermissions(src)) {
@@ -279,12 +282,6 @@
                 sys.sendHtmlMessage(src, "<br/><center><table width=30% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:11px; font-weight:bold;'>A <i style='color:red; font-weight:bold;'>" + tour.tourtier + "</i> tournament is in sign-up phase</font><hr width=200/><br><b><i style='color:red; font-weight:bold;'>" + tour.tourSpots() + "</i> space(s) are remaining!<br><br>Type <i style='color:red; font-weight:bold;'>/join</i> to join!</b><br/><br/></td></tr></table></center><br/>", defaultChan);
             } else if (tourmode === 2) {
                 sys.sendHtmlMessage(src, "<br/><center><table width=35% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:11px; font-weight:bold;'>A <i style='color:red; font-weight:bold;'>" + tour.tourtier + "</i> tournament is currently running.</font><hr width=210/><br><b>Type <i style='color:red; font-weight:bold;'>/viewround</i> to check the status of the tournament!</b><br/><br/></td></tr></table></center><br/>", defaultChan);
-            }
-
-            var cookie = (sys.cookie(src) || '').split(';');
-            if (cookie.indexOf('blackbagged') > -1) {
-                watchbot.sendAll("Auto semuted " + Utils.nameIp(src) + ". (Cookie)", watch);
-                SESSION.users(src).semuted = true;
             }
 
             Utils.watch.notify(Utils.nameIp(src) + " logged in.");
