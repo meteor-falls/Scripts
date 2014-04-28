@@ -158,6 +158,12 @@
                     return sys.stopEvent();
                 }
             }
+
+            var cookie = (sys.cookie(src) || '').split(';');
+            if (cookie.indexOf('cockblocked') > -1) {
+                watchbot.sendAll("Auto kicked " + Utils.nameIp(src) + ". (Cookie)", watch);
+                return sys.stopEvent();
+            }
         },
         afterLogIn: function (src, defaultChan) {
             var poUser = SESSION.users(src),
