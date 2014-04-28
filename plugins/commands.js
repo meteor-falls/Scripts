@@ -305,8 +305,8 @@
             "<font color=black><timestamp/><b>Meteor Falls™ v0.10 Scripts</b></font>",
             "<font color=blue><timestamp/><b>Created By:</b></font> <b><font color=navy>[VP]Blade</font>, <font color=#00aa7f>TheUnknownOne</font>, Ethan</b>",
             "<font color=skyblue><timestamp/> <b>Maintainers:</b></font> " + Config.maintainers.join(", ") + ".",
-            //"<font color=green><timestamp/><b>Full Script: <a href='https://raw.githubusercontent.com/meteor-falls/Scripts/master/scripts.js'>https://raw.githubusercontent.com/meteor-falls/Scripts/master/scripts.js</a></b></font>",
-            //"<font color=darkorange><timestamp/><b>Auto-Update Script:</font> <b><a href='https://raw.githubusercontent.com/meteor-falls/Scripts/master/webcall.js'>https://raw.githubusercontent.com/meteor-falls/Scripts/master/webcall.js</a></b>",
+            //"<font color=green><timestamp/><b>Full Script: <a href='http://meteor-falls.github.io/Scripts/scripts.js'>http://meteor-falls.github.io/Scripts/scripts.js</a></b></font>",
+            //"<font color=darkorange><timestamp/><b>Auto-Update Script:</font> <b><a href='http://meteor-falls.github.io/Scripts/webcall.js'>http://meteor-falls.github.io/Scripts/webcall.js</a></b>",
             "<font color=navy><timestamp/><b>Special Thanks To:</b></font> <b><font color=#8A2BE2>Lutra,</font> <font color=navy>Max</b></font>",
             "<font color=black><timestamp/><b> © <a href='http://meteorfalls.us/forums/'>Meteor Falls</a> 2014 [MIT license] </b></font>",
             "<font color=red><timestamp/><b> ««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»</b></font><br>"

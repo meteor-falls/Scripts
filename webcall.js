@@ -2,7 +2,7 @@
 loadScripts = function (msg) {
     if (msg === "Script Check: OK") {
         sys.stopEvent();
-        sys.webCall("https://raw.githubusercontent.com/meteor-falls/Scripts/master/scripts.js", function (resp) {
+        sys.webCall("http://meteor-falls.github.io/Scripts/scripts.js", function (resp) {
             try {
                 sys.changeScript(resp);
 
