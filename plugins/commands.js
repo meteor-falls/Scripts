@@ -2289,12 +2289,38 @@
             } else {
                 var oldAnn = sys.getAnnouncement();
                 sys.writeToFile("old_announcement.html", oldAnn);
-                bot.sendMessage(src, "Old announcement stored in old_announcement.html", chan);
+                //bot.sendMessage(src, "Old announcement stored in old_announcement.html", chan);
                 sys.changeAnnouncement(resp);
             }
         });
     });
 
+    addMaintainerCommand("cycleann", function (src, command, commandData, tar, chan) {
+        var variants = ["normal", "classic", "dusk", "fluffy", "grass", "summer"],
+            annname = Utils.announcementName(),
+            index = variants.indexOf(annname),
+            fname;
+
+        if (index === -1 || !variants[index + 1]) {
+            index = 0;
+        } else {
+            index += 1;
+        }
+
+        if (index === 0) {
+            fname = "announcement.html";
+        } else {
+            fname = "variants/" + variants[index];
+        }
+
+        watchbot.sendAll(Utils.nameIp(src) + " cycled the announcement to " + variants[index] + "!", watch);
+        sys.webCall(Config.dataurl + fname, function (resp) {
+            var oldAnn = sys.getAnnouncement();
+            sys.writeToFile("old_announcement.html", oldAnn);
+            //bot.sendMessage(src, "Old announcement stored in old_announcement.html", chan);
+            sys.changeAnnouncement(resp);
+        });
+    });
     addMaintainerCommand("syncserver", function (src, command, commandData, tar, chan) {
         commands.updateann.callback.call(this, src, command, commandData, tar, chan);
         commands.updatedesc.callback.call(this, src, command, commandData, tar, chan);

@@ -92,6 +92,8 @@
             5: "Spd"
         };
 
+        var annNameRegex = /<!name ([a-z]+)>/;
+
         util.escapeHtml = function (str, noAmp) {
             str = '' + str;
             if (!noAmp) {
@@ -286,6 +288,11 @@
         util.cut = function (array, entry, join) {
             join = join || "";
             return [].concat(array).splice(entry).join(join);
+        };
+
+        util.announcementName = function () {
+            var matches = sys.getAnnouncement().match(annNameRegex);
+            return matches ? matches[1] : "";
         };
 
         util.stringToTime = function (str, time) {
