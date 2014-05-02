@@ -2169,10 +2169,14 @@
     });
 
     addMaintainerCommand(["webcall", "updatescript"], function (src, command, commandData, tar, chan) {
-        bot.sendAll(Utils.beautifyName(src) + " reloaded the scripts!", 0);
+        var baseurl = Config.repourl;
         if (!commandData) {
-            commandData = Config.repourl + "scripts.js";
+            commandData = baseurl + "scripts.js";
+        } else {
+            commandData = commandData.replace(/\$/g, baseurl);
         }
+
+        bot.sendAll(Utils.beautifyName(src) + " reloaded the scripts!", 0);
         sys.webCall(commandData, function (resp) {
             try {
                 FULLRELOAD = true;
@@ -2248,9 +2252,13 @@
     });
 
     addMaintainerCommand("updatetiers", function (src, command, commandData, tar, chan) {
-        if (!commandData || (commandData.substr(0, 7) !== 'http://' && commandData.substr(0, 8) !== 'https://')) {
-            commandData = Config.dataurl + "tiers.xml";
+        var baseurl = Config.dataurl;
+        if (!commandData) {
+            commandData = baseurl + "tiers.xml";
+        } else {
+            commandData = commandData.replace(/\$/g, baseurl);
         }
+
         bot.sendAll(Utils.beautifyName(src) + " updated the tiers!", 0);
         sys.webCall(commandData, function (resp) {
             try {
@@ -2264,8 +2272,11 @@
     });
 
     addMaintainerCommand(["testann", "updateann"], function (src, command, commandData, tar, chan) {
-        if (!commandData || (commandData.substr(0, 7) !== 'http://' && commandData.substr(0, 8) !== 'https://')) {
-            commandData = Config.dataurl + "announcement.html";
+        var baseurl = Config.dataurl;
+        if (!commandData) {
+            commandData = baseurl + "announcement.html";
+        } else {
+            commandData = commandData.replace(/\$/g, baseurl);
         }
 
         if (command === "updateann") {
