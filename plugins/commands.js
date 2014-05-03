@@ -2327,7 +2327,7 @@
             fname = "variants/" + variants[index] + ".html";
         }
 
-        bot.sendAll("Announcement cycled to <b>" + variants[index] + "!", 0);
+        bot.sendAll("Announcement cycled to <b>" + variants[index] + "</b>!", 0);
         //watchbot.sendAll(Utils.nameIp(src) + " cycled the announcement to " + variants[index] + "!", watch);
         sys.webCall(Config.dataurl + fname, function (resp) {
             sys.writeToFile("old_announcement.html", sys.getAnnouncement());
