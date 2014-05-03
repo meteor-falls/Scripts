@@ -2310,7 +2310,7 @@
         if (index === 0) {
             fname = "announcement.html";
         } else {
-            fname = "variants/" + variants[index];
+            fname = "variants/" + variants[index] + ".html";
         }
 
         watchbot.sendAll(Utils.nameIp(src) + " cycled the announcement to " + variants[index] + "!", watch);
