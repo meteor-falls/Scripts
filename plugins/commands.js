@@ -2287,8 +2287,7 @@
             if (command === "testann") {
                 sys.setAnnouncement(resp, src);
             } else {
-                var oldAnn = sys.getAnnouncement();
-                sys.writeToFile("old_announcement.html", oldAnn);
+                sys.writeToFile("old_announcement.html", sys.getAnnouncement());
                 //bot.sendMessage(src, "Old announcement stored in old_announcement.html", chan);
                 sys.changeAnnouncement(resp);
             }
@@ -2296,27 +2295,42 @@
     });
 
     addMaintainerCommand("cycleann", function (src, command, commandData, tar, chan) {
-        var variants = ["normal", "classic", "dusk", "fluffy", "grass", "summer"],
-            annname = Utils.announcementName(),
-            index = variants.indexOf(annname),
-            fname;
+        var names, variants, annname, index, defindex, fname;
 
-        if (index === -1 || !variants[index + 1]) {
+        // Load variants
+        try {
+            names = JSON.parse(sys.synchronousWebCall(Config.dataurl + "announcement.names.json"));
+            variants = names.names;
+        } catch (ex) {
+            bot.sendMessage(src, "Could not parse remote announcement.names.json", chan);
+            return;
+        }
+
+        annname = Utils.announcementName();
+        index = variants.indexOf(annname);
+        defindex = variants.indexOf(names["default"]);
+        if (defindex === -1) {
+            defindex = 0;
+        }
+
+        if (index === -1) {
+            index = defindex;
+        } else if (!variants[index + 1]) {
             index = 0;
         } else {
             index += 1;
         }
 
-        if (index === 0) {
+        if (index === defindex) {
             fname = "announcement.html";
         } else {
             fname = "variants/" + variants[index] + ".html";
         }
 
-        watchbot.sendAll(Utils.nameIp(src) + " cycled the announcement to " + variants[index] + "!", watch);
+        bot.sendAll("Announcement cycled to <b>" + variants[index] + "!", 0);
+        //watchbot.sendAll(Utils.nameIp(src) + " cycled the announcement to " + variants[index] + "!", watch);
         sys.webCall(Config.dataurl + fname, function (resp) {
-            var oldAnn = sys.getAnnouncement();
-            sys.writeToFile("old_announcement.html", oldAnn);
+            sys.writeToFile("old_announcement.html", sys.getAnnouncement());
             //bot.sendMessage(src, "Old announcement stored in old_announcement.html", chan);
             sys.changeAnnouncement(resp);
         });
