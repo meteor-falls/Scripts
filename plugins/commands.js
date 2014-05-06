@@ -1181,7 +1181,7 @@
             } else {
                 bot.sendAll("Tie between option " + Utils.fancyJoin(winner.map(function (id) {
                     return "#" + id + " (" + Poll.options[winner[id]] + ")";
-                })) + "  with " + results[winner[0]] + " vote" + (results.winner.length === 1 ? '' : 's') + " each.", 0);
+                })) + "  with " + results[winner[0]] + " vote" + (winner.length === 1 ? '' : 's') + " each.", 0);
             }
         }
 
