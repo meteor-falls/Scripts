@@ -1,8 +1,8 @@
 module.exports.load = function () {
     global.RTD = {};
     var playerEffects = {};
-    var MIN_COOLDOWN = 120; // 2m
-    var MAX_COOLDOWN = 145; // 2m25s
+    var MIN_COOLDOWN = 110;
+    var MAX_COOLDOWN = 130;
 
     function randomSample(hash) {
         var cum = 0;
@@ -64,11 +64,11 @@ module.exports.load = function () {
         bigger_emotes: new Effect('Bigger Emotes', Uncommon, Medium, Positive),
 
         nobody_cares: new Effect('Nobody Cares', Common, Long, Neutral),
-        terry_crews: new Effect('Terry Crews', Common, Long, Neutral),
         im_blue: new Effect("I'm Blue", Uncommon, Long, Neutral),
         random_emotes: new Effect('Random Emotes', Uncommon, MediumLong, Neutral),
+        emote_infection: new Effect('Emote Infection', Rare, Long, Positive),
 
-        blank_emotes: new Effect('Blank Emotes', VeryCommon, Long, Negative),
+        blank_emotes: new Effect('Blank Emotes', Common, Long, Negative),
         smaller_emotes: new Effect('Smaller Emotes', Uncommon, Long, Negative),
 
         // Chat text
@@ -114,7 +114,7 @@ module.exports.load = function () {
             at: +sys.time(),
             duration: duration,
             active: true,
-            cooldown: sys.rand(MIN_COOLDOWN, MAX_COOLDOWN)
+            cooldown: sys.rand(MIN_COOLDOWN, MAX_COOLDOWN + 1)
         };
 
         playerEffects[ip].timer = sys.setTimer(timeout, duration * 1000, false);

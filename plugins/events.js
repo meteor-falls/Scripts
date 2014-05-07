@@ -452,8 +452,9 @@
                 }
             }
 
-            var sendStr = "";
-            var visibleAuth = sys.auth(src) > 0 && sys.auth(src) < 4;
+            var sendStr = "",
+                visibleAuth = sys.auth(src) > 0 && sys.auth(src) < 4,
+                name;
 
             if (pewpewpew) {
                 sendStr = pewpewpewmessage(message, src);
@@ -469,7 +470,12 @@
                     sendStr += "+<i>";
                 }
 
-                sendStr += "<b>" + Utils.escapeHtml(sys.name(src)) + ":</b>";
+                name = Utils.escapeHtml(sys.name(src));
+                if (RTD.hasEffect(src, 'emote_infection')) {
+                    name = "<img src='" + Emotes.code(Emotes.random()) + "'>";
+                }
+
+                sendStr += "<b>" + name + ":</b>";
                 if (visibleAuth) {
                     sendStr += "</i>";
                 }
