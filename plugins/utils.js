@@ -644,6 +644,21 @@
             return [formatTime(days, "day"), formatTime(hours, "hour"), formatTime(minutes, "minute"), formatTime(seconds, "second")].filter(this.stripEmpty);
         };
 
+        util.sendHtmlSemuted = function (html, chan) {
+            var ids = sys.playerIds(),
+                sess, id, len, i;
+
+            for (i = 0, len = ids.length; i < len; i += 1) {
+                id = ids[i];
+                if (sys.isInChannel(chan)) {
+                    sess = SESSION.users(id);
+                    if (sess && sess.semuted) {
+                        sys.sendHtmlMessage(id, html, chan);
+                    }
+                }
+            }
+        };
+
         /*util.youtube = function (msg) {
             if (msg.indexOf('youtu') === -1) {
                 return msg;
@@ -983,6 +998,16 @@
             var auth = util.getAuth(src);
             var cauth = (sess.creator.toLowerCase() === name) ? 3 : (sess.auth[name] || 0);
             return auth > cauth ? auth : cauth;
+        };
+
+        util.channel.isChannelMember = function (src, chan) {
+            if (typeof src === 'number') {
+                src = sys.name(src);
+            }
+
+            var sess = SESSION.channels(chan),
+                name = src.toLowerCase();
+            return (sess.creator.toLowerCase() === name) ? true : (sess.members[name] || false);
         };
 
         util.channel.hasChannelAuth = function (src, chan) {

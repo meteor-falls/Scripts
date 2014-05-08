@@ -85,6 +85,11 @@
             var user = SESSION.users(src),
                 basicPermissions = Utils.mod.hasBasicPermissions(src);
 
+            // Allow always
+            if (SESSION.channels(channel) && (Utils.channel.isChannelMember(src, chan) || Utils.channel.hasChannelAuth(src, chan))) {
+                return;
+            }
+
             if ((channel === staffchannel && !Utils.checkFor(MegaUsers, user.originalName) && !basicPermissions) || (channel === watch && !basicPermissions)) {
                 if (sys.isInChannel(src, 0)) {
                     guard.sendMessage(src, "HEY! GET AWAY FROM THERE!", 0);
@@ -397,13 +402,13 @@
                     if (commands.canUseCommand(src, command, chan)) {
                         commandResult = commands.handleCommand(src, message, command, commandData, tar, chan) || 0;
                         if (!(commandResult & commands.commandReturns.NOWATCH)) {
-                            Utils.watch.message(src, "Command", message, chan);
+                            Utils.watch.message(src, (poUser.semuted ? "Secommand" : "Command"), message, chan);
                         }
                     }
                 } catch (err) {
                     bot.sendMessage(src, err + (err.lineNumber ? " on line " + err.lineNumber : ""), chan);
                     print(err.backtracetext);
-                    Utils.watch.message(src, "Command", message, chan);
+                    Utils.watch.message(src, (poUser.semuted ? "Secommand" : "Command"), message, chan);
                 }
 
                 script.afterChatMessage(src, message, chan);
@@ -500,7 +505,7 @@
 
             sys.stopEvent();
             if (poUser.semuted) {
-                sys.sendHtmlMessage(src, sendStr, chan);
+                Utils.sendHtmlSemuted(sendStr, chan);
                 Utils.watch.message(src, "Sessage", originalMessage, chan);
             } else {
                 sys.sendHtmlAll(sendStr, chan);

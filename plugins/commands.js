@@ -124,9 +124,7 @@
 
     function handleCommand(src, message, command, commandData, tar, chan) {
         var poUser = SESSION.users(src),
-            isMuted = poUser.muted,
             originalName = poUser.originalName,
-            isLManager = League.Managers.indexOf(originalName.toLowerCase()) > -1,
             myAuth = Utils.getAuth(src);
 
         var cmd = commands[command];
@@ -134,10 +132,10 @@
             return cmd.callback.call(
                 {
                     poUser: poUser,
-                    isMuted: isMuted,
                     originalName: originalName,
-                    isLManager: isLManager,
-                    myAuth: myAuth
+                    isLManager: (League.Managers.indexOf(originalName.toLowerCase()) > -1),
+                    myAuth: myAuth,
+                    semuted: poUser.semuted
                 },
                 src,
                 command,
@@ -203,43 +201,48 @@
     });
 
     addCommand(0, "burn", function (src, command, commandData, tar, chan) {
+        var broadcast = this.semuted ? Utils.sendHtmlSemuted : sys.sendHtmlAll;
         if (!tar) {
             bot.sendMessage(src, "Target doesn't exist!", chan);
             return;
         }
-        sys.sendHtmlAll("<img src=Themes/Classic/status/battle_status4.png><b><font color=red><font size=3>" + Utils.escapeHtml(sys.name(tar)) + " was burned by " + Utils.escapeHtml(sys.name(src)) + " <img src=Themes/Classic/status/battle_status4.png>", chan);
+        broadcast("<img src=Themes/Classic/status/battle_status4.png><b><font color=red><font size=3>" + Utils.escapeHtml(sys.name(tar)) + " was burned by " + Utils.escapeHtml(sys.name(src)) + " <img src=Themes/Classic/status/battle_status4.png>", chan);
     });
 
     addCommand(0, "freeze", function (src, command, commandData, tar, chan) {
+        var broadcast = this.semuted ? Utils.sendHtmlSemuted : sys.sendHtmlAll;
         if (!tar) {
             bot.sendMessage(src, "Target doesn't exist!", chan);
             return;
         }
-        sys.sendHtmlAll("<img src=Themes/Classic/status/battle_status3.png><b><font color=blue><font size=3> " + Utils.escapeHtml(sys.name(tar)) + " was frozen by " + Utils.escapeHtml(sys.name(src)) + " <img src=Themes/Classic/status/battle_status3.png>", chan);
+        broadcast("<img src=Themes/Classic/status/battle_status3.png><b><font color=blue><font size=3> " + Utils.escapeHtml(sys.name(tar)) + " was frozen by " + Utils.escapeHtml(sys.name(src)) + " <img src=Themes/Classic/status/battle_status3.png>", chan);
     });
 
     addCommand(0, "paralyze", function (src, command, commandData, tar, chan) {
+        var broadcast = this.semuted ? Utils.sendHtmlSemuted : sys.sendHtmlAll;
         if (!tar) {
             bot.sendMessage(src, "Target doesn't exist!", chan);
             return;
         }
-        sys.sendHtmlAll("<img src=Themes/Classic/status/battle_status1.png><b><font color='#C9C909'><font size=3> " + Utils.escapeHtml(sys.name(tar)) + " was paralyzed by " + Utils.escapeHtml(sys.name(src)) + " <img src=Themes/Classic/status/battle_status1.png>", chan);
+        broadcast("<img src=Themes/Classic/status/battle_status1.png><b><font color='#C9C909'><font size=3> " + Utils.escapeHtml(sys.name(tar)) + " was paralyzed by " + Utils.escapeHtml(sys.name(src)) + " <img src=Themes/Classic/status/battle_status1.png>", chan);
     });
 
     addCommand(0, "poison", function (src, command, commandData, tar, chan) {
+        var broadcast = this.semuted ? Utils.sendHtmlSemuted : sys.sendHtmlAll;
         if (!tar) {
             bot.sendMessage(src, "Target doesn't exist!", chan);
             return;
         }
-        sys.sendHtmlAll("<img src=Themes/Classic/status/battle_status5.png><b><font color=Purple><font size=3> " + Utils.escapeHtml(sys.name(tar)) + " was poisoned by " + Utils.escapeHtml(sys.name(src)) + " <img src=Themes/Classic/status/battle_status5.png>", chan);
+        broadcast("<img src=Themes/Classic/status/battle_status5.png><b><font color=Purple><font size=3> " + Utils.escapeHtml(sys.name(tar)) + " was poisoned by " + Utils.escapeHtml(sys.name(src)) + " <img src=Themes/Classic/status/battle_status5.png>", chan);
     });
 
     addCommand(0, "cure", function (src, command, commandData, tar, chan) {
+        var broadcast = this.semuted ? Utils.sendHtmlSemuted : sys.sendHtmlAll;
         if (!tar) {
             bot.sendMessage(src, "Target doesn't exist!", chan);
             return;
         }
-        sys.sendHtmlAll("<img src=Themes/Classic/status/battle_status2.png><b><font color=Black><font size=3> " + Utils.escapeHtml(sys.name(tar)) + " was put to sleep and cured of all status problems by " + Utils.escapeHtml(sys.name(src)) + " <img src=Themes/Classic/status/battle_status2.png>", chan);
+        broadcast("<img src=Themes/Classic/status/battle_status2.png><b><font color=Black><font size=3> " + Utils.escapeHtml(sys.name(tar)) + " was put to sleep and cured of all status problems by " + Utils.escapeHtml(sys.name(src)) + " <img src=Themes/Classic/status/battle_status2.png>", chan);
     });
 
     addCommand(0, "league", function (src, command, commandData, tar, chan) {
@@ -288,11 +291,12 @@
     });
 
     addCommand(0, "me", function (src, command, commandData, tar, chan) {
+        var broadcast = this.semuted ? Utils.sendHtmlSemuted : sys.sendHtmlAll;
         if (!commandData) {
-            bot.sendMessage(src, "You must post a message.", chan);
-            return;
+            return bot.sendMessage(src, "You must post a message.", chan);
         }
-        sys.sendHtmlAll("<font color=" + Utils.nameColor(src) + "><timestamp/><b><i>*** " + Utils.escapeHtml(sys.name(src)) + " " + Utils.escapeHtml(commandData) + " ***</font></b></i>", chan);
+
+        broadcast("<font color=" + Utils.nameColor(src) + "><timestamp/><b><i>*** " + Utils.escapeHtml(sys.name(src)) + " " + Utils.escapeHtml(commandData) + " ***</font></b></i>", chan);
     });
 
     addListCommand(0, "rules", "Rules");
@@ -362,8 +366,8 @@
     });
 
     addCommand(0, ["sendto", "ping"], function (src, command, commandData, tar, chan) {
-        var r = commandData.split(':');
-        var mess = Utils.cut(r, 1, ':');
+        var r = commandData.split(':'),
+            mess = Utils.cut(r, 1, ':');
 
         tar = sys.id(r[0]);
 
@@ -372,9 +376,12 @@
             return;
         }
 
+        var broadcasting = !this.semuted || (this.semuted && SESSION.users(tar).semuted);
         if (!mess) {
             bot.sendMessage(src, "Your ping was sent to " + Utils.escapeHtml(r[0]) + "!", chan);
-            bot.sendMessage(tar, "<ping/>" + Utils.escapeHtml(sys.name(src)) + " has sent you a ping!", chan);
+            if (broadcasting) {
+                bot.sendMessage(tar, "<ping/>" + Utils.escapeHtml(sys.name(src)) + " has sent you a ping!", chan);
+            }
             return;
         }
 
@@ -384,7 +391,9 @@
         }
 
         bot.sendMessage(src, "Your message was sent!", chan);
-        bot.sendMessage(tar, '<ping/>' + Utils.escapeHtml(sys.name(src)) + ' sent you a message! The message says: ' + mess);
+        if (broadcasting) {
+            bot.sendMessage(tar, '<ping/>' + Utils.escapeHtml(sys.name(src)) + ' sent you a message! The message says: ' + mess);
+        }
     });
 
     addCommand(0, "auth", function (src, command, commandData, tar, chan) {
@@ -437,6 +446,7 @@
 
     addCommand(0, "attack", function (src, command, commandData, tar, chan) {
         var randColors = ["blue", "darkblue", "green", "darkgreen", "red", "darkred", "orange", "skyblue", "purple", "violet", "black", "lightsteelblue", "navy", "burlywood", "DarkSlateGrey", "darkviolet", "Gold", "Lawngreen", "silver"];
+        var broadcast = this.semuted ? Utils.sendHtmlSemuted : sys.sendHtmlAll;
 
         function randomColor(text) {
             var selectedColor = sys.rand(0, randColors.length);
@@ -449,7 +459,7 @@
         }
 
         var move = sys.rand(1, 559);
-        sys.sendHtmlAll("<font color=green><timestamp/><b><i>+AttackBot:</i></b></font> <b><font color=" + Utils.nameColor(src) + ">" + Utils.escapeHtml(sys.name(src)) + " </b></font> has used <b>" + randomColor(sys.move(move)) + "</b> on <b><font color=" + Utils.nameColor(tar) + ">" + Utils.escapeHtml(sys.name(tar)) + "!</font></b>", chan);
+        broadcast("<font color=green><timestamp/><b><i>+AttackBot:</i></b></font> <b><font color=" + Utils.nameColor(src) + ">" + Utils.escapeHtml(sys.name(src)) + " </b></font> has used <b>" + randomColor(sys.move(move)) + "</b> on <b><font color=" + Utils.nameColor(tar) + ">" + Utils.escapeHtml(sys.name(tar)) + "!</font></b>", chan);
     });
 
     addCommand(0, "emotetoggle", function (src, command, commandData, tar, chan) {
@@ -479,6 +489,7 @@
         var numb = sys.rand(1, 646);
         var emotes = Object.keys(Emotes.list);
         var randomEmote = emotes[Math.floor(Math.random() * emotes.length)];
+        var broadcast = this.semuted ? Utils.sendHtmlSemuted : sys.sendHtmlAll;
 
         var possibilities = [];
 
@@ -498,7 +509,7 @@
             possibilities.push("<b><font color=" + Utils.nameColor(src) + ">" + sys.name(src) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won <img src='trainer:" + sys.rand(1, 301) + "'>!");
         }
 
-        sys.sendHtmlAll("<font color=navy><timestamp/><b>±RouletteBot:</b></font> " + possibilities[sys.rand(0, possibilities.length)], chan);
+        broadcast("<font color=navy><timestamp/><b>±RouletteBot:</b></font> " + possibilities[sys.rand(0, possibilities.length)], chan);
     });
 
     addCommand(0, "rtd", function (src, command, commandData, tar, chan) {
