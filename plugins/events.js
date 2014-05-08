@@ -90,13 +90,16 @@
                 return;
             }
 
+            // TODO: Auto kick
             if ((channel === staffchannel && !Utils.checkFor(MegaUsers, user.originalName) && !basicPermissions) || (channel === watch && !basicPermissions)) {
                 if (sys.isInChannel(src, 0)) {
                     guard.sendMessage(src, "HEY! GET AWAY FROM THERE!", 0);
                 }
-                watchbot.sendAll(Utils.nameIp(src) + " tried to join " + ChannelLink(sys.channel(channel)) + "!", watch);
-                sys.stopEvent();
-                return;
+                // TODO: Remove this when autokick is implemented
+                if (!user.semuted) {
+                    watchbot.sendAll(Utils.nameIp(src) + " tried to join " + ChannelLink(sys.channel(channel)) + "!", watch);
+                }
+                return sys.stopEvent();
             }
         },
         afterChannelCreated: function (channel, cname, src) {
