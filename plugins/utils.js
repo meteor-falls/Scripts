@@ -650,7 +650,7 @@
 
             for (i = 0, len = ids.length; i < len; i += 1) {
                 id = ids[i];
-                if (sys.isInChannel(src, chan)) {
+                if (sys.isInChannel(id, chan)) {
                     sess = SESSION.users(id);
                     if (sess && sess.semuted) {
                         sys.sendHtmlMessage(id, html, chan);

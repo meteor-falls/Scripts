@@ -86,7 +86,7 @@
                 basicPermissions = Utils.mod.hasBasicPermissions(src);
 
             // Allow always
-            if (SESSION.channels(channel) && (Utils.channel.isChannelMember(src, chan) || Utils.channel.hasChannelAuth(src, chan))) {
+            if (SESSION.channels(channel) && (Utils.channel.isChannelMember(src, channel) || Utils.channel.hasChannelAuth(src, channel))) {
                 return;
             }
 
