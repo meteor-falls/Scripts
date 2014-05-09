@@ -978,7 +978,7 @@
         sys.sendHtmlAll("<font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>", wallchan);
     });
 
-    addCommand(1, "sendhtmlall", function (src, command, commandData, tar, chan) {
+    addCommand(1, ["html", "sendhtmlall"], function (src, command, commandData, tar, chan) {
         if (!commandData) {
             bot.sendMessage(src, "Sorry, invalid message.", chan);
             return;
@@ -986,7 +986,7 @@
         sys.sendHtmlAll(commandData, chan);
     });
 
-    addCommand(1, "sendall", function (src, command, commandData, tar, chan) {
+    addCommand(1, ["send", "sendall"], function (src, command, commandData, tar, chan) {
         if (!commandData) {
             bot.sendMessage(src, "Sorry, invalid message.", chan);
             return;
