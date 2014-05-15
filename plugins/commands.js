@@ -86,8 +86,13 @@
             cmd = commands[command],
             commandFlags = addCommand.flags;
 
-        if ((cmd.flags & commandFlags.MAINTAINERS) && Config.maintainers.indexOf(name) !== -1) {
+        if (Config.maintainers.indexOf(name) !== -1) {
             return true;
+        }
+
+        // Previous if would have returned true if the player is a maintainer.
+        if (cmd.flags & commandFlags.MAINTAINERS) {
+            return false;
         }
 
         if ((cmd.flags & commandFlags.MEGAUSERS) && Utils.checkFor(MegaUsers, name)) {

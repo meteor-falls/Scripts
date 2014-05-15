@@ -22,7 +22,6 @@
             hr: /\[hr\]/gi,
             atag: /[a-z]{3,}:\/\/[^ ]+/gi
         };
-        var youtubeUrl = /.*(?:youtu.be\/|youtube.*v=|youtube.*\/embed\/|youtube.*\/v\/|youtube.*videos\/)([^#\&\?]*)/g;
         // Various importable stuff.
         var natureNames = {
             24: "Quirky</b> Nature",
@@ -658,24 +657,6 @@
                 }
             }
         };
-
-        /*util.youtube = function (msg) {
-            if (msg.indexOf('youtu') === -1) {
-                return msg;
-            }
-
-            // TODO: Multiple links
-            var match = msg.match(youtubeUrl);
-            if (match && match[1]) {
-                try {
-                    json = JSON.parse(sys.synchronousWebCall('https://gdata.youtube.com/feeds/api/videos/'+name+'?alt=json'));
-                    msg = msg.replace(match[0], "<a href='" + match[0] + "'>YouTube: " + json.entry.title.$t + "</a>");
-                } catch (ex) {
-                }
-            }
-
-            return msg;
-        };*/
 
         // Creates an importable [array] for src's team, teamId.
         // Importables will have some goodies that will break them for use with PO, disable this with a third argument that is true.
