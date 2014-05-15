@@ -573,50 +573,25 @@
             var ip = sys.ip(src);
 
             if (teamChanges > 2) {
-                if (typeof teamSpammers[ip] === "undefined") {
-                    teamSpammers[ip] = 0;
-
-                    sys.setTimer(function () {
-                        if (typeof teamSpammers[ip] !== "undefined") {
-                            teamSpammers[ip] = 1;
-
-                            if (teamSpammers[ip] <= 0) {
-                                delete teamSpammers[ip];
-                            }
-                        }
-                    }, 40 * 1000, false);
-
-                } else if (teamSpammers[ip] === 0) {
-                    teamSpammers[ip] = 1;
-                    watchbot.sendAll("Alert: Possible team spammer " + Utils.nameIp(src) + ". Kicked for now.", watch);
-                    Utils.mod.kick(src);
-
-                    sys.setTimer(function () {
-                        if (typeof teamSpammers[ip] !== "undefined") {
-                            teamSpammers[ip] = 1;
-
-                            if (teamSpammers[ip] <= 0) {
-                                delete teamSpammers[ip];
-                            }
-                        }
-                    }, 180 * 1000, false);
-
-                    return;
+                if (!teamSpammers.hasOwnProperty(ip)) {
+                    teamSpammers[ip] = true;
                 } else {
-                    watchbot.sendAll("Team spammer found: " + Utils.nameIp(src) + ". Banning.", watch);
-                    Utils.mod.ban(sys.name(src));
-                    delete teamSpammers[ip];
+                    bot.sendMessage(src, "You are being kicked for changing your name too often.", chan);
+                    watchbot.sendAll("Kicked " + Utils.nameIp(src) + " for change name spamming.", watch);
+                    Utils.mod.kick(src);
                     return;
                 }
+
+                sys.setTimer(function () {
+                    delete teamSpammers[ip];
+                }, 10000, false);
             }
 
             sys.setTimer(function () {
-                var user = SESSION.users(src);
-
-                if (user) {
-                    user.teamChanges -= 1;
+                if (myUser) {
+                    myUser.teamChanges -= 1;
                 }
-            }, 5 * 1000, false);
+            }, 1000, false);
 
             watchbot.sendAll(Utils.nameIp(src) + " changed teams.", watch);
         },
