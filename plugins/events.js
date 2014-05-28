@@ -60,9 +60,9 @@
             }
 
             ignoreNext = true;
-            if (typeof watch !== 'undefined' && typeof watchbot !== 'undefined' && message.substr(0, 2) !== '[#' && message.substr(0, 2) !== '<f') {
+            /*if (typeof watch !== 'undefined' && typeof watchbot !== 'undefined' && message.substr(0, 2) !== '[#' && message.substr(0, 2) !== '<f') {
                 watchbot.sendAll(message.split("\n").join("<br/>"), watch);
-            }
+            }*/
         },
         beforeServerMessage: function (message) {
             var isEval = message.substr(0, 2) === ">>",
