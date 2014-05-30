@@ -131,7 +131,7 @@ global.Emotes = {
                     code = Emotes.code(emote);
                 }
 
-                return "<a href='po:appendmsg/ " + emote + "' title='" + emote + "'><img src='" + code + "'" + size + "></a>";
+                return "<a href='po:appendmsg/ " + emote + "'><img title='" + emote + "' src='" + code + "'" + size + "></a>";
             };
         }
 
@@ -149,7 +149,7 @@ global.Emotes = {
         // Misc "emotes". Pokemons, icons, items, and avatars.
         // pokemon:subtitute also works.
         // pokemon:30&cropped=true
-        message = message.replace(/((trainer|icon|item|pokemon):([(\d|\-)&=(gen|shiny|gender|back|cropped|num|substitute|true|false)]+))/g, "<a href='po:appendmsg/ $1' title='$1'><img src='$1'></a>");
+        message = message.replace(/((trainer|icon|item|pokemon):([(\d|\-)&=(gen|shiny|gender|back|cropped|num|substitute|true|false)]+))/g, "<a href='po:appendmsg/ $1'><img src='$1'  title='$1'></a>");
 
         // Emoji effects
         if (src) {
