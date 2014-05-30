@@ -322,23 +322,6 @@
         ].join("<br>"), chan);
     });
 
-    addCommand(0, ["calc", "calculate", "calculator"], function (src, command, commandData, tar, chan) {
-        if (typeof mathjs === 'undefined') {
-            require.reload('mathjs.js');
-        }
-
-        var res;
-        try {
-            res = mathjs.eval(commandData);
-
-            bot.sendMessage(src, Utils.escapeHtml("The result of '" + commandData + "' is:"), chan);
-            bot.sendMessage(src, Utils.escapeHtml(res.toString()), chan);
-        } catch (ex) {
-            bot.sendMessage(src, "Error in parsing your expression (" + Utils.escapeHtml(commandData) + ").", chan);
-            bot.sendMessage(src, ex, chan);
-        }
-    });
-
     // TODO: Move to lists.js
     addCommand(0, ["bbcode", "bbcodes"], function (src, command, commandData, tar, chan) {
         var BB = new CommandList("BB Code List", "navy", "Type in these BB Codes to use them:");

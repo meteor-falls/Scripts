@@ -46,29 +46,30 @@ Config = {
             return require.cache[name];
         }
 
-        var fileContent,
-            resp;
+        var __fileContent,
+            module, exports, __resp;
 
         if (webcall) {
-            resp = sys.synchronousWebCall(Config.repourl + "plugins/" + name);
-            sys.writeToFile(dir + name, resp);
+            __resp = sys.synchronousWebCall(Config.repourl + "plugins/" + name);
+            sys.writeToFile(dir + name, __resp);
         }
 
         if (!sys.fileExists(dir + name)) {
             throw {name: "NoFileError", toString: function () { return "Couldn't find file " + (dir + name) + "."; }};
         }
 
-        fileContent = sys.getFileContent(dir + name);
+        __fileContent = sys.getFileContent(dir + name);
 
-        var module = {
+        module = {
             exports: {},
             reload: function () { return false; },
             name: name
         };
-        var exports = module.exports;
+
+        exports = module.exports;
 
         try {
-            sys.eval(fileContent, dir + name);
+            sys.eval(__fileContent, dir + name);
         } catch (e) {
             sys.sendAll("Error loading module " + name + ": " + e + " on line " + e.lineNumber);
             print(e.backtracetext);
@@ -87,7 +88,7 @@ Config = {
         return require.meta[name].reload();
     };
 
-    if (typeof require.cache === 'undefined' || (typeof FULLRELOAD === 'boolean' && FULLRELOAD === true)) {
+    if (!require.cache || (typeof FULLRELOAD === 'boolean' && FULLRELOAD === true)) {
         require.cache = {};
         require.meta  = {};
     }
@@ -95,10 +96,9 @@ Config = {
     FULLRELOAD = false;
 
     require.callPlugins = function require_callPlugins(event) {
-        var args = Array.prototype.slice.call(arguments, 1);
-        var plugins = this.meta,
-            plugin,
-            exports;
+        var args = Array.prototype.slice.call(arguments, 1),
+            plugins = this.meta,
+            exports, plugin;
 
         for (plugin in plugins) {
             exports = plugins[plugin].exports;
@@ -119,6 +119,7 @@ Config = {
         plugin = Config.plugins[i] + ".js";
         require(plugin, Config.load_from_web);
     }
+
     for (i = 0; i < Config.data.length; i += 1) {
         data = Config.data[i] + ".json";
 
@@ -201,7 +202,6 @@ poScript = ({
         // lists.js reloaded by emotes.js
         //require.reload('lists.js');
 
-        //MathJS = require('mathjs.js');
         sys.resetProfiling();
     },
     warning: function warning(func, message, backtrace) {

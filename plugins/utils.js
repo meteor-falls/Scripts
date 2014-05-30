@@ -91,6 +91,10 @@
             5: "Spd"
         };
 
+        var bannedDWAbilities = {
+            'chandelure': ['shadow tag']
+        };
+
         var annNameRegex = /<!name ([a-z]+)>/;
 
         util.escapeHtml = function (str, noAmp) {
@@ -861,9 +865,10 @@
 
         util.mod = {};
         util.mod.kick = function (src) {
-            var pids = sys.playerIds(), len, i;
-            var id, found = false,
-                ip = sys.ip(src);
+            var pids = sys.playerIds(),
+                ip = sys.ip(src),
+                found = false,
+                len, id, i;
 
             for (i = 0, len = pids.length; i < len; i += 1) {
                 id = pids[i];
@@ -908,19 +913,19 @@
         // NOTE: Time is in minutes.
         // NOTE: This is done quietly.
         util.mod.tempBan = function (name, time) {
-            // Since there is basically nothing to customise atm (kick is done automatically), this is simply a small wrapper (though it does kick players under the same alt.)
-            // Ensure time is an integer.
-            time = Math.round(time);
             var tar = sys.id(name),
                 trueName = (SESSION.users(tar) || {originalName: name}).originalName || name;
+
+            time = Math.round(time);
 
             sys.tempBan(trueName, time);
             util.mod.kickIp(sys.ip(tar) || sys.dbIp(name));
         };
 
         util.mod.kickIp = function (ip) {
-            var aliases = sys.aliases(ip), found = false;
-            var id, len, i;
+            var aliases = sys.aliases(ip),
+                found = false,
+                id, len, i;
 
             for (i = 0, len = aliases.length; i < len; i += 1) {
                 id = sys.id(aliases[i]);
@@ -941,6 +946,7 @@
 
         util.mod.ban = function (name) {
             sys.ban(name);
+
             if (sys.id(name)) {
                 util.mod.kick(sys.id(name));
             } else {
@@ -949,8 +955,9 @@
         };
 
         util.mod.pruneMutes = function () {
-            var now = +sys.time();
-            var mute, meta;
+            var now = +sys.time(),
+                mute, meta;
+
             for (mute in Mutes) {
                 meta = Mutes[mute];
                 if (meta.time !== 0 && meta.time < now) {
@@ -1080,18 +1087,16 @@
         };
 
         util.tier.dreamAbilityCheck = function dreamAbilityCheck(src) {
-            var bannedAbilities = {
-                'chandelure': ['shadow tag']
-            };
+            var teamCount = sys.teamCount(src),
+                ability, poke, lpoke, i;
 
-            var i;
-            for (i = 0; i < sys.teamCount(src); i += 1) {
-                var ability = sys.ability(sys.teamPokeAbility(src, i, i));
-                var lability = ability.toLowerCase();
-                var poke = sys.pokemon(sys.teamPoke(src, i, i));
-                var lpoke = poke.toLowerCase();
-                if (bannedAbilities.hasOwnProperty(lpoke) && bannedAbilities[lpoke].indexOf(lability) !== -1) {
-                    bot.sendMessage(src, poke + " is not allowed to have ability " + ability + " in 5th Gen x Tier. Please change it in Teambuilder. You are now in the Random Battle tier.");
+            for (i = 0; i < teamCount; i += 1) {
+                ability = sys.ability(sys.teamPokeAbility(src, i, i));
+                poke = sys.pokemon(sys.teamPoke(src, i, i));
+                lpoke = poke.toLowerCase();
+
+                if (bannedAbilities.hasOwnProperty(lpoke) && bannedAbilities[lpoke].indexOf(ability.toLowerCase()) !== -1) {
+                    bot.sendMessage(src, poke + " is not allowed to have ability " + ability + " in the 5th Gen OU Tier. Please change it in Teambuilder. You are now in the Random Battle tier.");
                     return true;
                 }
             }

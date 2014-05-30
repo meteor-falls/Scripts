@@ -168,7 +168,6 @@
             ["bbcode", "To view a list of bbcodes."],
             ["selfkick", "Kicks all the ghosts on your ip."],
             ["vote", "To vote on a poll option.", ["option"]],
-            ["calc", "Evaluates a mathematical expression (10 / 2 * 4 ^ pi!). Full documentation <a href='https://github.com/josdejong/mathjs/blob/master/README.md'>here</a>.", ["expression"]],
             ["players", "Tells you how many players there are online on the given [os] (windows, mac, linux, android, webclient). If not specified, tells you how many players there are online regardless of OS.", ["os"]]
         ]).finish();
 
