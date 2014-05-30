@@ -12,23 +12,17 @@
     }
 
     function CommandList(title, bordercolor, help, listtype) {
+        help = (help || help === "") ? help : "Type one of the following into the channel's chat to use it:";
+        listtype = listtype || "ul";
+
         this.title = title;
         this.bordercolor = bordercolor;
-        this.template = "<font color='" + this.bordercolor + "' size='4'><b>" + listBorder + "</b></font><br/><h2>" + title + "</h2>";
-
-        if (!help && help !== "") {
-            help = "Type one of the following into the channel's chat to use it:";
-        }
-
-        if (!listtype) {
-            listtype = "ul";
-        }
+        this.listtype = listtype;
+        this.template = "<font color=" + bordercolor + " size=4><b>" + listBorder + "</b></font><br><h2>" + title + "</h2>";
 
         if (help !== "") {
             this.template += "<i>" + help + "</i><" + listtype + ">";
         }
-
-        this.listtype = listtype;
     }
 
     CommandList.prototype.add = function (cmd, desc, args) {
@@ -42,7 +36,7 @@
 
         if (arguments.length > 1) {
             if (!args) {
-                cmd = "/<a href='po:send//" + cmd + "' style='text-decoration: none; color: black;'>" + cmd + "</a>";
+                cmd = "/<a href='po:send//" + cmd + "' style='text-decoration:none;color:black'>" + cmd + "</a>";
             } else {
                 cmd = "/" + cmd;
             }
@@ -74,7 +68,7 @@
         this.borderColor = borderColor;
 
         this.template = "<font color=" + borderColor + " size=4><b>" + listBorder + "</b></font><h2>" + name + "</h2><br>";
-        this.template += "<table border=" + border + " cellpadding='" + padding + ">";
+        this.template += "<table border=" + border + " cellpadding=" + padding + ">";
 
         this._zebra = true;
     }
@@ -98,8 +92,7 @@
     TableList.prototype.add = function (elements, isBold) {
         var out = "<tr bgcolor='" + this.bgcolor() + "'>",
             tags = isBold ? ['<th>', '</th>'] : ['<td>', '</td>'],
-            len,
-            i;
+            len, i;
 
         for (i = 0, len = elements.length; i < len; i += 1) {
             out += tags[0] + elements[i] + tags[1];
@@ -112,8 +105,7 @@
 
     TableList.prototype.addEvery = function (elements, isBold, every, remainingIsBold) {
         var out = [],
-            len,
-            element;
+            element, len;
 
         for (element = 0, len = elements.length; element < len; element += 1) {
             out.push(elements[element]);
@@ -127,11 +119,12 @@
         if (out.length) {
             this.add(out, remainingIsBold === undefined ? isBold : remainingIsBold);
         }
+
         return this;
     };
 
     TableList.prototype.finish = function () {
-        this.template += "</table><br><br/><font color='" + this.borderColor + "' size='4'><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font>";
+        this.template += "</table><br><br><font color='" + this.borderColor + "' size='4'><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font>";
         return this;
     };
 
@@ -260,7 +253,7 @@
 
         for (i = 0, len = Emotes.display.length; i < len; i += 1) {
             emote = Utils.escapeHtml(Emotes.display[i]);
-            emotesToAdd.push("<a href='po:appendmsg/ " + emote + "'>" + emote + "</a>");
+            emotesToAdd.push("<a href='po:appendmsg/ " + emote + "' style='text-decoration:none;color:black;font-weight:none'>" + emote + "</a>");
 
             if (emotesToAdd.length >= 8) {
                 emotesList.add(emotesToAdd, false);
