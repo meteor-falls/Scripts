@@ -252,7 +252,7 @@
 
         for (i = 0, len = Emotes.display.length; i < len; i += 1) {
             emote = Utils.escapeHtml(Emotes.display[i]);
-            emotesToAdd.push("<a href='po:appendmsg/ " + emote + "' style='text-decoration:none;color:black;font-weight:none'>" + emote + "</a>");
+            emotesToAdd.push("<a href='po:appendmsg/ " + emote + "' style='text-decoration:none;color:black;font-weight:0'>" + emote + "</a>");
 
             if (emotesToAdd.length >= 8) {
                 emotesList.add(emotesToAdd, false);
@@ -285,136 +285,116 @@
         Lists.Rules = Rules;
 
         /** LEAGUE RULES **/
-        var League = new CommandList("League Rules", "navy", "Please follow the rules below or you will be unable to challenge the league:", "ol");
-        League.add("You must follow any rules made by the gym leader/elite 4. If the rule is crazy, talk to an auth. If the gym leader/elite 4 doesn't have rules, read rule 8.");
-        League.add("No lying. If you lie about defeating a league member, you will have to start the league over again.");
-        League.add("Be a good sport. If you lose, say GG or nothing, just don't be mean!");
-        League.add("Respect one another. This rule goes for both league members and challengers. Friendly trash talk is fine, don't make it personal.");
-        League.add("If you lose a gym battle, you can rematch that gym at a time specified by the gym leader.");
-        League.add("If you lose to an elite 4 or the champion, you must start back over at the first elite.");
-        League.add("If you defeat the gyms, elites, and the champion, you will be in the Hall of Fame!");
-        League.add("If the league member does not have set rules, follow these guidelines:</ol><ul><b><li>5th Gen OU Tier</li><b><li>Singles battle</li><b><li>Best 2 out of 3 decides winner</li></ul></li>");
-        League.finish();
-
-        Lists.LeagueRules = League;
+        Lists.LeagueRules = new CommandList("League Rules", "navy", "Please follow the rules below or you will be unable to challenge the league:", "ol").add([
+            ["You must follow any rules made by the gym leader/elite 4. If the rule is crazy, talk to an auth. If the gym leader/elite 4 doesn't have rules, read rule 8."],
+            ["No lying. If you lie about defeating a league member, you will have to start the league over again."],
+            ["Be a good sport. If you lose, say GG or nothing, just don't be mean!"],
+            ["Respect one another. This rule goes for both league members and challengers. Friendly trash talk is fine, don't make it personal."],
+            ["If you lose a gym battle, you can rematch that gym at a time specified by the gym leader."],
+            ["If you lose to an elite 4 or the champion, you must start back over at the first elite."],
+            ["If you defeat the gyms, elites, and the champion, you will be in the Hall of Fame!"],
+            ["If the league member does not have set rules, follow these guidelines:</ol><ul><b><li>5th Gen OU Tier</li><b><li>Singles battle</li><b><li>Best 2 out of 3 decides winner</li></ul></li>"]
+        ]).finish();
 
         /** MODERATOR COMMANDS **/
-        var Mod = new CommandList("Moderator Commands", "navy");
-        Mod.add("moderationcommands", "To display a list of commands that moderate the chat.");
-        Mod.add("partycommands", "To display a list of party commands.");
-        Mod.add("changetopic", "To change the topic of the channel [channel] to [topic].", ["channel", "topic"]);
-        Mod.add("[c]wall", "To post [text] with borders around it. [c makes it so it only appears in the channel it's used in]", ["text"]);
-        Mod.add("floodignore", "Toggles [name]'s flood ignore privilege.", ["name"]);
-        Mod.add("emoteperms", "To add/remove [name] from the emote permission list.", ["name"]);
-        Mod.add("imp", "To change your name to [name].", ["name"]);
-        Mod.add("impoff", "To stop imping.");
-        Mod.add("motd", "To change the Message of the Day to [message].", ["message"]);
-        Mod.add("roulette", "To start or end a roulette (/spin) game. Types can include: pokemons, items, emotes, avatars. By default, all 4 are enabled. It is separated with a comma followed by a space (, ).", ["type1, type2"]);
-        Mod.add("forcerules", "To show the rules to [player].", ["player"]);
-        Mod.add("info", "To view info about [player].", ["player"]);
-        Mod.add("sendall", "To send a message to everyone.", ["message"]);
-        Mod.add("sendhtmlall", "To send an HTML message to everyone.", ["message"]);
-        Mod.add("warn", "To send a warning to [player] with reason [reason]. If [reason] is undo, the warning is undone. [reason] is only required when the target hasn't been infracted. Further usage of the command will result in a kick/mute (5 minutes) of the player.", ["player", "reason"]);
-        Mod.add("getmotd", "To get the MOTD (including HTML).");
-        Mod.add("public", "To make the server public.");
-        Mod.add("regfix", "Re-connects the server to the registry.");
-        Mod.add("poll", "To start a poll. You must specify at least 2 options.", ["subject", "option1*option2*option..."]);
-        Mod.add("closepoll", "To close the current poll.");
-        Mod.add("onos", "Gives you the list of players on the given [os] (windows, mac, linux, android, webclient).", ["os"]);
-        Mod.finish();
-
-        Lists.Mod = Mod;
+        Lists.Mod = new CommandList("Moderator Commands", "navy").add([
+            ["moderationcommands", "To display a list of commands that moderate the chat."],
+            ["partycommands", "To display a list of party commands."],
+            ["changetopic", "To change the topic of the channel [channel] to [topic].", ["channel", "topic"]],
+            ["[c]wall", "To post [text] with borders around it. [c makes it so it only appears in the channel it's used in]", ["text"]],
+            ["floodignore", "Toggles [name]'s flood ignore privilege.", ["name"]],
+            ["emoteperms", "To add/remove [name] from the emote permission list.", ["name"]],
+            ["imp", "To change your name to [name].", ["name"]],
+            ["impoff", "To stop imping."],
+            ["motd", "To change the Message of the Day to [message].", ["message"]],
+            ["roulette", "To start or end a roulette (/spin) game. Types can include: pokemons, items, emotes, avatars. By default, all 4 are enabled. It is separated with a comma followed by a space (, ).", ["type1, type2"]],
+            ["forcerules", "To show the rules to [player].", ["player"]],
+            ["info", "To view info about [player].", ["player"]],
+            ["sendall", "To send a message to everyone.", ["message"]],
+            ["sendhtmlall", "To send an HTML message to everyone.", ["message"]],
+            ["warn", "To send a warning to [player] with reason [reason]. If [reason] is undo, the warning is undone. [reason] is only required when the target hasn't been infracted. Further usage of the command will result in a kick/mute (5 minutes) of the player.", ["player", "reason"]],
+            ["getmotd", "To get the MOTD (including HTML)."],
+            ["public", "To make the server public."],
+            ["regfix", "Re-connects the server to the registry."],
+            ["poll", "To start a poll. You must specify at least 2 options.", ["subject", "option1*option2*option..."]],
+            ["closepoll", "To close the current poll."],
+            ["onos", "Gives you the list of players on the given [os] (windows, mac, linux, android, webclient).", ["os"]]
+        ]).finish();
 
         /** MODERATION COMMANDS **/
-        var Moderate = new CommandList("Moderation Commands", "navy");
-        Moderate.add("logwarn", "To warn [player] of excessive logs.", ["player"]);
-        Moderate.add("tellemotes", "To explain to [player] what emotes are.", ["player"]);
-        Moderate.add("tellandroid", "To explain to [player] how to use the android application.", ["player"]);
-        Moderate.add("[s]kick", "To kick [player] from the server. You can kick multiple players with by separating their names with '*'. [reason] is optional.", ["player*player2", "reason"]);
-        Moderate.add("[s]mute", "To mute someone, [time], [timeunit], and [reason] are optional. [Units are: seconds, minutes, hours, days, weeks, months, years, decades. Default is minutes]. If no time is specified, mutes forever. You can skip time by doing: /mute [player]:::[reason].", ["person", "time", "unit", "reason"]);
-        Moderate.add("[s]unmute", "To unmute [person].", ["person"]);
-        Moderate.add("tempban", "To tempban [person] for [time]. [timeunit] and [reason] are optional. Units are the same from /mute. Default time is 30 minutes. Time should be in minutes (with no seconds specified), otherwise it might become 30 minutes.", ["person", "time", "timeunit", "reason"]);
-        Moderate.add("untempban", "To remove [person]'s tempban.", ["person"]);
-        Moderate.add("mutes", "To see a list of muted people.");
-        Moderate.add("tempbans", "To see a list of temporarily banned players.");
-        Moderate.add("rangebans", "To see a list of rangebanned ips.");
-        Moderate.add("silence", "To (un)silence all users.");
-        Moderate.add("message", "To set your kick, mute, ban, or welcome message. Use {target} for your target (for kick or ban messages). For your own color, use {color}, and for your target's color (in the case of a kick, mute, or ban), use {tcolor}. In your mute message, {duration} is also available and is mandatory. You can use HTML, but don't abuse. Example: " + Utils.escapeHtml("<font color=green><timestamp/> <b>Ethan struck the banhammer on {target}!</b></font>."), ["kick/mute/ban/welcome", "message"]);
-        Moderate.add("viewmessage", "To view your kick, mute, ban, or welcome message.", ["kick/mute/ban/welcome"]);
-        Moderate.add("removemessage", "To remove your kick, mute, ban, or welcome message.", ["kick/mute/ban/welcome"]);
+        Lists.Moderate = new CommandList("Moderation Commands", "navy").add([
+            ["logwarn", "To warn [player] of excessive logs.", ["player"]],
+            ["tellemotes", "To explain to [player] what emotes are.", ["player"]],
+            ["tellandroid", "To explain to [player] how to use the android application.", ["player"]],
+            ["[s]kick", "To kick [player] from the server. You can kick multiple players with by separating their names with '*'. [reason] is optional.", ["player*player2", "reason"]],
+            ["[s]mute", "To mute someone, [time], [timeunit], and [reason] are optional. [Units are: seconds, minutes, hours, days, weeks, months, years, decades. Default is minutes]. If no time is specified, mutes forever. You can skip time by doing: /mute [player]:::[reason].", ["person", "time", "unit", "reason"]],
+            ["[s]unmute", "To unmute [person].", ["person"]],
+            ["tempban", "To tempban [person] for [time]. [timeunit] and [reason] are optional. Units are the same from /mute. Default time is 30 minutes. Time should be in minutes (with no seconds specified), otherwise it might become 30 minutes.", ["person", "time", "timeunit", "reason"]],
+            ["untempban", "To remove [person]'s tempban.", ["person"]],
+            ["mutes", "To see a list of muted people."],
+            ["tempbans", "To see a list of temporarily banned players."],
+            ["rangebans", "To see a list of rangebanned ips."],
+            ["silence", "To (un)silence all users."],
+            ["message", "To set your kick, mute, ban, or welcome message. Use {target} for your target (for kick or ban messages). For your own color, use {color}, and for your target's color (in the case of a kick, mute, or ban), use {tcolor}. In your mute message, {duration} is also available and is mandatory. You can use HTML, but don't abuse. Example: " + Utils.escapeHtml("<font color=green><timestamp/> <b>Ethan struck the banhammer on {target}!</b></font>."), ["kick/mute/ban/welcome", "message"]],
+            ["viewmessage", "To view your kick, mute, ban, or welcome message.", ["kick/mute/ban/welcome"]],
+            ["removemessage", "To remove your kick, mute, ban, or welcome message.", ["kick/mute/ban/welcome"]]
+        ]).finish();
 
-        Moderate.finish();
-
-        Lists.Moderate = Moderate;
-
-        var Party = new CommandList("Party Commands", "navy");
-        Party.add("lolmode", "To turn lol mode on or off.");
-        Party.add("spacemode", "To turn space mode on or off.");
-        Party.add("capsmode", "To turn caps mode on or off.");
-        Party.add("reversemode", "To turn reverse mode on or off.");
-        Party.add("scramblemode", "To turn scramble mode on or off.");
-        Party.add("colormode", "To turn color mode on or off.");
-        Party.add("marxmode", "To turn Marx mode on or off.");
-        Party.add("comicmode", "To turn comic mode on or off.");
-        Party.add("pewpewpew", "To turn pewpewpew mode on or off.");
-        Party.add("nightclub", "To turn nightclub on or off.");
-        Party.finish();
-
-        Lists.Party = Party;
+        Lists.Party = new CommandList("Party Commands", "navy").add([
+            ["lolmode", "To turn lol mode on or off."],
+            ["spacemode", "To turn space mode on or off."],
+            ["capsmode", "To turn caps mode on or off."],
+            ["reversemode", "To turn reverse mode on or off."],
+            ["scramblemode", "To turn scramble mode on or off."],
+            ["colormode", "To turn color mode on or off."],
+            ["marxmode", "To turn Marx mode on or off."],
+            ["comicmode", "To turn comic mode on or off."],
+            ["pewpewpew", "To turn pewpewpew mode on or off."],
+            ["nightclub", "To turn nightclub on or off."]
+        ]).finish();
 
         /** ADMIN COMMANDS **/
-        var Admin = new CommandList("Administrator Commands", "navy");
-        Admin.add("<font color=blue>[s]</font>ban", "To ban [player] with an optional [reason]. Use /sban instead to silently ban.", ["player", "reason"]);
-        Admin.add("unban", "To unban a [player].", ["player"]);
-        Admin.add("clearpass", "To clear [player]'s password.", ["player"]);
-        Admin.add("clearchat", "To clear the chat in the channel [channel]. Default channel is " + sys.channel(0) + ".", ["channel"]);
-        Admin.add("supersilence", "To (un)silence all users and mods.");
-        Admin.add("showteam", "To view a player's team.", ["player"]);
-        Admin.add("megauser", "To give/take [player] megauser status.", ["player"]);
-        Admin.add("private", "To make the server private.");
-        Admin.finish();
-
-        Lists.Admin = Admin;
+        Lists.Admin = new CommandList("Administrator Commands", "navy").add([
+            ["<font color=blue>[s]</font>ban", "To ban [player] with an optional [reason]. Use /sban instead to silently ban.", ["player", "reason"]],
+            ["unban", "To unban a [player].", ["player"]],
+            ["clearpass", "To clear [player]'s password.", ["player"]],
+            ["clearchat", "To clear the chat in the channel [channel]. Default channel is " + sys.channel(0) + ".", ["channel"]],
+            ["supersilence", "To (un)silence all users and mods."],
+            ["showteam", "To view a player's team.", ["player"]],
+            ["megauser", "To give/take [player] megauser status.", ["player"]],
+            ["private", "To make the server private."]
+        ]).finish();
 
         /** OWNER COMMANDS **/
-        var Owner = new CommandList("Owner Commands", "navy");
-        Owner.add("servername", "To change the server name in the reg. Defaults to " + Config.servername, ["name"]);
-        Owner.add("authoptions", "To view the authority options.");
-        Owner.add("eval", "To evaluate [code]. Returns the result.", ["code"]);
-        Owner.add("resetladder", "To reset all ladders.");
-        Owner.add("bots", "To turn all bots on or off.");
-        Owner.finish();
+        Lists.Owner = new CommandList("Owner Commands", "navy").add([
+            ["servername", "To change the server name in the reg. Defaults to " + Config.servername + ".", ["name"]],
+            ["changeauth", "Changes [player]'s auth to [level].", ["player", "level"]],
+            ["dbauths", "To view all the players who have auth in the database."],
+            ["eval", "To evaluate [code]. Returns the result.", ["code"]],
+            ["resetladder", "To reset all ladders."],
+            ["bots", "To turn all bots on or off."]
+        ]).finish();
 
-        Lists.Owner = Owner;
-
-        /** AUTH OPTIONS **/
-        var Auth = new CommandList("Auth Options", "navy");
-        Auth.add("changeauth", "Changes [player]'s auth to [level].", ["player", "level"]);
-        Auth.add("dbauths", "To view all the players who have auth in the database.");
-        Auth.finish();
-
-        Lists.Auth = Auth;
 
         /** MAINTAINER COMMANDS **/
-        var Maintainer = new CommandList("Maintainer Commands", "navy");
-        Maintainer.add("webcall", "Loads scripts.js from the given [source] (by default, the Scripts repository's scripts.js). Use this when scripts.js is updated. Usually doesn't fully reload plugins.", ["source"]);
-        Maintainer.add("updatetiers", "Loads tiers.xml from the given [source] (by default, the Server-Shit repository's tiers.xml).", ["source"]);
-        Maintainer.add("updateann", "Sets the server announcement to the file from the given [source] (by default, the Server-Shit repository's announcement.html).", ["source"]);
-        Maintainer.add("testann", "Sets the server announcement to the file from the given [source] (by default, the Server-Shit repository's announcement.html), but only for you (for testing purposes). It's recommended to use the Designer Plugin instead.", ["source"]);
-        Maintainer.add("updatedesc", "Sets the server description to the file from the given [source] (by default, the Server-Shit repository's description.html).", ["source"]);
-        Maintainer.add("syncserver", "Loads the server announcement, description, tiers, and script from the default external source.");
-        Maintainer.add("update", "Updates the given [plugins] (separated by spaces: events init utils). '.js' at the end of the plugin name is optional and will be added automatically.", ["plugins"]);
-        Maintainer.add("init", "Calls script.init");
-        Maintainer.add("sessionrefill", "Calls SESSION.refill");
-        Maintainer.add("resetprofiling", "Calls sys.resetProfiling");
-        Maintainer.add("regsee", "Shows information about the given [key] in the reg.", ["key"]);
-        Maintainer.add("regremove", "Removes the given [key] from the reg.", ["key"]);
-        Maintainer.add("cdunregister", "Unregisters the given [channel] from the ChannelManager.", ["channel"]);
-        Maintainer.add("dump", "Dumps information about the given type. Available types are: * (selects everything, default), memory, profile, session, reg, channeldata.", ["type1", "type2"]);
-        Maintainer.add("id", "Shows [name]'s id.", ["id"]);
-        Maintainer.finish();
+        Lists.Maintainer = new CommandList("Maintainer Commands", "navy").add([
+            ["webcall", "Loads scripts.js from the given [source] (by default, the Scripts repository's scripts.js). Use this when scripts.js is updated. Usually doesn't fully reload plugins.", ["source"]],
+            ["updatetiers", "Loads tiers.xml from the given [source] (by default, the Server-Shit repository's tiers.xml).", ["source"]],
+            ["updateann", "Sets the server announcement to the file from the given [source] (by default, the Server-Shit repository's announcement.html).", ["source"]],
+            ["testann", "Sets the server announcement to the file from the given [source] (by default, the Server-Shit repository's announcement.html), but only for you (for testing purposes). It's recommended to use the Designer Plugin instead.", ["source"]],
+            ["updatedesc", "Sets the server description to the file from the given [source] (by default, the Server-Shit repository's description.html).", ["source"]],
+            ["syncserver", "Loads the server announcement, description, tiers, and script from the default external source."],
+            ["update", "Updates the given [plugins] (separated by spaces: events init utils). '.js' at the end of the plugin name is optional and will be added automatically.", ["plugins"]],
+            ["init", "Calls script.init"],
+            ["sessionrefill", "Calls SESSION.refill"],
+            ["resetprofiling", "Calls sys.resetProfiling"],
+            ["regsee", "Shows information about the given [key] in the reg.", ["key"]],
+            ["regremove", "Removes the given [key] from the reg.", ["key"]],
+            ["cdunregister", "Unregisters the given [channel] from the ChannelManager.", ["channel"]],
+            ["dump", "Dumps information about the given type. Available types are: * (selects everything, default), memory, profile, session, reg, channeldata.", ["type1", "type2"]],
+            ["id", "Shows [name]'s id.", ["id"]]
+        ]).finish();
 
-        Lists.Maintainer = Maintainer;
         return Lists;
     }
 

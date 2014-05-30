@@ -2093,8 +2093,6 @@
         bot.sendAll("The entire ladder has been reset!");
     });
 
-    addListCommand(3, "authoptions", "Auth");
-
     addCommand(3, "setwelcomemessage", function (src, command, commandData, tar, chan) {
         var r = commandData.split(':'),
             mess = Utils.cut(r, 1, ':'),
