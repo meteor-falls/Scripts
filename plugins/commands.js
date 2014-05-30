@@ -525,7 +525,7 @@
 
         effect = RTD.giveEffect(src);
         rtdbot.sendAll(RTD.rollString(src, effect), 0);
-        watchbot.sendAll(sys.name(src) + " rolled " + RTD.effects[effect].name + ".", watch);
+        Utils.watch.notify(sys.name(src) + " rolled " + RTD.effects[effect].name + ".");
     });
 
     addCommand(0, "megausers", function (src, command, commandData, tar, chan) {
@@ -1662,9 +1662,9 @@
     addCommand(1, "nightclub", function (src, command, commandData, tar, chan) {
         nightclub = !nightclub;
         if (nightclub) {
-            sys.sendHtmlAll("<br/>" + Utils.nightclub.format("Let the Night Club commence!"), chan);
+            sys.sendHtmlAll("<br>" + Utils.nightclub.format("Let the Night Club commence!"), chan);
         } else {
-            sys.sendHtmlAll(Utils.nightclub.format("Kay, Night Club times are over...") + "<br/>", chan);
+            sys.sendHtmlAll(Utils.nightclub.format("Kay, Night Club times are over...") + "<br>", chan);
         }
     });
 
@@ -1939,7 +1939,7 @@
         }
 
         for (i = 0; i < teamCount; i += 1) {
-            sys.sendHtmlMessage(src, Utils.teamImportable(tar, i).join("<br/>"), chan);
+            sys.sendHtmlMessage(src, Utils.teamImportable(tar, i).join("<br>"), chan);
         }
     });
 
@@ -2167,7 +2167,7 @@
                 Utils.watch.notify("Plugin " + plugin + " updated.");
             } catch (ex) {
                 bot.sendMessage(src, "Couldn't update plugin " + plugin + ": " + ex.toString() + " on line " + ex.lineNumber + " :(", chan);
-                sys.sendHtmlMessage(src, ex.backtrace.join("<br/>"), chan);
+                sys.sendHtmlMessage(src, ex.backtrace.join("<br>"), chan);
                 Utils.watch.notify("Couldn't update plugin " + plugin + ": " + ex.toString() + " on line " + ex.lineNumber + " :(");
                 print(ex.backtracetext);
             }
@@ -2180,7 +2180,7 @@
             bot.sendMessage(src, "Init was called successfully.", chan);
         } catch (ex) {
             bot.sendMessage(src, "Couldn't call init: " + ex, chan);
-            sys.sendHtmlMessage(src, ex.backtrace.join("<br/>"), chan);
+            sys.sendHtmlMessage(src, ex.backtrace.join("<br>"), chan);
         }
     });
 
@@ -2248,22 +2248,22 @@
 
         if (wantsDump('profile')) {
             bot.sendMessage(src, "Profile dump:", chan);
-            sys.sendHtmlMessage(src, sys.profileDump().replace(/\n/g, '<br/>'), chan);
+            sys.sendHtmlMessage(src, sys.profileDump().replace(/\n/g, '<br>'), chan);
         }
 
         if (wantsDump('session')) {
             bot.sendMessage(src, "SESSION dump:", chan);
-            sys.sendHtmlMessage(src, SESSION.dump().replace(/\n/g, '<br/>'), chan);
+            sys.sendHtmlMessage(src, SESSION.dump().replace(/\n/g, '<br>'), chan);
         }
 
         if (wantsDump('reg')) {
             bot.sendMessage(src, "Reg dump:", chan);
-            sys.sendHtmlMessage(src, Reg.dump().replace(/\n/g, '<br/>'), chan);
+            sys.sendHtmlMessage(src, Reg.dump().replace(/\n/g, '<br>'), chan);
         }
 
         if (wantsDump('channeldata')) {
             bot.sendMessage(src, "ChannelManager dump:", chan);
-            sys.sendHtmlMessage(src, ChannelManager.dump().replace(/\n/g, '<br/>'), chan);
+            sys.sendHtmlMessage(src, ChannelManager.dump().replace(/\n/g, '<br>'), chan);
         }
     });
 
@@ -2344,7 +2344,7 @@
         }
 
         bot.sendAll("Announcement cycled to <b>" + variants[index] + "</b>!", 0);
-        //watchbot.sendAll(Utils.nameIp(src) + " cycled the announcement to " + variants[index] + "!", watch);
+        //Utils.watch.notify(Utils.nameIp(src) + " cycled the announcement to " + variants[index] + "!");
         sys.webCall(Config.dataurl + fname, function (resp) {
             sys.writeToFile("old_announcement.html", sys.getAnnouncement());
             //bot.sendMessage(src, "Old announcement stored in old_announcement.html", chan);
@@ -2373,18 +2373,20 @@
     });
 
     addMaintainerCommand("eval", function (src, command, commandData, tar, chan) {
+        var res;
+
         bot.sendMessage(src, "You evaluated: " + Utils.escapeHtml(commandData), chan);
         try {
-            var res = sys.eval(commandData);
-            sys.sendHtmlMessage(src, "<timestamp/><b>Evaluation Check: </b><font color='green'>OK</font>", chan);
-            sys.sendHtmlMessage(src, "<timestamp/><b>Result: </b> " + Utils.escapeHtml(res), chan);
+            res = sys.eval(commandData);
+            sys.sendHtmlMessage(src, "<timestamp/><b>Evaluation Check:</b> <font color=green>OK</font>", chan);
+            sys.sendHtmlMessage(src, "<timestamp/><b>Result:</b> " + Utils.escapeHtml(res), chan);
             Utils.watch.notify("Result: " + Utils.escapeHtml(res));
         } catch (error) {
             sys.sendHtmlMessage(src, "<timestamp/><b>Evaluation Check: </b><font color='red'>" + error + "</font>", chan);
             Utils.watch.notify("Error: " + error);
             if (error.backtrace) {
-                sys.sendHtmlMessage(src, "<timestamp/><b>Backtrace:</b> <br/> " + Utils.escapeHtml(error.backtrace.join("<br/>")), chan);
-                Utils.watch.notify("Backtrace: " + Utils.escapeHtml(error.backtrace.join("<br/>")));
+                sys.sendHtmlMessage(src, "<timestamp/><b>Backtrace:</b><br> " + Utils.escapeHtml(error.backtrace.join("<br>")), chan);
+                Utils.watch.notify("Backtrace: " + Utils.escapeHtml(error.backtrace.join("<br>")));
             }
         }
     });

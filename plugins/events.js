@@ -13,7 +13,7 @@
 
                 if (id && sys.isInChannel(id, 0)) {
                     sys.sendMessage(id, "Script warning in function " + func + ": " + message, 0);
-                    sys.sendHtmlMessage(id, backtrace.split("\n").join("<br/>"), 0);
+                    sys.sendHtmlMessage(id, backtrace.split("\n").join("<br>"), 0);
                 }
             }
         },
@@ -54,14 +54,14 @@
 
                     if (id && sys.isInChannel(id, 0)) {
                         sys.sendMessage(id, message, 0);
-                        sys.sendHtmlMessage(id, sys.backtrace().split("\n").join("<br/>"), 0);
+                        sys.sendHtmlMessage(id, sys.backtrace().split("\n").join("<br>"), 0);
                     }
                 }
             }
 
             ignoreNext = true;
             /*if (typeof watch !== 'undefined' && typeof watchbot !== 'undefined' && message.substr(0, 2) !== '[#' && message.substr(0, 2) !== '<f') {
-                watchbot.sendAll(message.split("\n").join("<br/>"), watch);
+                Utils.watch.notify(message.split("\n").join("<br>"));
             }*/
         },
         beforeServerMessage: function (message) {
@@ -97,7 +97,7 @@
                 }
                 // TODO: Remove this when autokick is implemented
                 if (!user.semuted) {
-                    watchbot.sendAll(Utils.nameIp(src) + " tried to join " + ChannelLink(sys.channel(channel)) + "!", watch);
+                    Utils.watch.notify(Utils.nameIp(src) + " tried to join " + ChannelLink(sys.channel(channel)) + "!");
                 }
                 return sys.stopEvent();
             }
@@ -137,32 +137,31 @@
             }
 
             if (chan !== 0) {
-                watchbot.sendAll(Utils.nameIp(src) + " has joined " + ChannelLink(sys.channel(chan)) + "!", watch);
+                Utils.watch.notify(Utils.nameIp(src) + " joined " + ChannelLink(sys.channel(chan)) + "!");
             }
         },
         beforeLogIn: function (src) {
             var srcip = sys.ip(src),
                 poUser = SESSION.users(src),
                 auth = sys.auth(src),
-                t_n = +sys.time(),
                 ip;
 
             if (auth < 1) {
                 for (ip in Rangebans) {
                     if (ip === srcip.substr(0, ip.length)) {
-                        watchbot.sendAll("Rangebanned IP [" + srcip + "] tried to log in.", watch);
+                        Utils.watch.notify("Rangebanned IP [" + srcip + "] tried to log in.");
                         return sys.stopEvent();
                     }
                 }
                 if (reconnectTrolls.hasOwnProperty(ip)) {
-                    watchbot.sendAll("Blocked auto-reconnect from IP " + srcip + ".", watch);
+                    Utils.watch.notify("Blocked auto-reconnect from IP " + srcip + ".");
                     return sys.stopEvent();
                 }
             }
 
             if (auth < 3) {
                 if (Utils.hasIllegalChars(sys.name(src))) {
-                    watchbot.sendAll("Blocked login for bad characters from IP " + srcip + ".", watch);
+                    Utils.watch.notifyl("Blocked login for bad characters from IP " + srcip + ".");
                     return sys.stopEvent();
                 }
             }
@@ -178,13 +177,14 @@
 
             var cookie = (sys.cookie(src) || '').split(';');
             if (cookie.indexOf('cockblocked') > -1) {
-                watchbot.sendAll("Auto kicked " + Utils.nameIp(src) + ". (Cookie)", watch);
+                Utils.watch.notify("Cockblocked " + Utils.nameIp(src) + ".");
                 poUser.autokick = true;
                 return sys.kick(src);
             } else if (cookie.indexOf('blackbagged') > -1) {
-                watchbot.sendAll("Auto semuted " + Utils.nameIp(src) + ". (Cookie)", watch);
+                Utils.watch.notify("Blackbagged " + Utils.nameIp(src) + ".");
                 poUser.semuted = true;
             }
+
             poUser.originalName = sys.name(src);
 
             if (Utils.mod.hasBasicPermissions(src)) {
@@ -340,14 +340,14 @@
             if (!Utils.mod.hasBasicPermissions(src) && message.length > charLimit) {
                 sys.stopEvent();
                 bot.sendMessage(src, "Sorry, your message has exceeded the " + charLimit + " character limit.", chan);
-                //watchbot.sendAll("User, " + Utils.nameIp(src) + ", has tried to post a message that exceeds the " + charLimit + " character limit. Take action if need be.", watch);
+                //Utils.watch.notify("User, " + Utils.nameIp(src) + ", has tried to post a message that exceeds the " + charLimit + " character limit. Take action if need be.");
                 script.afterChatMessage(src, message, chan);
                 return;
             }
 
             if (Utils.hasIllegalChars(message) && myAuth < 1) {
-                bot.sendMessage(src, 'WHY DID YOU TRY TO POST THAT, YOU NOOB?!', chan);
-                watchbot.sendAll(Utils.nameIp(src) + ' TRIED TO POST A BAD CODE! KILL IT!', watch);
+                bot.sendMessage(src, "WHY DID YOU TRY TO POST THAT, YOU NOOB?!", chan);
+                Utils.watch.notify(Utils.nameIp(src) + " TRIED TO POST A BAD CODE! KILL IT!");
                 sys.stopEvent();
                 script.afterChatMessage(src, message, chan);
                 return;
@@ -577,7 +577,7 @@
                     teamSpammers[ip] = true;
                 } else {
                     bot.sendMessage(src, "You are being kicked for changing your name too often.", chan);
-                    watchbot.sendAll("Kicked " + Utils.nameIp(src) + " for change name spamming.", watch);
+                    Utils.watch.notify("Kicked " + Utils.nameIp(src) + " for change name spamming.");
                     Utils.mod.kick(src);
                     return;
                 }
@@ -593,7 +593,7 @@
                 }
             }, 1000, false);
 
-            watchbot.sendAll(Utils.nameIp(src) + " changed teams.", watch);
+            Utils.watch.notify(Utils.nameIp(src) + " changed teams.");
         },
         beforePlayerKick: function (src, bpl) {
             sys.stopEvent();
@@ -690,7 +690,7 @@
                 limit = (chan === testchan ? 18 : 7);
 
                 if (poUser.floodCount > limit && !poUser.muted) {
-                    watchbot.sendAll(Utils.nameIp(src) + " was kicked and muted for flooding in " + ChannelLink(sys.channel(chan)) + ".", watch);
+                    Utils.watch.notify(Utils.nameIp(src) + " was kicked and muted for flooding in " + ChannelLink(sys.channel(chan)) + ".");
                     flbot.sendAll(sys.name(src) + " was kicked and muted for flooding.", chan);
                     poUser.muted = true;
                     Mutes[srcip] = {

@@ -56,7 +56,7 @@
     };
 
     CommandList.prototype.finish = function () {
-        this.template += "</" + this.listtype + "><br/><font color='" + this.bordercolor + "' size='4'><b>" + listBorder + "</b></font>";
+        this.template += "</" + this.listtype + "><br><font color='" + this.bordercolor + "' size='4'><b>" + listBorder + "</b></font>";
         return this;
     };
 
@@ -73,8 +73,8 @@
         this.padding = padding;
         this.borderColor = borderColor;
 
-        this.template = "<font color='" + borderColor + "' size='4'><b>" + listBorder + "</b></font><h2>" + name + "</h2><br/>";
-        this.template += "<table border='" + border + "' cellpadding='" + padding + "'>";
+        this.template = "<font color=" + borderColor + " size=4><b>" + listBorder + "</b></font><h2>" + name + "</h2><br>";
+        this.template += "<table border=" + border + " cellpadding='" + padding + ">";
 
         this._zebra = true;
     }
@@ -256,11 +256,11 @@
         var emotesList = new TableList("Emotes", "stripe", 1, 2, "navy");
 
         var emotesToAdd = [],
-            len,
-            i;
+            emote, len, i;
 
         for (i = 0, len = Emotes.display.length; i < len; i += 1) {
-            emotesToAdd.push(Utils.escapeHtml(Emotes.display[i]));
+            emote = Utils.escapeHtml(Emotes.display[i]);
+            emotesToAdd.push("<a href='po:appendmsg/ " + emote + "'>" + emote + "</a>");
 
             if (emotesToAdd.length >= 8) {
                 emotesList.add(emotesToAdd, false);

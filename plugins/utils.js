@@ -574,8 +574,8 @@
                     .replace(formatRegex.size, '<font size=$1>$2</font>')
                     .replace(formatRegex.pre, '<pre>$1</pre>')
                     .replace(formatRegex.ping, "<ping/>")
-                    .replace(formatRegex.br, "<br/>")
-                    .replace(formatRegex.hr, "<hr/>");
+                    .replace(formatRegex.br, "<br>")
+                    .replace(formatRegex.hr, "<hr>");
             }
 
             return util.addChannelLinks(str); // Do this last to prevent collisions.
