@@ -2399,7 +2399,7 @@
         script.beforeChatMessage(tar, msg, chan);
 
         if (!containsCommand) {
-            var watchMessage = "[" + ChannelLink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(message);
+            var watchMessage = "[" + Utils.clink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(message);
             var players = sys.playerIds(), len, pi, sess, id;
             for (pi = 0, len = players.length; pi < len; pi += 1) {
                 id = players[pi];
@@ -2437,7 +2437,7 @@
         }
 
         sys.changeName(tar, name);
-        var watchMessage = "[" + ChannelLink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(message);
+        var watchMessage = "[" + Utils.clink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(message);
         var players = sys.playerIds(), len, pi, sess, id;
         for (pi = 0, len = players.length; pi < len; pi += 1) {
             id = players[pi];
@@ -2472,7 +2472,7 @@
         }
 
         SESSION.users(tar).semuted = true;
-        var watchMessage = "[" + ChannelLink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(message);
+        var watchMessage = "[" + Utils.clink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(message);
         var players = sys.playerIds(), len, pi, sess, id;
         for (pi = 0, len = players.length; pi < len; pi += 1) {
             id = players[pi];
@@ -2504,7 +2504,7 @@
             Poll.votes[i] = option;
         }
 
-        var watchMessage = "[" + ChannelLink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(message);
+        var watchMessage = "[" + Utils.clink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(message);
         var players = sys.playerIds(), len, pi, sess, id;
         for (pi = 0, len = players.length; pi < len; pi += 1) {
             id = players[pi];

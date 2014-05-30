@@ -73,7 +73,8 @@ module.exports.load = function () {
 
         // Chat text
         big_text: new Effect('Big Text', Rare, Medium, Positive),
-        small_text: new Effect('Small Text', Common, Long, Negative)
+        small_text: new Effect('Small Text', Common, Long, Negative),
+        screech_infection: new Effect('Screech Infection', Common, Long, Negative)
     };
 
     RTD.getTypeColor = function (type) {

@@ -154,14 +154,6 @@ module.exports = {
             return num + (nthNum[num] || "th");
         };
 
-        ChannelLink = function (channel) {
-            if (typeof channel === "number") {
-                channel = sys.channel(channel);
-            }
-
-            return "<a href='po:join/" + channel + "'>#" + channel + "</a>";
-        };
-
         /*function formatLinks(message) {
             return message.replace(/(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?\^=%&amp;:\/~\+#]*[\w\-\@?\^=%&amp;\/~\+#])?/gi, '$1');
         }*/

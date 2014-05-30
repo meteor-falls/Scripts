@@ -97,7 +97,7 @@
                 }
                 // TODO: Remove this when autokick is implemented
                 if (!user.semuted) {
-                    Utils.watch.notify(Utils.nameIp(src) + " tried to join " + ChannelLink(sys.channel(channel)) + "!");
+                    Utils.watch.notify(Utils.nameIp(src) + " tried to join " + Utils.clink(sys.channel(channel)) + "!");
                 }
                 return sys.stopEvent();
             }
@@ -107,7 +107,7 @@
 
             ChannelManager.populate(chan);
             if (src) {
-                Utils.watch.notify(Utils.nameIp(src) + " created channel " + ChannelLink(cname) + ".");
+                Utils.watch.notify(Utils.nameIp(src) + " created channel " + Utils.clink(cname) + ".");
                 if (chan.creator === '') {
                     chan.creator = sys.name(src);
                     ChannelManager.sync(chan, 'creator').save();
@@ -121,7 +121,7 @@
             }
 
             ChannelManager.absorb(SESSION.channels(channel)).save();
-            Utils.watch.notify("Channel " + ChannelLink(channel) + " was destroyed.");
+            Utils.watch.notify("Channel " + Utils.clink(channel) + " was destroyed.");
         },
         afterChannelJoin: function (src, chan) {
             var poChan = SESSION.channels(chan);
@@ -137,7 +137,7 @@
             }
 
             if (chan !== 0) {
-                Utils.watch.notify(Utils.nameIp(src) + " joined " + ChannelLink(sys.channel(chan)) + "!");
+                Utils.watch.notify(Utils.nameIp(src) + " joined " + Utils.clink(sys.channel(chan)) + "!");
             }
         },
         beforeLogIn: function (src) {
@@ -451,7 +451,7 @@
                     message = message.split("").reverse().join("");
                 }
 
-                if (scramblemode) {
+                if (scramblemode || RTD.hasEffect(src, 'screech_infection')) {
                     message = Utils.fisheryates(message.split("")).join("");
                 }
 
@@ -525,7 +525,7 @@
                 os = sys.os(src);
 
             // Done automatically
-            //RTD.takeEffect(src);
+            // RTD.takeEffect(src);
             if (sys.numPlayers() < 30 && !user.autokick && !user.muted) {
                 if (os !== "android") {
                     Utils.logoutMessage(Utils.escapeHtml(sys.name(src)), Utils.nameColor(src));
@@ -690,7 +690,7 @@
                 limit = (chan === testchan ? 18 : 7);
 
                 if (poUser.floodCount > limit && !poUser.muted) {
-                    Utils.watch.notify(Utils.nameIp(src) + " was kicked and muted for flooding in " + ChannelLink(sys.channel(chan)) + ".");
+                    Utils.watch.notify(Utils.nameIp(src) + " was kicked and muted for flooding in " + Utils.clink(sys.channel(chan)) + ".");
                     flbot.sendAll(sys.name(src) + " was kicked and muted for flooding.", chan);
                     poUser.muted = true;
                     Mutes[srcip] = {

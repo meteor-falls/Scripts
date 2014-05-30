@@ -110,6 +110,14 @@
             return str.replace(/<\/?[^>]*>/g, "");
         };
 
+        util.clink = function (channel) {
+            if (typeof channel === "number") {
+                channel = sys.channel(channel);
+            }
+
+            return "<a href='po:join/" + channel + "'>#" + channel + "</a>";
+        };
+
         // http://bost.ocks.org/mike/shuffle/
         util.fisheryates = function fisheryates(array) {
             var m = array.length, t, i;
@@ -856,7 +864,7 @@
 
         util.watch = {};
         util.watch.message = function (src, type, message, chan) {
-            watchbot.sendAll("[" + ChannelLink(chan) + "] " + type + " » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(message), watch);
+            watchbot.sendAll("[" + Utils.clink(chan) + "] " + type + " » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(message), watch);
         };
 
         util.watch.notify = function (message) {
