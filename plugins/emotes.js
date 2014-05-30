@@ -82,8 +82,10 @@ global.Emotes = {
             }
         }
 
-        function assignEmote(emote, code) {
+        function assignEmote(emote) {
             return function ($1) {
+                var code;
+
                 if (emotes.length > 4 || (limit && lastEmote.indexOf(emote) !== -1)) {
                     return Utils.escapeHtml($1);
                 }
@@ -125,6 +127,10 @@ global.Emotes = {
                     }
                 }
 
+                if (!code) {
+                    code = Emotes.code(emote);
+                }
+
                 return "<a href='po:appendmsg/ " + emote + "' title='" + emote + "'><img src='" + code + "'" + size + "></a>";
             };
         }
@@ -136,21 +142,14 @@ global.Emotes = {
 
             // Major speed up.
             if (message.indexOf(i) !== -1) {
-                message = message.replace(emoteRegex[i], assignEmote(i, Emotes.list[i]));
+                message = message.replace(emoteRegex[i], assignEmote(i));
             }
         }
 
         // Misc "emotes". Pokemons, icons, items, and avatars.
         // pokemon:subtitute also works.
         // pokemon:30&cropped=true
-        message = message.replace(/((trainer|icon|item|pokemon):([(\d|\-)&=(gen|shiny|gender|back|cropped|num|substitute|true|false)]+))/g, "<img src='$1'>")
-            .replace(/:\(/g, "<img src='item:177'>")
-            .replace(/:charimang:/g, "<img src='pokemon:6&gen=2'>")
-            .replace(/:mukmang:/g, "<img src='pokemon:89&gen=1'>")
-            .replace(/:feralimang:/g, "<img src='pokemon:160&gen=2'>")
-            .replace(/oprah1/g, "<img src='pokemon:124&gen=1'>")
-            .replace(/oprah2/g, "<img src='pokemon:124&gen=2'>");
-
+        message = message.replace(/((trainer|icon|item|pokemon):([(\d|\-)&=(gen|shiny|gender|back|cropped|num|substitute|true|false)]+))/g, "<a href='po:appendmsg/ $1' title='$1'><img src='$1'></a>");
 
         // Emoji effects
         if (src) {
@@ -264,6 +263,14 @@ global.Emotes = {
     };
     Emotes.always = false;
     Emotes.emoji = emojis;
+
+    // Misc emotes
+    Emotes.add(":(", "item:177");
+    Emotes.add(":charimang:", "pokemon:6&gen=2");
+    Emotes.add(":mukmang:", "pokemon:89&gen=1");
+    Emotes.add(":feralimang:", "pokemon:160&gen=2");
+    Emotes.add("oprah1", "pokemon:124&gen=1");
+    Emotes.add("oprah2", "pokemon:124&gen=2");
 }());
 
 module.reload = function () {
