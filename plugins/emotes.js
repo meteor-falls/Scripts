@@ -243,6 +243,16 @@ global.Emotes = {
         for (emote in emoteSource) {
             Emotes.add(emote.split(','), emoteSource[emote]);
         }
+
+        // Misc emotes
+        Emotes.add(":(", "item:177");
+        Emotes.add(":charimang:", "pokemon:6&gen=2");
+        Emotes.add(":mukmang:", "pokemon:89&gen=1");
+        Emotes.add(":feralimang:", "pokemon:160&gen=2");
+        Emotes.add("oprah1", "pokemon:124&gen=1");
+        Emotes.add("oprah2", "pokemon:124&gen=2");
+
+        Emotes.display.sort();
     };
 
     Emotes.interpolate = function (src, msg, vars, checkEnabled, rateLimit) {
@@ -261,16 +271,9 @@ global.Emotes = {
 
         return msg;
     };
+
     Emotes.always = false;
     Emotes.emoji = emojis;
-
-    // Misc emotes
-    Emotes.add(":(", "item:177");
-    Emotes.add(":charimang:", "pokemon:6&gen=2");
-    Emotes.add(":mukmang:", "pokemon:89&gen=1");
-    Emotes.add(":feralimang:", "pokemon:160&gen=2");
-    Emotes.add("oprah1", "pokemon:124&gen=1");
-    Emotes.add("oprah2", "pokemon:124&gen=2");
 }());
 
 module.reload = function () {
