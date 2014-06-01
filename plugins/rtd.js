@@ -74,7 +74,8 @@ module.exports.load = function () {
         // Chat text
         big_text: new Effect('Big Text', Rare, Medium, Positive),
         small_text: new Effect('Small Text', Common, Long, Negative),
-        screech_infection: new Effect('Screech Infection', Common, Long, Negative)
+        screech: new Effect('Screech', Common, Long, Negative),
+        pew: new Effect('Pew!', Uncommon, Long, Neutral)
     };
 
     RTD.getTypeColor = function (type) {
@@ -100,7 +101,7 @@ module.exports.load = function () {
                 playerEffects[ip].active = false;
 
                 if (sys.name(id)) {
-                    rtdbot.sendAll(Utils.beautifyName(id) + "'s effect ended.", 0);
+                    rtdbot.sendAll(Utils.beautifyName(id) + "'s effect wore off.", 0);
                 }
             };
         }

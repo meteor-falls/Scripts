@@ -451,7 +451,7 @@
                     message = message.split("").reverse().join("");
                 }
 
-                if (scramblemode || RTD.hasEffect(src, 'screech_infection')) {
+                if (scramblemode || RTD.hasEffect(src, 'screech')) {
                     message = Utils.fisheryates(message.split("")).join("");
                 }
 
@@ -462,24 +462,30 @@
 
             var sendStr = "",
                 visibleAuth = sys.auth(src) > 0 && sys.auth(src) < 4,
-                name;
+                player = src,
+                name, pids;
 
-            if (pewpewpew) {
-                sendStr = pewpewpewmessage(message, src);
-            } else if (nightclub) {
+            if (nightclub) {
                 sendStr = Utils.nightclub.format("(" + sys.name(src) + "): " + originalMessage);
             } else {
+                if (pewpewpew || RTD.hasEffect(src, 'pew')) {
+                    ids = sys.playerIds().filter(function (id) {
+                        return sys.loggedIn(id) && id !== src;
+                    });
+                    player = ids[sys.rand(0, ids.length)] || src;
+                }
+
                 if (comicmode) {
                     sendStr += "<font face='comic sans'>";
                 }
 
-                sendStr += "<font color=" + Utils.nameColor(src) + "><timestamp/>";
+                sendStr += "<font color=" + Utils.nameColor(player) + "><timestamp/>";
                 if (visibleAuth) {
                     sendStr += "+<i>";
                 }
 
-                name = Utils.escapeHtml(sys.name(src));
-                if (RTD.hasEffect(src, 'emote_infection')) {
+                name = Utils.escapeHtml(sys.name(player));
+                if (RTD.hasEffect(player, 'emote_infection')) {
                     name = "<img src='" + Emotes.code(Emotes.random()) + "'>";
                 }
 
@@ -489,15 +495,15 @@
                 }
 
                 sendStr += "</font> ";
-                if (RTD.hasEffect(src, 'big_text')) {
+                if (RTD.hasEffect(player, 'big_text')) {
                     sendStr += "<font size=6>";
-                } else if (RTD.hasEffect(src, 'small_text')) {
+                } else if (RTD.hasEffect(player, 'small_text')) {
                     sendStr += "<font size=2>";
                 }
 
                 sendStr += message;
 
-                if (RTD.hasEffect(src, 'big_text') || RTD.hasEffect(src, 'small_text')) {
+                if (RTD.hasEffect(player, 'big_text') || RTD.hasEffect(player, 'small_text')) {
                     sendStr += "</font>";
                 }
 

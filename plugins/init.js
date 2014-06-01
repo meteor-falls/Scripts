@@ -25,28 +25,6 @@ module.exports = {
             return msg;
         };
 
-        pewpewpewmessage = function (message, src) {
-            var sendStr;
-            var ids = sys.playerIds().filter(function (id) {
-                return sys.loggedIn(id) && id !== src;
-            }),
-                randPlayer = ids[sys.rand(0, ids.length)];
-
-            var name = sys.name(randPlayer),
-                auth = sys.auth(randPlayer);
-
-            if (Emotes.enabledFor(randPlayer)) {
-                message = Emotes.format(message, Emotes.ratelimit, src);
-            }
-
-            sendStr = "<font color='" + Utils.nameColor(randPlayer) + "'" + (comicmode ? " face='comic sans'" : "") + "><timestamp/><b>" + Utils.escapeHtml(name) + ": </b></font>" + message;
-            if (auth> 0 && auth < 4) {
-                sendStr = "<font color='" + Utils.nameColor(randPlayer) + "'" + (comicmode ? " face='comic sans'" : "") + "><timestamp/>+<i><b>" + Utils.escapeHtml(name) + ": </b></i></font>" + message;
-            }
-
-            return sendStr;
-        };
-
         Reg.init('MOTD', '');
         Reg.init('maxPlayersOnline', 0);
         Reg.init('servername', Config.servername);
