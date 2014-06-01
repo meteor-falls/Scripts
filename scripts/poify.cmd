@@ -1,0 +1,1 @@
+echo poScript; >> ../scripts.js

@@ -24,7 +24,7 @@ exports.init = ->
         Champ: ""
         Managers: []
 
-    
+
     # Global var name: reg val name
     regVals =
         MegaUsers: "Megausers"
@@ -47,43 +47,7 @@ exports.init = ->
         catch e
             global[i] = {}
     League.Managers = []    unless League.hasOwnProperty("Managers")
-    globalVars =
-        border: "<font color=blue><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</b></font>"
-        tourmode: 0
-        spinTypes: [] # can contain: items, emotes, pokemons
-        muteall: false
-        supersilence: false
-        rouletteon: false
-        htmlchat: false
-        lolmode: false
-        spacemode: false
-        capsmode: false
-        reversemode: false
-        marxmode: false
-        georgemode: false
-        comicmode: false
-        scramblemode: false
-        colormode: false
-        pewpewpew: false
-        nightclub: false
-        warnings: {}
-        teamSpammers: {}
-        reconnectTrolls: {}
-        uniqueVisitors:
-            ips: {}
-            count: 0
-            total: 0
 
-        Poll:
-            active: false
-            subject: ""
-            by: ""
-            options: []
-            votes: {}
-
-    j = undefined
-    for j of globalVars
-        global[j] = globalVars[j]    if typeof global[j] is "undefined"
     makeChan = (cname) ->
         sys.createChannel cname
         sys.channelId cname
@@ -106,6 +70,3 @@ exports.init = ->
 #function formatLinks(message) {
 #        return message.replace(/(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?\^=%&amp;:\/~\+#]*[\w\-\@?\^=%&amp;\/~\+#])?/gi, '$1');
 #    }
-module.reload = reloadInit = ->
-    module.exports.init()
-    true
