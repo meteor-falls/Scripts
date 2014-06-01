@@ -1,4 +1,4 @@
-Bot = function (name, color, prefix, italics) {
+function Bot(name, color, prefix, italics) {
     italics = italics || false;
     prefix = prefix || (italics ? "+" : "±");
     color = color || "red";
@@ -58,22 +58,18 @@ Bot.prototype.lineAll = function (channel) {
     }
 };
 
-module.exports.Bot = Bot;
-module.reload = function () {
-    // These are all meant to be globals.
-    bot      = new Bot("Bot", "#0a4aff");
-    guard    = new Bot("Guard", "#a80000");
-    watchbot = new Bot("Watch", "#00aa7f");
-    topicbot = new Bot("Channel Topic", "#cc0000");
-    setbybot = new Bot("Set By", "#ffaf1e");
-    capsbot  = new Bot("CAPSBot", "#31945e");
-    flbot    = new Bot("FloodBot", "#39ab5a");
-    rtdbot   = new Bot("RTD", "#1c4eaa");
-
-    // Then there are also lesser used bots, as static properties on Bot
-    Bot.kick = new Bot("Kick", "#d6000f");
-    Bot.mute = new Bot("Mute", "#5b1eff");
-    Bot.unmute = new Bot("Unmute", "#089107");
-    Bot.reason = new Bot("Reason", "#000ff4");
-    return true;
+module.exports = {
+    Bot: Bot,
+    bot: new Bot("Bot", "#0a4aff"),
+    guard: new Bot("Guard", "#a80000"),
+    watch: new Bot("Watch", "#00aa7f"),
+    channeltopic: new Bot("Channel Topic", "#cc0000"),
+    setby: new Bot("Set By", "#ffaf1e"),
+    caps: new Bot("CAPSBot", "#31945e"),
+    flood: new Bot("FloodBot", "#39ab5a"),
+    rtd: new Bot("RTD", "#1c4eaa"),
+    kick: new Bot("Kick", "#d6000f"),
+    mute: new Bot("Mute", "#5b1eff"),
+    unmute: new Bot("Unmute", "#089107"),
+    reason: new Bot("Reason", "#000ff4")
 };
