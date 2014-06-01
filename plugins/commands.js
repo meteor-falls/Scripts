@@ -433,13 +433,7 @@
     });
 
     addCommand(0, "attack", function (src, command, commandData, tar, chan) {
-        var randColors = ["blue", "darkblue", "green", "darkgreen", "red", "darkred", "orange", "skyblue", "purple", "violet", "black", "lightsteelblue", "navy", "burlywood", "DarkSlateGrey", "darkviolet", "Gold", "Lawngreen", "silver"];
         var broadcast = this.semuted ? Utils.sendHtmlSemuted : sys.sendHtmlAll;
-
-        function randomColor(text) {
-            var selectedColor = sys.rand(0, randColors.length);
-            return "<font color=" + randColors[selectedColor] + ">" + text + "</font>";
-        }
 
         if (!tar) {
             bot.sendMessage(src, "Target doesn't exist!", chan);
@@ -447,7 +441,7 @@
         }
 
         var move = sys.rand(1, 559);
-        broadcast("<font color=green><timestamp/><b><i>+AttackBot:</i></b></font> <b><font color=" + Utils.nameColor(src) + ">" + Utils.escapeHtml(sys.name(src)) + " </b></font> has used <b>" + randomColor(sys.move(move)) + "</b> on <b><font color=" + Utils.nameColor(tar) + ">" + Utils.escapeHtml(sys.name(tar)) + "!</font></b>", chan);
+        broadcast("<font color=green><timestamp/><b><i>+AttackBot:</i></b></font> <b style='color:" + Utils.nameColor(src) + ">" + Utils.escapeHtml(sys.name(src)) + " </b> has used <b style='color:" + Utils.color.randomDark() + "'>" + sys.move(move)) + "</b> on <b style='color:" + Utils.nameColor(tar) + ">" + Utils.escapeHtml(sys.name(tar)) + "!</b>", chan);
     });
 
     addCommand(0, "emotetoggle", function (src, command, commandData, tar, chan) {

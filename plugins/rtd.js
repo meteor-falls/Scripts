@@ -4,34 +4,6 @@ module.exports.load = function () {
     var MIN_COOLDOWN = 110;
     var MAX_COOLDOWN = 130;
 
-    function randomSample(hash) {
-        var cum = 0;
-        var val = Math.random();
-        var psum = 0.0;
-        var x;
-        var count = 0;
-        for (x in hash) {
-            psum += hash[x].chance;
-            count += 1;
-        }
-        if (psum === 0.0) {
-            var j = 0;
-            for (x in hash) {
-                cum = (++j) / count;
-                if (cum >= val) {
-                    return x;
-                }
-            }
-        } else {
-            for (x in hash) {
-                cum += hash[x].chance / psum;
-                if (cum >= val) {
-                    return x;
-                }
-            }
-        }
-    }
-
     function Effect(name, chance, duration, type) {
         this.name = name;
         this.chance = chance;
@@ -88,8 +60,8 @@ module.exports.load = function () {
         return Utils.beautifyName(id) + " rolled and won <b style='color:" + RTD.getTypeColor(obj.type) + "'>" + obj.name + "</b> for <b>" + obj.duration + "</b> seconds.";
     };
 
-    RTD.rollTheDice = function () {
-        return randomSample(effects);
+    RTD.randomEffect = function () {
+        return Utils.randomSample(effects);
     };
 
     RTD.giveEffect = function (id, effect, duration, timeout) {
@@ -106,7 +78,7 @@ module.exports.load = function () {
             };
         }
 
-        effect = effect || RTD.rollTheDice();
+        effect = effect || RTD.randomEffect();
         duration = duration || effects[effect].duration;
 
         // NOTE: These are not garbage collected, it's not necessary and keeps things simple.

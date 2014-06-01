@@ -40,7 +40,7 @@ global.Emotes = {
             Emotes.names.push(alt);
             Emotes.list[alt] = code;
 
-            regex = RegExp.quote(alt);
+            regex = Utils.escapeRegex(alt);
             if (!nonAlpha.test(alt)) {
                 regex = "\\b" + regex + "\\b";
             }
@@ -257,7 +257,7 @@ global.Emotes = {
     Emotes.interpolate = function (src, msg, vars, checkEnabled, rateLimit) {
         var i;
         for (i in vars) {
-            msg = msg.replace(new RegExp(RegExp.quote(i), "gi"), vars[i]);
+            msg = msg.replace(new RegExp(Utils.escapeRegex(i), "gi"), vars[i]);
         }
 
         if (rateLimit !== false) {

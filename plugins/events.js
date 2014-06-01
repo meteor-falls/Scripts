@@ -456,7 +456,7 @@
                 }
 
                 if (colormode) {
-                    message = "<b>" + colormodemessage(message) + "</b>";
+                    message = "<b>" + Utils.nightclub.rainbowify(message, 200) + "</b>";
                 }
             }
 
