@@ -152,13 +152,13 @@ global.Emotes = {
                     code = Emotes.code(emote);
                 }
 
-                return "<img title='" + emote + "' src='" + code + "'" + size + ">";
+                return "<img src='" + code + "'" + size + ">";
             };
         }
 
         // First, pokemons, icons, items, and avatars.
         // pokemon:subtitute|pokemon:30&cropped=true
-        message = message.replace(/((trainer|icon|item|pokemon):([(\d|\-)&=(gen|shiny|gender|back|cropped|num|substitute|true|false)]+))/g, "<img src='$1' title='$1'>");
+        message = message.replace(/((trainer|icon|item|pokemon):([(\d|\-)&=(gen|shiny|gender|back|cropped|num|substitute|true|false)]+))/g, "<img src='$1'>");
 
         for (i in Emotes.list) {
             if (emotes.length > 4) {
