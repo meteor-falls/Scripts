@@ -50,6 +50,27 @@ global.Emotes = {
         Emotes.display.push(alts.join(" | "));
     };
 
+    Emotes.addUnlisted = function (alts, code) {
+        var regex, alt, len, i;
+
+        if (!Array.isArray(alts)) {
+            alts = [alts];
+        }
+
+        len = alts.length;
+
+        for (i = 0; i < len; i += 1) {
+            alt = alts[i];
+            Emotes.list[alt] = code;
+
+            regex = Utils.escapeRegex(alt);
+            if (!nonAlpha.test(alt)) {
+                regex = "\\b" + regex + "\\b";
+            }
+            emoteRegex[alt] = new RegExp(regex, "g");
+        }
+    };
+
     Emotes.format = function (message, limit, src) {
         if (!Config.emotesEnabled) {
             return message;
@@ -244,12 +265,12 @@ global.Emotes = {
         }
 
         // Misc emotes
-        Emotes.add(":(", "item:177");
-        Emotes.add(":charimang:", "pokemon:6&gen=2");
-        Emotes.add(":mukmang:", "pokemon:89&gen=1");
-        Emotes.add(":feralimang:", "pokemon:160&gen=2");
-        Emotes.add("oprah1", "pokemon:124&gen=1");
-        Emotes.add("oprah2", "pokemon:124&gen=2");
+        Emotes.addUnlisted(":(", "item:177");
+        Emotes.addUnlisted(":charimang:", "pokemon:6&gen=2");
+        Emotes.addUnlisted(":mukmang:", "pokemon:89&gen=1");
+        Emotes.addUnlisted(":feralimang:", "pokemon:160&gen=2");
+        Emotes.addUnlisted("oprah1", "pokemon:124&gen=1");
+        Emotes.addUnlisted("oprah2", "pokemon:124&gen=2");
 
         Emotes.display.sort();
     };
