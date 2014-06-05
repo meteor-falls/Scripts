@@ -84,7 +84,7 @@ global.Emotes = {
 
         function assignEmote(emote) {
             return function ($1) {
-                var code;
+                var code = false;
 
                 if (emotes.length > 4 || (limit && lastEmote.indexOf(emote) !== -1)) {
                     return Utils.escapeHtml($1);
@@ -127,7 +127,7 @@ global.Emotes = {
                     }
                 }
 
-                if (!code) {
+                if (code === false) {
                     code = Emotes.code(emote);
                 }
 
