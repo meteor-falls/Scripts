@@ -421,7 +421,6 @@
             var originalMessage = message;
             var sentMessage = ((isOwner && htmlchat) ? originalMessage : Utils.escapeHtml(originalMessage, true).replace(/&lt;_&lt;/g, "<_<").replace(/&gt;_&lt;/g, ">_<").replace(/&gt;_&gt;/g, ">_>")); // no amp
             var emotes = false;
-            sentMessage = Utils.format(src, sentMessage);
 
             if (Emotes.enabledFor(src) && !pewpewpew && !nightclub) {
                 var simpleMessage = sentMessage;
@@ -430,6 +429,8 @@
                     emotes = true;
                 }
             }
+
+            sentMessage = Utils.format(src, sentMessage);
 
             sentMessage = sentMessage.replace(/<_</g, "&lt;_&lt;").replace(/>_</g, "&gt;_&lt;").replace(/<3/g, "&lt;3");
             message = sentMessage;
