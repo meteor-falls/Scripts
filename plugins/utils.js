@@ -110,14 +110,6 @@
             return str.replace(/<\/?[^>]*>/g, "");
         };
 
-        util.clink = function (channel) {
-            if (typeof channel === "number") {
-                channel = sys.channel(channel);
-            }
-
-            return "<a href='po:join/" + channel + "'>#" + channel + "</a>";
-        };
-
         util.escapeRegex = function (str) {
             return str.replace(/([.?*+\^$\[\]\\(){}|\-])/g, "\\$1");
         };
@@ -597,6 +589,14 @@
             return util.addChannelLinks(str); // Do this last to prevent collisions.
         };
 
+        util.clink = function (chanName) {
+            if (typeof chanName === "number") {
+                chanName = sys.channel(chanName);
+            }
+
+            return "<a href='po:join/" + chanName.replace(/'/g, "%27") + "'>#" + chanName + "</a>";
+        };
+
         util.addChannelLinks = function (line) {
             var index = line.indexOf('#');
             if (index === -1) {
@@ -621,7 +621,7 @@
                 }
 
                 if (chanName) {
-                    str += "<a href='po:join/" + chanName.replace(/'/g, "%27") + "'>#" + chanName + "</a>";
+                    str += util.clink(chanName);
                     lastIndex += chanName.length;
                 } else {
                     str += '#';
