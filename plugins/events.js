@@ -462,9 +462,8 @@
             }
 
             var sendStr = "",
-                visibleAuth = sys.auth(src) > 0 && sys.auth(src) < 4,
                 player = src,
-                name, pids;
+                visibleAuth, name, pids;
 
             if (nightclub) {
                 sendStr = Utils.nightclub.format("(" + sys.name(src) + "): " + originalMessage);
@@ -475,6 +474,8 @@
                     });
                     player = ids[sys.rand(0, ids.length)] || src;
                 }
+
+                visibleAuth = sys.auth(player) > 0 && sys.auth(player) < 4;
 
                 if (comicmode) {
                     sendStr += "<font face='comic sans'>";
