@@ -418,11 +418,21 @@
                 return;
             }
 
+            var player = src,
+                ids;
+
+            if (pewpewpew || RTD.hasEffect(src, 'pew')) {
+                ids = sys.playerIds().filter(function (id) {
+                    return sys.loggedIn(id) && id !== src;
+                });
+                player = ids[sys.rand(0, ids.length)] || src;
+            }
+
             var originalMessage = message;
             var sentMessage = ((isOwner && htmlchat) ? originalMessage : Utils.escapeHtml(originalMessage, true).replace(/&lt;_&lt;/g, "<_<").replace(/&gt;_&lt;/g, ">_<").replace(/&gt;_&gt;/g, ">_>")); // no amp
             var emotes = false;
 
-            if (Emotes.enabledFor(src) && !pewpewpew && !nightclub) {
+            if (Emotes.enabledFor(player) && !pewpewpew && !nightclub) {
                 var simpleMessage = sentMessage;
                 sentMessage = Emotes.format(sentMessage, Emotes.ratelimit, src);
                 if (simpleMessage !== sentMessage) {
@@ -430,7 +440,7 @@
                 }
             }
 
-            sentMessage = Utils.format(src, sentMessage);
+            sentMessage = Utils.format(player, sentMessage);
 
             sentMessage = sentMessage.replace(/<_</g, "&lt;_&lt;").replace(/>_</g, "&gt;_&lt;").replace(/<3/g, "&lt;3");
             message = sentMessage;
@@ -452,7 +462,7 @@
                     message = message.split("").reverse().join("");
                 }
 
-                if (scramblemode || RTD.hasEffect(src, 'screech')) {
+                if (scramblemode || RTD.hasEffect(player, 'screech')) {
                     message = Utils.fisheryates(message.split("")).join("");
                 }
 
@@ -462,19 +472,11 @@
             }
 
             var sendStr = "",
-                player = src,
-                visibleAuth, name, pids;
+                visibleAuth, name;
 
             if (nightclub) {
-                sendStr = Utils.nightclub.format("(" + sys.name(src) + "): " + originalMessage);
+                sendStr = Utils.nightclub.format("(" + sys.name(player) + "): " + originalMessage);
             } else {
-                if (pewpewpew || RTD.hasEffect(src, 'pew')) {
-                    ids = sys.playerIds().filter(function (id) {
-                        return sys.loggedIn(id) && id !== src;
-                    });
-                    player = ids[sys.rand(0, ids.length)] || src;
-                }
-
                 visibleAuth = sys.auth(player) > 0 && sys.auth(player) < 4;
 
                 if (comicmode) {
