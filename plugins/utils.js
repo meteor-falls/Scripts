@@ -621,7 +621,7 @@
                 }
 
                 if (chanName) {
-                    str += "<a href='po:join/" + chanName + "'>#" + chanName + "</a>";
+                    str += "<a href='po:join/" + chanName.replace(/'/g, "%27") + "'>#" + chanName + "</a>";
                     lastIndex += chanName.length;
                 } else {
                     str += '#';
