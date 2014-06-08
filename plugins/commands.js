@@ -305,7 +305,29 @@
     });
 
     addListCommand(0, "rules", "Rules");
-    addListCommand(0, "emotes", "EmoteList");
+    addListCommand(0, "emotes", function (src, command, commandData, tar, chan) {
+        var emotesList = new TableList("Emotes", "stripe", 1, 2, "navy");
+
+        var emotesToAdd = [],
+            emote, len, i;
+
+        for (i = 0, len = Emotes.display.length; i < len; i += 1) {
+            emote = Utils.escapeHtml(Emotes.display[i]);
+            emotesToAdd.push("<a href='po:appendmsg/ " + emote + "' style='text-decoration:none;color:black;font-weight:0'>" + emote + "</a>");
+
+            if (emotesToAdd.length >= 8) {
+                emotesList.add(emotesToAdd, false);
+                emotesToAdd = [];
+            }
+        }
+
+        if (emotesToAdd.length) {
+            emotesList.add(emotesToAdd, false);
+        }
+
+        emotesList.finish();
+        emotesList.display(src, chan);
+    });
 
     addCommand(0, "scriptinfo", function (src, command, commandData, tar, chan) {
         sys.sendHtmlMessage(src, [

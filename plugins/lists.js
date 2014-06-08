@@ -244,30 +244,6 @@
             ["tourtier", "To view the tier of the tournament."]
         ]).finish();
 
-        /** EMOTES **/
-        var emotesList = new TableList("Emotes", "stripe", 1, 2, "navy");
-
-        var emotesToAdd = [],
-            emote, len, i;
-
-        for (i = 0, len = Emotes.display.length; i < len; i += 1) {
-            emote = Utils.escapeHtml(Emotes.display[i]);
-            emotesToAdd.push("<a href='po:appendmsg/ " + emote + "' style='text-decoration:none;color:black;font-weight:0'>" + emote + "</a>");
-
-            if (emotesToAdd.length >= 8) {
-                emotesList.add(emotesToAdd, false);
-                emotesToAdd = [];
-            }
-        }
-
-        if (emotesToAdd.length) {
-            emotesList.add(emotesToAdd, false);
-        }
-
-        emotesList.finish();
-
-        Lists.EmoteList = emotesList;
-
         /** RULES **/
         var Rules = new CommandList("Rules", "navy", "Please follow the rules or risk punishment: <small>(revision 3)</small>", "ol").add([
             ["Do not spam or flood the chat (3 lines in a row is generally flood). CAPS are not allowed either, neither is posting the exact same message (you may be punished even if you post this twice in a row, in a short timespan)."],

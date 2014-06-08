@@ -301,6 +301,5 @@ global.Emotes = {
 
 module.reload = function () {
     Emotes.load();
-    require.reload('lists.js');
     return true;
 };
