@@ -305,7 +305,7 @@
     });
 
     addListCommand(0, "rules", "Rules");
-    addListCommand(0, "emotes", function (src, command, commandData, tar, chan) {
+    addCommand(0, "emotes", function (src, command, commandData, tar, chan) {
         var emotesList = new TableList("Emotes", "stripe", 1, 2, "navy");
 
         var emotesToAdd = [],
