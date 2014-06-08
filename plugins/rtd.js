@@ -70,13 +70,7 @@ module.exports.load = function () {
             peffect;
 
         if (typeof timeout !== 'function') {
-            timeout = function () {
-                playerEffects[ip].active = false;
-
-                if (sys.name(id)) {
-                    rtdbot.sendAll(Utils.beautifyName(id) + "'s effect wore off.", 0);
-                }
-            };
+            timeout = function (){};
         }
 
         effect = effect || RTD.randomEffect();
@@ -92,7 +86,10 @@ module.exports.load = function () {
             cooldown: sys.rand(MIN_COOLDOWN, MAX_COOLDOWN + 1)
         };
 
-        playerEffects[ip].timer = sys.setTimer(timeout, duration * 1000, false);
+        playerEffects[ip].timer = sys.setTimer(function () {
+            playerEffects[ip].active = false;
+            timeout();
+        }, duration * 1000, false);
         return effect;
     };
 

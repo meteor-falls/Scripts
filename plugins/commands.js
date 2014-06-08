@@ -500,7 +500,12 @@
             return bot.sendMessage(src, "You can't use RTD for another " + Utils.getTimeString(RTD.getPlayer(src).at + RTD.getPlayer(src).cooldown - +sys.time()) + ".", chan);
         }
 
-        effect = RTD.giveEffect(src);
+        effect = RTD.giveEffect(src, null, null, function () {
+            if (sys.name(src)) {
+                rtdbot.sendAll(Utils.beautifyName(src) + "'s effect wore off.", 0);
+            }
+        });
+
         rtdbot.sendAll(RTD.rollString(src, effect), 0);
         Utils.watch.notify(sys.name(src) + " rolled " + RTD.effects[effect].name + ".");
     });
