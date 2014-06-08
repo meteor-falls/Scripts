@@ -33,21 +33,22 @@ module.exports.load = function () {
     // Name Chance Duration Type
     var effects = {
         // Emotes
-        bigger_emotes: new Effect('Bigger Emotes', Uncommon, Medium, Positive),
+        bigger_emotes: new Effect('Bigger Emotes', Rare, Medium, Positive),
 
         nobody_cares: new Effect('Nobody Cares', Common, Long, Neutral),
         im_blue: new Effect("I'm Blue", Uncommon, Long, Neutral),
+        happy: new Effect('Happy', Rare, Long, Neutral),
         random_emotes: new Effect('Random Emotes', Uncommon, MediumLong, Neutral),
         emote_infection: new Effect('Emote Infection', Rare, Long, Positive),
 
-        blank_emotes: new Effect('Blank Emotes', Common, Long, Negative),
-        smaller_emotes: new Effect('Smaller Emotes', Uncommon, Long, Negative),
+        blank_emotes: new Effect('Blank Emotes', Uncommon, Long, Negative),
+        smaller_emotes: new Effect('Smaller Emotes', Common, Long, Negative),
 
         // Chat text
         big_text: new Effect('Big Text', Rare, Medium, Positive),
         small_text: new Effect('Small Text', Common, Long, Negative),
         screech: new Effect('Screech', Common, Long, Negative),
-        pew: new Effect('Pew!', Rare, Long, Neutral)
+        pew: new Effect('Pew!', VeryRare, Long, Neutral)
     };
 
     RTD.getTypeColor = function (type) {
