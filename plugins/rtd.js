@@ -1,8 +1,8 @@
 module.exports.load = function () {
     global.RTD = {};
     var playerEffects = {};
-    var MIN_COOLDOWN = 110;
-    var MAX_COOLDOWN = 130;
+    var MIN_COOLDOWN = 105;
+    var MAX_COOLDOWN = 120;
 
     function Effect(name, chance, duration, type) {
         this.name = name;
