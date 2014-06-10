@@ -199,8 +199,7 @@ poScript = ({
         require.reload('init.js');
 
         require.reload('emotes.js');
-        // lists.js reloaded by emotes.js
-        //require.reload('lists.js');
+        require.reload('lists.js');
 
         sys.resetProfiling();
     },
