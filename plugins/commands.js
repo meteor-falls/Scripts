@@ -1387,13 +1387,13 @@
         }
         sys.sendAll('~~Server~~: The server was made public by ' + sys.name(src) + '.');
         sys.makeServerPublic(true);
-    }),
+    });
 
     addCommand(1, "regfix", function (src, command, commandData, tar, chan) {
         sys.makeServerPublic(false);
         sys.makeServerPublic(true);
         sys.sendAll('~~Server~~: ' + sys.name(src) + ' made the server re-connect to the registry!');
-    }), 
+    });
 
     addCommand(1, ["tempban", "tb"], function (src, command, commandData, tar, chan) {
         var t = commandData.split(':'),
