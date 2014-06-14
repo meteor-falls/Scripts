@@ -455,10 +455,6 @@
                     message = message.toUpperCase();
                 }
 
-                if (reversemode) {
-                    message = message.split("").reverse().join("");
-                }
-
                 if (scramblemode || RTD.hasEffect(player, 'screech')) {
                     message = Utils.fisheryates(message.split("")).join("");
                 }

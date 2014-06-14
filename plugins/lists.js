@@ -318,7 +318,6 @@
 
         Lists.Party = new CommandList("Party Commands", "navy").add([
             ["capsmode", "To turn caps mode on or off."],
-            ["reversemode", "To turn reverse mode on or off."],
             ["scramblemode", "To turn scramble mode on or off."],
             ["colormode", "To turn color mode on or off."],
             ["marxmode", "To turn Marx mode on or off."],

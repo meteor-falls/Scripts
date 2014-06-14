@@ -51,7 +51,6 @@ exports.init = function () {
         rouletteon: false,
         htmlchat: false,
         capsmode: false,
-        reversemode: false,
         marxmode: false,
         georgemode: false,
         comicmode: false,
