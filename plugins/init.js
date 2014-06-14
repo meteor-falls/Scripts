@@ -1,11 +1,5 @@
 // NOTE: New functions should go in utils.js, old ones should slowly be ported over.
 exports.init = function () {
-    lolmessage = function (message) {
-        return message.split('').map(function () {
-            return "lol";
-        }).join('');
-    };
-
     Reg.init('MOTD', '');
     Reg.init('maxPlayersOnline', 0);
     Reg.init('servername', Config.servername);
@@ -56,8 +50,6 @@ exports.init = function () {
         supersilence: false,
         rouletteon: false,
         htmlchat: false,
-        lolmode: false,
-        spacemode: false,
         capsmode: false,
         reversemode: false,
         marxmode: false,

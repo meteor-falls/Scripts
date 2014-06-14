@@ -317,8 +317,6 @@
         ]).finish();
 
         Lists.Party = new CommandList("Party Commands", "navy").add([
-            ["lolmode", "To turn lol mode on or off."],
-            ["spacemode", "To turn space mode on or off."],
             ["capsmode", "To turn caps mode on or off."],
             ["reversemode", "To turn reverse mode on or off."],
             ["scramblemode", "To turn scramble mode on or off."],
@@ -350,7 +348,6 @@
             ["resetladder", "To reset all ladders."],
             ["bots", "To turn all bots on or off."]
         ]).finish();
-
 
         /** MAINTAINER COMMANDS **/
         Lists.Maintainer = new CommandList("Maintainer Commands", "navy").add([

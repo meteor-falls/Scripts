@@ -451,15 +451,7 @@
             message = sentMessage;
 
             if (!emotes) {
-                if (lolmode) {
-                    message = lolmessage(message);
-                }
-
-                if (spacemode) {
-                    message = message.split("").join(" ");
-                }
-
-                if (capsmode) {
+                if (capsmode || RTD.hasEffect(src, 'rage')) {
                     message = message.toUpperCase();
                 }
 
