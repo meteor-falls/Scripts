@@ -1,15 +1,15 @@
 (function () {
     var commands = require('commands.js');
     //var hlr = require('highlanders.js');
-    var sendWarningsTo = ['Ethan', 'TheUnknownOne'];
-    var sendErrorsTo = ['Ethan', 'TheUnknownOne'];
+    var sendWarningsTo = "TheUnknownOne cares".split(" "),
+        sendErrorsTo = "TheUnknownOne cares".split(" "),
+        ignoreNextChanMsg = false,
+        ignoreNext = false;
 
-
-    var ignoreNextChanMsg = false;
-    var ignoreNext = false;
     module.exports = {
         warning: function (func, message, backtrace) {
-            var len = sendWarningsTo.length, id, i;
+            var len = sendWarningsTo.length,
+                id, i;
 
             for (i = 0; i < len; i += 1) {
                 id = sys.id(sendWarningsTo[i]);
@@ -50,7 +50,8 @@
             }
 
             if (message.substr(0, 17) === "Script Error line") {
-                var len = sendErrorsTo.length, id, i;
+                var len = sendErrorsTo.length,
+                    id, i;
 
                 for (i = 0; i < len; i += 1) {
                     id = sys.id(sendErrorsTo[i]);
@@ -96,7 +97,7 @@
             // TODO: Auto kick
             if ((channel === staffchannel && !Utils.checkFor(MegaUsers, user.originalName) && !basicPermissions) || (channel === watch && !basicPermissions)) {
                 if (sys.isInChannel(src, 0)) {
-                    guard.sendMessage(src, "HEY! GET AWAY FROM THERE!", 0);
+                    Bot.guard.sendMessage(src, "HEY! GET AWAY FROM THERE!", 0);
                 }
                 // TODO: Remove this when autokick is implemented
                 if (!user.semuted) {
@@ -111,7 +112,7 @@
             ChannelManager.populate(chan);
             if (src) {
                 Utils.watch.notify(Utils.nameIp(src) + " created channel " + Utils.clink(cname) + ".");
-                if (chan.creator === '') {
+                if (!chan.creator) {
                     chan.creator = sys.name(src);
                     ChannelManager.sync(chan, 'creator').save();
                 }
@@ -127,14 +128,14 @@
             Utils.watch.notify("Channel " + Utils.clink(channel) + " was destroyed.");
         },
         afterChannelJoin: function (src, chan) {
-            var poChan = SESSION.channels(chan);
-            var topic = poChan.topic;
+            var poChan = SESSION.channels(chan),
+                topic = poChan.topic;
 
             if (topic) {
-                topicbot.sendMessage(src, topic, chan);
+                Bot.topic.sendMessage(src, topic, chan);
 
                 if (poChan.setBy) {
-                    setbybot.sendMessage(src, poChan.setBy, chan);
+                    Bot.setby.sendMessage(src, poChan.setBy, chan);
                 }
             }
 
@@ -172,9 +173,9 @@
                 ip = sys.ip(src),
                 numPlayers = sys.numPlayers(),
                 os = sys.os(src),
-                newRecord = false;
+                newRecord = false,
+                cookie = (sys.cookie(src) || '').split(';');
 
-            var cookie = (sys.cookie(src) || '').split(';');
             if (cookie.indexOf('cockblocked') > -1) {
                 Utils.watch.notify("Cockblocked " + Utils.nameIp(src) + ".");
                 poUser.autokick = true;
@@ -215,17 +216,16 @@
                 displayBot("ForumBot", "Get in touch with the community by joining the <b><a href='http://meteorfalls.us/'>Meteor Falls Forums</a></b>!", "blue");
             }
             displayBot("StatsBot", "There are <b>" + numPlayers + "</b> players online. You are the <b>" + Utils.nthNumber(Utils.placeCommas(src)) + "</b> player to join. At most, there were <b>" + Reg.get("maxPlayersOnline") + "</b> players online" + (newRecord ? " (new record!)" : "") + ".", "goldenrod");
-            if (typeof(startUpTime) === "number" && startUpTime < sys.time()) {
+            if (typeof startUpTime === "number" && startUpTime < sys.time()) {
                 displayBot("UptimeBot", "The server has been up for " + Utils.fancyJoin(Utils.uptime()) + ".", "orange");
             }
 
-            var MOTD = Reg.get("MOTD");
-            if (MOTD !== "") {
-                displayBot("Message of the Day", MOTD, "red");
+            var motd = Reg.get("MOTD");
+            if (motd) {
+                displayBot("Message of the Day", motd, "red");
             }
 
             sys.sendMessage(src, '');
-
 
             Utils.mod.pruneMutes();
             if (Mutes.hasOwnProperty(ip)) {
@@ -270,7 +270,7 @@
                 }
             }
 
-            for (var team = 0; team < sys.teamCount(src); team++) {
+            for (var team = 0; team < sys.teamCount(src); team += 1) {
                 if (!Utils.tier.hasOneUsablePoke(src, team) && !Utils.tier.isCCTier(sys.tier(src, team))) {
                     bot.sendMessage(src, "Sorry, you do not have a valid team for the " + sys.tier(src, team) + " tier.", defaultChan);
                     bot.sendMessage(src, "You have been placed into 'Challenge Cup'.", defaultChan);
@@ -278,8 +278,7 @@
                 }
             }
 
-            var tier = sys.hasTier(src, "5th Gen OU");
-            if (tier) {
+            if (sys.hasTier(src, "5th Gen OU")) {
                 Utils.tier.dreamAbilityCheck(src);
             }
 
@@ -525,12 +524,17 @@
             }
         },
         afterChangeTeam: function (src) {
+            var teamCount = sys.teamCount(src),
+                myUser = SESSION.users(src),
+                ip = sys.ip(src),
+                team, i;
+
             if (Utils.hasIllegalChars(sys.name(src))) {
                 Utils.mod.kickIp(sys.ip(src));
                 return;
             }
 
-            for (var team = 0; team < sys.teamCount(src); team++) {
+            for (team = 0; team < teamCount; team += 1) {
                 if (!Utils.tier.hasOneUsablePoke(src, team) && !Utils.tier.isCCTier(sys.tier(src, team))) {
                     bot.sendMessage(src, "Sorry, you do not have a valid team for the " + sys.tier(src, team) + " tier.");
                     bot.sendMessage(src, "You have been placed into 'Challenge Cup'.");
@@ -538,9 +542,7 @@
                 }
             }
 
-            var drizzleSwim = Utils.tier.hasDrizzleSwim(src),
-                i;
-
+            var drizzleSwim = Utils.tier.hasDrizzleSwim(src);
             if (drizzleSwim.length > 0) {
                 for (i = 0; i < drizzleSwim.length; i += 1) {
                     bot.sendMessage(src, "Sorry, DrizzleSwim is banned from 5th Gen OU.");
@@ -555,15 +557,10 @@
                 }
             }
 
-            var myUser = SESSION.users(src);
-
             myUser.originalName = sys.name(src);
             myUser.teamChanges += 1;
 
-            var teamChanges = myUser.teamChanges;
-            var ip = sys.ip(src);
-
-            if (teamChanges > 2) {
+            if (myUser.teamChanges > 2) {
                 if (!teamSpammers.hasOwnProperty(ip)) {
                     teamSpammers[ip] = true;
                 } else {
@@ -678,10 +675,10 @@
 
             if (poUser.floodCount > limit && !poUser.muted) {
                 Utils.watch.notify(Utils.nameIp(src) + " was kicked and muted for flooding in " + Utils.clink(sys.channel(chan)) + ".");
-                flbot.sendAll(sys.name(src) + " was kicked and muted for flooding.", chan);
+                Bot.flood.sendAll(sys.name(src) + " was kicked and muted for flooding.", chan);
                 poUser.muted = true;
                 Mutes[srcip] = {
-                    by: flbot.name,
+                    by: Bot.flood.name,
                     mutedname: sys.name(src),
                     reason: "Flooding",
                     time: time + (5 * 60)
@@ -696,11 +693,11 @@
                 limit = (chan === testchan ? 15 : 6);
 
                 if (poUser.caps >= limit && !poUser.muted) {
-                    capsbot.sendAll(sys.name(src) + " was muted for 5 minutes for CAPS.", 0);
+                    Bot.caps.sendAll(sys.name(src) + " was muted for 5 minutes for CAPS.", 0);
                     poUser.muted = true;
                     poUser.caps = 0;
                     Mutes[srcip] = {
-                        by: capsbot.name,
+                        by: Bot.caps.name,
                         mutedname: sys.name(src),
                         reason: "Caps",
                         time: time + 300

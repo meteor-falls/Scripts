@@ -8,7 +8,7 @@
     "latedef": "nofunc",
     "noarg": true,
     "noempty": true,
-    "plusplus": false,
+    "plusplus": true,
     "undef": true,
     "unused": true,
     "eqnull": true,
@@ -28,12 +28,7 @@
 
         "Bot": true,
         "bot": true,
-        "guard": true,
         "watchbot": true,
-        "topicbot": true,
-        "setbybot": true,
-        "capsbot": true,
-        "flbot": true,
         "rtdbot": true,
 
         "Emotes": true,
@@ -71,7 +66,6 @@
         "uniqueVisitors": true,
         "Poll": true,
         "startUpTime": true,
-
 
         "MegaUsers": true,
         "FloodIgnore": true,
