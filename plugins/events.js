@@ -1,5 +1,6 @@
 (function () {
     var commands = require('commands.js');
+    //var hlr = require('highlanders.js');
     var sendWarningsTo = ['Ethan', 'TheUnknownOne'];
     var sendErrorsTo = ['Ethan', 'TheUnknownOne'];
 
@@ -329,6 +330,7 @@
         },
         beforeChatMessage: function (src, message, chan) {
             var poUser = SESSION.users(src),
+                poChan = SESSION.channels(chan),
                 isMuted = poUser.muted,
                 originalName = poUser.originalName,
                 isLManager = League.Managers.indexOf(originalName.toLowerCase()) > -1,
@@ -402,7 +404,10 @@
 
                 var tar = sys.id(commandData);
                 try {
-                    if (commands.canUseCommand(src, command, chan)) {
+                    /*if (poChan.hlr && !poUser.semuted && hlr.canUseCommand(src, command, chan)) {
+                        hlr.handleCommand(src, message, command, commandData, tar, chan);
+                        Utils.watch.message(src, (poUser.semuted ? "Secommand" : "Command"), message, chan);
+                    } else*/ if (commands.canUseCommand(src, command, chan)) {
                         commandResult = commands.handleCommand(src, message, command, commandData, tar, chan) || 0;
                         if (!(commandResult & commands.commandReturns.NOWATCH)) {
                             Utils.watch.message(src, (poUser.semuted ? "Secommand" : "Command"), message, chan);

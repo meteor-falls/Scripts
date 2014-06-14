@@ -11,7 +11,8 @@
         mutes: {},
         bans: {},
         bots: true,
-        isPublic: true
+        isPublic: true,
+        hlr: false
     };
 
     var fields = ["creator", "topic", "setBy", "members", "auth", "mutes", "bans", "bots", "isPublic"];
