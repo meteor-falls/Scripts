@@ -22,7 +22,7 @@ Config = {
     // Do not touch unless you are adding a new plugin.
     // Plugins to load on script load.
     // mathjs is loaded dynamically.
-    plugins: ['bot', 'reg', 'utils', 'rtd', 'channeldata', 'emotes', 'lists', 'init', 'feedmon', 'tours', 'commands', 'events'],
+    plugins: ['bot', 'reg', 'utils', 'rtd', 'channeldata', 'emotes', 'lists', 'init', 'feedmon', 'tours', /*'highlanders',*/ 'commands', 'events'],
     data: ['emoji'],
 
     // Whether or not to load plugins from repourl. If set to false, they will load locally.
@@ -69,7 +69,7 @@ Config = {
         exports = module.exports;
 
         try {
-            sys.eval(__fileContent, dir + name);
+            sys.eval("(function () { " + __fileContent + " });", dir + name);
         } catch (e) {
             sys.sendAll("Error loading module " + name + ": " + e + " on line " + e.lineNumber);
             print(e.backtracetext);
@@ -165,6 +165,7 @@ function poChannel(chanId) {
 
     this.bots     = true;
     this.isPublic = true;
+    this.hlr      = false;
 }
 
 try {
@@ -185,6 +186,9 @@ poScript = ({
         startUpTime = +sys.time();
         script.init();
     },
+    serverShutDown: function serverShutDown() {
+        require.callPlugins("serverShutDown");
+    },
     init: function init() {
         require.reload('utils.js');
 
@@ -202,6 +206,9 @@ poScript = ({
         require.reload('lists.js');
 
         sys.resetProfiling();
+    },
+    step: function step() {
+        require.callPlugins("step");
     },
     warning: function warning(func, message, backtrace) {
         require.callPlugins("warning", func, message, backtrace);
