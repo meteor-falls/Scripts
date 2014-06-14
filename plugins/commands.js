@@ -693,9 +693,9 @@
             return bot.sendMessage(src, "There is no topic right now.", chan);
         }
 
-        topicbot.sendMessage(src, poChan.topic, chan);
+        Bot.topic.sendMessage(src, poChan.topic, chan);
         if (poChan.setBy) {
-            setbybot.sendMessage(src, poChan.setBy, chan);
+            Bot.setby.sendMessage(src, poChan.setBy, chan);
         }
     });
 
@@ -705,9 +705,9 @@
             return bot.sendMessage(src, "There is no topic right now.", chan);
         }
 
-        topicbot.sendMessage(src, Utils.escapeHtml(poChan.topic), chan);
+        Bot.topic.sendMessage(src, Utils.escapeHtml(poChan.topic), chan);
         if (poChan.setBy) {
-            setbybot.sendMessage(src, poChan.setBy, chan);
+            Bot.setby.sendMessage(src, poChan.setBy, chan);
         }
     });
 

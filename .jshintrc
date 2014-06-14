@@ -21,6 +21,7 @@
         "print": true,
 
         "Config": true,
+        "FULLRELOAD": true,
 
         "module": true,
         "exports": true,
