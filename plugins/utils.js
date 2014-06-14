@@ -95,6 +95,7 @@
             'chandelure': ['shadow tag']
         };
 
+        var nthNum = "th st nd rd".split(" ");
         var annNameRegex = /<!name ([a-z]+)>/;
 
         util.escapeHtml = function (str, noAmp) {
@@ -112,6 +113,10 @@
 
         util.escapeRegex = function (str) {
             return str.replace(/([.?*+\^$\[\]\\(){}|\-])/g, "\\$1");
+        };
+
+        util.nthNum = function (num) {
+            return num + (nthNum[num] || "th");
         };
 
         // http://bost.ocks.org/mike/shuffle/
@@ -137,7 +142,6 @@
         util.nightclub = {};
 
         util.nightclub.hsv2rgb = function (h, s, v) {
-            var r, g, b;
             var RGB = [];
             var var_r,
                 var_g,
@@ -280,14 +284,18 @@
         };
 
         util.hasIllegalChars = function (m) {
-            if (/[\u202E\u202D]/.test(m))
+            if (/[\u202E\u202D]/.test(m)) {
                 return true;
-            if (/[\u0300-\u036F]/.test(m))
+            }
+            if (/[\u0300-\u036F]/.test(m)) {
                 return true;
-            if (/[\u0430-\u044f\u2000-\u200d]/.test(m))
+            }
+            if (/[\u0430-\u044f\u2000-\u200d]/.test(m)) {
                 return true;
-            if (/[\u0458\u0489\u202a-\u202e\u0300-\u036F\u1dc8\u1dc9\u1dc4-\u1dc7\u20d0\u20d1\u0415\u0421\u20f0\u0783\uFE22\u0E47\u0E01\u0E49\u5462\u0614]/.test(m))
+            }
+            if (/[\u0458\u0489\u202a-\u202e\u0300-\u036F\u1dc8\u1dc9\u1dc4-\u1dc7\u20d0\u20d1\u0415\u0421\u20f0\u0783\uFE22\u0E47\u0E01\u0E49\u5462\u0614]/.test(m)) {
                 return true;
+            }
 
             return false;
         };
@@ -341,7 +349,8 @@
         };
 
         util.getAuth = function (src) {
-            var auth = 0;
+            var auth = 0,
+                id;
             if (typeof src === "string") {
                 id = sys.name(src);
                 auth = (id !== undefined) ? sys.auth(id) : sys.dbAuth(src);
@@ -996,7 +1005,7 @@
         };
 
         util.mod.pruneMutes = function () {
-            var now = +sys.time(),
+            var now = sys.time(),
                 mute, meta;
 
             for (mute in Mutes) {
@@ -1136,7 +1145,7 @@
                 poke = sys.pokemon(sys.teamPoke(src, i, i));
                 lpoke = poke.toLowerCase();
 
-                if (bannedAbilities.hasOwnProperty(lpoke) && bannedAbilities[lpoke].indexOf(ability.toLowerCase()) !== -1) {
+                if (bannedDWAbilities.hasOwnProperty(lpoke) && bannedDWAbilities[lpoke].indexOf(ability.toLowerCase()) !== -1) {
                     bot.sendMessage(src, poke + " is not allowed to have ability " + ability + " in the 5th Gen OU Tier. Please change it in Teambuilder. You are now in the Random Battle tier.");
                     return true;
                 }
@@ -1148,6 +1157,7 @@
         // https://github.com/davidmerfield/randomColor
         util.color = {};
 
+        // jshint ignore:start
         util.color.randomColor = function (options) {
 
           options = options || {};
@@ -1168,7 +1178,7 @@
             }
 
             return colors;
-          };
+          }
 
           // Populate the color dictionary
           loadColorBounds();
@@ -1192,7 +1202,7 @@
 
             // Instead of storing red as two seperate ranges,
             // we group them, using negative numbers
-            if (hue < 0) {hue = 360 + hue}
+            if (hue < 0) {hue = 360 + hue;}
 
             return hue;
 
@@ -1300,9 +1310,9 @@
                  return m*S + b;
               }
 
-            };
+            }
 
-            return 0
+            return 0;
           }
 
           function getHueRange (colorInput) {
@@ -1321,7 +1331,7 @@
 
               if (colorDictionary[colorInput]) {
                 var color = colorDictionary[colorInput];
-                if (color.hueRange) {return color.hueRange}
+                if (color.hueRange) {return color.hueRange;}
               }
             }
 
@@ -1366,7 +1376,7 @@
 
             function componentToHex(c) {
                 var hex = c.toString(16);
-                return hex.length == 1 ? "0" + hex : hex;
+                return hex.length === 1 ? "0" + hex : hex;
             }
 
             var hex = "#" + componentToHex(rgb[0]) + componentToHex(rgb[1]) + componentToHex(rgb[2]);
@@ -1449,8 +1459,8 @@
             // this doesn't work for the values of 0 and 360
             // here's the hacky fix
             var h = hsv[0];
-            if (h === 0) {h = 1}
-            if (h === 360) {h = 359}
+            if (h === 0) {h = 1;}
+            if (h === 360) {h = 359;}
 
             // Rebase the h,s,v values
             h = h/360;
@@ -1483,6 +1493,7 @@
           }
 
         };
+        // jshint ignore:end
 
         util.color.randomDark = function () {
             return util.color.randomColor({luminosity: 'dark', count: 27});

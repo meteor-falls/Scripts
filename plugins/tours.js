@@ -1,8 +1,5 @@
 (function() {
     var gradient = "qlineargradient(spread:pad, x1:0.432, y1:0.692955, x2:0.145, y2:1, stop:0 rgba(139, 191, 228, 255), stop:1 rgba(189, 221, 246, 255))";
-    if (typeof(tourmode) !== "number") {
-        tourmode = 0;
-    }
 
     function addCommands() {
         var commandsModule = require('commands.js');
@@ -464,7 +461,7 @@
         },
 
         afterBattleStarted: function(src, dest, info, id, t1, t2) {
-            if (tourmode == 2) {
+            if (tourmode === 2) {
                 if (areOpponentsForTourBattle(src, dest)) {
                     if (sys.hasTier(src, tourtier) && sys.hasTier(dest, tourtier)) {
                         battlesStarted[Math.floor(tourbattlers.indexOf(sys.name(src).toLowerCase()) / 2)] = true;

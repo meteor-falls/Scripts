@@ -81,9 +81,9 @@ global.Emotes = {
             uobj = SESSION.users(src),
             timeout = 3,
             lastEmote = [],
-            time = +sys.time(),
+            time = sys.time(),
             size = "",
-            perm, i;
+            i;
 
         if (limit && src && uobj) {
             //perm = Utils.mod.hasBasicPermissions(src);

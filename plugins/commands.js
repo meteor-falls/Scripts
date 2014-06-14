@@ -306,7 +306,7 @@
 
     addListCommand(0, "rules", "Rules");
     addCommand(0, "emotes", function (src, command, commandData, tar, chan) {
-        var emotesList = new TableList("Emotes", "stripe", 1, 2, "navy");
+        var emotesList = new TableList("Emotes", "stripe", 1, 2);
 
         var emotesToAdd = [],
             emote, len, i;
@@ -519,7 +519,7 @@
     addCommand(0, "rtd", function (src, command, commandData, tar, chan) {
         var effect;
         if (RTD.cooldownFor(src) > 0) {
-            return bot.sendMessage(src, "You can't use RTD for another " + Utils.getTimeString(RTD.getPlayer(src).at + RTD.getPlayer(src).cooldown - +sys.time()) + ".", chan);
+            return bot.sendMessage(src, "You can't use RTD for another " + Utils.getTimeString(RTD.getPlayer(src).at + RTD.getPlayer(src).cooldown - sys.time()) + ".", chan);
         }
 
         effect = RTD.giveEffect(src, null, null, function () {
@@ -541,7 +541,7 @@
             return;
         }
 
-        list = new TableList("Megausers", "cornflowerblue", 2, 5, "navy");
+        list = new TableList("Megausers", "cornflowerblue");
         list.addEvery(keys, false, 10);
         list.finish();
         list.display(src, chan);
@@ -556,7 +556,7 @@
             return;
         }
 
-        list = new TableList("Flood Ignores", "cornflowerblue", 2, 5, "navy");
+        list = new TableList("Flood Ignores", "cornflowerblue");
         list.addEvery(keys, false, 10);
         list.finish();
         list.display(src, chan);
@@ -571,7 +571,7 @@
             return;
         }
 
-        list = new TableList("Emote Permission", "cornflowerblue", 2, 5, "navy");
+        list = new TableList("Emote Permission", "cornflowerblue");
         list.addEvery(keys, false, 10);
         list.finish();
         list.display(src, chan);
@@ -982,9 +982,9 @@
             wallmessage = Emotes.format(wallmessage, Emotes.ratelimit, src);
         }
 
-        sys.sendHtmlAll("<br><font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>", wallchan);
-        sys.sendHtmlAll("<font color=" + Utils.nameColor(src) + "><timestamp/>+<b><i>" + Utils.escapeHtml(sys.name(src)) + ":</i></b></font> " + wallmessage + "<br>", wallchan);
-        sys.sendHtmlAll("<font color=navy><font size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font><br>", wallchan);
+        sys.sendHtmlAll("<br>" + Bot.border + "<br>", wallchan);
+        sys.sendHtmlAll("<font color=" + Utils.nameColor(src) + "><timestamp/>+<b><i>" + Utils.escapeHtml(sys.name(src)) + ":</i></b></font> " + wallmessage, wallchan);
+        sys.sendHtmlAll("<br>" + Bot.border + "<br>", wallchan);
     });
 
     addCommand(1, ["html", "sendhtmlall"], function (src, command, commandData, tar, chan) {
@@ -1028,17 +1028,15 @@
 
     addCommand(1, ["mutes", "mutelist"], function (src, command, commandData, tar, chan) {
         var keys = Object.keys(Mutes),
-            timeNow = +sys.time(),
-            list,
-            now,
-            key;
+            timeNow = sys.time(),
+            list, now, key;
 
-        if (keys.length === 0) {
+        if (!keys.length) {
             bot.sendMessage(src, "There are no mutes.", chan);
             return;
         }
 
-        list = new TableList("Mutes", "cornflowerblue", 2, 5, "navy");
+        list = new TableList("Mutes", "cornflowerblue");
         list.add(["IP", "Muted Name", "By", "Length", "Reason"], true);
 
         for (key in Mutes) {
@@ -1058,17 +1056,14 @@
 
     addCommand(1, ["rangebans", "rangebanlist"], function (src, command, commandData, tar, chan) {
         var keys = Object.keys(Rangebans),
-            timeNow = +sys.time(),
-            list,
-            now,
-            key;
+            list, now, key;
 
-        if (keys.length === 0) {
+        if (!keys.length) {
             bot.sendMessage(src, "There are no rangebans.", chan);
             return;
         }
 
-        list = new TableList("Rangebans", "cornflowerblue", 2, 5, "navy");
+        list = new TableList("Rangebans", "cornflowerblue");
         list.add(["IP", "By", "Reason"], true);
 
         for (key in Rangebans) {
@@ -1091,7 +1086,7 @@
             return;
         }
 
-        list = new TableList("Bans", "cornflowerblue", 2, 5, "navy");
+        list = new TableList("Bans", "cornflowerblue");
         list.add(["IP", "Aliases"], true);
 
         for (i = 0, len = keys.length; i < len; i += 1) {
@@ -1130,7 +1125,7 @@
         Poll.by = self;
         Poll.options = options;
 
-        sys.sendHtmlAll(border + "<br>", 0);
+        sys.sendHtmlAll(Bot.border + "<br>", 0);
         bot.sendAll(self + " started a poll!<ping/>", 0);
         bot.sendAll(subject, 0);
         bot.sendAll("Options:", 0);
@@ -1143,7 +1138,7 @@
 
         sys.sendAll("", 0);
         bot.sendAll("Vote with /vote [option number]!", 0);
-        sys.sendHtmlAll("<br>" + border, 0);
+        sys.sendHtmlAll("<br>" + Bot.border, 0);
     });
 
     addCommand(1, "closepoll", function (src, command, commandData, tar, chan) {
@@ -1153,7 +1148,7 @@
 
         var self = sys.name(src);
 
-        sys.sendHtmlAll(border + "<br>", 0);
+        sys.sendHtmlAll(Bot.border + "<br>", 0);
         bot.sendAll(self + " closed the poll (started by " + Poll.by + ")!", 0);
 
         if (Object.keys(Poll.votes).length !== 0) {
@@ -1205,7 +1200,7 @@
             }
         }
 
-        sys.sendHtmlAll("<br>" + border, 0);
+        sys.sendHtmlAll("<br>" + Bot.border, 0);
 
         Poll.active = false;
         Poll.subject = '';
@@ -1247,6 +1242,7 @@
         sys.sendMessage(src, "", chan);
         sys.sendHtmlMessage(src, "<timestamp/> Player " + Utils.beautifyName(commandData) + " (<b>" + logstr + "</b>; <b>" + regstr + "</b>):", chan);
 
+        header("IP", tarip);
         if (loggedIn) {
             header("OS", sys.os(tar));
         }
@@ -1262,7 +1258,7 @@
             });
 
             header("Inside Channels [" + chans.length + "]", chans.join(", "));
-            header("Logged in", Utils.getTimeString(+sys.time() - SESSION.users(tar).loginTime) + " ago");
+            header("Logged in", Utils.getTimeString(sys.time() - SESSION.users(tar).loginTime) + " ago");
             if (cookie) {
                 header("Cookie", cookie);
             }
@@ -1306,7 +1302,7 @@
         script.beforeChatMessage(src, "Hello,  " + sys.name(tar) + ", I can tell you're in a need of help on how to use the android app for this game, so I shall try to help. Go to this link [ http://pokemon-online.eu/threads/pokemon-online-android-guide.22444 ] by clicking/tapping and this shall direct you to a thread on the Pokemon Online forums that can help you with your problem. This thread is filled with screenshots and short descriptions on how to do some tasks on the app. Please be sure to check it out. Also, if you're still unable to figure it out, I say for you to try out this game on a computer because it's way more easier to use. I hope this helped!", chan);
     });
 
-    addCommand(1, "silence", function (src, command, commandData, tar, chan) {
+    addCommand(1, "silence", function (src) {
         if (muteall) {
             sys.sendHtmlAll("<font color=green><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + " ended the silence!</b></font>");
         } else {
@@ -1380,7 +1376,7 @@
         }
     });
 
-    addCommand(1, "public", function (src, command, commandData, tar, chan) {
+    addCommand(1, "public", function (src) {
         if (!sys.isServerPrivate()) {
             sys.sendMessage(src, "~~Server~~: The server is already public.");
             return;
@@ -1389,7 +1385,7 @@
         sys.makeServerPublic(true);
     });
 
-    addCommand(1, "regfix", function (src, command, commandData, tar, chan) {
+    addCommand(1, "regfix", function (src) {
         sys.makeServerPublic(false);
         sys.makeServerPublic(true);
         sys.sendAll('~~Server~~: ' + sys.name(src) + ' made the server re-connect to the registry!');
@@ -1491,8 +1487,7 @@
         reason = Utils.escapeHtml(reason);
 
         var time = Utils.stringToTime(timeunit, Number(mutetime)),
-            time_now = +sys.time(),
-            trueTime = time + time_now,
+            trueTime = time + sys.time(),
             timeString = "for " + Utils.getTimeString(time);
 
         if (tar) {
@@ -1628,7 +1623,7 @@
             var dupeCheck = {};
             var types = (commandData || "").split(",").map(function (val) {
                 return val.toLowerCase().trim();
-            }).filter(function (val, index, array) {
+            }).filter(function (val) {
                 var pass = (val === "pokemons" || val === "items" || val === "emotes" || val === "trainers" || val === "avatars") && !dupeCheck.hasOwnProperty(val);
                 if (pass) {
                     dupeCheck[val] = true;
@@ -1660,7 +1655,7 @@
         var name = command.indexOf("mode") > -1 ? command.split("mode")[0] : command;
         name = name.substr(0, 1).toUpperCase() + name.substr(1);
 
-        bot.sendAll(name + " Mode was turned " + word + "!", 0);
+        bot.sendAll(name + " mode was turned " + word + "!", chan);
     });
 
     addCommand(1, "nightclub", function (src, command, commandData, tar, chan) {
@@ -1817,7 +1812,6 @@
             sys.sendMessage(src, "Please specify a valid range.");
             return;
         }
-        var lowername = this.originalName.toLowerCase();
         if (!rbreason) {
             bot.sendMessage(src, "Please specify a reason.", chan);
             return;
@@ -1910,17 +1904,17 @@
         sys.sendHtmlAll("<b><font color=" + sys.getColor(src) + ">" + Utils.escapeHtml(sys.name(src)) + " </b></font>cleared the chat in the channel: <b><font color=red>" + sys.channel(chan) + "</b></font>!", chan);
     });
 
-    addCommand(2, "supersilence", function (src, command, commandData, tar, chan) {
+    addCommand(2, "supersilence", function (src) {
         if (supersilence) {
             sys.sendHtmlAll("<font color=green><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + " ended the super silence!</b></font>");
-            supersilence = false;
         } else {
             sys.sendHtmlAll("<font color=blue><timestamp/><b>" + Utils.escapeHtml(sys.name(src)) + " super silenced the chat!</b></font>");
-            supersilence = true;
         }
+
+        supersilence = !supersilence;
     });
 
-    addCommand(2, "private", function (src, command, commandData, tar, chan) {
+    addCommand(2, "private", function (src) {
         if (sys.isServerPrivate()) {
             sys.sendMessage(src, "~~Server~~: The server is already private.");
             return;
@@ -1935,8 +1929,7 @@
             return;
         }
 
-        var importables = [],
-            teamCount = sys.teamCount(tar),
+        var teamCount = sys.teamCount(tar),
             i;
         if (teamCount === 0) {
             return bot.sendMessage(src, "That person doesn't have a valid team.", chan);
@@ -2008,7 +2001,7 @@
     /** OWNER COMMANDS */
     addListCommand(3, "ownercommands", "Owner");
 
-    addCommand(3, "servername", function (src, command, commandData, tar, chan) {
+    addCommand(3, "servername", function (src, command, commandData) {
         if (!commandData) {
             commandData = Config.servername;
         }
@@ -2083,7 +2076,7 @@
     });
 
     addCommand(3, "dbauths", function (src, command, commandData, tar, chan) {
-        sys.sendMessage(src, sys.dbAuths());
+        sys.sendMessage(src, sys.dbAuths(), chan);
     });
 
     addCommand(3, "unidle", function (src, command, commandData, tar, chan) {
@@ -2093,25 +2086,6 @@
 
         bot.sendMessage(src, "You have made " + commandData + " unidle.", chan);
         sys.changeAway(tar, false);
-    });
-
-    addCommand(3, "ti", function (src, command, commandData, tar, chan) {
-        if (!tar) {
-            return bot.sendMessage(src, "Invalid target.", chan);
-        }
-
-        bot.sendMessage(src, commandData + "'s trainer info is:", chan);
-        bot.sendMessage(src, Utils.escapeHtml(sys.info(tar)), chan);
-    });
-
-    addCommand(3, "resetladder", function (src, command, commandData, tar, chan) {
-        var tiers = sys.getTierList(),
-            x;
-
-        for (x in tiers) {
-            sys.resetLadder(tiers[x]);
-        }
-        bot.sendAll("The entire ladder has been reset!");
     });
 
     addCommand(3, "setwelcomemessage", function (src, command, commandData, tar, chan) {
@@ -2269,7 +2243,7 @@
         }
     });
 
-    addMaintainerCommand("updatetiers", function (src, command, commandData, tar, chan) {
+    addMaintainerCommand("updatetiers", function (src, command, commandData) {
         var baseurl = Config.dataurl;
         if (!commandData) {
             commandData = baseurl + "tiers.xml";
@@ -2289,7 +2263,7 @@
         });
     });
 
-    addMaintainerCommand(["testann", "updateann"], function (src, command, commandData, tar, chan) {
+    addMaintainerCommand(["testann", "updateann"], function (src, command, commandData) {
         var baseurl = Config.dataurl;
         if (!commandData) {
             commandData = baseurl + "announcement.html";

@@ -9,7 +9,7 @@
         addCommand(0, "catch", function (src, command, commandData, tar, chan) {
             var name = sys.name(src).toLowerCase();
             var feedmon = Feedmon.ensurePlayer(name);
-            var time = +sys.time();
+            var time = sys.time();
 
             if (Feedmon.isBattling(name)) {
                 bot.sendMessage(src, "You're busy battling right now!", chan);
@@ -41,10 +41,8 @@
         addCommand(0, "feed", function (src, command, commandData, tar, chan) {
             var name = sys.name(src).toLowerCase(),
                 player = Feedmon.getPlayer(name),
-                feedname,
-                feedmon,
-                feedexp,
-                time = +sys.time();
+                time = sys.time(),
+                feedname, feedmon, feedexp;
 
             if (Feedmon.isBattling(name)) {
                 bot.sendMessage(src, "You're busy battling right now!", chan);
@@ -126,9 +124,7 @@
                 table = Feedmon.exp,
                 nextlvl,
                 feedmon,
-                feedname,
-                len,
-                i;
+                feedname;
 
             if (!player) {
                 bot.sendMessage(src, "First catch a Feedmon!", chan);
@@ -397,7 +393,7 @@
             var player = ensurePlayer(name);
 
             timeout = timeout || 'timeout';
-            return player[timeout] !== 0 && player[timeout] > (+sys.time());
+            return player[timeout] !== 0 && player[timeout] > sys.time();
         }
 
         function generatePokemon(name) {
@@ -433,8 +429,6 @@
         }
 
         function getPokemon(name) {
-            var player;
-
             if (!has(name)) {
                 return null;
             }
@@ -448,18 +442,15 @@
             var happinessGain = 0,
                 oldHappiness,
                 feedmon = getPokemon(name),
-                player = getPlayer(name),
                 lvlGain = 0,
                 gain = 0,
-                lvl = feedmon.level;
-
-            var looplvl,
+                lvl = feedmon.level,
+                bonusRange = Math.round(lvl / 10),
+                bonus = [0, 0],
+                looplvl,
                 lvlexp,
                 len,
                 i;
-
-            var bonusRange = Math.round(lvl / 10),
-                bonus = [0, 0];
 
             multiplier = multiplier || 1;
 
@@ -535,17 +526,13 @@
 
         // TODO: Natures, stats
         function battleTurn(name, move) {
-            var player = getPlayer(name),
-                feedmon = getPokemon(name),
-                feedname = getPokemonName(name),
+            var feedmon = getPokemon(name),
                 battle = battles[name],
                 opponent = battle.opponent,
                 selfMoveName = feedmon.moves[move],
                 selfMoveDamage = Math.floor(getMoveDamage(selfMoveName) * (feedmon.level / 80)),
                 opponentMoveName = opponent.moves[sys.rand(0, opponent.moves.length)],
-                opponentMoveDamage = Math.floor(getMoveDamage(opponentMoveName) * (opponent.level / 80)),
-                selfNum = sys.pokeNum(feedmon.pokemon),
-                oppNum = sys.pokeNum(opponent.pokemon);
+                opponentMoveDamage = Math.floor(getMoveDamage(opponentMoveName) * (opponent.level / 80));
 
             // TODO: Types
             var result = {self: {}, opponent: {}};
@@ -588,9 +575,7 @@
         }
 
         function turnMessage(name, sendMessage) {
-            var player = getPlayer(name),
-                feedmon = getPokemon(name),
-                feedname = getPokemonName(name),
+            var feedmon = getPokemon(name),
                 battle = battles[name];
 
             sendMessage("Start of turn #" + (battle.turn + 1) + " vs. <b>" + battle.opponent.pokemon + "</b> <img src='icon:" + sys.pokeNum(battle.opponent.pokemon) + "'>");

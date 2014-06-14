@@ -4,6 +4,8 @@
     var sendWarningsTo = ['Ethan', 'TheUnknownOne'];
     var sendErrorsTo = ['Ethan', 'TheUnknownOne'];
 
+
+    var ignoreNextChanMsg = false;
     var ignoreNext = false;
     module.exports = {
         warning: function (func, message, backtrace) {
@@ -126,7 +128,6 @@
         },
         afterChannelJoin: function (src, chan) {
             var poChan = SESSION.channels(chan);
-            var channelToLower = poChan.name.toLowerCase();
             var topic = poChan.topic;
 
             if (topic) {
@@ -143,7 +144,6 @@
         },
         beforeLogIn: function (src) {
             var srcip = sys.ip(src),
-                poUser = SESSION.users(src),
                 auth = sys.auth(src),
                 ip;
 
@@ -169,9 +169,7 @@
         },
         afterLogIn: function (src, defaultChan) {
             var poUser = SESSION.users(src),
-                myName = sys.name(src),
                 ip = sys.ip(src),
-                myAuth = Utils.getAuth(src),
                 numPlayers = sys.numPlayers(),
                 os = sys.os(src),
                 newRecord = false;
@@ -216,8 +214,8 @@
             if (Reg.get("forumbotEnabled") !== false) {
                 displayBot("ForumBot", "Get in touch with the community by joining the <b><a href='http://meteorfalls.us/'>Meteor Falls Forums</a></b>!", "blue");
             }
-            displayBot("StatsBot", "There are <b>" + numPlayers + "</b> players online. You are the <b>" + nthNumber(Utils.placeCommas(src)) + "</b> player to join. At most, there were <b>" + Reg.get("maxPlayersOnline") + "</b> players online" + (newRecord ? " (new record!)" : "") + ".", "goldenrod");
-            if (typeof(startUpTime) === "number" && startUpTime < +sys.time()) {
+            displayBot("StatsBot", "There are <b>" + numPlayers + "</b> players online. You are the <b>" + Utils.nthNumber(Utils.placeCommas(src)) + "</b> player to join. At most, there were <b>" + Reg.get("maxPlayersOnline") + "</b> players online" + (newRecord ? " (new record!)" : "") + ".", "goldenrod");
+            if (typeof(startUpTime) === "number" && startUpTime < sys.time()) {
                 displayBot("UptimeBot", "The server has been up for " + Utils.fancyJoin(Utils.uptime()) + ".", "orange");
             }
 
@@ -232,7 +230,7 @@
             Utils.mod.pruneMutes();
             if (Mutes.hasOwnProperty(ip)) {
                 var myMute = Mutes[ip],
-                    muteStr = myMute.time !== 0 ? Utils.getTimeString(myMute.time - +sys.time()) : "forever";
+                    muteStr = myMute.time !== 0 ? Utils.getTimeString(myMute.time - sys.time()) : "forever";
                 poUser.muted = true;
                 bot.sendMessage(src, "You are muted for " + muteStr + ". By: " + myMute.by + ". Reason: " + myMute.reason, defaultChan);
             }
@@ -330,18 +328,13 @@
         },
         beforeChatMessage: function (src, message, chan) {
             var poUser = SESSION.users(src),
-                poChan = SESSION.channels(chan),
+                //poChan = SESSION.channels(chan),
                 isMuted = poUser.muted,
-                originalName = poUser.originalName,
-                isLManager = League.Managers.indexOf(originalName.toLowerCase()) > -1,
-                messageToLowerCase = message.toLowerCase(),
-                myAuth = Utils.getAuth(src),
-                isOwner = myAuth === 3,
-                charLimit = Config.characterLimit;
+                myAuth = Utils.getAuth(src);
 
-            if (!Utils.mod.hasBasicPermissions(src) && message.length > charLimit) {
+            if (!Utils.mod.hasBasicPermissions(src) && message.length > Config.characterLimit) {
                 sys.stopEvent();
-                bot.sendMessage(src, "Sorry, your message has exceeded the " + charLimit + " character limit.", chan);
+                bot.sendMessage(src, "Sorry, your message has exceeded the " + Config.characterLimit + " character limit.", chan);
                 //Utils.watch.notify("User, " + Utils.nameIp(src) + ", has tried to post a message that exceeds the " + charLimit + " character limit. Take action if need be.");
                 script.afterChatMessage(src, message, chan);
                 return;
@@ -362,7 +355,7 @@
                 } else {
                     sys.stopEvent();
                     var myMute = Mutes[sys.ip(src)],
-                        muteStr = myMute.time !== 0 ? Utils.getTimeString(myMute.time - +sys.time()) : "forever";
+                        muteStr = myMute.time !== 0 ? Utils.getTimeString(myMute.time - sys.time()) : "forever";
                     bot.sendMessage(src, "Shut up, you are muted for " + muteStr + ", by " + myMute.by + "! Reason: " + myMute.reason, chan);
                     Utils.watch.message(src, "Muted Message", message, chan);
                     script.afterChatMessage(src, message, chan);
@@ -382,7 +375,7 @@
             message = message.replace(/\ufffc/gi, "");
 
             if (message.length === 0) {
-                Utils.watch.notify(Utils.nameIp(src) + " posted an empty message but failed.");
+                //Utils.watch.notify(Utils.nameIp(src) + " posted an empty message but failed.");
                 return sys.stopEvent();
             }
 
@@ -424,7 +417,8 @@
             }
 
             var player = src,
-                ids;
+                sendStr = "",
+                visibleAuth, ids, name;
 
             if (pewpewpew || RTD.hasEffect(src, 'pew')) {
                 ids = sys.playerIds().filter(function (id) {
@@ -433,42 +427,36 @@
                 player = ids[sys.rand(0, ids.length)] || src;
             }
 
-            var originalMessage = message;
-            var sentMessage = ((isOwner && htmlchat) ? originalMessage : Utils.escapeHtml(originalMessage, true).replace(/&lt;_&lt;/g, "<_<").replace(/&gt;_&lt;/g, ">_<").replace(/&gt;_&gt;/g, ">_>")); // no amp
+            var sentMessage = ((myAuth === 3 && htmlchat) ? message : Utils.escapeHtml(message, true).replace(/&lt;_&lt;/g, "<_<").replace(/&gt;_&gt;/g, ">_>")); // no amp
             var emotes = false;
 
             if (Emotes.enabledFor(player) && !pewpewpew && !nightclub) {
-                var simpleMessage = sentMessage;
-                sentMessage = Emotes.format(sentMessage, Emotes.ratelimit, src);
-                if (simpleMessage !== sentMessage) {
+                var emoteMessage = Emotes.format(sentMessage, Emotes.ratelimit, src);
+                if (sentMessage !== emoteMessage) {
                     emotes = true;
+                    sentMessage = emoteMessage;
                 }
             }
 
             sentMessage = Utils.format(player, sentMessage);
-
-            sentMessage = sentMessage.replace(/<_</g, "&lt;_&lt;").replace(/>_</g, "&gt;_&lt;").replace(/<3/g, "&lt;3");
-            message = sentMessage;
+            sentMessage = sentMessage.replace(/<_</g, "&lt;_&lt;").replace(/>_</g, "&gt;_&lt;");
 
             if (!emotes) {
                 if (capsmode || RTD.hasEffect(src, 'rage')) {
-                    message = message.toUpperCase();
+                    sentMessage = sentMessage.toUpperCase();
                 }
 
                 if (scramblemode || RTD.hasEffect(player, 'screech')) {
-                    message = Utils.fisheryates(message.split("")).join("");
+                    sentMessage = Utils.fisheryates(sentMessage.split("")).join("");
                 }
 
                 if (colormode) {
-                    message = "<b>" + Utils.nightclub.rainbowify(message, 200) + "</b>";
+                    sentMessage = "<b>" + Utils.nightclub.rainbowify(sentMessage, 200) + "</b>";
                 }
             }
 
-            var sendStr = "",
-                visibleAuth, name;
-
             if (nightclub) {
-                sendStr = Utils.nightclub.format("(" + sys.name(player) + "): " + originalMessage);
+                sendStr = Utils.nightclub.format("(" + sys.name(player) + "): " + message);
             } else {
                 visibleAuth = sys.auth(player) > 0 && sys.auth(player) < 4;
 
@@ -498,7 +486,7 @@
                     sendStr += "<font size=2>";
                 }
 
-                sendStr += message;
+                sendStr += sentMessage;
 
                 if (RTD.hasEffect(player, 'big_text') || RTD.hasEffect(player, 'small_text')) {
                     sendStr += "</font>";
@@ -512,15 +500,15 @@
             sys.stopEvent();
             if (poUser.semuted) {
                 Utils.sendHtmlSemuted(sendStr, chan);
-                Utils.watch.message(src, "Sessage", originalMessage, chan);
+                Utils.watch.message(src, "Sessage", message, chan);
             } else {
                 sys.sendHtmlAll(sendStr, chan);
                 if (chan !== watch) {
-                    Utils.watch.message(src, "Message", originalMessage, chan);
+                    Utils.watch.message(src, "Message", message, chan);
                 }
             }
 
-            script.afterChatMessage(src, originalMessage, chan);
+            script.afterChatMessage(src, message, chan);
         },
 
         beforeLogOut: function (src) {
@@ -579,7 +567,7 @@
                 if (!teamSpammers.hasOwnProperty(ip)) {
                     teamSpammers[ip] = true;
                 } else {
-                    bot.sendMessage(src, "You are being kicked for changing your name too often.", chan);
+                    bot.sendMessage(src, "You are being kicked for changing your name too often.");
                     Utils.watch.notify("Kicked " + Utils.nameIp(src) + " for change name spamming.");
                     Utils.mod.kick(src);
                     return;
@@ -667,47 +655,42 @@
                 return;
             }
 
-            var time = +sys.time();
-            var srcip = sys.ip(src);
-            var poUser = SESSION.users(src),
+            var time = sys.time(),
+                srcip = sys.ip(src),
+                poUser = SESSION.users(src),
                 limit,
                 ignoreFlood = Utils.checkFor(FloodIgnore, sys.name(src)),
                 auth = Utils.getAuth(src);
 
-            if (auth < 1 && !ignoreFlood) {
-                if (poUser.floodCount < 0) {
-                    poUser.floodCount = 0;
-                }
-
-                poUser.floodCount += 1;
-
-                sys.setTimer(function () {
-                    var user = SESSION.users(src);
-
-                    if (user) {
-                        user.floodCount -= 1;
-                    }
-
-                }, 8 * 1000, false);
-
-                limit = (chan === testchan ? 18 : 7);
-
-                if (poUser.floodCount > limit && !poUser.muted) {
-                    Utils.watch.notify(Utils.nameIp(src) + " was kicked and muted for flooding in " + Utils.clink(sys.channel(chan)) + ".");
-                    flbot.sendAll(sys.name(src) + " was kicked and muted for flooding.", chan);
-                    poUser.muted = true;
-                    Mutes[srcip] = {
-                        "by": flbot.name,
-                        "mutedname": sys.name(src),
-                        "reason": "Flooding.",
-                        "time": time + 300
-                    };
-                    Utils.mod.kick(src);
-                    return;
-                }
+            if (ignoreFlood || auth > 0) {
+                return;
             }
 
-            if (Utils.isMCaps(message) && auth < 1 && !ignoreFlood) {
+            poUser.floodCount += 1;
+
+            sys.setTimer(function () {
+                if (poUser) {
+                    poUser.floodCount -= 1;
+                }
+            }, 8 * 1000, false);
+
+            limit = (chan === testchan ? 18 : 7);
+
+            if (poUser.floodCount > limit && !poUser.muted) {
+                Utils.watch.notify(Utils.nameIp(src) + " was kicked and muted for flooding in " + Utils.clink(sys.channel(chan)) + ".");
+                flbot.sendAll(sys.name(src) + " was kicked and muted for flooding.", chan);
+                poUser.muted = true;
+                Mutes[srcip] = {
+                    by: flbot.name,
+                    mutedname: sys.name(src),
+                    reason: "Flooding",
+                    time: time + (5 * 60)
+                };
+                Utils.mod.kick(src);
+                return;
+            }
+
+            if (Utils.isMCaps(message)) {
                 poUser.caps += 1;
 
                 limit = (chan === testchan ? 15 : 6);
@@ -717,10 +700,10 @@
                     poUser.muted = true;
                     poUser.caps = 0;
                     Mutes[srcip] = {
-                        "by": capsbot.name,
-                        "mutedname": sys.name(src),
-                        "reason": "Caps.",
-                        "time": time + 300
+                        by: capsbot.name,
+                        mutedname: sys.name(src),
+                        reason: "Caps",
+                        time: time + 300
                     };
                 }
             } else if (poUser.caps > 0) {
@@ -728,11 +711,11 @@
             }
         },
 
-        beforeChallengeIssued: function(src, dest) {
+        beforeChallengeIssued: function (src, dest) {
             Utils.watch.notify(Utils.nameIp(src) + " challenged " + Utils.nameIp(dest) + ".");
         },
 
-        beforeBattleMatchup: function(src, dest, clauses, rated, mode, team1, team2) {
+        beforeBattleMatchup: function (src, dest) {
             Utils.watch.notify(Utils.nameIp(src) + " got matched up via Find Battle with " + Utils.nameIp(dest));
         }
     };

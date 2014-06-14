@@ -7,11 +7,10 @@ Bot = function (name, color, prefix, italics) {
     this.prefix = prefix;
     this.color = color;
     this.italics = italics;
-    this.italicsPart = italics ? ["<i>", "</i>"] : ["", ""];
 };
 
 Bot.prototype.markup = function (message) {
-    return "<font color='" + this.color + "'><timestamp/>" + this.prefix + "<b>" + this.italicsPart[0] + this.name + ":" + this.italicsPart[1] + "</b></font> " + message;
+    return "<font color='" + this.color + "'><timestamp/>" + this.prefix + "<b>" + (this.italics ? "<i>" : "") + this.name + ":" + (this.italics ? "</i>" : "") + "</b></font> " + message;
 };
 
 Bot.prototype.sendAll = function (message, channel) {
@@ -58,7 +57,9 @@ Bot.prototype.lineAll = function (channel) {
     }
 };
 
-module.exports.Bot = Bot;
+Bot.border = "<font color=navy size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font>";
+
+module.exports = Bot;
 module.reload = function () {
     // These are all meant to be globals.
     bot      = new Bot("Bot", "#0a4aff");

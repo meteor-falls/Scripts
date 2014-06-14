@@ -81,7 +81,7 @@ module.exports.load = function () {
         peffect = playerEffects[ip] = {
             effect: effect,
             timer: -1,
-            at: +sys.time(),
+            at: sys.time(),
             duration: duration,
             active: true,
             cooldown: sys.rand(MIN_COOLDOWN, MAX_COOLDOWN + 1)
@@ -106,7 +106,7 @@ module.exports.load = function () {
             return 0;
         }
 
-        return playerEffects[ip].at + playerEffects[ip].cooldown - +sys.time();
+        return playerEffects[ip].at + playerEffects[ip].cooldown - sys.time();
     };
 
     RTD.getPlayer = function (id) {

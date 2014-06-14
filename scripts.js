@@ -130,8 +130,6 @@ Config = {
     }
 }());
 
-var ignoreNextChanMsg = false;
-
 function poUser(id) {
     var ip = sys.ip(id);
 
@@ -144,7 +142,7 @@ function poUser(id) {
     this.semuted = false;
 
     this.originalName = sys.name(id);
-    this.loginTime = +sys.time();
+    this.loginTime = sys.time();
 
     // This is an array so we can track multiple emotes in their last message.
     this.lastEmote = [];
@@ -183,7 +181,7 @@ SESSION.refill();
 var poScript;
 poScript = ({
     serverStartUp: function serverStartUp() {
-        startUpTime = +sys.time();
+        startUpTime = sys.time();
         script.init();
     },
     serverShutDown: function serverShutDown() {
@@ -216,31 +214,24 @@ poScript = ({
     beforeNewMessage: function beforeNewMessage(message) {
         require.callPlugins("beforeNewMessage", message);
     },
-
     afterNewMessage: function afterNewMessage(message) {
         require.callPlugins("afterNewMessage", message);
     },
-
     beforeServerMessage: function (message) {
         require.callPlugins("beforeServerMessage", message);
     },
-
     beforeChannelJoin: function beforeChannelJoin(src, channel) {
         require.callPlugins("beforeChannelJoin", src, channel);
     },
-
     beforeChannelDestroyed: function beforeChannelDestroyed(channel) {
         require.callPlugins("beforeChannelDestroyed", channel);
     },
-
     afterChannelCreated: function afterChannelCreated(chan, name, src) {
         require.callPlugins("afterChannelCreated", chan, name, src);
     },
-
     afterChannelJoin: function afterChannelJoin(src, chan) {
         require.callPlugins("afterChannelJoin", src, chan);
     },
-
     beforeLogIn: function beforeLogIn(src) {
         require.callPlugins("beforeLogIn", src);
     },
@@ -250,58 +241,44 @@ poScript = ({
     beforeChangeTier: function(src, team, oldtier, newtier) {
         require.callPlugins("beforeChangeTier", src, team, oldtier, newtier);
     },
-
     beforeChangeTeam: function beforeChangeTeam(src) {
         require.callPlugins("beforeChangeTeam", src);
     },
-
     beforeChatMessage: function beforeChatMessage(src, message, chan) {
         require.callPlugins("beforeChatMessage", src, message, chan);
     },
-
     beforeLogOut: function beforeLogOut(src) {
         require.callPlugins("beforeLogOut", src);
     },
-
     afterChangeTeam: function afterChangeTeam(src) {
         require.callPlugins("afterChangeTeam", src);
     },
-
     beforePlayerKick: function beforePlayerKick(src, bpl) {
         require.callPlugins("beforePlayerKick", src, bpl);
     },
-
     beforePlayerBan: function beforePlayerBan(src, bpl, time) {
         require.callPlugins("beforePlayerBan", src, bpl, time);
     },
-
     beforeChallengeIssued: function beforeChallengeIssued(src, dest) {
         require.callPlugins("beforeChallengeIssued", src, dest);
     },
-
     /*afterPlayerAway: function afterPlayerAway(src, mode) {
     },*/
-
     beforeBattleMatchup: function beforeBattleMatchup(src, dest, clauses, rated, mode, team1, team2) {
         require.callPlugins("beforeBattleMatchup", src, dest, clauses, rated, mode, team1, team2);
     },
-
     afterBattleStarted: function afterBattleStarted(src, dest, info, id, t1, t2) {
         require.callPlugins("afterBattleStarted", src, dest, info, id, t1, t2);
     },
-
     afterBattleEnded: function afterBattleEnded(src, dest, desc) {
         require.callPlugins("afterBattleEnded", src, dest, desc);
     },
-
     afterChatMessage: function afterChatMessage(src, message, chan) {
         require.callPlugins("afterChatMessage", src, message, chan);
     },
-
     beforePlayerRegister: function (src) {
         Utils.watch.notify(Utils.nameIp(src) + " registered.");
     },
-
     battleConnectionLost: function() {
         Utils.watch.notify("Connection to the battle server has been lost.");
     }

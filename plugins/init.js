@@ -43,7 +43,6 @@ exports.init = function () {
     }
 
     var globalVars = {
-        border: "<font color=blue><timestamp/><b>«««««««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»»»»»»</b></font>",
         tourmode: 0,
         spinTypes: [], // can contain: items, emotes, pokemons
         muteall: false,
@@ -90,17 +89,6 @@ exports.init = function () {
     staffchannel = makeChan("Auth Party");
     testchan = makeChan("Ground Zero");
     watch = makeChan("Watch");
-
-    nthNumber = function (num) {
-        var nthNum = {
-            0: "th",
-            1: "st",
-            2: "nd",
-            3: "rd"
-        };
-
-        return num + (nthNum[num] || "th");
-    };
 
     /*function formatLinks(message) {
         return message.replace(/(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?\^=%&amp;:\/~\+#]*[\w\-\@?\^=%&amp;\/~\+#])?/gi, '$1');

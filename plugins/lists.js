@@ -1,6 +1,4 @@
 (function () {
-    var listBorder = "»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»";
-
     function formatArgs(args) {
         if (!args || !Array.isArray(args)) {
             return "";
@@ -11,14 +9,13 @@
         }).join(":");
     }
 
-    function CommandList(title, bordercolor, help, listtype) {
+    function CommandList(title, help, listtype) {
         help = (help || help === "") ? help : "Type one of the following into the channel's chat to use it:";
         listtype = listtype || "ul";
 
         this.title = title;
-        this.bordercolor = bordercolor;
         this.listtype = listtype;
-        this.template = "<font color=" + bordercolor + " size=4><b>" + listBorder + "</b></font><br><h2>" + title + "</h2>";
+        this.template = Bot.border + "<br><h2>" + title + "</h2>";
 
         if (help !== "") {
             this.template += "<i>" + help + "</i><" + listtype + ">";
@@ -50,7 +47,7 @@
     };
 
     CommandList.prototype.finish = function () {
-        this.template += "</" + this.listtype + "><br><font color='" + this.bordercolor + "' size='4'><b>" + listBorder + "</b></font>";
+        this.template += "</" + this.listtype + "><br>" + Bot.border;
         return this;
     };
 
@@ -60,14 +57,20 @@
 
     // Default border: 2
     // Default padding: 5
-    function TableList(name, color, border, padding, borderColor) {
+    function TableList(name, color, border, padding) {
+        if (padding == null) {
+            padding = 5;
+        }
+        if (border == null) {
+            border = 2;
+        }
+
         this.name = name;
         this.color = color;
         this.border = border;
         this.padding = padding;
-        this.borderColor = borderColor;
 
-        this.template = "<font color=" + borderColor + " size=4><b>" + listBorder + "</b></font><h2>" + name + "</h2><br>";
+        this.template = Bot.border + "<h2>" + name + "</h2><br>";
         this.template += "<table border=" + border + " cellpadding=" + padding + ">";
 
         this._zebra = true;
@@ -138,7 +141,7 @@
     function generateLists() {
         var Lists = {};
 
-        Lists.Commands = new CommandList("Commands", "navy").add([
+        Lists.Commands = new CommandList("Commands").add([
             ["usercommands", "To view the commands for <b>users</b>."],
             ["feedmoncommands", "To view the commands related to <b>feedmon</b>."],
             ["channelcommands", "To view the commands related to <b>channels</b>."],
@@ -151,7 +154,7 @@
         ]).finish();
 
         /** USER COMMANDS **/
-        Lists.User = new CommandList("User Commands", "navy").add([
+        Lists.User = new CommandList("User Commands").add([
             ["funcommands", "To view the fun commands."],
             ["rules", "To view the rules."],
             ["scriptinfo", "To view script information."],
@@ -172,14 +175,14 @@
         ]).finish();
 
         /** LEAGUE MANAGER **/
-        Lists.LeagueManager = new CommandList("League Manager Commands", "navy").add([
+        Lists.LeagueManager = new CommandList("League Manager Commands").add([
             ["gl", "To make someone the [spot] gym leader. [spot] can be 1-8. Removes gym leader [spot] if [player] is empty.", ["player", "spot"]],
             ["el", "To make someone the [spot] elite. [spot] can be 1-4. Removes elite [spot] if [player] is empty.", ["player", "spot"]],
             ["champ", "To make someone the champion. Removes the champion if [player] is empty.", ["player"]]
         ]).finish();
 
         /** FUN **/
-        Lists.Fun = new CommandList("Fun Commands", "navy").add([
+        Lists.Fun = new CommandList("Fun Commands").add([
             ["burn", "To burn someone.", ["player"]],
             ["freeze", "To freeze someone.", ["player"]],
             ["paralyze", "To paralyze someone.", ["player"]],
@@ -192,7 +195,7 @@
         ]).finish();
 
         /** FEEDMON **/
-        Lists.Feedmon = new CommandList("Feedmon Commands", "navy").add([
+        Lists.Feedmon = new CommandList("Feedmon Commands").add([
             ["catch", "Catches a random Pokémon."],
             ["feed", "Feeds your caught Pokémon."],
             ["nickname", "Gives your caught Pokémon a nickname.", ["name"]],
@@ -203,7 +206,7 @@
         ]).finish();
 
         /** CHANNEL */
-        Lists.Channel = new CommandList("Channel Commands", "navy").add([
+        Lists.Channel = new CommandList("Channel Commands").add([
             ["cauth", "Shows this channel's auth."],
             ["topic", "Shows this channel's topic."],
             ["chanmodcommands", "To view the commands for <b>channel moderators</b>."],
@@ -212,21 +215,21 @@
             ["<b>Note:</b> As creator of the channel, you will always have channel owner permissions. Additionally, your channel auth is never lower than your server auth."]
         ]).finish();
 
-        Lists.ChanMod = new CommandList("Channel Moderator Commands", "navy").add([
+        Lists.ChanMod = new CommandList("Channel Moderator Commands").add([
             ["changetopic", "Sets the topic of the channel to [topic]. HTML is allowed. An empty [topic] will reset the topic.", ["topic"]],
             ["topicsource", "Shows the source of this channel's topic (no formatting)."],
             ["channelkick", "To kick [player] from this channel.", ["player"]]
         ]).finish();
 
-        Lists.ChanAdmin = new CommandList("Channel Administrator Commands", "navy").add([
+        Lists.ChanAdmin = new CommandList("Channel Administrator Commands").add([
         ]).finish();
 
-        Lists.ChanOwner = new CommandList("Channel Owner Commands", "navy").add([
+        Lists.ChanOwner = new CommandList("Channel Owner Commands").add([
             ["cchangeauth", "Changes the channel auth of [player] to [auth]. [auth] must be 0-3.", ["player", "auth"]]
         ]).finish();
 
         /** MEGAUSER **/
-        Lists.Megauser = new CommandList("Megauser Commands", "navy").add([
+        Lists.Megauser = new CommandList("Megauser Commands").add([
             ["tour", "To start a tournament with tier [tier] that allows [#ofplayers] people to play with optional prize [prize].", ["tier", "#ofplayers", "prize"]],
             ["endtour", "To end a running tournament."],
             ["sub", "To replace [player1] with [player2] in the running tournament.", ["player1", "player2"]],
@@ -237,7 +240,7 @@
         ]).finish();
 
         /** TOURNAMENT USER **/
-        Lists.Tour = new CommandList("Tour User Commands", "navy").add([
+        Lists.Tour = new CommandList("Tour User Commands").add([
             ["join", "To join a tournament during the sign up phase."],
             ["unjoin", "To leave a tournament."],
             ["viewround", "To view the status of the tournament."],
@@ -245,7 +248,7 @@
         ]).finish();
 
         /** RULES **/
-        var Rules = new CommandList("Rules", "navy", "Please follow the rules or risk punishment: <small>(revision 3)</small>", "ol").add([
+        var Rules = new CommandList("Rules", "Please follow the rules or risk punishment: <small>(revision 3)</small>", "ol").add([
             ["Do not spam or flood the chat (3 lines in a row is generally flood). CAPS are not allowed either, neither is posting the exact same message (you may be punished even if you post this twice in a row, in a short timespan)."],
             ["Listen to the auth. If an auth tells you to stop misbehaving, you must listen or your punishment is their choice (as long as it's reasonable). Shouting 'abuse' when you've clearly broken the rules will bring you in more trouble."],
             ["Keep disrespectful statements to a minimum; Jokes shouldn't go too far."],
@@ -261,7 +264,7 @@
         Lists.Rules = Rules;
 
         /** LEAGUE RULES **/
-        Lists.LeagueRules = new CommandList("League Rules", "navy", "Please follow the rules below or you will be unable to challenge the league:", "ol").add([
+        Lists.LeagueRules = new CommandList("League Rules", "Please follow the rules below or you will be unable to challenge the league:", "ol").add([
             ["You must follow any rules made by the gym leader/elite 4. If the rule is crazy, talk to an auth. If the gym leader/elite 4 doesn't have rules, read rule 8."],
             ["No lying. If you lie about defeating a league member, you will have to start the league over again."],
             ["Be a good sport. If you lose, say GG or nothing, just don't be mean!"],
@@ -273,7 +276,7 @@
         ]).finish();
 
         /** MODERATOR COMMANDS **/
-        Lists.Mod = new CommandList("Moderator Commands", "navy").add([
+        Lists.Mod = new CommandList("Moderator Commands").add([
             ["moderationcommands", "To display a list of commands that moderate the chat."],
             ["partycommands", "To display a list of party commands."],
             ["changetopic", "To change the topic of the channel [channel] to [topic].", ["channel", "topic"]],
@@ -298,7 +301,7 @@
         ]).finish();
 
         /** MODERATION COMMANDS **/
-        Lists.Moderate = new CommandList("Moderation Commands", "navy").add([
+        Lists.Moderate = new CommandList("Moderation Commands").add([
             ["logwarn", "To warn [player] of excessive logs.", ["player"]],
             ["tellemotes", "To explain to [player] what emotes are.", ["player"]],
             ["tellandroid", "To explain to [player] how to use the android application.", ["player"]],
@@ -316,7 +319,7 @@
             ["removemessage", "To remove your kick, mute, ban, or welcome message.", ["kick/mute/ban/welcome"]]
         ]).finish();
 
-        Lists.Party = new CommandList("Party Commands", "navy").add([
+        Lists.Party = new CommandList("Party Commands").add([
             ["capsmode", "To turn caps mode on or off."],
             ["scramblemode", "To turn scramble mode on or off."],
             ["colormode", "To turn color mode on or off."],
@@ -327,7 +330,7 @@
         ]).finish();
 
         /** ADMIN COMMANDS **/
-        Lists.Admin = new CommandList("Administrator Commands", "navy").add([
+        Lists.Admin = new CommandList("Administrator Commands").add([
             ["<font color=blue>[s]</font>ban", "To ban [player] with an optional [reason]. Use /sban instead to silently ban.", ["player", "reason"]],
             ["unban", "To unban a [player].", ["player"]],
             ["clearpass", "To clear [player]'s password.", ["player"]],
@@ -339,17 +342,16 @@
         ]).finish();
 
         /** OWNER COMMANDS **/
-        Lists.Owner = new CommandList("Owner Commands", "navy").add([
+        Lists.Owner = new CommandList("Owner Commands").add([
             ["servername", "To change the server name in the reg. Defaults to " + Config.servername + ".", ["name"]],
             ["changeauth", "Changes [player]'s auth to [level].", ["player", "level"]],
             ["dbauths", "To view all the players who have auth in the database."],
             ["eval", "To evaluate [code]. Returns the result.", ["code"]],
-            ["resetladder", "To reset all ladders."],
             ["bots", "To turn all bots on or off."]
         ]).finish();
 
         /** MAINTAINER COMMANDS **/
-        Lists.Maintainer = new CommandList("Maintainer Commands", "navy").add([
+        Lists.Maintainer = new CommandList("Maintainer Commands").add([
             ["webcall", "Loads scripts.js from the given [source] (by default, the Scripts repository's scripts.js). Use this when scripts.js is updated. Usually doesn't fully reload plugins.", ["source"]],
             ["updatetiers", "Loads tiers.xml from the given [source] (by default, the Server-Shit repository's tiers.xml).", ["source"]],
             ["updateann", "Sets the server announcement to the file from the given [source] (by default, the Server-Shit repository's announcement.html).", ["source"]],
