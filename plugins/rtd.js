@@ -88,7 +88,9 @@ module.exports.load = function () {
         };
 
         playerEffects[ip].timer = sys.setTimer(function () {
-            playerEffects[ip].active = false;
+            if (playerEffects[ip]) {
+                playerEffects[ip].active = false;
+            }
             timeout();
         }, duration * 1000, false);
         return effect;

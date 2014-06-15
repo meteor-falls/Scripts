@@ -514,8 +514,6 @@
             var user = SESSION.users(src),
                 os = sys.os(src);
 
-            // Done automatically
-            // RTD.takeEffect(src);
             if (sys.numPlayers() < 30 && !user.autokick && !user.muted) {
                 if (os !== "android") {
                     Utils.logoutMessage(Utils.escapeHtml(sys.name(src)), Utils.nameColor(src));
