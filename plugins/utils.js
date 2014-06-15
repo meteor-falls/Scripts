@@ -916,6 +916,19 @@
             watchbot.sendAll(message, watch);
         };
 
+        util.watch.notifyMaintainers = function (message) {
+            var players = sys.playerIds(),
+                len, pi, sess, id;
+            for (pi = 0, len = players.length; pi < len; pi += 1) {
+                id = players[pi];
+                sess = SESSION.users(id);
+
+                if (sess && Config.maintainers.indexOf(sess.originalName) !== -1 && sys.isInChannel(id, watch)) {
+                    watchbot.sendMessage(id, message, watch);
+                }
+            }
+        };
+
         util.mod = {};
         util.mod.kick = function (src) {
             var pids = sys.playerIds(),

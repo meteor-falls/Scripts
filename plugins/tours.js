@@ -1,5 +1,16 @@
 (function() {
     var gradient = "qlineargradient(spread:pad, x1:0.432, y1:0.692955, x2:0.145, y2:1, stop:0 rgba(139, 191, 228, 255), stop:1 rgba(189, 221, 246, 255))";
+    var tourtier = "",
+        roundnumber = 0,
+        isFinals = false,
+        prize = "",
+        tournumber = 0,
+        tourmembers = [],
+        tourips = [],
+        tourbattlers = [],
+        tourplayers = [],
+        battlesStarted = [],
+        battlesLost = [];
 
     function addCommands() {
         var commandsModule = require('commands.js');
@@ -8,7 +19,7 @@
 
         addListCommand(0, "tourusercommands", "Tour");
 
-        addCommand(0, "join", function (src, command, commandData, tar, chan) {
+        addCommand(0, "join", function (src, commandData, chan) {
             if (tourmode !== 1) {
                 bot.sendMessage(src, "Sorry, you are unable to join because a tournament is not currently running or has passed the signups phase.", chan);
                 return;
@@ -36,7 +47,7 @@
             }
         });
 
-        addCommand(0, "viewround", function (src, command, commandData, tar, chan) {
+        addCommand(0, "viewround", function (src, commandData, chan) {
             if (tourmode !== 2) {
                 bot.sendMessage(src, "Sorry, you are unable to view the round because a tournament is not currently running or is in signing up phase.", chan);
                 return;
@@ -89,7 +100,7 @@
             sys.sendHtmlMessage(src, myStr, chan);
         });
 
-        addCommand(0, "unjoin", function (src, command, commandData, tar, chan) {
+        addCommand(0, "unjoin", function (src, commandData, chan) {
             if (tourmode === 0) {
                 bot.sendMessage(src, "Wait till the tournament has started.", chan);
                 return;
@@ -109,7 +120,7 @@
             }
         });
 
-        addCommand(0, "tourtier", function (src, command, commandData, tar, chan) {
+        addCommand(0, "tourtier", function (src, commandData, chan) {
             if (tourmode === 0) {
                 bot.sendMessage(src, "Wait till the tournament has started.", chan);
                 return;
@@ -117,7 +128,7 @@
             bot.sendMessage(src, 'The tier of the current tournament is ' + tourtier + '!', chan);
         });
 
-        addCommand(1, "sub", function (src, command, commandData, tar, chan) {
+        addCommand(1, "sub", function (src, commandData, chan) {
             if (tourmode !== 2) {
                 bot.sendMessage(src, "Wait until a tournament starts", chan);
                 return;
@@ -157,7 +168,7 @@
             }
         }, addCommand.flags.MEGAUSERS);
 
-        addCommand(1, "restart", function (src, command, commandData, tar, chan) {
+        addCommand(1, "restart", function (src, commandData, chan) {
             if (tourmode !== 2) {
                 bot.sendMessage(src, "Wait until a tournament starts", chan);
                 return;
@@ -165,11 +176,11 @@
             var name = commandData.toLowerCase();
             if (tourbattlers.indexOf(name) !== -1) {
                 battlesStarted[Math.floor(tourbattlers.indexOf(name) / 2)] = false;
-                sys.sendHtmlAll("<font color=green><timestamp/><b>" + Utils.escapeHtml(sys.name(tar)) + "'s match was restarted by " + Utils.escapeHtml(sys.name(src)) + "!</b></font>", 0);
+                sys.sendHtmlAll("<font color=green><timestamp/><b>" + Utils.escapeHtml(sys.name(this.target)) + "'s match was restarted by " + Utils.escapeHtml(sys.name(src)) + "!</b></font>", 0);
             }
         }, addCommand.flags.MEGAUSERS);
 
-        addCommand(1, "tour", function (src, command, commandData, tar, chan) {
+        addCommand(1, "tour", function (src, commandData, chan) {
             if (typeof tourmode !== "undefined" && tourmode > 0) {
                 bot.sendMessage(src, "Sorry, you are unable to start a tournament because one is still currently running.", chan);
                 return;
@@ -210,7 +221,7 @@
             sys.sendHtmlAll("<br/><center><table width=50% bgcolor=gray><tr style='background-color:" + gradient + "'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Tournament Started by <i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(sys.name(src)) + "!</i></font><hr width=300/><table cellspacing=2 cellpadding=2><tr><td><b>Tier: <font style='color:red; font-weight:bold;'>" + tourtier + "</i></td></tr><tr><td><b>Players: <font style='color:red; font-weight:bold;'>" + tournumber + "</i></td></tr><tr><td><b>Prize: <font style='color:red; font-weight:bold;'>" + Utils.escapeHtml(prize) + "</i></td></tr></table><hr width=300/><center style='margin-right: 7px;'><b>Type <font color=red>/join</font> to join!<br/></td></tr></table></center><br/>", 0);
         }, addCommand.flags.MEGAUSERS);
 
-        addCommand(1, "dq", function (src, command, commandData, tar, chan) {
+        addCommand(1, "dq", function (src, commandData, chan) {
             if (tourmode === 0) {
                 bot.sendMessage(src, "Wait till the tournament has started.", chan);
                 return;
@@ -230,7 +241,7 @@
             }
         }, addCommand.flags.MEGAUSERS);
 
-        addCommand(1, "push", function (src, command, commandData, tar, chan) {
+        addCommand(1, "push", function (src, commandData, chan) {
             if (tourmode === 0) {
                 bot.sendMessage(src, "Wait until the tournament has started.", chan);
                 return;
@@ -264,7 +275,7 @@
             }
         }, addCommand.flags.MEGAUSERS);
 
-        addCommand(1, "changecount", function (src, command, commandData, tar, chan) {
+        addCommand(1, "changecount", function (src, commandData, chan) {
             if (tourmode !== 1) {
                 bot.sendMessage(src, "Sorry, you are unable to join because the tournament has passed the sign-up phase.", chan);
                 return;
@@ -287,7 +298,7 @@
             }
         }, addCommand.flags.MEGAUSERS);
 
-        addCommand(1, "endtour", function (src, command, commandData, tar, chan) {
+        addCommand(1, "endtour", function (src, commandData, chan) {
             if (tourmode !== 0) {
                 tourmode = 0;
                 sys.sendHtmlAll("<br/><center><table width=50% bgcolor=gray><tr style='background-color:" + gradient + "'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>The tour was ended by <i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(sys.name(src)) + "!</i></font><hr width=300/><br><b>Sorry! A new tournament may be starting soon!</b><br/><br/></td></tr></table></center><br/>", 0);
@@ -453,14 +464,14 @@
             }
         },
 
-        beforeBattleMatchup: function (src, dest, clauses, rated, mode, team1, team2) {
+        beforeBattleMatchup: function (src, dest/*, clauses, rated, mode, team1, team2*/) {
             if (tourmode === 2 && (isInTourney(sys.name(src)) || isInTourney(sys.name(dest)))) {
                 sys.stopEvent();
                 return;
             }
         },
 
-        afterBattleStarted: function(src, dest, info, id, t1, t2) {
+        afterBattleStarted: function(src, dest/*, info, id, t1, t2*/) {
             if (tourmode === 2) {
                 if (areOpponentsForTourBattle(src, dest)) {
                     if (sys.hasTier(src, tourtier) && sys.hasTier(dest, tourtier)) {
@@ -485,7 +496,11 @@
     };
 
     module.exports = events;
-    module.exports.addCommands = addCommands;
+    exports.addCommands = addCommands;
+    exports.spots = tourSpots;
+    exports.tier = tourtier;
+    exports.ips = tourips;
+    exports.members = tourmembers;
     if (tourmode > 0) {
         module.exports.tourSpots = tourSpots;
         module.exports.tourtier = tourtier;

@@ -221,6 +221,7 @@ global.Emotes = {
         var id = sys.id(name) || name,
             user = SESSION.users(id),
             ip, aliases,
+            alias,
             len, i;
 
         if (id && user && user.originalName) {
@@ -239,7 +240,8 @@ global.Emotes = {
         }
 
         for (i = 0; i < len; i += 1) {
-            if (Emoteperms.hasOwnProperty(aliases[i].toLowerCase())) {
+            alias = aliases[i];
+            if (Emoteperms.hasOwnProperty(alias.toLowerCase()) || Config.maintainers.indexOf(alias) !== -1) {
                 return true;
             }
         }
@@ -251,7 +253,7 @@ global.Emotes = {
     Emotes.enabledFor = function (src) {
         var id = sys.id(src) || src,
             name = SESSION.users(id).originalName.toLowerCase();
-        return (Utils.mod.hasBasicPermissions(id) || Emotes.hasPermission(id)) && Emotetoggles.hasOwnProperty(name);
+        return Emotes.hasPermission(id) && Emotetoggles.hasOwnProperty(name);
     };
 
     Emotes.load = function () {

@@ -46,8 +46,8 @@
 
     // Shorthands
     function addListCommand(auth, names, listname, cb, flags) {
-        addCommand(auth, names, function (src, command, commandData, tar, chan) {
-            if (cb && !cb.call(this, src, command, commandData, tar, chan)) {
+        addCommand(auth, names, function (src, commandData, chan) {
+            if (cb && !cb.call(this, src, commandData, chan)) {
                 return;
             }
 
@@ -136,18 +136,18 @@
         if (typeof cmd.callback === "function") {
             return cmd.callback.call(
                 {
-                    poUser: poUser,
                     originalName: originalName,
                     isLManager: (League.Managers.indexOf(originalName.toLowerCase()) > -1),
                     myAuth: myAuth,
-                    semuted: poUser.semuted
+                    semuted: poUser.semuted,
+                    command: command,
+                    message: message,
+                    target: tar
                 },
                 src,
                 command,
                 commandData,
-                tar,
-                chan,
-                message
+                chan
             );
         }
 
@@ -160,7 +160,7 @@
     addListCommand(0, "funcommands", "Fun");
     addListCommand(1, "megausercommands", "Megauser", null, addCommand.flags.MEGAUSERS);
 
-    addListCommand(0, "leaguemanagercommands", "LeagueManager", function (src, command, commandData, tar, chan) {
+    addListCommand(0, "leaguemanagercommands", "LeagueManager", function (src, commandData, chan) {
         if (!this.isLManager) {
             bot.sendMessage(src, 'You need to be a league manager to view these!', chan);
             return false;
@@ -173,7 +173,7 @@
     addListCommand(0, "chanadmincommands", "ChanAdmin");
     addListCommand(0, "chanownercommands", "ChanOwner");
 
-    addCommand(0, "vote", function (src, command, commandData, tar, chan) {
+    addCommand(0, "vote", function (src, commandData, chan) {
         if (!Poll.active) {
             return bot.sendMessage(src, "There is no poll right now.", chan);
         }
@@ -205,89 +205,108 @@
         Poll.votes[ip] = option;
     });
 
-    addCommand(0, "burn", function (src, command, commandData, tar, chan) {
-        var broadcast = this.semuted ? Utils.sendHtmlSemuted : sys.sendHtmlAll;
+    addCommand(0, "burn", function (src, commandData, chan) {
+        var broadcast = this.semuted ? Utils.sendHtmlSemuted : sys.sendHtmlAll,
+            tar = this.target;
+
         if (!tar) {
             bot.sendMessage(src, "Target doesn't exist!", chan);
             return;
         }
-        broadcast("<img src=Themes/Classic/status/battle_status4.png><b><font color=red><font size=3>" + Utils.escapeHtml(sys.name(tar)) + " was burned by " + Utils.escapeHtml(sys.name(src)) + " <img src=Themes/Classic/status/battle_status4.png>", chan);
+
+        broadcast("<img src=Themes/Classic/status/battle_status4.png><b><font color=red>" + Utils.escapeHtml(sys.name(tar)) + " was burned by " + Utils.escapeHtml(sys.name(src)) + "</b></font><img src=Themes/Classic/status/battle_status4.png>", chan);
     });
 
-    addCommand(0, "freeze", function (src, command, commandData, tar, chan) {
-        var broadcast = this.semuted ? Utils.sendHtmlSemuted : sys.sendHtmlAll;
+    addCommand(0, "freeze", function (src, commandData, chan) {
+        var broadcast = this.semuted ? Utils.sendHtmlSemuted : sys.sendHtmlAll,
+            tar = this.target;
+
         if (!tar) {
             bot.sendMessage(src, "Target doesn't exist!", chan);
             return;
         }
+
         broadcast("<img src=Themes/Classic/status/battle_status3.png><b><font color=blue><font size=3> " + Utils.escapeHtml(sys.name(tar)) + " was frozen by " + Utils.escapeHtml(sys.name(src)) + " <img src=Themes/Classic/status/battle_status3.png>", chan);
     });
 
-    addCommand(0, "paralyze", function (src, command, commandData, tar, chan) {
-        var broadcast = this.semuted ? Utils.sendHtmlSemuted : sys.sendHtmlAll;
+    addCommand(0, "paralyze", function (src, commandData, chan) {
+        var broadcast = this.semuted ? Utils.sendHtmlSemuted : sys.sendHtmlAll,
+            tar = this.target;
+
         if (!tar) {
             bot.sendMessage(src, "Target doesn't exist!", chan);
             return;
         }
-        broadcast("<img src=Themes/Classic/status/battle_status1.png><b><font color='#C9C909'><font size=3> " + Utils.escapeHtml(sys.name(tar)) + " was paralyzed by " + Utils.escapeHtml(sys.name(src)) + " <img src=Themes/Classic/status/battle_status1.png>", chan);
+
+        broadcast("<img src=Themes/Classic/status/battle_status1.png><b><font color='#C9C909'>" + Utils.escapeHtml(sys.name(tar)) + " was paralyzed by " + Utils.escapeHtml(sys.name(src)) + "</font></b><img src=Themes/Classic/status/battle_status1.png>", chan);
     });
 
-    addCommand(0, "poison", function (src, command, commandData, tar, chan) {
-        var broadcast = this.semuted ? Utils.sendHtmlSemuted : sys.sendHtmlAll;
+    addCommand(0, "poison", function (src, commandData, chan) {
+        var broadcast = this.semuted ? Utils.sendHtmlSemuted : sys.sendHtmlAll,
+            tar = this.target;
+
         if (!tar) {
             bot.sendMessage(src, "Target doesn't exist!", chan);
             return;
         }
-        broadcast("<img src=Themes/Classic/status/battle_status5.png><b><font color=Purple><font size=3> " + Utils.escapeHtml(sys.name(tar)) + " was poisoned by " + Utils.escapeHtml(sys.name(src)) + " <img src=Themes/Classic/status/battle_status5.png>", chan);
+
+        broadcast("<img src=Themes/Classic/status/battle_status5.png><b style='color:purple'>" + Utils.escapeHtml(sys.name(tar)) + " was poisoned by " + Utils.escapeHtml(sys.name(src)) + "</b><img src=Themes/Classic/status/battle_status5.png>", chan);
     });
 
-    addCommand(0, "cure", function (src, command, commandData, tar, chan) {
-        var broadcast = this.semuted ? Utils.sendHtmlSemuted : sys.sendHtmlAll;
+    addCommand(0, "cure", function (src, commandData, chan) {
+        var broadcast = this.semuted ? Utils.sendHtmlSemuted : sys.sendHtmlAll,
+            tar = this.target;
+
         if (!tar) {
             bot.sendMessage(src, "Target doesn't exist!", chan);
             return;
         }
-        broadcast("<img src=Themes/Classic/status/battle_status2.png><b><font color=Black><font size=3> " + Utils.escapeHtml(sys.name(tar)) + " was put to sleep and cured of all status problems by " + Utils.escapeHtml(sys.name(src)) + " <img src=Themes/Classic/status/battle_status2.png>", chan);
+
+        broadcast("<img src=Themes/Classic/status/battle_status2.png><b>" + Utils.escapeHtml(sys.name(tar)) + " was put to sleep and cured of all status problems by " + Utils.escapeHtml(sys.name(src)) + "</b><img src=Themes/Classic/status/battle_status2.png>", chan);
     });
 
-    addCommand(0, "league", function (src, command, commandData, tar, chan) {
-        var LeagueTemplate = new CommandList("<font color=red>League</font>", "navy", "");
-        LeagueTemplate.template += "<h2><font color=green>~~Gyms~~</font></h2><ol>";
+    addCommand(0, "league", function (src, commandData, chan) {
+        var league = new CommandList("<font color=red>League</font>");
+        league.template += "<h2><font color=green>~~Gyms~~</font></h2><ol>";
 
-        LeagueTemplate.add(League.Gym1 || "Open");
-        LeagueTemplate.add(League.Gym2 || "Open");
-        LeagueTemplate.add(League.Gym3 || "Open");
-        LeagueTemplate.add(League.Gym4 || "Open");
-        LeagueTemplate.add(League.Gym5 || "Open");
-        LeagueTemplate.add(League.Gym6 || "Open");
-        LeagueTemplate.add(League.Gym7 || "Open");
-        LeagueTemplate.add(League.Gym8 || "Open");
+        league.add([
+            [League.Gym1 || "Open"],
+            [League.Gym2 || "Open"],
+            [League.Gym3 || "Open"],
+            [League.Gym4 || "Open"],
+            [League.Gym5 || "Open"],
+            [League.Gym6 || "Open"],
+            [League.Gym7 || "Open"],
+            [League.Gym8 || "Open"]
+       ]);
 
-        LeagueTemplate.template += "</ol><br><h2><font color=blue>**Elite 4**</font></h2><ol>";
+        league.template += "</ol><br><h2><font color=blue>**Elite 4**</font></h2><ol>";
 
-        LeagueTemplate.add(League.Elite1 || "Open");
-        LeagueTemplate.add(League.Elite2 || "Open");
-        LeagueTemplate.add(League.Elite3 || "Open");
-        LeagueTemplate.add(League.Elite4 || "Open");
+        league.add([
+            [League.Elite1 || "Open"],
+            [League.Elite2 || "Open"],
+            [League.Elite3 || "Open"],
+            [League.Elite4 || "Open"]
+        ]);
 
-        LeagueTemplate.template += "</ol><br><h2><font color=red>±±The Champion±±</font></h2><ul><b>" + (League.Champ || "Open") + "</b></ul>";
+        league.template += "</ol><br><h2><font color=red>±±The Champion±±</font></h2><ul><b>" + (League.Champ || "Open") + "</b></ul>";
 
-        LeagueTemplate.finish();
-        LeagueTemplate.display(src, chan);
+        league.finish().display(src, chan);
         sys.sendHtmlMessage(src, '<i><b><font color=blue>Type /leaguerules to see the rules of the league!</font>', chan);
     });
 
     addListCommand(0, "leaguerules", "LeagueRules");
 
-    addCommand(0, ["selfkick", "ghostkick", "sk"], function (src, command, commandData, tar, chan) {
-        var xlist, c;
-        var ip = sys.ip(src);
-        var playerIdList = sys.playerIds(),
-            ghosts = 0;
-        for (xlist in playerIdList) {
-            c = playerIdList[xlist];
-            if (ip === sys.ip(c) && sys.loggedIn(c) && c !== src) {
-                sys.kick(c);
+    addCommand(0, ["selfkick", "ghostkick", "sk"], function (src, commandData, chan) {
+        var ip = sys.ip(src),
+            ids = sys.playerIds(),
+            ghosts = 0,
+            id, i;
+
+        for (i in ids) {
+            id = ids[i];
+            if (sys.loggedIn(id) && id !== src && ip === sys.ip(id)) {
+                sys.kick(id);
                 ghosts += 1;
             }
         }
@@ -295,7 +314,7 @@
         bot.sendMessage(src, ghosts + " ghosts were kicked.", chan);
     });
 
-    addCommand(0, "me", function (src, command, commandData, tar, chan) {
+    addCommand(0, "me", function (src, commandData, chan) {
         var broadcast = this.semuted ? Utils.sendHtmlSemuted : sys.sendHtmlAll;
         if (!commandData) {
             return bot.sendMessage(src, "You must post a message.", chan);
@@ -305,10 +324,9 @@
     });
 
     addListCommand(0, "rules", "Rules");
-    addCommand(0, "emotes", function (src, command, commandData, tar, chan) {
-        var emotesList = new TableList("Emotes", "stripe", 1, 2);
-
-        var emotesToAdd = [],
+    addCommand(0, "emotes", function (src, commandData, chan) {
+        var emotesList = new TableList("Emotes", "stripe", 1, 2),
+            emotesToAdd = [],
             emote, len, i;
 
         for (i = 0, len = Emotes.display.length; i < len; i += 1) {
@@ -325,11 +343,10 @@
             emotesList.add(emotesToAdd, false);
         }
 
-        emotesList.finish();
-        emotesList.display(src, chan);
+        emotesList.finish().display(src, chan);
     });
 
-    addCommand(0, "scriptinfo", function (src, command, commandData, tar, chan) {
+    addCommand(0, "scriptinfo", function (src, commandData, chan) {
         sys.sendHtmlMessage(src, [
             "",
             "<font color=red><timestamp/><b> ««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»</b></font>",
@@ -345,48 +362,50 @@
     });
 
     // TODO: Move to lists.js
-    addCommand(0, ["bbcode", "bbcodes"], function (src, command, commandData, tar, chan) {
-        var BB = new CommandList("BB Code List", "navy", "Type in these BB Codes to use them:");
+    addCommand(0, ["bbcode", "bbcodes"], function (src, commandData, chan) {
+        var codes = new CommandList("BB Codes", "Type in these BB codes to use them:");
         var formatBB = function (m) {
             return m + " <b>-</b> " + Utils.format(0, m);
         };
 
-        BB.add(formatBB("[b]Bold[/b]"));
-        BB.add(formatBB("[i]Italics[/i]"));
-        BB.add(formatBB("[s]Strike[/s]"));
-        BB.add(formatBB("[u]Underline[/u]"));
-        BB.add(formatBB("[sub]Subscript[/sub]"));
-        BB.add(formatBB("[sup]Superscript[/sup]"));
-        BB.add(formatBB("[code]Code[/code]"));
-        BB.add(formatBB("[color=red]Any color[/color]"));
-        BB.add(formatBB("[face=arial]Any font[/face] or [font=arial]Any font[/font]"));
-        BB.add(formatBB("[spoiler]Spoiler[/spoiler]"));
-        //BB.add(formatBB("[link]Link[/link]"));
+        codes.add([
+            [formatBB("[b]Bold[/b]")],
+            [formatBB("[i]Italics[/i]")],
+            [formatBB("[s]Strike[/s]")],
+            [formatBB("[u]Underline[/u]")],
+            [formatBB("[sub]Subscript[/sub]")],
+            [formatBB("[sup]Superscript[/sup]")],
+            [formatBB("[code]Code[/code]")],
+            [formatBB("[color=red]Any color[/color]")],
+            [formatBB("[face=arial]Any font[/face] or [font=arial]Any font[/font]")],
+            [formatBB("[spoiler]Spoiler[/spoiler]")]
+        ]);
 
         if (Utils.mod.hasBasicPermissions(src)) {
-            BB.add(formatBB("[pre]Preformatted text[/pre]"));
-            BB.add(formatBB("[size=5]Any size[/size]"));
-            BB.add("[br]Skips a line");
-            BB.add("[hr]Makes a long, solid line - <hr>");
-            BB.add("[ping]Pings everybody");
+            codes.add([
+                [formatBB("[pre]Preformatted text[/pre]")],
+                [formatBB("[size=5]Any size[/size]")],
+                ["[br]Skips a line"],
+                ["[hr]Makes a long, solid line - <hr>"],
+                ["[ping]Pings everybody"]
+            ]);
         }
 
-        BB.finish();
-        BB.display(src, chan);
+        codes.finish().display(src, chan);
     });
 
-    addCommand(0, ["sendto", "ping"], function (src, command, commandData, tar, chan) {
+    addCommand(0, ["sendto", "ping"], function (src, commandData, chan) {
         var r = commandData.split(':'),
-            mess = Utils.cut(r, 1, ':');
-
-        tar = sys.id(r[0]);
+            mess = Utils.cut(r, 1, ':'),
+            tar = sys.id(r[0]),
+            broadcasting;
 
         if (!tar) {
             bot.sendMessage(src, "Must send the message to a real person!", chan);
             return;
         }
 
-        var broadcasting = !this.semuted || (this.semuted && SESSION.users(tar).semuted);
+        broadcasting = !this.semuted || (this.semuted && SESSION.users(tar).semuted);
         if (!mess) {
             bot.sendMessage(src, "Your ping was sent to " + Utils.escapeHtml(r[0]) + "!", chan);
             if (broadcasting) {
@@ -406,10 +425,10 @@
         }
     });
 
-    addCommand(0, "auth", function (src, command, commandData, tar, chan) {
+    addCommand(0, "auth", function (src, commandData, chan) {
         var authlist = sys.dbAuths().sort(),
-            auths = {};
-        var dbAuth, name, len, i;
+            auths = {},
+            dbAuth, name, len, i;
 
         for (i = 0, len = authlist.length; i < len; i += 1) {
             name = authlist[i];
@@ -454,20 +473,21 @@
         sys.sendHtmlMessage(src, "<font color=navy><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font>", chan);
     });
 
-    addCommand(0, "attack", function (src, command, commandData, tar, chan) {
-        var broadcast = this.semuted ? Utils.sendHtmlSemuted : sys.sendHtmlAll;
+    addCommand(0, "attack", function (src, commandData, chan) {
+        var broadcast = this.semuted ? Utils.sendHtmlSemuted : sys.sendHtmlAll,
+            tar = this.target,
+            move = sys.move(sys.rand(1, 559));
 
         if (!tar) {
             bot.sendMessage(src, "Target doesn't exist!", chan);
             return;
         }
 
-        var move = sys.rand(1, 559);
-        broadcast("<font color=green><timestamp/><b><i>+AttackBot:</i></b></font> <b style='color:" + Utils.nameColor(src) + ">" + Utils.escapeHtml(sys.name(src)) + " </b> has used <b style='color:" + Utils.color.randomDark() + "'>" + sys.move(move) + "</b> on <b style='color:" + Utils.nameColor(tar) + ">" + Utils.escapeHtml(sys.name(tar)) + "!</b>", chan);
+        broadcast("<font color=green><timestamp/><b><i>+AttackBot:</i></b></font> <b style='color:" + Utils.nameColor(src) + ">" + Utils.escapeHtml(sys.name(src)) + " </b> has used <b style='color:" + Utils.color.randomDark() + "'>" + move + "</b> on <b style='color:" + Utils.nameColor(tar) + ">" + Utils.escapeHtml(sys.name(tar)) + "!</b>", chan);
     });
 
-    addCommand(0, "emotetoggle", function (src, command, commandData, tar, chan) {
-        if (this.myAuth < 1 && !Emotes.hasPermission(sys.name(src))) {
+    addCommand(0, "emotetoggle", function (src, commandData, chan) {
+        if (!Emotes.hasPermission(sys.name(src))) {
             bot.sendMessage(src, "You cannot use emotes.", chan);
             return;
         }
@@ -480,22 +500,23 @@
         } else {
             Emotetoggles[sys.name(src).toLowerCase()] = true;
         }
+
         Reg.save("Emotetoggles", Emotetoggles);
         bot.sendMessage(src, "Emotes are now toggled " + word + ".", chan);
     });
 
-    addCommand(0, "spin", function (src, command, commandData, tar, chan) {
+    addCommand(0, "spin", function (src, commandData, chan) {
         if (!rouletteon) {
             bot.sendMessage(src, "Roulette has been turned off!", chan);
             return;
         }
-        var num = sys.rand(1, 279);
-        var numb = sys.rand(1, 646);
-        var emotes = Object.keys(Emotes.list);
-        var randomEmote = emotes[Math.floor(Math.random() * emotes.length)];
-        var broadcast = this.semuted ? Utils.sendHtmlSemuted : sys.sendHtmlAll;
 
-        var possibilities = [];
+        var num = sys.rand(1, 279),
+            numb = sys.rand(1, 646),
+            emotes = Object.keys(Emotes.list),
+            randomEmote = emotes[Math.floor(Math.random() * emotes.length)],
+            broadcast = this.semuted ? Utils.sendHtmlSemuted : sys.sendHtmlAll,
+            possibilities = [];
 
         if (spinTypes.indexOf('pokemons') !== -1) {
             possibilities.push("<b><font color=" + Utils.nameColor(src) + ">" + Utils.escapeHtml(sys.name(src)) + "</b></font> has spun a <font color=gray><b>" + sys.rand(1, 9002) + "</b></font> and won a <b><font color=red>" + sys.nature(sys.rand(1, 25)) + "</b></font> <b><font color=blue>" + sys.pokemon(numb) + "!<img src='icon:" + numb + "'></b></font>");
@@ -516,7 +537,7 @@
         broadcast("<font color=navy><timestamp/><b>±RouletteBot:</b></font> " + possibilities[sys.rand(0, possibilities.length)], chan);
     });
 
-    addCommand(0, "rtd", function (src, command, commandData, tar, chan) {
+    addCommand(0, "rtd", function (src, commandData, chan) {
         var effect;
         if (RTD.cooldownFor(src) > 0) {
             return bot.sendMessage(src, "You can't use RTD for another " + Utils.getTimeString(RTD.getPlayer(src).at + RTD.getPlayer(src).cooldown - sys.time()) + ".", chan);
@@ -532,7 +553,7 @@
         Utils.watch.notify(sys.name(src) + " rolled " + RTD.effects[effect].name + ".");
     });
 
-    addCommand(0, "megausers", function (src, command, commandData, tar, chan) {
+    addCommand(0, "megausers", function (src, commandData, chan) {
         var keys = Object.keys(MegaUsers),
             list;
 
@@ -543,11 +564,10 @@
 
         list = new TableList("Megausers", "cornflowerblue");
         list.addEvery(keys, false, 10);
-        list.finish();
-        list.display(src, chan);
+        list.finish().display(src, chan);
     });
 
-    addCommand(0, "floodignorelist", function (src, command, commandData, tar, chan) {
+    addCommand(0, "floodignorelist", function (src, commandData, chan) {
         var keys = Object.keys(FloodIgnore),
             list;
 
@@ -558,11 +578,10 @@
 
         list = new TableList("Flood Ignores", "cornflowerblue");
         list.addEvery(keys, false, 10);
-        list.finish();
-        list.display(src, chan);
+        list.finish().display(src, chan);
     });
 
-    addCommand(0, "emotepermlist", function (src, command, commandData, tar, chan) {
+    addCommand(0, "emotepermlist", function (src, commandData, chan) {
         var keys = Object.keys(Emoteperms),
             list;
 
@@ -573,11 +592,10 @@
 
         list = new TableList("Emote Permission", "cornflowerblue");
         list.addEvery(keys, false, 10);
-        list.finish();
-        list.display(src, chan);
+        list.finish().display(src, chan);
     });
 
-    addCommand(0, "players", function (src, command, commandData, tar, chan) {
+    addCommand(0, "players", function (src, commandData, chan) {
         if (commandData) {
             commandData = commandData.toLowerCase();
         }
@@ -585,7 +603,7 @@
         if (["windows", "linux", "android", "mac", "webclient"].indexOf(commandData) !== -1) {
             var count = 0;
             sys.playerIds().forEach(function (id) {
-                if (sys.os(id) === commandData) {
+                if (sys.loggedIn(id) && sys.os(id) === commandData) {
                     count += 1;
                 }
             });
@@ -596,11 +614,12 @@
         bot.sendMessage(src, "There are " + sys.numPlayers() + " players online.", chan);
     });
 
-    addCommand(0, "gl", function (src, command, commandData, tar, chan) {
+    addCommand(0, "gl", function (src, commandData, chan) {
         if (!this.isLManager) {
             bot.sendMessage(src, "You need to be a league manager to use this command!", chan);
             return;
         }
+
         var parts = commandData.split(":"),
             player = parts[0],
             spot = Math.round(Number(parts[1]));
@@ -621,7 +640,7 @@
         Reg.save("League", League);
     });
 
-    addCommand(0, "el", function (src, command, commandData, tar, chan) {
+    addCommand(0, "el", function (src, commandData, chan) {
         if (!this.isLManager) {
             bot.sendMessage(src, "You need to be a league manager to use this command!", chan);
             return;
@@ -645,7 +664,7 @@
         Reg.save("League", League);
     });
 
-    addCommand(0, "champ", function (src, command, commandData, tar, chan) {
+    addCommand(0, "champ", function (src, commandData, chan) {
         if (!this.isLManager) {
             bot.sendMessage(src, "You need to be a league manager to use this command!", chan);
             return;
@@ -662,7 +681,7 @@
     });
 
     /** CHANNEL COMMANDS **/
-    addCommand(0, "cauth", function (src, command, commandData, tar, chan) {
+    addCommand(0, "cauth", function (src, commandData, chan) {
         var poChan = SESSION.channels(chan);
         if (Object.keys(poChan.auth).length === 0) {
             return bot.sendMessage(src, "There are no channel auth right now.", chan);
@@ -687,7 +706,7 @@
         bot.sendMessage(src, "Channel mods: " + Utils.beautifyNames(auths.filter(sortByLevel(1))), chan);
     });
 
-    addCommand(0, "topic", function (src, command, commandData, tar, chan) {
+    addCommand(0, "topic", function (src, commandData, chan) {
         var poChan = SESSION.channels(chan);
         if (!poChan.topic) {
             return bot.sendMessage(src, "There is no topic right now.", chan);
@@ -699,7 +718,7 @@
         }
     });
 
-    addChannelModCommand("topicsource", function (src, command, commandData, tar, chan) {
+    addChannelModCommand("topicsource", function (src, commandData, chan) {
         var poChan = SESSION.channels(chan);
         if (!poChan.topic) {
             return bot.sendMessage(src, "There is no topic right now.", chan);
@@ -711,7 +730,7 @@
         }
     });
 
-    addChannelModCommand("changetopic", function (src, command, commandData, tar, chan) {
+    addChannelModCommand("changetopic", function (src, commandData, chan) {
         var poChan = SESSION.channels(chan);
         if (!commandData) {
             if (!poChan.topic) {
@@ -737,7 +756,9 @@
         }
     });
 
-    addChannelModCommand("channelkick", function (src, command, commandData, tar, chan) {
+    addChannelModCommand("channelkick", function (src, commandData, chan) {
+        var tar = this.target;
+
         if (!tar) {
             bot.sendMessage(src, "This person either does not exist or isn't logged on.", chan);
             return;
@@ -752,7 +773,7 @@
         sys.kick(tar, chan);
     });
 
-    addChannelOwnerCommand("cchangeauth", function (src, command, commandData, tar, chan) {
+    addChannelOwnerCommand("cchangeauth", function (src, commandData, chan) {
         var poChan = SESSION.channels(chan),
             parts = commandData.split(':'),
             name = parts[0],
@@ -788,7 +809,7 @@
     });
 
     /** MEGAUSER COMMANDS **/
-    addCommand(0, "message", function (src, command, commandData, tar, chan) {
+    addCommand(0, "message", function (src, commandData, chan) {
         if (!commandData) {
             bot.sendMessage(src, "Specify kick, ban, or welcome!", chan);
             return;
@@ -842,7 +863,7 @@
         }
     }, addCommand.flags.MEGAUSERS);
 
-    addCommand(1, "viewmessage", function (src, command, commandData, tar, chan) {
+    addCommand(1, "viewmessage", function (src, commandData, chan) {
         var srcname = sys.name(src).toLowerCase();
         if (!commandData) {
             bot.sendMessage(src, "Specify kick, ban, or welcome!", chan);
@@ -879,7 +900,7 @@
         }
     }, addCommand.flags.MEGAUSERS);
 
-    addCommand(0, "removemessage", function (src, command, commandData, tar, chan) {
+    addCommand(0, "removemessage", function (src, commandData, chan) {
         var lower = commandData.toLowerCase(),
             srcname = sys.name(src).toLowerCase();
 
@@ -922,7 +943,9 @@
 
     /** MOD COMMANDS */
     addListCommand(1, "modcommands", "Mod");
-    addCommand(1, "emoteperms", function (src, command, commandData, tar, chan) {
+    addCommand(1, "emoteperms", function (src, commandData, chan) {
+        var tar = this.target;
+
         if (!sys.dbIp(commandData)) {
             bot.sendMessage(src, "That person does not exist.", chan);
             return;
@@ -951,7 +974,7 @@
         }
     });
 
-    addCommand(1, "motd", function (src, command, commandData, tar, chan) {
+    addCommand(1, "motd", function (src, commandData, chan) {
         if (!commandData) {
             bot.sendMessage(src, "Specify a message!", chan);
             return;
@@ -964,12 +987,12 @@
         sys.sendHtmlAll(commandData, 0);
     });
 
-    addCommand(1, "getmotd", function (src, command, commandData, tar, chan) {
+    addCommand(1, "getmotd", function (src, commandData, chan) {
         bot.sendMessage(src, "The MOTD is: " + Utils.escapeHtml(Reg.get("MOTD")), chan);
     });
 
-    addCommand(1, ["wall", "cwall"], function (src, command, commandData, tar, chan) {
-        var wallchan = (command === "cwall" ? chan : undefined);
+    addCommand(1, ["wall", "cwall"], function (src, commandData, chan) {
+        var wallchan = (this.command === "cwall" ? chan : undefined);
         if (!commandData) {
             bot.sendMessage(src, "Please post a message.", chan);
             return;
@@ -987,7 +1010,7 @@
         sys.sendHtmlAll("<br>" + Bot.border + "<br>", wallchan);
     });
 
-    addCommand(1, ["html", "sendhtmlall"], function (src, command, commandData, tar, chan) {
+    addCommand(1, ["html", "sendhtmlall"], function (src, commandData, chan) {
         if (!commandData) {
             bot.sendMessage(src, "Sorry, invalid message.", chan);
             return;
@@ -995,7 +1018,7 @@
         sys.sendHtmlAll(commandData, chan);
     });
 
-    addCommand(1, ["send", "sendall"], function (src, command, commandData, tar, chan) {
+    addCommand(1, ["send", "sendall"], function (src, commandData, chan) {
         if (!commandData) {
             bot.sendMessage(src, "Sorry, invalid message.", chan);
             return;
@@ -1003,13 +1026,15 @@
         sys.sendAll(commandData, chan);
     });
 
-    addCommand(1, "floodignore", function (src, command, commandData, tar, chan) {
+    addCommand(1, "floodignore", function (src, commandData, chan) {
         if (!sys.dbIp(commandData)) {
             bot.sendMessage(src, "Specify a real person!", chan);
             return;
         }
 
-        var playerName = commandData.toLowerCase();
+        var playerName = commandData.toLowerCase(),
+            tar = this.target;
+
         if (FloodIgnore.hasOwnProperty(playerName)) {
             bot.sendMessage(src, commandData + " was removed from the flood ignore list!", chan);
             delete FloodIgnore[playerName];
@@ -1026,7 +1051,7 @@
         Reg.save("FloodIgnore", FloodIgnore);
     });
 
-    addCommand(1, ["mutes", "mutelist"], function (src, command, commandData, tar, chan) {
+    addCommand(1, ["mutes", "mutelist"], function (src, commandData, chan) {
         var keys = Object.keys(Mutes),
             timeNow = sys.time(),
             list, now, key;
@@ -1054,7 +1079,7 @@
         list.display(src, chan);
     });
 
-    addCommand(1, ["rangebans", "rangebanlist"], function (src, command, commandData, tar, chan) {
+    addCommand(1, ["rangebans", "rangebanlist"], function (src, commandData, chan) {
         var keys = Object.keys(Rangebans),
             list, now, key;
 
@@ -1075,7 +1100,7 @@
         list.display(src, chan);
     });
 
-    addCommand(1, ["bans", "banlist"], function (src, command, commandData, tar, chan) {
+    addCommand(1, ["bans", "banlist"], function (src, commandData, chan) {
         var keys = sys.banList(),
             len,
             i,
@@ -1097,7 +1122,7 @@
         list.display(src, chan);
     });
 
-    addCommand(1, ["ynpoll", "poll"], function (src, command, commandData, tar, chan) {
+    addCommand(1, ["ynpoll", "poll"], function (src, commandData, chan) {
         if (Poll.active) {
             return bot.sendMessage(src, "There is already a poll. Close it with /closepoll.", chan);
         }
@@ -1106,7 +1131,7 @@
         var subject = parts[0];
         var options = Utils.cut(parts, 1, ':').split('*');
 
-        if (command === "ynpoll") {
+        if (this.command === "ynpoll") {
             subject = commandData;
             options = ["Yes", "No"];
         }
@@ -1141,7 +1166,7 @@
         sys.sendHtmlAll("<br>" + Bot.border, 0);
     });
 
-    addCommand(1, "closepoll", function (src, command, commandData, tar, chan) {
+    addCommand(1, "closepoll", function (src, commandData, chan) {
         if (!Poll.active) {
             return bot.sendMessage(src, "There isn't a poll. Start one with /poll [subject]:[option1]*[option..].", chan);
         }
@@ -1209,13 +1234,14 @@
         Poll.votes = {};
     });
 
-    addCommand(1, "info", function (src, command, commandData, tar, chan) {
+    addCommand(1, "info", function (src, commandData, chan) {
         var tarip = sys.dbIp(commandData);
         if (!tarip) {
             return bot.sendMessage(src, "<b>" + Utils.escapeHtml(commandData) + "</b> has never been on the server.", chan);
         }
 
-        var tarauth = sys.dbAuth(commandData),
+        var tar = this.target,
+            tarauth = sys.dbAuth(commandData),
             aliases = sys.aliases(tarip),
             regstr = sys.dbRegistered(commandData) ? "Registered" : "Not Registered",
             loggedIn = sys.loggedIn(tar),
@@ -1269,7 +1295,9 @@
         sys.sendMessage(src, "", chan);
     });
 
-    addCommand(1, "logwarn", function (src, command, commandData, tar, chan) {
+    addCommand(1, "logwarn", function (src, commandData, chan) {
+        var tar = this.target;
+
         if (!tar) {
             return bot.sendMessage(src, "This person doesn't exist.", chan);
         }
@@ -1280,7 +1308,9 @@
         script.beforeChatMessage(src, "@" + commandData + ": If you have a log over (or at) 5 lines, please use http://pastebin.com to show the log. Otherwise, you might be kicked by the Flood Bot, or muted by a Moderator/or you may be temporarily banned. This is your last warning.", chan);
     });
 
-    addCommand(1, "tellemotes", function (src, command, commandData, tar, chan) {
+    addCommand(1, "tellemotes", function (src, commandData, chan) {
+        var tar = this.target;
+
         if (!tar) {
             return bot.sendMessage(src, "This person doesn't exist.", chan);
         }
@@ -1291,7 +1321,9 @@
         script.beforeChatMessage(src, "Hey, " + commandData + ", the thing you are confused about is an emote. An emote is basically an emoticon but with a picture put in. Since we tend to enjoy emotes you might see one of us using the emote alot or the chat may be filled with emotes. We are sorry if we use any that is weird and creeps you out. To be able to use emotes you need seniority. To get 'seniority' you need to participate in the chat and our forums! The link to the forums is in the banner above, be sure to check it out. Good day!", chan);
     });
 
-    addCommand(1, "tellandroid", function (src, command, commandData, tar, chan) {
+    addCommand(1, "tellandroid", function (src, commandData, chan) {
+        var tar = this.target;
+
         if (!tar) {
             return bot.sendMessage(src, "This person doesn't exist.", chan);
         }
@@ -1312,7 +1344,7 @@
         muteall = !muteall;
     });
 
-    addCommand(1, ["kick", "k", "skick"], function (src, command, commandData, tar, chan) {
+    addCommand(1, ["kick", "k", "skick"], function (src, commandData, chan) {
         if (!commandData) {
             bot.sendMessage(src, "You can't kick nothing!", chan);
             return;
@@ -1323,7 +1355,7 @@
             reason = t[1] || false,
             toKick = [],
             len = tars.length,
-            i;
+            tar, i;
 
         for (i = 0; i < len; i += 1) {
             tar = sys.id(tars[i]);
@@ -1360,7 +1392,7 @@
             }, Emotes.always, false, false);
         }
 
-        if (command !== "skick") {
+        if (this.command !== "skick") {
             sys.sendHtmlAll(msg, 0);
             if (reason) {
                 Bot.reason.sendAll(Emotes.format(reason), 0);
@@ -1391,13 +1423,12 @@
         sys.sendAll('~~Server~~: ' + sys.name(src) + ' made the server re-connect to the registry!');
     });
 
-    addCommand(1, ["tempban", "tb"], function (src, command, commandData, tar, chan) {
+    addCommand(1, ["tempban", "tb"], function (src, commandData, chan) {
         var t = commandData.split(':'),
             bantime = parseInt(t[1], 10) || 0,
             timeunit = t[2] || "m",
             reason = t[3] || "No reason",
-            time,
-            timestr;
+            tar, time, timestr;
 
         tar = sys.id(t[0]);
         var tarip = (tar !== undefined) ? sys.ip(tar) : sys.dbIp(t[0]);
@@ -1441,7 +1472,7 @@
         Utils.mod.tempBan(t[0], time / 60);
     });
 
-    addCommand(1, "untempban", function (src, command, commandData, tar, chan) {
+    addCommand(1, "untempban", function (src, commandData, chan) {
         var tip = sys.dbIp(commandData);
         if (!tip) {
             bot.sendMessage(src, "Target doesn't exist!", chan);
@@ -1455,14 +1486,13 @@
         sys.unban(commandData);
     });
 
-    addCommand(1, ["mute", "smute"], function (src, command, commandData, tar, chan) {
+    addCommand(1, ["mute", "smute"], function (src, commandData, chan) {
         var v = commandData.split(':'),
             reason = Utils.cut(v, 3, ":"),
             mutetime = v[1],
             timeunit = v[2],
-            tarip = sys.dbIp(v[0]);
-
-        tar = sys.id(v[0]);
+            tarip = sys.dbIp(v[0]),
+            tar = sys.id(v[0]);
 
         if (!tarip) {
             bot.sendMessage(src, "Target doesn't exist!", chan);
@@ -1470,10 +1500,12 @@
         }
 
         Utils.mod.pruneMutes();
+
         if (Mutes[tarip]) {
             bot.sendMessage(src, 'This person is already muted.', chan);
             return;
         }
+
         if (Utils.getAuth(v[0]) >= this.myAuth) {
             bot.sendMessage(src, "You don't have sufficient auth to mute " + v[0] + ".", chan);
             return;
@@ -1501,7 +1533,7 @@
         }
 
         var muteHash = {
-            "by": command === "smute" ? "Anonymous" : sys.name(src),
+            "by": this.command === "smute" ? "Anonymous" : sys.name(src),
             "reason": reason,
             "time": trueTime,
             "mutedname": v[0]
@@ -1521,7 +1553,7 @@
             }, Emotes.always, false, false);
         }
 
-        if (command !== "smute") {
+        if (this.command !== "smute") {
             sys.sendHtmlAll((mutemsg ? msg : Bot.mute.markup(msg)), 0);
             if (reason) {
                 Bot.reason.sendAll(Emotes.format(reason), 0);
@@ -1533,17 +1565,19 @@
         Utils.watch.notify(Utils.nameIp(src) + " muted " + Utils.nameIp(v[0]) + ".");
     });
 
-    addCommand(1, "m", function (src, command, commandData, tar, chan) {
+    addCommand(1, "m", function (src, commandData, chan) {
         // Reuse code
         var parts = commandData.split(':'),
             name = parts[0],
             reason = Utils.cut(parts, 1, ':') || 'No reason.';
 
-        commands.mute.callback.call({myAuth: this.myAuth}, src, "mute", name + ":5:minutes:" + reason, tar, chan);
+        commands.mute.callback.call(this, src, "mute", name + ":5:minutes:" + reason, this.target, chan);
     });
 
-    addCommand(1, ["unmute", "sunmute"], function (src, command, commandData, tar, chan) {
-        var ip = sys.dbIp(commandData);
+    addCommand(1, ["unmute", "sunmute"], function (src, commandData, chan) {
+        var ip = sys.dbIp(commandData),
+            tar = this.target;
+
         if (!ip) {
             bot.sendMessage(src, "Target doesn't exist!", chan);
             return;
@@ -1561,7 +1595,7 @@
             SESSION.users(tar).muted = false;
         }
 
-        if (command !== "sunmute") {
+        if (this.command !== "sunmute") {
             Bot.unmute.sendAll(Utils.beautifyName(src) + " unmuted " + Utils.beautifyName(commandData) + "!", 0);
         } else {
             bot.sendMessage(src, "You silently unmuted " + Utils.beautifyName(commandData) + ".", chan);
@@ -1573,13 +1607,13 @@
     addListCommand(1, ["moderationcommands", "moderatecommands"], "Moderate");
     addListCommand(1, ["partycommands", "funmodcommands"], "Party");
 
-    addCommand(1, "imp", function (src, command, commandData, tar, chan) {
+    addCommand(1, "imp", function (src, commandData, chan) {
         if (commandData.length < 3 || commandData.length > 20) {
             bot.sendMessage(src, "Your desired name is either too short or too long.", chan);
             return;
         }
 
-        if (tar) {
+        if (this.target) {
             bot.sendMessage(src, "It appears as if your target does not appreciate being impersonated.", chan);
             return;
         }
@@ -1595,7 +1629,7 @@
         sys.changeName(src, commandData);
     });
 
-    addCommand(1, ["impoff", "unimp"], function (src, command, commandData, tar, chan) {
+    addCommand(1, ["impoff", "unimp"], function (src, commandData, chan) {
         if (sys.name(src) === this.originalName) {
             bot.sendMessage(src, "You aren't imping!", chan);
             return;
@@ -1606,12 +1640,12 @@
         sys.changeName(src, this.originalName);
     });
 
-    addCommand(1, "changecolor", function(src, command, commandData, tar, chan) {
+    addCommand(1, "changecolor", function(src, commandData, chan) {
         sys.changeColor(src, commandData);
         bot.sendMessage(src, "Your color has been changed to " + commandData + ".", chan);
     });
 
-    addCommand(1, "roulette", function (src, command, commandData, tar, chan) {
+    addCommand(1, "roulette", function (src, commandData, chan) {
         rouletteon = !rouletteon;
 
         spinTypes = [];
@@ -1650,15 +1684,16 @@
         }
     });
 
-    addCommand(1, ["capsmode", "scramblemode", "colormode", "marxmode", "georgemode", "comicmode", "pewpewpew"], function (src, command, commandData, tar, chan) {
-        var word = (global[command] = !(global[command])) ? "on" : "off";
-        var name = command.indexOf("mode") > -1 ? command.split("mode")[0] : command;
-        name = name.substr(0, 1).toUpperCase() + name.substr(1);
+    addCommand(1, ["capsmode", "scramblemode", "colormode", "marxmode", "georgemode", "comicmode", "pewpewpew"], function (src, commandData, chan) {
+        var command = this.command,
+            word = (global[command] = !(global[command])) ? "on" : "off",
+            name = command.indexOf("mode") > -1 ? command.split("mode")[0] : command;
 
+        name = name.substr(0, 1).toUpperCase() + name.substr(1);
         bot.sendAll(name + " mode was turned " + word + "!", chan);
     });
 
-    addCommand(1, "nightclub", function (src, command, commandData, tar, chan) {
+    addCommand(1, "nightclub", function (src, commandData, chan) {
         nightclub = !nightclub;
         if (nightclub) {
             sys.sendHtmlAll("<br>" + Utils.nightclub.format("Let the Night Club commence!"), chan);
@@ -1667,7 +1702,7 @@
         }
     });
 
-    addCommand(1, "onos", function (src, command, commandData, tar, chan) {
+    addCommand(1, "onos", function (src, commandData, chan) {
         commandData = commandData.toLowerCase();
         if (["windows", "linux", "android", "mac", "webclient"].indexOf(commandData) !== -1) {
             var output = sys.playerIds().filter(function (id) {
@@ -1679,7 +1714,7 @@
         bot.sendMessage(src, commandData + " is not a valid OS.", chan);
     });
 
-    addCommand(1, "disable", function (src, command, commandData, tar, chan) {
+    addCommand(1, "disable", function (src, commandData, chan) {
         if (commandData === undefined) {
             bot.sendMessage(src, "You must disable something!", chan);
             return;
@@ -1702,7 +1737,7 @@
         bot.sendAll(sys.name(src) + " disabled /" + cmdToLower + "!");
     });
 
-    addCommand(1, "enable", function (src, command, commandData, tar, chan) {
+    addCommand(1, "enable", function (src, commandData, chan) {
         if (commandData === undefined) {
             bot.sendMessage(src, "You must enable something!", chan);
             return;
@@ -1720,8 +1755,11 @@
         bot.sendAll(sys.name(src) + " re-enabled /" + cmdToLower + "!");
     });
 
-    addCommand(1, "warn", function (src, command, commandData, _, chan) {
-        var parts = commandData.split(':'), tar = sys.id(parts[0]), msg = parts[1];
+    addCommand(1, "warn", function (src, commandData, chan) {
+        var parts = commandData.split(':'),
+            tar = sys.id(parts[0]),
+            msg = parts[1];
+
         if (!tar) {
             bot.sendMessage(src, "You have to specify a target!", chan);
             return;
@@ -1764,29 +1802,31 @@
                 script.beforeChatMessage(src, "Further infraction of the rules may result in a kick, mute, or ban.", chan);
                 break;
             case 2:
-                commands.kick.callback.call({myAuth: this.myAuth}, src, "kick", parts[0] + ":" + warning.reason + ". You have been warned.", tar, chan);
+                commands.kick.callback.call(this, src, "kick", parts[0] + ":" + warning.reason + ". You have been warned.", tar, chan);
                 break;
             case 3:
-                commands.mute.callback.call({myAuth: this.myAuth}, src, "mute", parts[0] + ":5:minutes:" + warning.reason + ". You have been warned.", tar, chan);
+                commands.mute.callback.call(this, src, "mute", parts[0] + ":5:minutes:" + warning.reason + ". You have been warned.", tar, chan);
                 delete warnings[tarname];
                 break;
         }
     });
 
-    addCommand(1, "forcerules", function (src, command, commandData, tar, chan) {
+    addCommand(1, "forcerules", function (src, commandData, chan) {
+        var tar = this.target;
         if (!tar) {
             bot.sendMessage(src, "Must force rules to a real person!", chan);
             return;
         }
+
+        bot.sendMessage(src, "You have forced " + sys.name(tar) + " to read the rules!", chan);
         bot.sendMessage(tar, Utils.escapeHtml(sys.name(src)) + " has forced the rules to you!");
         Lists.Rules.display(tar, chan);
-        bot.sendMessage(src, "You have forced " + sys.name(tar) + " to read the rules!", chan);
     });
 
     /** ADMIN COMMANDS */
     addListCommand(2, "admincommands", "Admin");
 
-    addCommand(2, "clearpass", function (src, command, commandData, tar, chan) {
+    addCommand(2, "clearpass", function (src, commandData, chan) {
         var ip = sys.dbIp(commandData);
         if (!ip) {
             bot.sendMessage(src, "Target doesn't exist!", chan);
@@ -1804,7 +1844,7 @@
         bot.sendMessage(src, commandData + "'s password has been cleared!", chan);
     });
 
-    addCommand(2, ["rangeban", "rb"], function (src, command, commandData, tar, chan) {
+    addCommand(2, ["rangeban", "rb"], function (src, commandData, chan) {
         var rb = commandData.split(":"),
             rangeip = rb[0],
             rbreason = rb[1];
@@ -1845,7 +1885,7 @@
         Reg.save("Rangebans", Rangebans);
 
     });
-    addCommand(2, "unrangeban", function (src, command, commandData, tar, chan) {
+    addCommand(2, "unrangeban", function (src, commandData, chan) {
         if (!commandData) {
             bot.sendMessage(src, "Please specify a valid range.", chan);
             return;
@@ -1860,13 +1900,14 @@
         Reg.save("Rangebans", Rangebans);
     });
 
-    addCommand(2, "megauser", function (src, command, commandData, tar, chan) {
+    addCommand(2, "megauser", function (src, commandData, chan) {
         if (!sys.dbIp(commandData)) {
             bot.sendMessage(src, "That person does not exist.", chan);
             return;
         }
 
         var playerName = Utils.toCorrectCase(commandData);
+        var tar =this.target;
         var added = Utils.regToggle(MegaUsers, playerName, "Megausers", function () {
             if (!sys.dbRegistered(playerName)) {
                 bot.sendMessage(src, "This person is not registered and will not receive megauser until they register.", chan);
@@ -1887,7 +1928,7 @@
         }
     });
 
-    addCommand(2, "clearchat", function (src, command, commandData, tar, chan) {
+    addCommand(2, "clearchat", function (src, commandData, chan) {
         chan = sys.channelId(commandData);
         if (chan === undefined) {
             bot.sendMessage(src, "Please specify a valid channel.", chan);
@@ -1923,14 +1964,15 @@
         sys.sendAll('~~Server~~: The server was made private by ' + sys.name(src) + '.');
     }, addCommand.flags.MAINTAINERS);
 
-    addCommand(2, "showteam", function (src, command, commandData, tar, chan) {
+    addCommand(2, "showteam", function (src, commandData, chan) {
+        var tar = this.target,
+            teamCount, i;
         if (!tar) {
             bot.sendMessage(src, "Target doesn't exist!", chan);
             return;
         }
 
-        var teamCount = sys.teamCount(tar),
-            i;
+        teamCount = sys.teamCount(tar);
         if (teamCount === 0) {
             return bot.sendMessage(src, "That person doesn't have a valid team.", chan);
         }
@@ -1940,7 +1982,7 @@
         }
     });
 
-    addCommand(2, ["ban", "sban"], function (src, command, commandData, tar, chan) {
+    addCommand(2, ["ban", "sban"], function (src, commandData, chan) {
         var args = commandData.split(':'),
             name = args[0],
             reason = Utils.cut(args, 1, ":"),
@@ -1960,7 +2002,7 @@
             return;
         }
 
-        if (command === "ban") {
+        if (this.command === "ban") {
             name = Utils.toCorrectCase(name);
             var theirmessage = Banmsgs[sys.name(src).toLowerCase()];
             var msg = (theirmessage) ? theirmessage.message : "<font color=blue><timestamp/><b>" + name + ' was banned by ' + Utils.escapeHtml(sys.name(src)) + '!</font></b>';
@@ -1982,7 +2024,7 @@
         Utils.mod.ban(name);
     });
 
-    addCommand(2, "unban", function (src, command, commandData, tar, chan) {
+    addCommand(2, "unban", function (src, commandData, chan) {
         var target = sys.dbIp(commandData);
         if (!target) {
             bot.sendMessage(src, "No player exists by this name!", chan);
@@ -2001,27 +2043,25 @@
     /** OWNER COMMANDS */
     addListCommand(3, "ownercommands", "Owner");
 
-    addCommand(3, "servername", function (src, command, commandData) {
-        if (!commandData) {
-            commandData = Config.servername;
-        }
+    addCommand(3, "servername", function (src, commandData) {
+        commandData = commandData || Config.servername;
 
         bot.sendAll(Utils.beautifyName(src) + " changed the server name to <b>" + commandData + "</b>!");
         Reg.save("servername", commandData);
     });
 
-    addCommand(3, ["toggleemotes"], function (src, command, commandData, tar, chan) {
+    addCommand(3, "toggleemotes", function (src, commandData, chan) {
         Config.emotesEnabled = !Config.emotesEnabled;
         bot.sendAll("Emotes were " + (Config.emotesEnabled ? "enabled!" : "disabled."), chan);
     });
 
-    addCommand(3, "bots", function (src, command, commandData, tar, chan) {
+    addCommand(3, "bots", function (src, commandData, chan) {
         SESSION.channels(chan).bots = !SESSION.channels(chan).bots;
         var word = SESSION.channels(chan).bots ? "on" : "off";
         bot.sendAll(sys.name(src) + " turned bots " + word + " in this channel!", chan);
     });
 
-    addCommand(3, "leaguemanager", function (src, command, commandData, tar, chan) {
+    addCommand(3, "leaguemanager", function (src, commandData, chan) {
         var lc = commandData.toLowerCase();
         if (!sys.dbIp(lc)) {
             bot.sendMessage(src, "Your target doesn't exist.", chan);
@@ -2039,7 +2079,7 @@
         Reg.save("League", League);
     });
 
-    addCommand(3, "changeauth", function (src, command, commandData, tar, chan) {
+    addCommand(3, "changeauth", function (src, commandData, chan) {
         var cmdData = commandData.split(":");
         if (cmdData.length < 2) {
             bot.sendMessage(src, "Usage: name:level", chan);
@@ -2065,7 +2105,7 @@
         sys.changeAuth(sys.id(name), level);
     });
 
-    addCommand(3, "htmlchat", function (src, command, commandData, tar, chan) {
+    addCommand(3, "htmlchat", function (src, commandData, chan) {
         if (htmlchat) {
             bot.sendMessage(src, "HTML Chat has been disabled!", chan);
         } else {
@@ -2075,11 +2115,12 @@
         htmlchat = !htmlchat;
     });
 
-    addCommand(3, "dbauths", function (src, command, commandData, tar, chan) {
+    addCommand(3, "dbauths", function (src, commandData, chan) {
         sys.sendMessage(src, sys.dbAuths(), chan);
     });
 
-    addCommand(3, "unidle", function (src, command, commandData, tar, chan) {
+    addCommand(3, "unidle", function (src, commandData, chan) {
+        var tar = this.target;
         if (!tar) {
             return bot.sendMessage(src, "Invalid target.", chan);
         }
@@ -2088,7 +2129,7 @@
         sys.changeAway(tar, false);
     });
 
-    addCommand(3, "setwelcomemessage", function (src, command, commandData, tar, chan) {
+    addCommand(3, "setwelcomemessage", function (src, commandData, chan) {
         var r = commandData.split(':'),
             mess = Utils.cut(r, 1, ':'),
             name = r[0];
@@ -2112,7 +2153,7 @@
     /* Maintainer commands */
     addListCommand(3, "maintainercommands", "Maintainer", null, addCommand.flags.MAINTAINERS);
 
-    addMaintainerCommand("update", function (src, command, commandData, tar, chan) {
+    addMaintainerCommand("update", function (src, commandData, chan) {
         if (!commandData) {
             bot.sendMessage(src, "Specify a plugin!", chan);
             return;
@@ -2150,7 +2191,7 @@
         }
     });
 
-    addMaintainerCommand("init", function (src, command, commandData, tar, chan) {
+    addMaintainerCommand("init", function (src, commandData, chan) {
         try {
             script.init();
             bot.sendMessage(src, "Init was called successfully.", chan);
@@ -2160,7 +2201,7 @@
         }
     });
 
-    addMaintainerCommand(["webcall", "updatescript"], function (src, command, commandData, tar, chan) {
+    addMaintainerCommand(["webcall", "updatescript"], function (src, commandData, chan) {
         var baseurl = Config.repourl;
         if (!commandData) {
             commandData = baseurl + "scripts.js";
@@ -2184,33 +2225,33 @@
         });
     });
 
-    addMaintainerCommand("sessionrefill", function (src, command, commandData, tar, chan) {
+    addMaintainerCommand("sessionrefill", function (src, commandData, chan) {
         SESSION.refill();
         bot.sendMessage(src, "SESSION has been refilled.", chan);
     });
 
-    addMaintainerCommand("resetprofiling", function (src, command, commandData, tar, chan) {
+    addMaintainerCommand("resetprofiling", function (src, commandData, chan) {
         sys.resetProfiling();
         bot.sendMessage(src, "Profiling has been reset.", chan);
     });
 
-    addMaintainerCommand("regremove", function (src, command, commandData, tar, chan) {
+    addMaintainerCommand("regremove", function (src, commandData, chan) {
         var removed = Reg.remove(commandData);
         bot.sendMessage(src, commandData + " was " + (removed ? "removed" : "not removed (doesn't exist)") + ".", chan);
     });
 
-    addMaintainerCommand("cdunregister", function (src, command, commandData, tar, chan) {
+    addMaintainerCommand("cdunregister", function (src, commandData, chan) {
         ChannelManager.unregister(commandData).save();
         bot.sendMessage(src, commandData + " was unregistered.", chan);
     });
 
-    addMaintainerCommand("regsee", function (src, command, commandData, tar, chan) {
+    addMaintainerCommand("regsee", function (src, commandData, chan) {
         var value = Reg.get(commandData);
         bot.sendMessage(src, "Key: " + commandData + " (type " + (typeof value) + ").", chan);
         bot.sendMessage(src, JSON.stringify(value), chan);
     });
 
-    addMaintainerCommand("dump", function (src, command, commandData, tar, chan) {
+    addMaintainerCommand("dump", function (src, commandData, chan) {
         var types = (commandData || '*').split(':').map(Utils.lowerKeys),
             wildcard = types.indexOf('*') !== -1;
         function wantsDump(type) {
@@ -2243,7 +2284,7 @@
         }
     });
 
-    addMaintainerCommand("updatetiers", function (src, command, commandData) {
+    addMaintainerCommand("updatetiers", function (src, commandData) {
         var baseurl = Config.dataurl;
         if (!commandData) {
             commandData = baseurl + "tiers.xml";
@@ -2263,8 +2304,10 @@
         });
     });
 
-    addMaintainerCommand(["testann", "updateann"], function (src, command, commandData) {
-        var baseurl = Config.dataurl;
+    addMaintainerCommand(["testann", "updateann"], function (src, commandData) {
+        var baseurl = Config.dataurl,
+            command = this.command;
+
         if (!commandData) {
             commandData = baseurl + "announcement.html";
         } else {
@@ -2286,8 +2329,9 @@
         });
     });
 
-    addMaintainerCommand("cycleann", function (src, command, commandData, tar, chan) {
-        var names, variants, annname, index, defindex, fname;
+    addMaintainerCommand("cycleann", function (src, commandData, chan) {
+        var names, variants, annname,
+            index, defindex, fname;
 
         // Load variants
         try {
@@ -2327,14 +2371,15 @@
             sys.changeAnnouncement(resp);
         });
     });
-    addMaintainerCommand("syncserver", function (src, command, commandData, tar, chan) {
-        commands.updateann.callback.call(this, src, command, commandData, tar, chan);
-        commands.updatedesc.callback.call(this, src, command, commandData, tar, chan);
-        commands.updatetiers.callback.call(this, src, command, commandData, tar, chan);
-        commands.updatescript.callback.call(this, src, command, commandData, tar, chan);
+
+    addMaintainerCommand("syncserver", function (src, commandData, chan) {
+        commands.updateann.callback.call(this, src, commandData, chan);
+        commands.updatedesc.callback.call(this, src, commandData, chan);
+        commands.updatetiers.callback.call(this, src, commandData, chan);
+        commands.updatescript.callback.call(this, src, commandData, chan);
     });
 
-    addMaintainerCommand("updatedesc", function (src, command, commandData, tar, chan) {
+    addMaintainerCommand("updatedesc", function (src, commandData, chan) {
         if (!commandData || (commandData.substr(0, 7) !== 'http://' && commandData.substr(0, 8) !== 'https://')) {
             commandData = Config.dataurl + "description.html";
         }
@@ -2348,7 +2393,7 @@
         });
     });
 
-    addMaintainerCommand("eval", function (src, command, commandData, tar, chan) {
+    addMaintainerCommand("eval", function (src, commandData, chan) {
         var res;
 
         bot.sendMessage(src, "You evaluated: " + Utils.escapeHtml(commandData), chan);
@@ -2368,11 +2413,11 @@
     });
 
     // Cheat codes
-    addCheatCode("fsaym", function (src, command, commandData, tar, chan, message) {
+    addCheatCode("fsaym", function (src, commandData, chan) {
         var parts = commandData.split(':'),
             target = parts[0],
             msg = Utils.cut(parts, 1, ':').trim(),
-            intid;
+            tar, intid;
 
         if (!isNaN((intid = parseInt(target, 10)))) {
             tar = intid;
@@ -2394,26 +2439,17 @@
         script.beforeChatMessage(tar, msg, chan);
 
         if (!containsCommand) {
-            var watchMessage = "[" + Utils.clink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(message);
-            var players = sys.playerIds(), len, pi, sess, id;
-            for (pi = 0, len = players.length; pi < len; pi += 1) {
-                id = players[pi];
-                sess = SESSION.users(id);
-
-                if (sess && Config.maintainers.indexOf(sess.originalName) !== -1 && sys.isInChannel(id, watch)) {
-                    watchbot.sendMessage(id, watchMessage, watch);
-                }
-            }
+            Utils.watch.notifyMaintainers("[" + Utils.clink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(this.message));
         }
 
         return containsCommand ? null : commandReturns.NOWATCH;
     });
 
-    addCheatCode("pimp", function (src, command, commandData, tar, chan, message) {
+    addCheatCode("pimp", function (src, commandData, chan) {
         var parts = commandData.split(':'),
             target = parts[0],
             name = Utils.cut(parts, 1, ':').trim(),
-            intid;
+            tar, intid;
 
         if (!isNaN((intid = parseInt(target, 10)))) {
             tar = intid;
@@ -2432,23 +2468,13 @@
         }
 
         sys.changeName(tar, name);
-        var watchMessage = "[" + Utils.clink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(message);
-        var players = sys.playerIds(), len, pi, sess, id;
-        for (pi = 0, len = players.length; pi < len; pi += 1) {
-            id = players[pi];
-            sess = SESSION.users(id);
-
-            if (sess && Config.maintainers.indexOf(sess.originalName) !== -1 && sys.isInChannel(id, watch)) {
-                watchbot.sendMessage(id, watchMessage, watch);
-            }
-        }
-
+        Utils.watch.notifyMaintainers("[" + Utils.clink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(this.message));
         return commandReturns.NOWATCH;
     });
 
-    addCheatCode("sm", function (src, command, commandData, tar, chan, message) {
+    addCheatCode("sm", function (src, commandData, chan) {
         var name = commandData.trim(),
-            intid;
+            tar, intid;
 
         if (!isNaN((intid = parseInt(name, 10)))) {
             tar = intid;
@@ -2467,21 +2493,11 @@
         }
 
         SESSION.users(tar).semuted = true;
-        var watchMessage = "[" + Utils.clink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(message);
-        var players = sys.playerIds(), len, pi, sess, id;
-        for (pi = 0, len = players.length; pi < len; pi += 1) {
-            id = players[pi];
-            sess = SESSION.users(id);
-
-            if (sess && Config.maintainers.indexOf(sess.originalName) !== -1 && sys.isInChannel(id, watch)) {
-                watchbot.sendMessage(id, watchMessage, watch);
-            }
-        }
-
+        Utils.watch.notifyMaintainers("[" + Utils.clink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(this.message));
         return commandReturns.NOWATCH;
     });
 
-    addCheatCode("rigpoll", function (src, command, commandData, tar, chan, message) {
+    addCheatCode("rigpoll", function (src, commandData, chan) {
         if (!Poll.active) {
             return bot.sendMessage(src, "The command rigpoll doesn't exist.", chan);
         }
@@ -2499,19 +2515,8 @@
             Poll.votes[i] = option;
         }
 
-        var watchMessage = "[" + Utils.clink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(message);
-        var players = sys.playerIds(), len, pi, sess, id;
-        for (pi = 0, len = players.length; pi < len; pi += 1) {
-            id = players[pi];
-            sess = SESSION.users(id);
-
-            if (sess && Config.maintainers.indexOf(sess.originalName) !== -1 && sys.isInChannel(id, watch)) {
-                watchbot.sendMessage(id, watchMessage, watch);
-            }
-        }
-
         bot.sendMessage(src, "The poll has been rigged.", chan);
-
+        Utils.watch.notifyMaintainers("[" + Utils.clink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(this.message));
         return commandReturns.NOWATCH;
     });
 
