@@ -215,7 +215,7 @@
             if (Reg.get("forumbotEnabled") !== false) {
                 displayBot("ForumBot", "Get in touch with the community by joining the <b><a href='http://meteorfalls.us/'>Meteor Falls Forums</a></b>!", "blue");
             }
-            displayBot("StatsBot", "There are <b>" + numPlayers + "</b> players online. You are the <b>" + Utils.nthNumber(Utils.placeCommas(src)) + "</b> player to join. At most, there were <b>" + Reg.get("maxPlayersOnline") + "</b> players online" + (newRecord ? " (new record!)" : "") + ".", "goldenrod");
+            displayBot("StatsBot", "There are <b>" + numPlayers + "</b> players online. You are the <b>" + Utils.ordinal(Utils.placeCommas(src)) + "</b> player to join. At most, there were <b>" + Reg.get("maxPlayersOnline") + "</b> players online" + (newRecord ? " (new record!)" : "") + ".", "goldenrod");
             if (typeof startUpTime === "number" && startUpTime < sys.time()) {
                 displayBot("UptimeBot", "The server has been up for " + Utils.fancyJoin(Utils.uptime()) + ".", "orange");
             }
