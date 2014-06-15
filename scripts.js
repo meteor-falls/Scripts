@@ -51,7 +51,7 @@ Config = {
 
         if (webcall) {
             __resp = sys.synchronousWebCall(Config.repourl + "plugins/" + name);
-            if (!__resp) {
+            if (!__resp || __resp.substr(0, 9) === "<!DOCTYPE") {
                 throw new Error("Failed to load plugin " + name + " from " + Config.repourl + "plugins/" + name);
             }
             sys.writeToFile(dir + name, __resp);
