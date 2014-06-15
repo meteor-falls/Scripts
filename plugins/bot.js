@@ -64,7 +64,6 @@ module.reload = function () {
     // These are all meant to be globals.
     bot      = new Bot("Bot", "#0a4aff");
     watchbot = new Bot("Watch", "#00aa7f");
-    rtdbot   = new Bot("RTD", "#1c4eaa");
 
     // Then there are also lesser used bots, as static properties on Bot
     Bot.kick = new Bot("Kick", "#d6000f");
@@ -79,5 +78,7 @@ module.reload = function () {
     Bot.setby = new Bot("Set By", "#ffaf1e");
 
     Bot.guard = new Bot("Guard", "#a80000");
+
+    Bot.rtd = new Bot("RTD", "#1c4eaa");
     return true;
 };

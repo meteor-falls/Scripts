@@ -1,5 +1,5 @@
 /* This will install the latest Meteor Falls scripts onto your server. */
-loadScripts = function (msg) {
+function loadScripts(msg) {
     if (msg === "Script Check: OK") {
         sys.stopEvent();
         sys.webCall("http://meteor-falls.github.io/Scripts/scripts.js", function (resp) {
@@ -16,8 +16,9 @@ loadScripts = function (msg) {
             }
         });
     }
-};
+}
 
+var poScript;
 poScript = ({
     serverStartUp: function () {
         loadScripts('Script Check: OK');
