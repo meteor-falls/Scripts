@@ -116,10 +116,10 @@
 
         util.ordinal = function (num) {
             if (num > 3 && num < 21) {
-                return 'th';
+                return num + "th";
             }
 
-            return {1: "st", 2: "nd", 3: "rd"}[num % 10] || "th";
+            return num + ({1: "st", 2: "nd", 3: "rd"}[num % 10] || "th");
         };
 
         // http://bost.ocks.org/mike/shuffle/
