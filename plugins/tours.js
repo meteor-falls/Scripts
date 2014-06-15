@@ -501,7 +501,7 @@
     exports.tier = tourtier;
     exports.ips = tourips;
     exports.members = tourmembers;
-    if (tourmode > 0) {
+    if (typeof tourmode !== "undefined" && tourmode > 0) {
         module.exports.tourSpots = tourSpots;
         module.exports.tourtier = tourtier;
     }

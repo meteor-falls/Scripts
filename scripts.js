@@ -69,7 +69,7 @@ Config = {
         exports = module.exports;
 
         try {
-            sys.eval("(function () { " + __fileContent + " });", dir + name);
+            sys.eval("(function () { " + __fileContent + " }());", dir + name);
         } catch (e) {
             sys.sendAll("Error loading module " + name + ": " + e + " on line " + e.lineNumber);
             print(e.backtracetext);
