@@ -67,8 +67,7 @@ module.exports.load = function () {
     };
 
     RTD.giveEffect = function (id, effect, duration, timeout) {
-        var ip = sys.ip(id),
-            peffect;
+        var ip = sys.ip(id);
 
         if (typeof timeout !== 'function') {
             timeout = function (){};
@@ -78,7 +77,7 @@ module.exports.load = function () {
         duration = duration || effects[effect].duration;
 
         // NOTE: These are not garbage collected, it's not necessary and keeps things simple.
-        peffect = playerEffects[ip] = {
+        playerEffects[ip] = {
             effect: effect,
             timer: -1,
             at: sys.time(),
