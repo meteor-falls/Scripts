@@ -145,7 +145,6 @@
                     target: tar
                 },
                 src,
-                command,
                 commandData,
                 chan
             );
