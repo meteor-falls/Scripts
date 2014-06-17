@@ -117,7 +117,7 @@ exports.load = function () {
     global.Ranks = {};
     Ranks.Rank = Rank;
 
-    Ranks.rank = rank;
+    Ranks.plus = plus;
 };
 
 module.reload = function () {

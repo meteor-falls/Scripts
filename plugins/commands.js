@@ -581,7 +581,7 @@
     });
 
     addCommand(0, "pluslist", function (src, commandData, chan) {
-        var keys = Object.keys(Ranks.plus),
+        var keys = Object.keys(Ranks.plus.members),
             list;
 
         if (keys.length === 0) {
