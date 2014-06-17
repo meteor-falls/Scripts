@@ -966,7 +966,7 @@
             return;
         }
 
-        added = Ranks.plus.toggleMember(playerName);
+        added = Ranks.plus.toggleMember(playerName) === 'added';
         Ranks.plus.save();
 
         // Do not simplify this.
@@ -1576,7 +1576,7 @@
             name = parts[0],
             reason = Utils.cut(parts, 1, ':') || 'No reason.';
 
-        commands.mute.callback.call(this, src, "mute", name + ":5:minutes:" + reason, this.target, chan);
+        commands.mute.callback.call(this, src, name + ":5:minutes:" + reason, chan);
     });
 
     addCommand(1, ["unmute", "sunmute"], function (src, commandData, chan) {
@@ -1807,10 +1807,10 @@
                 script.beforeChatMessage(src, "Further infraction of the rules may result in a kick, mute, or ban.", chan);
                 break;
             case 2:
-                commands.kick.callback.call(this, src, "kick", parts[0] + ":" + warning.reason + ". You have been warned.", tar, chan);
+                commands.kick.callback.call(this, src, parts[0] + ":" + warning.reason + ". You have been warned.", chan);
                 break;
             case 3:
-                commands.mute.callback.call(this, src, "mute", parts[0] + ":5:minutes:" + warning.reason + ". You have been warned.", tar, chan);
+                commands.mute.callback.call(this, src, parts[0] + ":5:minutes:" + warning.reason + ". You have been warned.", chan);
                 delete warnings[tarname];
                 break;
         }
