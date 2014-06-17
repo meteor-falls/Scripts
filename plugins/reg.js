@@ -2,7 +2,7 @@
     var currentVersion = 1;
     function updateReg(reg) {
         if (reg.version === 0) {
-            ("Megausers FloodIgnore Mutes Rangebans Kickmsgs Banmsgs Welmsgs EmoteToggles Emoteperms Feedmon")
+            ("Megausers FloodIgnore Mutes Rangebans Kickmsgs Banmsgs Welmsgs Emotetoggles Feedmon")
                 .split(" ")
                 .forEach(function (key) {
                     var val = reg.get(key);

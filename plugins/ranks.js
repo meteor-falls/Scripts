@@ -1,7 +1,7 @@
 function Rank(name, table) {
     this.name = name;
     this.table = table || name;
-    this.members = Reg.get(this.table) || {};
+    this.members = {};
 }
 
 var rank = Rank.prototype;
@@ -46,10 +46,12 @@ rank.isMember = function (name) {
 
 rank.addMember = function (name) {
     this.members[this.toEntry(name)] = 1;
+    return this;
 };
 
 rank.removeMember = function (name) {
     delete this.members[this.toEntry(name)];
+    return this;
 };
 
 rank.toggleMember = function (name) {
@@ -64,6 +66,12 @@ rank.toggleMember = function (name) {
 
 rank.save = function () {
     Reg.save(this.table, JSON.stringify(this.members));
+    return this;
+};
+
+rank.load = function () {
+    this.members = Reg.get(this.table) || {};
+    return this;
 };
 
 Rank.isMemberIncludingAuth = function (name) {
@@ -101,10 +109,18 @@ Rank.isMemberIncludingAuth = function (name) {
     return false;
 };
 
-module.exports.Rank = Rank;
+exports.Rank = Rank;
+exports.load = function () {
+    var plus = new Rank("MF+", "plusmembers");
+    plus.isMember = Rank.isMemberIncludingAuth;
 
-// Ranks
-var plus = new Rank("MF+", "plusmembers");
-plus.isMember = Rank.isMemberIncludingAuth;
+    global.Ranks = {};
+    Ranks.Rank = Rank;
 
-module.exports.plus = plus;
+    Ranks.rank = rank;
+};
+
+module.reload = function () {
+    module.exports.load();
+    return true;
+};

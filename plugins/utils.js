@@ -353,12 +353,24 @@
 
         util.getAuth = function (src) {
             var auth = 0,
-                id;
+                mauth, ip, id;
             if (typeof src === "string") {
                 id = sys.name(src);
-                auth = (id !== undefined) ? sys.auth(id) : sys.dbAuth(src);
+                if (id) {
+                    auth = sys.auth(id);
+                    ip = sys.ip(id);
+                } else {
+                    auth = sys.dbAuth(src);
+                    ip = sys.dbIp(src);
+                }
             } else {
                 auth = sys.auth(src);
+                ip = sys.ip(src);
+            }
+
+            mauth = sys.maxAuth(ip);
+            if (mauth > auth) {
+                auth = mauth;
             }
             return auth;
         };

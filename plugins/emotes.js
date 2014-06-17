@@ -83,7 +83,8 @@ global.Emotes = {
             lastEmote = [],
             time = sys.time(),
             size = "",
-            perm = 2, i;
+            auth = true,
+            i;
 
         if (limit && src && uobj) {
             //timeout = perm ? 4 : 7;
@@ -160,11 +161,11 @@ global.Emotes = {
 
         // First, pokemons, icons, items, and avatars.
         // pokemon:subtitute|pokemon:30&cropped=true
-        if (src) {
-            perm = Emotes.permissionLevel(src);
+        if (src && !Utils.mod.hasBasicPermissions(src)) {
+            auth = false;
         }
 
-        if (perm >= 2) {
+        if (auth) {
             message = message.replace(/((trainer|icon|item|pokemon):([(\d|\-)&=(gen|shiny|gender|back|cropped|num|substitute|true|false)]+))/g, "<img src='$1'>");
         }
 
@@ -221,47 +222,8 @@ global.Emotes = {
     // Enum for Emotes.format, not literally rate limiting all the time
     Emotes.ratelimit = true;
 
-    // Accepts either a name (the player must be online) or id
-    Emotes.permissionLevel = function (name) {
-        var id = sys.id(name) || name,
-            user = SESSION.users(id),
-            ip, aliases,
-            alias,
-            len, i;
-
-        if (id && user && user.originalName) {
-            name = user.originalName;
-        }
-
-        ip = sys.dbIp(name);
-        if (sys.maxAuth(ip) > 0 || Config.maintainers.indexOf(name) !== -1) {
-            return 2;
-        }
-        if (Emoteperms.hasOwnProperty(name.toLowerCase())) {
-            return 1;
-        }
-
-        aliases = sys.aliases(ip);
-
-        if (!aliases || (len = aliases.length) === 1) {
-            return 0;
-        }
-
-        for (i = 0; i < len; i += 1) {
-            alias = aliases[i];
-            if (Config.maintainers.indexOf(alias) !== -1) {
-                return 2;
-            }
-            if (Emoteperms.hasOwnProperty(alias.toLowerCase())) {
-                return 1;
-            }
-        }
-
-        return 0;
-    };
-
     Emotes.hasPermission = function (name) {
-        return Emotes.permissionLevel(name) >= 1;
+        return Ranks.plus.hasMember(name);
     };
 
     // Accepts either a name (the player must be online) or id

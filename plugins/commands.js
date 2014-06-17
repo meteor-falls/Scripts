@@ -41,7 +41,8 @@
         CHANNELMODS: 0x4,
         CHANNELADMINS: 0x8,
         CHANNELOWNERS: 0x10,
-        HIDDEN: 0x20
+        HIDDEN: 0x20,
+        PLUS: 0x40
     };
 
     // Shorthands
@@ -109,6 +110,10 @@
 
         if ((cmd.flags & commandFlags.CHANNELOWNERS) && Utils.channel.isChannelOwner(src, chan)) {
             return true;
+        }
+
+        if ((cmd.flags & commandFlags.PLUS) && !Ranks.plus.hasMember(src, chan)) {
+            throw "You need " + Ranks.plus.name + " to use this command.";
         }
 
         if (cmd.authLevel) {
@@ -486,11 +491,6 @@
     });
 
     addCommand(0, "emotetoggle", function (src, commandData, chan) {
-        if (!Emotes.hasPermission(sys.name(src))) {
-            bot.sendMessage(src, "You cannot use emotes.", chan);
-            return;
-        }
-
         var toggled = Emotes.enabledFor(src),
             word = (toggled ? "off" : "on");
 
@@ -502,7 +502,7 @@
 
         Reg.save("Emotetoggles", Emotetoggles);
         bot.sendMessage(src, "Emotes are now toggled " + word + ".", chan);
-    });
+    }, addCommand.flags.PLUS);
 
     addCommand(0, "spin", function (src, commandData, chan) {
         if (!rouletteon) {
@@ -580,16 +580,16 @@
         list.finish().display(src, chan);
     });
 
-    addCommand(0, "emotepermlist", function (src, commandData, chan) {
-        var keys = Object.keys(Emoteperms),
+    addCommand(0, "pluslist", function (src, commandData, chan) {
+        var keys = Object.keys(Ranks.plus),
             list;
 
         if (keys.length === 0) {
-            bot.sendMessage(src, "There are no emote perm users.", chan);
+            bot.sendMessage(src, "There are no people with " + Ranks.plus.name + ".", chan);
             return;
         }
 
-        list = new TableList("Emote Permission", "cornflowerblue");
+        list = new TableList(Ranks.plus.name, "cornflowerblue");
         list.addEvery(keys, false, 10);
         list.finish().display(src, chan);
     });
@@ -942,7 +942,7 @@
 
     /** MOD COMMANDS */
     addListCommand(1, "modcommands", "Mod");
-    addCommand(1, "emoteperms", function (src, commandData, chan) {
+    addCommand(1, "plus", function (src, commandData, chan) {
         var tar = this.target;
 
         if (!sys.dbIp(commandData)) {
@@ -950,26 +950,28 @@
             return;
         }
 
-        var playerName = Utils.toCorrectCase(commandData), beautifulName = Utils.beautifyName(playerName);
-        var added = Utils.regToggle(Emoteperms, playerName, "Emoteperms", function () {
-            if (!sys.dbRegistered(playerName)) {
-                bot.sendMessage(src, "This person is not registered and will not receive permission to use emotes until they register.", chan);
-                if (tar) {
-                    bot.sendMessage(tar, "Please register so you can receive permission to use emotes.");
-                }
-                return;
-            }
+        var playerName = Utils.toCorrectCase(commandData),
+            beautifulName = Utils.beautifyName(playerName),
+            added = false;
 
-            return true;
-        });
+        if (!sys.dbRegistered(playerName)) {
+            bot.sendMessage(src, "This person is not registered and will not receive permission to use emotes until they register.", chan);
+            if (tar) {
+                bot.sendMessage(tar, "Please register so you can receive permission to use emotes.");
+            }
+            return;
+        }
+
+        added = Ranks.plus.toggleMember(playerName);
+        Ranks.plus.save();
 
         // Do not simplify this.
-        if (added === true) {
-            bot.sendAll(Utils.beautifyName(src) + " granted " + beautifulName + " permission to use emotes!", 0);
-            Utils.watch.notify(Utils.nameIp(src) + " granted " + beautifulName + " permission to use emotes.");
-        } else if (added === false) {
-            bot.sendAll(Utils.beautifyName(src) + " revoked " + beautifulName + "'s permission to use emotes!", 0);
-            Utils.watch.notify(Utils.nameIp(src) + " revoked " + beautifulName + "'s permission to use emotes.");
+        if (added) {
+            bot.sendAll(Utils.beautifyName(src) + " granted " + beautifulName + " " + Ranks.plus.name + "!", 0);
+            Utils.watch.notify(Utils.nameIp(src) + " granted " + beautifulName + " " + Ranks.plus.name + ".");
+        } else {
+            bot.sendAll(Utils.beautifyName(src) + " revoked " + beautifulName + "'s " + Ranks.plus.name + "!", 0);
+            Utils.watch.notify(Utils.nameIp(src) + " revoked " + beautifulName + "'s " + Ranks.plus.name + ".");
         }
     });
 

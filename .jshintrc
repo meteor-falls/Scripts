@@ -38,6 +38,7 @@
         "Reg": true,
         "Feedmon": true,
         "Lists": true,
+        "Ranks": true,
 
         "CommandList": true,
         "TableList": true,
@@ -76,7 +77,6 @@
         "Banmsgs": true,
         "Welmsgs": true,
         "Emotetoggles": true,
-        "Emoteperms": true,
         "Feedmons": true,
         "League": true
     }

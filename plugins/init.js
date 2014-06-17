@@ -23,7 +23,6 @@ exports.init = function () {
         "Banmsgs": "Banmsgs",
         "Welmsgs": "Welmsgs",
         "Emotetoggles": "Emotetoggles",
-        "Emoteperms": "Emoteperms",
         "Feedmons": "Feedmon",
         "League": "League"
     };
