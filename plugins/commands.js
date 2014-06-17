@@ -56,6 +56,10 @@
         }, flags);
     }
 
+    function addPlusCommand(names, cb, flags) {
+        addCommand(0, names, cb, (flags || 0) | addCommand.flags.PLUS);
+    }
+
     function addMaintainerCommand(names, cb, flags) {
         addCommand(3, names, cb, (flags || 0) | addCommand.flags.MAINTAINERS);
     }
@@ -490,7 +494,7 @@
         broadcast("<font color=green><timestamp/><b><i>+AttackBot:</i></b></font> <b style='color:" + Utils.nameColor(src) + ">" + Utils.escapeHtml(sys.name(src)) + " </b> has used <b style='color:" + Utils.color.randomDark() + "'>" + move + "</b> on <b style='color:" + Utils.nameColor(tar) + ">" + Utils.escapeHtml(sys.name(tar)) + "!</b>", chan);
     });
 
-    addCommand(0, "emotetoggle", function (src, commandData, chan) {
+    addPlusCommand("emotetoggle", function (src, commandData, chan) {
         var toggled = Emotes.enabledFor(src),
             word = (toggled ? "off" : "on");
 
@@ -502,7 +506,7 @@
 
         Reg.save("Emotetoggles", Emotetoggles);
         bot.sendMessage(src, "Emotes are now toggled " + word + ".", chan);
-    }, addCommand.flags.PLUS);
+    });
 
     addCommand(0, "spin", function (src, commandData, chan) {
         if (!rouletteon) {
@@ -536,7 +540,7 @@
         broadcast("<font color=navy><timestamp/><b>±RouletteBot:</b></font> " + possibilities[sys.rand(0, possibilities.length)], chan);
     });
 
-    addCommand(0, "rtd", function (src, commandData, chan) {
+    addPlusCommand("rtd", function (src, commandData, chan) {
         var effect;
         if (RTD.cooldownFor(src) > 0) {
             return bot.sendMessage(src, "You can't use RTD for another " + Utils.getTimeString(RTD.getPlayer(src).at + RTD.getPlayer(src).cooldown - sys.time()) + ".", chan);
@@ -2529,6 +2533,7 @@
         addCommand: addCommand,
         commandReturns: commandReturns,
         addListCommand: addListCommand,
+        addPlusCommand: addPlusCommand,
         addMaintainerCommand: addMaintainerCommand,
         addChannelModCommand: addChannelModCommand,
         addChannelAdminCommand: addChannelAdminCommand,
