@@ -16,7 +16,7 @@ rank.toEntry = function (name) {
     return name.toLowerCase();
 };
 
-rank.isMember = function (name) {
+rank.hasMember = function (name) {
     var ip, aliases,
         alias,
         len, i;
@@ -55,7 +55,7 @@ rank.removeMember = function (name) {
 };
 
 rank.toggleMember = function (name) {
-    if (this.isMember(name)) {
+    if (this.hasMember(name)) {
         this.removeMember(name);
         return 'remove';
     } else {
@@ -74,7 +74,7 @@ rank.load = function () {
     return this;
 };
 
-Rank.isMemberIncludingAuth = function (name) {
+Rank.hasMemberIncludingAuth = function (name) {
     var ip, aliases,
         alias,
         len, i;
@@ -112,7 +112,7 @@ Rank.isMemberIncludingAuth = function (name) {
 exports.Rank = Rank;
 exports.load = function () {
     var plus = new Rank("MF+", "plusmembers");
-    plus.isMember = Rank.isMemberIncludingAuth;
+    plus.hasMember = Rank.hasMemberIncludingAuth;
 
     global.Ranks = {};
     Ranks.Rank = Rank;
