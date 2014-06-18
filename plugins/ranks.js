@@ -125,7 +125,7 @@ exports.load = function () {
     Ranks.Rank = Rank;
 
     Ranks.plus = plus;
-    Ranks.plusplus = {};
+    Ranks.plusplus = plusplus;
 };
 
 module.reload = function () {
