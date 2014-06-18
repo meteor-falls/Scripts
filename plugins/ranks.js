@@ -65,7 +65,7 @@ rank.toggleMember = function (name) {
 };
 
 rank.save = function () {
-    Reg.save(this.table, JSON.stringify(this.members));
+    Reg.save(this.table, this.members);
     return this;
 };
 
