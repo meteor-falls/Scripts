@@ -374,7 +374,6 @@
         ].join("<br>"), chan);
     });
 
-    // TODO: Move to lists.js
     addCommand(0, ["bbcode", "bbcodes"], function (src, commandData, chan) {
         var codes = new CommandList("BB Codes", "Type in these BB codes to use them:");
         var formatBB = function (m) {
@@ -670,25 +669,13 @@
         bot.sendMessage(src, "Channel mods: " + Utils.beautifyNames(auths.filter(sortByLevel(1))), chan);
     });
 
-    addCommand(0, "topic", function (src, commandData, chan) {
+    addCommand(0, ["topic", "topicsource"], function (src, commandData, chan) {
         var poChan = SESSION.channels(chan);
         if (!poChan.topic) {
             return bot.sendMessage(src, "There is no topic right now.", chan);
         }
 
-        Bot.topic.sendMessage(src, poChan.topic, chan);
-        if (poChan.setBy) {
-            Bot.setby.sendMessage(src, poChan.setBy, chan);
-        }
-    });
-
-    addChannelModCommand("topicsource", function (src, commandData, chan) {
-        var poChan = SESSION.channels(chan);
-        if (!poChan.topic) {
-            return bot.sendMessage(src, "There is no topic right now.", chan);
-        }
-
-        Bot.topic.sendMessage(src, Utils.escapeHtml(poChan.topic), chan);
+        Bot.topic.sendMessage(src, this.command === "topic" ? poChan.topic : Utils.escapeHtml(poChan.topic), chan);
         if (poChan.setBy) {
             Bot.setby.sendMessage(src, poChan.setBy, chan);
         }
@@ -796,7 +783,7 @@
         if (toggled) {
             delete Emotetoggles[sys.name(src).toLowerCase()];
         } else {
-            Emotetoggles[sys.name(src).toLowerCase()] = true;
+            Emotetoggles[sys.name(src).toLowerCase()] = 1;
         }
 
         Reg.save("Emotetoggles", Emotetoggles);

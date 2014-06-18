@@ -206,6 +206,7 @@
         Lists.Channel = new CommandList("Channel Commands").add([
             ["cauth", "Shows this channel's auth."],
             ["topic", "Shows this channel's topic."],
+            ["topicsource", "Shows the source of this channel's topic (no formatting)."],
             ["chanmodcommands", "To view the commands for <b>channel moderators</b>."],
             ["chanadmincommands", "To view the commands for <b>channel administrators</b>."],
             ["chanownercommands", "To view the commands for <b>channel owners</b>."],
@@ -214,7 +215,6 @@
 
         Lists.ChanMod = new CommandList("Channel Moderator Commands").add([
             ["changetopic", "Sets the topic of the channel to [topic]. HTML is allowed. An empty [topic] will reset the topic.", ["topic"]],
-            ["topicsource", "Shows the source of this channel's topic (no formatting)."],
             ["channelkick", "To kick [player] from this channel.", ["player"]]
         ]).finish();
 
