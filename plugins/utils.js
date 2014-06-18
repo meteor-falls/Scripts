@@ -95,6 +95,15 @@
             'chandelure': ['shadow tag']
         };
 
+        var units = {
+            's': 1,
+            'm': 60,
+            'h': 3600,
+            'd': 86400,
+            'w': 604800,
+            'y': 31536000
+        };
+        var evNames = "HP ATK DEF SPATK SPDEF SPD".split(" ");
         var annNameRegex = /<!name ([a-z]+)>/;
 
         util.escapeHtml = function (str, noAmp) {
@@ -321,29 +330,7 @@
             str = str.toLowerCase();
             time = +time;
 
-            var unitString = str[0],
-                unitString2 = str.substr(0, 2);
-
-            var units = {
-                's': 1,
-                'm': 60,
-                'h': 3600,
-                'd': 86400,
-                'w': 604800,
-                'y': 31536000
-            },
-                units2 = {
-                    'mo': 2592000,
-                    'de': 315360000
-                };
-
-            var unit1 = units[unitString],
-                unit2 = units2[unitString2];
-
-            if (unit2 !== undefined) {
-                return unit2 * time;
-            }
-
+            var unit1 = units[str[0]];
             if (unit1 !== undefined) {
                 return unit1 * time;
             }
@@ -540,14 +527,7 @@
         };
 
         util.EVName = function (num) {
-            return {
-                0: "HP",
-                1: "ATK",
-                2: "DEF",
-                3: "SPATK",
-                4: "SPDEF",
-                5: "SPD"
-            }[num];
+            return evNames[num];
         };
 
         function atag(link) {
