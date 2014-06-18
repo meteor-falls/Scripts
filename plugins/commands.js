@@ -1040,9 +1040,7 @@
 
     addCommand(1, ["bans", "banlist"], function (src, commandData, chan) {
         var keys = sys.banList(),
-            len,
-            i,
-            list;
+            list, len, i;
 
         if (keys.length === 0) {
             bot.sendMessage(src, "There are no bans.", chan);
@@ -1785,7 +1783,7 @@
             return;
         }
 
-        added = group.toggleMember(playerName) === 'added';
+        added = group.toggleMember(playerName) === 'add';
         group.save();
 
         bot.sendAll(Utils.beautifyName(src) + " " + (added ? "granted " + beautifulName : "revoked " + beautifulName + "'s") + " " + group.name + "!", 0);
