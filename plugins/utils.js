@@ -550,30 +550,6 @@
             }[num];
         };
 
-        util.checkFor = function (obj, key) {
-            return obj.hasOwnProperty((('' + key).toLowerCase()));
-        };
-
-        // Keys are automatically lowercase.
-        util.regToggle = function (container, key, field, addCheck) {
-            var added;
-            key = key.toLowerCase();
-
-            addCheck = addCheck || function () { return true; };
-            if ((key in container)) {
-                delete container[key];
-                added = false;
-            } else if (addCheck(container, key, field)) {
-                container[key] = true;
-                added = true;
-            } else {
-                added = 'fail';
-            }
-
-            Reg.save(field, container);
-            return added;
-        };
-
         function atag(link) {
             return "<a href='" + link + "'>" + link + "</a>";
         }
