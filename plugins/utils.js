@@ -455,34 +455,6 @@
             });
         };
 
-        // TODO: Remove these unused functions.
-        util.randPoke = function () {
-            return "<img src='pokemon:num=" + sys.rand(1, 649) + (sys.rand(1, 100) === 50 ? '&shiny=true:' : '') + "'>";
-        };
-
-        util.formatPoke = function (pokenum, shiny, back, genderId, gan) {
-            if (!pokenum || pokenum < 1 || isNaN(pokenum)) {
-                if (!sys.pokeNum(pokenum)) {
-                    return "<img src='pokemon:0'>";
-                } else {
-                    pokenum = sys.pokeNum(pokenum);
-                }
-            }
-
-            var gender = "neutral";
-
-            if (genderId) {
-                genderId = Number(genderId);
-                if ((genderId === 0 || genderId === 1 || genderId === 2)) {
-                    gender = {
-                        0: "neutral",
-                        1: "male",
-                        2: "female"
-                    }[genderId];
-                }
-            }
-            return "<img src='pokemon:" + pokenum + "&shiny=" + shiny + "&back=" + back + "&gender=" + gender + "&gen=" + gan + "'>";
-        };
 
         util.isLCaps = function isLCaps(letter) {
             return letter >= 'A' && letter <= 'Z';

@@ -20,3 +20,4 @@ It's expected that our [tiers](https://meteor-falls.github.io/Server-Shit/tiers.
 * Channel management, private channels (soon to come)
 * Persistent channel data
 * Clean Watch channel
+* Ranks (MF+, MF++)

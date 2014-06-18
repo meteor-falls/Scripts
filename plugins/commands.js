@@ -5,33 +5,17 @@
         NOWATCH: 0x1
     };
 
-    function addCommand(authLevel, name, callback, flags) {
-        // Proper checks
-        if (typeof authLevel !== "number" && typeof authLevel !== "object") {
-            print("Error: command " + name + " doesn't have a minimum auth level.");
-            return;
-        }
-
-        if ((typeof name !== "string") && (typeof name !== "object")) {
-            print("Error: unknown command without name.");
-            return;
-        }
-
-        if (typeof callback !== "function") {
-            print("Error: command " + name + " doesn't have a callback.");
-            return;
-        }
-
-        var names = [].concat(name),
-            len,
-            i;
+    function addCommand(auth, name, callback, flags) {
+        var names = Array.isArray(name) ? name : name.split(" "),
+            cmd = {
+                auth: auth,
+                callback: callback,
+                flags: flags || 0
+            },
+            len, i;
 
         for (i = 0, len = names.length; i < len; i += 1) {
-            commands[names[i]] = {
-                'authLevel': authLevel,
-                'callback': callback,
-                'flags': flags || 0
-            };
+            commands[names[i]] = cmd;
         }
     }
 
@@ -42,16 +26,13 @@
         CHANNELMODS: 0x8,
         CHANNELADMINS: 0x10,
         CHANNELOWNERS: 0x20,
-        HIDDEN: 0x40
+        LEAGUEMANAGERS: 0x40,
+        HIDDEN: 0x80
     };
 
     // Shorthands
-    function addListCommand(auth, names, listname, cb, flags) {
+    function addListCommand(auth, names, listname, flags) {
         addCommand(auth, names, function (src, commandData, chan) {
-            if (cb && !cb.call(this, src, commandData, chan)) {
-                return;
-            }
-
             Lists[listname].display(src, chan);
         }, flags);
     }
@@ -62,6 +43,10 @@
 
     function addPlusPlusCommand(names, cb, flags) {
         addCommand(0, names, cb, (flags || 0) | addCommand.flags.PLUSPLUS);
+    }
+
+    function addLeagueManagerCommand(names, cb, flags) {
+        addCommand(3, names, cb, (flags || 0) | addCommand.flags.LEAGUEMANAGERS);
     }
 
     function addMaintainerCommand(names, cb, flags) {
@@ -116,6 +101,10 @@
             return true;
         }
 
+        if ((cmd.flags & commandFlags.LEAGUEMANAGERS) && League.Managers.indexOf(name) !== -1) {
+            return true;
+        }
+
         if ((cmd.flags & commandFlags.PLUS) && !Ranks.plus.hasMember(src)) {
             throw "You need " + Ranks.plus.name + " to use this command.";
         }
@@ -124,8 +113,8 @@
             throw "You need " + Ranks.plusplus.name + " to use this command.";
         }
 
-        if (cmd.authLevel) {
-            if ((typeof cmd.authLevel === 'number' && (cmd.authLevel > srcauth || cmd.authLevel === -1)) || (Array.isArray(cmd.authLevel) && cmd.authLevel.indexOf(poUser.originalName) === -1)) {
+        if (cmd.auth) {
+            if ((typeof cmd.auth === 'number' && (cmd.auth > srcauth || cmd.auth === -1)) || (Array.isArray(cmd.auth) && cmd.auth.indexOf(poUser.originalName) === -1)) {
                 if (cmd.flags & commandFlags.HIDDEN) {
                     throw "The command " + command + " doesn't exist.";
                 } else {
@@ -150,7 +139,6 @@
             return cmd.callback.call(
                 {
                     originalName: originalName,
-                    isLManager: (League.Managers.indexOf(originalName.toLowerCase()) > -1),
                     myAuth: myAuth,
                     semuted: poUser.semuted,
                     command: command,
@@ -170,16 +158,10 @@
     addListCommand(0, "commands", "Commands");
     addListCommand(0, "usercommands", "User");
     addListCommand(0, "funcommands", "Fun");
-    addListCommand(0, "pluscommands", "Plus", null, addCommand.flags.PLUS);
-    addListCommand(0, "pluspluscommands", "Plusplus", null, addCommand.flags.PLUSPLUS);
+    addListCommand(0, "pluscommands", "Plus", addCommand.flags.PLUS);
+    addListCommand(0, "pluspluscommands", "Plusplus", addCommand.flags.PLUSPLUS);
 
-    addListCommand(0, "leaguemanagercommands", "LeagueManager", function (src, commandData, chan) {
-        if (!this.isLManager) {
-            bot.sendMessage(src, 'You need to be a league manager to view these!', chan);
-            return false;
-        }
-        return true;
-    });
+    addListCommand(0, "leaguemanagercommands", "LeagueManager", addCommand.flags.LEAGUEMANAGERS);
 
     addListCommand(0, "channelcommands", "Channel");
     addListCommand(0, "chanmodcommands", "ChanMod");
@@ -577,69 +559,39 @@
         bot.sendMessage(src, "There are " + sys.numPlayers() + " players online.", chan);
     });
 
-    addCommand(0, "gl", function (src, commandData, chan) {
-        if (!this.isLManager) {
-            bot.sendMessage(src, "You need to be a league manager to use this command!", chan);
-            return;
-        }
-
+    addLeagueManagerCommand("gl", function (src, commandData, chan) {
         var parts = commandData.split(":"),
             player = parts[0],
-            spot = Math.round(Number(parts[1]));
+            spot = Math.round(+parts[1]);
+
         if (isNaN(spot) || spot < 1 || spot > 8) {
             bot.sendMessage(src, "Valid range for gym leaders is 1-8.", chan);
             return;
         }
 
-        if (!player) {
-            bot.sendAll("The gym leader " + spot + " spot has been voided.", 0);
-            League["Gym" + spot] = "";
-            Reg.save("League", League);
-            return;
-        }
-
-        bot.sendAll(player + " has been made gym leader " + spot + "!", 0);
-        League["Gym" + spot] = player;
+        bot.sendAll(player ? player + " has been made gym leader " + spot + "!" : "The gym leader " + spot + " spot has been voided.", 0);
+        League["Gym" + spot] = player || "";
         Reg.save("League", League);
     });
 
-    addCommand(0, "el", function (src, commandData, chan) {
-        if (!this.isLManager) {
-            bot.sendMessage(src, "You need to be a league manager to use this command!", chan);
-            return;
-        }
+    addLeagueManagerCommand("el", function (src, commandData, chan) {
         var parts = commandData.split(":"),
             player = parts[0],
-            spot = Math.round(Number(parts[1]));
+            spot = Math.round(+parts[1]);
+
         if (isNaN(spot) || spot < 1 || spot > 4) {
             bot.sendMessage(src, "Valid range for the elite is 1-4.", chan);
             return;
         }
 
-        if (!player) {
-            bot.sendAll("The elite " + spot + " spot has been voided.", 0);
-            League["Elite" + spot] = "";
-            Reg.save("League", League);
-            return;
-        }
-        bot.sendAll(player + " has been made elite " + spot + "!", 0);
-        League["Elite" + spot] = player;
+        bot.sendAll(player ? player + " has been made elite " + spot + "!" : "The elite " + spot + " spot has been voided.", 0);
+        League["Elite" + spot] = player || "";
         Reg.save("League", League);
     });
 
-    addCommand(0, "champ", function (src, commandData, chan) {
-        if (!this.isLManager) {
-            bot.sendMessage(src, "You need to be a league manager to use this command!", chan);
-            return;
-        }
-        if (!commandData) {
-            bot.sendAll("The champion spot has been voided.", 0);
-            League.Champ = "";
-            Reg.save("League", League);
-            return;
-        }
-        bot.sendAll(commandData + " has been made the champion!", 0);
-        League.Champ = commandData;
+    addLeagueManagerCommand("champ", function (src, commandData) {
+        bot.sendAll(commandData ? commandData + " has been made the champion!" : "The champion spot has been voided", 0);
+        League.Champ = commandData || "";
         Reg.save("League", League);
     });
 
@@ -949,7 +901,6 @@
         }
 
         var wallmessage = Utils.format(src, commandData);
-        //var wallmessage = Utils.escapeHtml(commandData);
 
         if (Emotes.enabledFor(src)) {
             wallmessage = Emotes.format(wallmessage, Emotes.ratelimit, src);
@@ -1218,7 +1169,13 @@
         sys.sendMessage(src, "", chan);
     });
 
-    addCommand(1, "logwarn", function (src, commandData, chan) {
+    var autoMessages = {
+        logwarn: "@%1: If you have a log over (or at) 5 lines, please use http://pastebin.com to show the log. Otherwise, you might be kicked by the Flood Bot, or muted by a Moderator/or you may be temporarily banned. This is your last warning.",
+        tellemotes: "Hey, %1, the thing you are confused about is an emote. An emote is basically an emoticon but with a picture put in. Since we tend to enjoy emotes you might see one of us using the emote alot or the chat may be filled with emotes. We are sorry if we use any that is weird and creeps you out. To be able to use emotes you need seniority. To get 'seniority' you need to participate in the chat and our forums! The link to the forums is in the banner above, be sure to check it out. Good day!",
+        tellandroid: "Hello, %1, I can tell you're in a need of help on how to use the android app for this game, so I shall try to help. Go to this link [ http://pokemon-online.eu/threads/pokemon-online-android-guide.22444 ] by clicking/tapping and this shall direct you to a thread on the Pokemon Online forums that can help you with your problem. This thread is filled with screenshots and short descriptions on how to do some tasks on the app. Please be sure to check it out. Also, if you're still unable to figure it out, I say for you to try out this game on a computer because it's way more easier to use. I hope this helped!"
+    };
+
+    addCommand(1, "logwarn tellemotes tellandroid", function (src, commandData, chan) {
         var tar = this.target;
 
         if (!tar) {
@@ -1228,33 +1185,7 @@
             return bot.sendMessage(src, "<img src='" + Emotes.code("musso3") + "'>", chan);
         }
 
-        script.beforeChatMessage(src, "@" + commandData + ": If you have a log over (or at) 5 lines, please use http://pastebin.com to show the log. Otherwise, you might be kicked by the Flood Bot, or muted by a Moderator/or you may be temporarily banned. This is your last warning.", chan);
-    });
-
-    addCommand(1, "tellemotes", function (src, commandData, chan) {
-        var tar = this.target;
-
-        if (!tar) {
-            return bot.sendMessage(src, "This person doesn't exist.", chan);
-        }
-        if (Utils.getAuth(tar) > 0) {
-            return bot.sendMessage(src, "<img src='" + Emotes.code("musso3") + "'>", chan);
-        }
-
-        script.beforeChatMessage(src, "Hey, " + commandData + ", the thing you are confused about is an emote. An emote is basically an emoticon but with a picture put in. Since we tend to enjoy emotes you might see one of us using the emote alot or the chat may be filled with emotes. We are sorry if we use any that is weird and creeps you out. To be able to use emotes you need seniority. To get 'seniority' you need to participate in the chat and our forums! The link to the forums is in the banner above, be sure to check it out. Good day!", chan);
-    });
-
-    addCommand(1, "tellandroid", function (src, commandData, chan) {
-        var tar = this.target;
-
-        if (!tar) {
-            return bot.sendMessage(src, "This person doesn't exist.", chan);
-        }
-        if (Utils.getAuth(tar) > 0 || sys.os(tar) !== "android") {
-            return bot.sendMessage(src, "<img src='" + Emotes.code("musso3") + "'>", chan);
-        }
-
-        script.beforeChatMessage(src, "Hello,  " + sys.name(tar) + ", I can tell you're in a need of help on how to use the android app for this game, so I shall try to help. Go to this link [ http://pokemon-online.eu/threads/pokemon-online-android-guide.22444 ] by clicking/tapping and this shall direct you to a thread on the Pokemon Online forums that can help you with your problem. This thread is filled with screenshots and short descriptions on how to do some tasks on the app. Please be sure to check it out. Also, if you're still unable to figure it out, I say for you to try out this game on a computer because it's way more easier to use. I hope this helped!", chan);
+        script.beforeChatMessage(src, autoMessages[this.command].replace('%1', sys.name(tar)), chan);
     });
 
     addCommand(1, "silence", function (src) {
@@ -2072,7 +2003,7 @@
     }, addCommand.flags.MAINTAINERS);
 
     /* Maintainer commands */
-    addListCommand(3, "maintainercommands", "Maintainer", null, addCommand.flags.MAINTAINERS);
+    addListCommand(3, "maintainercommands", "Maintainer", addCommand.flags.MAINTAINERS);
 
     addMaintainerCommand("update", function (src, commandData, chan) {
         if (!commandData) {
@@ -2451,6 +2382,7 @@
         addListCommand: addListCommand,
         addPlusCommand: addPlusCommand,
         addPlusPlusCommand: addPlusPlusCommand,
+        addLeagueManagerCommand: addLeagueManagerCommand,
         addMaintainerCommand: addMaintainerCommand,
         addChannelModCommand: addChannelModCommand,
         addChannelAdminCommand: addChannelAdminCommand,
