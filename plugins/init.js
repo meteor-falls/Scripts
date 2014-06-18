@@ -1,4 +1,3 @@
-// NOTE: New functions should go in utils.js, old ones should slowly be ported over.
 exports.init = function () {
     Reg.init('MOTD', '');
     Reg.init('maxPlayersOnline', 0);
@@ -14,8 +13,6 @@ exports.init = function () {
 
     // Global var name: reg val name
     var regVals = {
-        "MegaUsers": "Megausers",
-        "FloodIgnore": "FloodIgnore",
         "Mutes": "Mutes",
         "Rangebans": "Rangebans",
         "Kickmsgs": "Kickmsgs",
@@ -80,18 +77,14 @@ exports.init = function () {
         }
     }
 
-    var makeChan = function (cname) {
-        sys.createChannel(cname);
-        return sys.channelId(cname);
-    };
+    function makeChan(cname) {
+        return sys.createChannel(cname) || sys.channelId(cname);
+    }
 
     staffchannel = makeChan("Auth Party");
     testchan = makeChan("Ground Zero");
     watch = makeChan("Watch");
-
-    /*function formatLinks(message) {
-        return message.replace(/(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?\^=%&amp;:\/~\+#]*[\w\-\@?\^=%&amp;\/~\+#])?/gi, '$1');
-    }*/
+    pluschannel = makeChan("MF's Lounge");
 };
 
 module.reload = function reloadInit() {

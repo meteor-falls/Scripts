@@ -37,12 +37,12 @@
 
     addCommand.flags = {
         MAINTAINERS: 0x1,
-        MEGAUSERS: 0x2,
-        CHANNELMODS: 0x4,
-        CHANNELADMINS: 0x8,
-        CHANNELOWNERS: 0x10,
-        HIDDEN: 0x20,
-        PLUS: 0x40
+        PLUS: 0x2,
+        PLUSPLUS: 0x4,
+        CHANNELMODS: 0x8,
+        CHANNELADMINS: 0x10,
+        CHANNELOWNERS: 0x20,
+        HIDDEN: 0x40
     };
 
     // Shorthands
@@ -58,6 +58,10 @@
 
     function addPlusCommand(names, cb, flags) {
         addCommand(0, names, cb, (flags || 0) | addCommand.flags.PLUS);
+    }
+
+    function addPlusPlusCommand(names, cb, flags) {
+        addCommand(0, names, cb, (flags || 0) | addCommand.flags.PLUSPLUS);
     }
 
     function addMaintainerCommand(names, cb, flags) {
@@ -100,10 +104,6 @@
             return false;
         }
 
-        if ((cmd.flags & commandFlags.MEGAUSERS) && Utils.checkFor(MegaUsers, name)) {
-            return true;
-        }
-
         if ((cmd.flags & commandFlags.CHANNELMODS) && Utils.channel.isChannelMod(src, chan)) {
             return true;
         }
@@ -116,8 +116,12 @@
             return true;
         }
 
-        if ((cmd.flags & commandFlags.PLUS) && !Ranks.plus.hasMember(src, chan)) {
+        if ((cmd.flags & commandFlags.PLUS) && !Ranks.plus.hasMember(src)) {
             throw "You need " + Ranks.plus.name + " to use this command.";
+        }
+
+        if ((cmd.flags & commandFlags.PLUSPLUS) && !Ranks.plusplus.hasMember(src)) {
+            throw "You need " + Ranks.plusplus.name + " to use this command.";
         }
 
         if (cmd.authLevel) {
@@ -166,7 +170,8 @@
     addListCommand(0, "commands", "Commands");
     addListCommand(0, "usercommands", "User");
     addListCommand(0, "funcommands", "Fun");
-    addListCommand(1, "megausercommands", "Megauser", null, addCommand.flags.MEGAUSERS);
+    addListCommand(0, "pluscommands", "Plus", null, addCommand.flags.PLUS);
+    addListCommand(0, "pluspluscommands", "Plusplus", null, addCommand.flags.PLUSPLUS);
 
     addListCommand(0, "leaguemanagercommands", "LeagueManager", function (src, commandData, chan) {
         if (!this.isLManager) {
@@ -494,20 +499,6 @@
         broadcast("<font color=green><timestamp/><b><i>+AttackBot:</i></b></font> <b style='color:" + Utils.nameColor(src) + ">" + Utils.escapeHtml(sys.name(src)) + " </b> has used <b style='color:" + Utils.color.randomDark() + "'>" + move + "</b> on <b style='color:" + Utils.nameColor(tar) + ">" + Utils.escapeHtml(sys.name(tar)) + "!</b>", chan);
     });
 
-    addPlusCommand("emotetoggle", function (src, commandData, chan) {
-        var toggled = Emotes.enabledFor(src),
-            word = (toggled ? "off" : "on");
-
-        if (toggled) {
-            delete Emotetoggles[sys.name(src).toLowerCase()];
-        } else {
-            Emotetoggles[sys.name(src).toLowerCase()] = true;
-        }
-
-        Reg.save("Emotetoggles", Emotetoggles);
-        bot.sendMessage(src, "Emotes are now toggled " + word + ".", chan);
-    });
-
     addCommand(0, "spin", function (src, commandData, chan) {
         if (!rouletteon) {
             bot.sendMessage(src, "Roulette has been turned off!", chan);
@@ -540,50 +531,6 @@
         broadcast("<font color=navy><timestamp/><b>±RouletteBot:</b></font> " + possibilities[sys.rand(0, possibilities.length)], chan);
     });
 
-    addPlusCommand("rtd", function (src, commandData, chan) {
-        var effect;
-        if (RTD.cooldownFor(src) > 0) {
-            return bot.sendMessage(src, "You can't use RTD for another " + Utils.getTimeString(RTD.getPlayer(src).at + RTD.getPlayer(src).cooldown - sys.time()) + ".", chan);
-        }
-
-        effect = RTD.giveEffect(src, null, null, function () {
-            if (sys.name(src)) {
-                Bot.rtd.sendAll(Utils.beautifyName(src) + "'s effect wore off.", 0);
-            }
-        });
-
-        Bot.rtd.sendAll(RTD.rollString(src, effect), 0);
-        Utils.watch.notify(sys.name(src) + " rolled " + RTD.effects[effect].name + ".");
-    });
-
-    addCommand(0, "megausers", function (src, commandData, chan) {
-        var keys = Object.keys(MegaUsers),
-            list;
-
-        if (keys.length === 0) {
-            bot.sendMessage(src, "There are no megausers.", chan);
-            return;
-        }
-
-        list = new TableList("Megausers", "cornflowerblue");
-        list.addEvery(keys, false, 10);
-        list.finish().display(src, chan);
-    });
-
-    addCommand(0, "floodignorelist", function (src, commandData, chan) {
-        var keys = Object.keys(FloodIgnore),
-            list;
-
-        if (keys.length === 0) {
-            bot.sendMessage(src, "There are no flood ignores.", chan);
-            return;
-        }
-
-        list = new TableList("Flood Ignores", "cornflowerblue");
-        list.addEvery(keys, false, 10);
-        list.finish().display(src, chan);
-    });
-
     addCommand(0, "pluslist", function (src, commandData, chan) {
         var keys = Object.keys(Ranks.plus.members),
             list;
@@ -594,6 +541,20 @@
         }
 
         list = new TableList(Ranks.plus.name, "cornflowerblue");
+        list.addEvery(keys, false, 10);
+        list.finish().display(src, chan);
+    });
+
+    addCommand(0, "pluspluslist", function (src, commandData, chan) {
+        var keys = Object.keys(Ranks.plusplus.members),
+            list;
+
+        if (keys.length === 0) {
+            bot.sendMessage(src, "There are no people with " + Ranks.plusplus.name + ".", chan);
+            return;
+        }
+
+        list = new TableList(Ranks.plusplus.name, "cornflowerblue");
         list.addEvery(keys, false, 10);
         list.finish().display(src, chan);
     });
@@ -811,8 +772,40 @@
         bot.sendAll(Utils.beautifyName(src) + " changed the channel auth level of " + Utils.beautifyName(name) + " to " + auth + ".", chan);
     });
 
-    /** MEGAUSER COMMANDS **/
-    addCommand(0, "message", function (src, commandData, chan) {
+    /** PLUSPLUS COMMANDS **/
+    addPlusCommand("rtd", function (src, commandData, chan) {
+        var effect;
+        if (RTD.cooldownFor(src) > 0) {
+            return bot.sendMessage(src, "You can't use RTD for another " + Utils.getTimeString(RTD.getPlayer(src).at + RTD.getPlayer(src).cooldown - sys.time()) + ".", chan);
+        }
+
+        effect = RTD.giveEffect(src, null, null, function () {
+            if (sys.name(src)) {
+                Bot.rtd.sendAll(Utils.beautifyName(src) + "'s effect wore off.", 0);
+            }
+        });
+
+        Bot.rtd.sendAll(RTD.rollString(src, effect), 0);
+        Utils.watch.notify(sys.name(src) + " rolled " + RTD.effects[effect].name + ".");
+    });
+
+    addPlusCommand("emotetoggle", function (src, commandData, chan) {
+        var toggled = Emotes.enabledFor(src),
+            word = (toggled ? "off" : "on");
+
+        if (toggled) {
+            delete Emotetoggles[sys.name(src).toLowerCase()];
+        } else {
+            Emotetoggles[sys.name(src).toLowerCase()] = true;
+        }
+
+        Reg.save("Emotetoggles", Emotetoggles);
+        bot.sendMessage(src, "Emotes are now toggled " + word + ".", chan);
+    });
+
+    /** MOD COMMANDS */
+    addListCommand(1, "modcommands", "Mod");
+    addCommand(1, "message", function (src, commandData, chan) {
         if (!commandData) {
             bot.sendMessage(src, "Specify kick, ban, or welcome!", chan);
             return;
@@ -864,7 +857,7 @@
         } else {
             bot.sendMessage(src, "Specify kick, ban, or welcome!", chan);
         }
-    }, addCommand.flags.MEGAUSERS);
+    });
 
     addCommand(1, "viewmessage", function (src, commandData, chan) {
         var srcname = sys.name(src).toLowerCase();
@@ -901,9 +894,9 @@
         } else {
             bot.sendMessage(src, "Specify kick, ban, or welcome!", chan);
         }
-    }, addCommand.flags.MEGAUSERS);
+    });
 
-    addCommand(0, "removemessage", function (src, commandData, chan) {
+    addCommand(1, "removemessage", function (src, commandData, chan) {
         var lower = commandData.toLowerCase(),
             srcname = sys.name(src).toLowerCase();
 
@@ -941,41 +934,6 @@
             bot.sendMessage(src, "Welcome message removed!", chan);
         } else {
             bot.sendMessage(src, "Specify a message (kick/ban/welcome)!", chan);
-        }
-    }, addCommand.flags.MEGAUSERS);
-
-    /** MOD COMMANDS */
-    addListCommand(1, "modcommands", "Mod");
-    addCommand(1, "plus", function (src, commandData, chan) {
-        var tar = this.target;
-
-        if (!sys.dbIp(commandData)) {
-            bot.sendMessage(src, "That person does not exist.", chan);
-            return;
-        }
-
-        var playerName = Utils.toCorrectCase(commandData),
-            beautifulName = Utils.beautifyName(playerName),
-            added = false;
-
-        if (!sys.dbRegistered(playerName)) {
-            bot.sendMessage(src, "This person is not registered and will not receive permission to use emotes until they register.", chan);
-            if (tar) {
-                bot.sendMessage(tar, "Please register so you can receive permission to use emotes.");
-            }
-            return;
-        }
-
-        added = Ranks.plus.toggleMember(playerName) === 'added';
-        Ranks.plus.save();
-
-        // Do not simplify this.
-        if (added) {
-            bot.sendAll(Utils.beautifyName(src) + " granted " + beautifulName + " " + Ranks.plus.name + "!", 0);
-            Utils.watch.notify(Utils.nameIp(src) + " granted " + beautifulName + " " + Ranks.plus.name + ".");
-        } else {
-            bot.sendAll(Utils.beautifyName(src) + " revoked " + beautifulName + "'s " + Ranks.plus.name + "!", 0);
-            Utils.watch.notify(Utils.nameIp(src) + " revoked " + beautifulName + "'s " + Ranks.plus.name + ".");
         }
     });
 
@@ -1029,31 +987,6 @@
             return;
         }
         sys.sendAll(commandData, chan);
-    });
-
-    addCommand(1, "floodignore", function (src, commandData, chan) {
-        if (!sys.dbIp(commandData)) {
-            bot.sendMessage(src, "Specify a real person!", chan);
-            return;
-        }
-
-        var playerName = commandData.toLowerCase(),
-            tar = this.target;
-
-        if (FloodIgnore.hasOwnProperty(playerName)) {
-            bot.sendMessage(src, commandData + " was removed from the flood ignore list!", chan);
-            delete FloodIgnore[playerName];
-        } else {
-            if (!sys.dbRegistered(commandData)) {
-                bot.sendMessage(src, "This person is not registered and will not receive flood ignore until they register.", chan);
-                bot.sendMessage(tar, "Please register so you can receive flood ignore.");
-                return;
-            }
-            bot.sendMessage(src, commandData + " was added to the flood ignore list!", chan);
-            FloodIgnore[playerName] = true;
-        }
-
-        Reg.save("FloodIgnore", FloodIgnore);
     });
 
     addCommand(1, ["mutes", "mutelist"], function (src, commandData, chan) {
@@ -1831,6 +1764,34 @@
     /** ADMIN COMMANDS */
     addListCommand(2, "admincommands", "Admin");
 
+    addCommand(2, ["plus", "plusplus"], function (src, commandData, chan) {
+        var tar = this.target;
+
+        if (!sys.dbIp(commandData)) {
+            bot.sendMessage(src, "That person does not exist.", chan);
+            return;
+        }
+
+        var playerName = Utils.toCorrectCase(commandData),
+            beautifulName = Utils.beautifyName(playerName),
+            group = {plus: Ranks.plus, plusplus: Ranks.plusplus}[this.command],
+            added = false;
+
+        if (!sys.dbRegistered(playerName) && !group.hasMember(playerName)) {
+            bot.sendMessage(src, "This person is not registered and will not receive " + group.name + " until they register.", chan);
+            if (tar) {
+                bot.sendMessage(tar, "Please register so you can receive " + group.name + ".");
+            }
+            return;
+        }
+
+        added = group.toggleMember(playerName) === 'added';
+        group.save();
+
+        bot.sendAll(Utils.beautifyName(src) + " " + (added ? "granted " + beautifulName : "revoked " + beautifulName + "'s") + " " + group.name + "!", 0);
+        Utils.watch.notify(Utils.nameIp(src) + " " + (added ? "granted " + beautifulName : "revoked " + beautifulName + "'s") + " " + group.name + "!");
+    });
+
     addCommand(2, "clearpass", function (src, commandData, chan) {
         var ip = sys.dbIp(commandData);
         if (!ip) {
@@ -1905,48 +1866,18 @@
         Reg.save("Rangebans", Rangebans);
     });
 
-    addCommand(2, "megauser", function (src, commandData, chan) {
-        if (!sys.dbIp(commandData)) {
-            bot.sendMessage(src, "That person does not exist.", chan);
-            return;
-        }
-
-        var playerName = Utils.toCorrectCase(commandData);
-        var tar =this.target;
-        var added = Utils.regToggle(MegaUsers, playerName, "Megausers", function () {
-            if (!sys.dbRegistered(playerName)) {
-                bot.sendMessage(src, "This person is not registered and will not receive megauser until they register.", chan);
-                if (tar) {
-                    bot.sendMessage(tar, "Please register so you can receive megauser.");
-                }
-                return;
-            }
-
-            return true;
-        });
-
-        // Do not simplify this.
-        if (added === true) {
-            bot.sendAll(playerName + ' is now a megauser!', 0);
-        } else if (added === false) {
-            bot.sendAll(playerName + ' is no longer a megauser!', 0);
-        }
-    });
-
     addCommand(2, "clearchat", function (src, commandData, chan) {
-        chan = sys.channelId(commandData);
-        if (chan === undefined) {
-            bot.sendMessage(src, "Please specify a valid channel.", chan);
-            return;
-        }
+        chan = sys.channelId(commandData) || chan;
         if (chan === watch) {
-            bot.sendMessage(src, "I'm watching you...", chan);
+            bot.sendMessage(src, "I'm #Watch-ing you...", chan);
             return;
         }
+
         var c;
         for (c = 0; c < 2999; c += 1) {
             sys.sendAll("", chan);
         }
+
         sys.sendHtmlAll("<b><font color=" + sys.getColor(src) + ">" + Utils.escapeHtml(sys.name(src)) + " </b></font>cleared the chat in the channel: <b><font color=red>" + sys.channel(chan) + "</b></font>!", chan);
     });
 
@@ -1962,11 +1893,11 @@
 
     addCommand(2, "private", function (src) {
         if (sys.isServerPrivate()) {
-            sys.sendMessage(src, "~~Server~~: The server is already private.");
+            bot.sendMessage(src, "The server is already private.");
             return;
         }
         sys.makeServerPublic(false);
-        sys.sendAll('~~Server~~: The server was made private by ' + sys.name(src) + '.');
+        bot.sendAll("The server was made private by " + sys.name(src) + ".");
     }, addCommand.flags.MAINTAINERS);
 
     addCommand(2, "showteam", function (src, commandData, chan) {
@@ -2534,6 +2465,7 @@
         commandReturns: commandReturns,
         addListCommand: addListCommand,
         addPlusCommand: addPlusCommand,
+        addPlusPlusCommand: addPlusPlusCommand,
         addMaintainerCommand: addMaintainerCommand,
         addChannelModCommand: addChannelModCommand,
         addChannelAdminCommand: addChannelAdminCommand,

@@ -46,6 +46,7 @@
         "watch": true,
         "staffchannel": true,
         "testchan": true,
+        "pluschannel": true,
 
         "tourmode": true,
         "spinTypes": true,
@@ -68,8 +69,6 @@
         "Poll": true,
         "startUpTime": true,
 
-        "MegaUsers": true,
-        "FloodIgnore": true,
         "Mutes": true,
         "Rangebans": true,
         "Kickmsgs": true,

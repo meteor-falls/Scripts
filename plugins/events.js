@@ -95,7 +95,9 @@
             }
 
             // TODO: Auto kick
-            if ((channel === staffchannel && !Utils.checkFor(MegaUsers, user.originalName) && !basicPermissions) || (channel === watch && !basicPermissions)) {
+            if ((channel === staffchannel && !Ranks.plusplus.hasMember(src) && !basicPermissions) ||
+                (channel === watch && !basicPermissions) ||
+                (channel === pluschannel && !Ranks.plus.hasMember(src))) {
                 if (sys.isInChannel(src, 0)) {
                     Bot.guard.sendMessage(src, "HEY! GET AWAY FROM THERE!", 0);
                 }
@@ -653,9 +655,10 @@
             var time = sys.time(),
                 srcip = sys.ip(src),
                 poUser = SESSION.users(src),
-                limit,
-                ignoreFlood = Utils.checkFor(FloodIgnore, sys.name(src)),
-                auth = Utils.getAuth(src);
+                name = sys.name(src),
+                ignoreFlood = Ranks.plusplus.hasMember(src),
+                auth = Utils.getAuth(src),
+                limit;
 
             if (ignoreFlood || auth > 0) {
                 return;
@@ -673,11 +676,11 @@
 
             if (poUser.floodCount > limit && !poUser.muted) {
                 Utils.watch.notify(Utils.nameIp(src) + " was kicked and muted for flooding in " + Utils.clink(sys.channel(chan)) + ".");
-                Bot.flood.sendAll(sys.name(src) + " was kicked and muted for flooding.", chan);
+                Bot.flood.sendAll(name + " was kicked and muted for flooding.", chan);
                 poUser.muted = true;
                 Mutes[srcip] = {
                     by: Bot.flood.name,
-                    mutedname: sys.name(src),
+                    mutedname: name,
                     reason: "Flooding",
                     time: time + (5 * 60)
                 };
@@ -691,12 +694,12 @@
                 limit = (chan === testchan ? 15 : 6);
 
                 if (poUser.caps >= limit && !poUser.muted) {
-                    Bot.caps.sendAll(sys.name(src) + " was muted for 5 minutes for CAPS.", 0);
+                    Bot.caps.sendAll(name + " was muted for 5 minutes for CAPS.", 0);
                     poUser.muted = true;
                     poUser.caps = 0;
                     Mutes[srcip] = {
                         by: Bot.caps.name,
-                        mutedname: sys.name(src),
+                        mutedname: name,
                         reason: "Caps",
                         time: time + 300
                     };

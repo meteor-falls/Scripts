@@ -111,13 +111,20 @@ Rank.hasMemberIncludingAuth = function (name) {
 
 exports.Rank = Rank;
 exports.load = function () {
-    var plus = new Rank("MF+", "plusmembers");
-    plus.hasMember = Rank.hasMemberIncludingAuth;
+    var plus = new Rank("MF+", "plusmembers"),
+        plusplus = new Rank("MF++", "plusplusmembers");
+
+    plusplus.hasMember = Rank.hasMemberIncludingAuth;
+    plus.hasMember = function (name) {
+        // don't call hasMemberIncludingAuth twice here for performance
+        return plusplus.hasMember(name) || Rank.prototype.hasMember.call(this, name);
+    };
 
     global.Ranks = {};
     Ranks.Rank = Rank;
 
     Ranks.plus = plus;
+    Ranks.plusplus = {};
 };
 
 module.reload = function () {

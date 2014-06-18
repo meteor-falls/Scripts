@@ -145,8 +145,9 @@
             ["usercommands", "To view the commands for <b>users</b>."],
             ["feedmoncommands", "To view the commands related to <b>feedmon</b>."],
             ["channelcommands", "To view the commands related to <b>channels</b>."],
-            ["megausercommands", "To view the commands for <b>megausers</b>."],
-            ["leaguemanagercommands", "To view the commands for <b>leaguemanagers</b>."],
+            ["pluscommands", "To view the commands for <b>" + Ranks.plus.name + " members</b>."],
+            ["pluspluscommands", "To view the commands for <b>" + Ranks.plus.name + " members</b>."],
+            ["leaguemanagercommands", "To view the commands for <b>league managers</b>."],
             ["modcommands", "To view the commands for <b>moderators</b>."],
             ["admincommands", "To view the commands for <b>administrators</b>."],
             ["ownercommands", "To view the commands for <b>owners</b>."],
@@ -155,19 +156,16 @@
 
         /** USER COMMANDS **/
         Lists.User = new CommandList("User Commands").add([
+            ["tourusercommands", "To view the tournament commands for users."],
             ["funcommands", "To view the fun commands."],
             ["rules", "To view the rules."],
             ["scriptinfo", "To view script information."],
             ["auth", "To view the authlist."],
-            ["megausers", "To view the list of people who can make tournaments."],
-            ["floodignorelist", "To view the users who can't be flood kicked"],
             ["pluslist", "To view the users who have " + Ranks.plus.name + "."],
+            ["pluspluslist", "To view the users who have " + Ranks.plusplus.name + "."],
             ["league", "To view the list of gym leaders, elites, and the champion."],
             ["leaguerules", "To view the rules for the League."],
-            ["tourusercommands", "To view the tournament commands for users."],
             ["sendto", "To send a message to a certain person. To ping, just type /sendto [person].", ["person", "message"]],
-            ["emotes", "To view a list of emotes. For moderators and above only."],
-            ["emotetoggle", "To toggle emotes on or off for you."],
             ["bbcode", "To view a list of bbcodes."],
             ["selfkick", "Kicks all the ghosts on your ip."],
             ["vote", "To vote on a poll option.", ["option"]],
@@ -190,8 +188,7 @@
             ["cure", "To cure someone.", ["player"]],
             ["me", "To post a message with *** around it.", ["message"]],
             ["spin", "To play roulette if a game is going on."],
-            ["attack", "To use a Pokémon attack on someone.", ["player"]],
-            ["rtd", "Roll the dice! You will receive a special effect."]
+            ["attack", "To use a Pokémon attack on someone.", ["player"]]
         ]).finish();
 
         /** FEEDMON **/
@@ -228,23 +225,30 @@
             ["cchangeauth", "Changes the channel auth of [player] to [auth]. [auth] must be 0-3.", ["player", "auth"]]
         ]).finish();
 
-        /** MEGAUSER **/
-        Lists.Megauser = new CommandList("Megauser Commands").add([
-            ["tour", "To start a tournament with tier [tier] that allows [#ofplayers] people to play with optional prize [prize].", ["tier", "#ofplayers", "prize"]],
-            ["endtour", "To end a running tournament."],
-            ["sub", "To replace [player1] with [player2] in the running tournament.", ["player1", "player2"]],
-            ["changecount", "To change the number of entrants allowed to [number] during the sign up phase.", ["number"]],
-            ["push", "To force [player] in the running tournament.", ["player"]],
-            ["dq", "To disqualify [player] from the running tournament.", ["player"]],
-            ["restart", "To restart [name]'s battle in the running tournament. Abusing this can cost you your megauser status.", ["name"]]
-        ]).finish();
-
         /** TOURNAMENT USER **/
         Lists.Tour = new CommandList("Tour User Commands").add([
             ["join", "To join a tournament during the sign up phase."],
             ["unjoin", "To leave a tournament."],
             ["viewround", "To view the status of the tournament."],
             ["tourtier", "To view the tier of the tournament."]
+        ]).finish();
+
+        /** PLUS **/
+        Lists.Plus = new CommandList(Ranks.plus.name + " Commands").add([
+            ["rtd", "Roll the dice! You will receive a special effect."],
+            ["emotes", "To view a list of emotes."],
+            ["emotetoggle", "To toggle emotes on or off for you."]
+        ]).finish();
+
+        /** PLUSPLUS **/
+        Lists.Plusplus = new CommandList(Ranks.plusplus.name + " Commands").add([
+            ["tour", "To start a tournament with tier [tier] that allows [#ofplayers] people to play with optional prize [prize].", ["tier", "#ofplayers", "prize"]],
+            ["endtour", "To end a running tournament."],
+            ["sub", "To replace [player1] with [player2] in the running tournament.", ["player1", "player2"]],
+            ["changecount", "To change the number of entrants allowed to [number] during the sign up phase.", ["number"]],
+            ["push", "To force [player] in the running tournament.", ["player"]],
+            ["dq", "To disqualify [player] from the running tournament.", ["player"]],
+            ["restart", "To restart [name]'s battle in the running tournament. Abusing this can cost you your " + Ranks.plusplus.name + " status.", ["name"]]
         ]).finish();
 
         /** RULES **/
@@ -279,14 +283,10 @@
         Lists.Mod = new CommandList("Moderator Commands").add([
             ["moderationcommands", "To display a list of commands that moderate the chat."],
             ["partycommands", "To display a list of party commands."],
-            ["changetopic", "To change the topic of the channel [channel] to [topic].", ["channel", "topic"]],
             ["[c]wall", "To post [text] with borders around it. [c makes it so it only appears in the channel it's used in]", ["text"]],
-            ["floodignore", "Toggles [name]'s flood ignore privilege.", ["name"]],
-            ["plus", "To add/remove [name]'s " + Ranks.plus.name + ".", ["name"]],
             ["imp", "To change your name to [name].", ["name"]],
             ["impoff", "To stop imping."],
             ["motd", "To change the Message of the Day to [message].", ["message"]],
-            ["roulette", "To start or end a roulette (/spin) game. Types can include: pokemons, items, emotes, avatars. By default, all 4 are enabled. It is separated with a comma followed by a space (, ).", ["type1, type2"]],
             ["forcerules", "To show the rules to [player].", ["player"]],
             ["info", "To view info about [player].", ["player"]],
             ["sendall", "To send a message to everyone.", ["message"]],
@@ -326,19 +326,20 @@
             ["marxmode", "To turn Marx mode on or off."],
             ["comicmode", "To turn comic mode on or off."],
             ["pewpewpew", "To turn pewpewpew mode on or off."],
-            ["nightclub", "To turn nightclub on or off."]
+            ["nightclub", "To turn nightclub on or off."],
+            ["roulette", "To start or end a roulette (/spin) game. Types can include: pokemons, items, emotes, avatars. By default, all 4 are enabled. It is separated with a comma followed by a space (, ).", ["type1, type2"]]
         ]).finish();
 
         /** ADMIN COMMANDS **/
         Lists.Admin = new CommandList("Administrator Commands").add([
-            ["<font color=blue>[s]</font>ban", "To ban [player] with an optional [reason]. Use /sban instead to silently ban.", ["player", "reason"]],
+            ["[s]ban", "To ban [player] with an optional [reason]. Use /sban instead to silently ban.", ["player", "reason"]],
             ["unban", "To unban a [player].", ["player"]],
             ["clearpass", "To clear [player]'s password.", ["player"]],
             ["clearchat", "To clear the chat in the channel [channel]. Default channel is " + sys.channel(0) + ".", ["channel"]],
             ["supersilence", "To (un)silence all users and mods."],
             ["showteam", "To view a player's team.", ["player"]],
-            ["megauser", "To give/take [player] megauser status.", ["player"]],
-            ["private", "To make the server private."]
+            ["plus", "To add/remove [name]'s " + Ranks.plus.name + ".", ["name"]],
+            ["plusplus", "To add/remove [name]'s " + Ranks.plusplus.name + ".", ["name"]],
         ]).finish();
 
         /** OWNER COMMANDS **/

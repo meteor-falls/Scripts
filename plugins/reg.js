@@ -1,17 +1,6 @@
 (function () {
     var currentVersion = 1;
     function updateReg(reg) {
-        if (reg.version === 0) {
-            ("Megausers FloodIgnore Mutes Rangebans Kickmsgs Banmsgs Welmsgs Emotetoggles Feedmon")
-                .split(" ")
-                .forEach(function (key) {
-                    var val = reg.get(key);
-                    if (typeof val === "string") {
-                        reg.save(key, JSON.parse(val));
-                    }
-                });
-        }
-
         reg.save("version", currentVersion);
         reg.version = currentVersion;
     }
@@ -59,29 +48,6 @@
 
             return deleted;
         };
-
-        /*
-        this.removeIf = function (func) {
-            var x, d = this.data,
-                madeChange = false;
-            for (x in d) {
-                if (func(d, x)) {
-                    delete d[x];
-                    madeChange = true;
-                }
-            }
-
-            if (madeChange) {
-                this.saveData();
-            }
-        };
-
-        this.removeIfValue = function (key, value) {
-            if (this.data[key] === value) {
-                delete this.data[key];
-                this.saveData();
-            }
-        };*/
 
         this.saveData = function () {
             sys.writeToFile(file, JSON.stringify(this.data));
