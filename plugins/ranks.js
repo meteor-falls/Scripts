@@ -2,6 +2,7 @@ function Rank(name, table) {
     this.name = name;
     this.table = table || name;
     this.members = {};
+    this.load();
 }
 
 var rank = Rank.prototype;
