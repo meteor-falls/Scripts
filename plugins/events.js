@@ -90,14 +90,12 @@
                 basicPermissions = Utils.mod.hasBasicPermissions(src);
 
             // Allow always
-            if (SESSION.channels(channel) && (Utils.channel.isChannelMember(src, channel) || Utils.channel.hasChannelAuth(src, channel))) {
+            if (SESSION.channels(channel) && (Utils.channel.isChannelMember(src, channel) || Utils.channel.hasChannelAuth(src, channel)) || basicPermissions) {
                 return;
             }
 
             // TODO: Auto kick
-            if ((channel === staffchannel && !Ranks.plusplus.hasMember(src) && !basicPermissions) ||
-                (channel === watch && !basicPermissions) ||
-                (channel === pluschannel && !Ranks.plus.hasMember(src))) {
+            if ((channel === staffchannel && !Ranks.plusplus.hasMember(src)) || (channel === watch) || (channel === pluschannel && !Ranks.plus.hasMember(src))) {
                 if (sys.isInChannel(src, 0)) {
                     Bot.guard.sendMessage(src, "HEY! GET AWAY FROM THERE!", 0);
                 }
@@ -121,7 +119,7 @@
             }
         },
         beforeChannelDestroyed: function (channel) {
-            if (channel === staffchannel || channel === testchan || channel === watch) {
+            if (channel === staffchannel || channel === testchan || channel === watch || channel === pluschannel) {
                 sys.stopEvent();
                 return;
             }
