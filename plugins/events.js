@@ -238,7 +238,7 @@
             }
 
             if (!poUser.muted) {
-                var hasWelcomeMessage = Welmsgs.hasOwnProperty(sys.name(src).toLowerCase());
+                var hasWelcomeMessage = Welmsgs.hasOwnProperty(sys.name(src).toLowerCase()) && Ranks.plus.hasMember(src);
                 if (!hasWelcomeMessage) {
                     if (sys.numPlayers() < 30 && os !== "android") {
                         Utils.loginMessage(sys.name(src), Utils.nameColor(src));
@@ -292,7 +292,7 @@
                 sys.sendHtmlMessage(src, "<br/><center><table width=35% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:11px; font-weight:bold;'>A <i style='color:red; font-weight:bold;'>" + tour.tier + "</i> tournament is currently running.</font><hr width=210/><br><b>Type <i style='color:red; font-weight:bold;'>/viewround</i> to check the status of the tournament!</b><br/><br/></td></tr></table></center><br/>", defaultChan);
             }
 
-            Utils.watch.notify(Utils.nameIp(src) + " logged in.");
+            Utils.watch.notify(Utils.nameIp(src) + " logged in (" + os + ").");
         },
 
         beforeChangeTier: function (src, team, oldtier, newtier) {
