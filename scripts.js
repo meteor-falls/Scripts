@@ -191,10 +191,10 @@ poScript = ({
         require.callPlugins("serverShutDown");
     },
     init: function init() {
-        require.reload('ranks.js');
         require.reload('utils.js');
 
         require.reload('reg.js');
+        require.reload('ranks.js');
         require.reload('bot.js');
 
         require.reload('rtd.js');
