@@ -129,7 +129,7 @@
             bot.sendMessage(src, 'The tier of the current tournament is ' + tourtier + '!', chan);
         });
 
-        addPlusPlusCommand(1, "sub", function (src, commandData, chan) {
+        addPlusPlusCommand("sub", function (src, commandData, chan) {
             if (tourmode !== 2) {
                 bot.sendMessage(src, "Wait until a tournament starts", chan);
                 return;
