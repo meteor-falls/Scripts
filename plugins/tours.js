@@ -12,6 +12,14 @@
         battlesStarted = [],
         battlesLost = [];
 
+    function tourbox(msg) {
+        sys.sendHtmlAll("<br/><center><table width=50% bgcolor=gray><tr style='background-color:" + gradient + "'><td align=center><br/>" + msg + "<br/></td></tr></table></center><br/>", 0);
+    }
+
+    function tourboxSelf(src, msg, chan) {
+        sys.sendHtmlMessage(src, "<br/><center><table width=50% bgcolor=gray><tr style='background-color:" + gradient + "'><td align=center><br/>" + msg + "<br/></td></tr></table></center><br/>", chan);
+    }
+
     function addCommands() {
         var commands = require('commands.js');
         var addListCommand = commands.addListCommand,
@@ -58,9 +66,9 @@
             var i;
 
             if (finals) {
-                myStr = "<center><table width=50% bgcolor=gray><tr style='background-color:" + gradient + "'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Finals of <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament:</font><hr width=300/>";
+                myStr = "<font style='font-size:20px; font-weight:bold;'>Finals of <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament:</font><hr width=300/>";
             } else {
-                myStr = "<center><table width=50% bgcolor=gray><tr style='background-color:" + gradient + "'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Round <i>" + roundnumber + "</i> of <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament!</font><hr width=300/>";
+                myStr = "<font style='font-size:20px; font-weight:bold;'>Round <i>" + roundnumber + "</i> of <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament!</font><hr width=300/>";
             }
 
             if (battlesLost.length > 0) {
@@ -98,7 +106,8 @@
                     myStr += (str.length === 0 ? "" : ", ") + tourplayers[tourmembers[x]] + "<br>";
                 }
             }
-            sys.sendHtmlMessage(src, myStr, chan);
+
+            tourboxSelf(src, msg, chan);
         });
 
         addCommand(0, "unjoin", function (src, commandData, chan) {
@@ -219,7 +228,7 @@
                 prize = "No prize";
             }
 
-            sys.sendHtmlAll("<br/><center><table width=50% bgcolor=gray><tr style='background-color:" + gradient + "'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Tournament Started by <i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(sys.name(src)) + "!</i></font><hr width=300/><table cellspacing=2 cellpadding=2><tr><td><b>Tier: <font style='color:red; font-weight:bold;'>" + tourtier + "</i></td></tr><tr><td><b>Players: <font style='color:red; font-weight:bold;'>" + tournumber + "</i></td></tr><tr><td><b>Prize: <font style='color:red; font-weight:bold;'>" + Utils.escapeHtml(prize) + "</i></td></tr></table><hr width=300/><center style='margin-right: 7px;'><b>Type <font color=red>/join</font> to join!<br/></td></tr></table></center><br/>", 0);
+            tourbox("<font style='font-size:20px; font-weight:bold;'>Tournament Started by <i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(sys.name(src)) + "!</i></font><hr width=300/><table cellspacing=2 cellpadding=2><tr><td><b>Tier: <font style='color:red; font-weight:bold;'>" + tourtier + "</i></td></tr><tr><td><b>Players: <font style='color:red; font-weight:bold;'>" + tournumber + "</i></td></tr><tr><td><b>Prize: <font style='color:red; font-weight:bold;'>" + Utils.escapeHtml(prize) + "</i></td></tr></table><hr width=300/><center style='margin-right: 7px;'><b>Type <font color=red>/join</font> to join!");
         });
 
         addPlusPlusCommand("dq", function (src, commandData, chan) {
@@ -291,7 +300,7 @@
                 return;
             }
             tournumber = count;
-            sys.sendHtmlAll("<br/><center><table width=50% bgcolor=gray><tr style='background-color:" + gradient + "'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(sys.name(src)) + "</i> changed the number of entrants to <i style='color:red; font-weight:bold;'>" + count + "!</i></font><hr width=300/><br><b><i style='color:red; font-weight:bold;'>" + tourSpots() + "</i> more spot(s) left!</b><br/><br/></td></tr></table></center><br/>", 0);
+            tourbox("<font style='font-size:20px; font-weight:bold;'><i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(sys.name(src)) + "</i> changed the number of entrants to <i style='color:red; font-weight:bold;'>" + count + "!</i></font><hr width=300/><br><b><i style='color:red; font-weight:bold;'>" + tourSpots() + "</i> more spot(s) left!</b>");
             if (tourSpots() === 0) {
                 tourmode = 2;
                 roundnumber = 0;
@@ -302,7 +311,7 @@
         addPlusPlusCommand("endtour", function (src, commandData, chan) {
             if (tourmode !== 0) {
                 tourmode = 0;
-                sys.sendHtmlAll("<br/><center><table width=50% bgcolor=gray><tr style='background-color:" + gradient + "'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>The tour was ended by <i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(sys.name(src)) + "!</i></font><hr width=300/><br><b>Sorry! A new tournament may be starting soon!</b><br/><br/></td></tr></table></center><br/>", 0);
+                tourbox("<font style='font-size:20px; font-weight:bold;'>The tour was ended by <i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(sys.name(src)) + "!</i></font><hr width=300/><br><b>Sorry! A new tournament may be starting soon!</b>");
             } else {
                 bot.sendMessage(src, "Sorry, you are unable to end a tournament because one is not currently running.", chan);
             }
@@ -357,19 +366,18 @@
         tourmembers.push(srcL);
         delete tourplayers[destL];
         var str = "";
+
         if (tourbattlers.length !== 0 || tourmembers.length > 1) {
-            str = "<br/><center><table width=50% bgcolor=gray><tr style='background-color:" + gradient + "'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><font style='font-size:25px;'>B</font>attle <font style='font-size:25px;'>C</font>ompleted!</font><hr width=300/><br>";
-            str += "<b><i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(Utils.toCorrectCase(src)) + "</i> won their battle and moves on to the next round.<br><br><i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(Utils.toCorrectCase(dest)) + "</i> lost their battle and is out of the tournament.</b>";
-        }
-        if (tourbattlers.length > 0) {
-            str += "<br><hr width=300/><br><i style='color:red; font-weight:bold;'>" + tourbattlers.length / 2 + "</i>  battle(s) remaining!";
-            str += "<br/><br/></td></tr></table></center><br/>";
-            sys.sendHtmlAll(str, 0);
-            return;
+            str = "<font style='font-size:20px; font-weight:bold;'><font style='font-size:25px;'>B</font>attle <font style='font-size:25px;'>C</font>ompleted!</font><hr width=300/><br><b><i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(Utils.toCorrectCase(src)) + "</i> won their battle and moves on to the next round.<br><br><i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(Utils.toCorrectCase(dest)) + "</i> lost their battle and is out of the tournament.</b>";
+            if (tourbattlers.length > 0) {
+                str += "<br><hr width=300/><br><i style='color:red; font-weight:bold;'>" + tourbattlers.length / 2 + "</i>  battle(s) remaining!";
+                tourbox(str);
+                return;
+            }
         }
 
         if (str.length > 0) {
-            sys.sendHtmlAll(str + "<br/><br/></td></tr></table></center><br/>", 0);
+            tourbox(str);
         }
 
         roundPairing();
@@ -381,7 +389,7 @@
         tourbattlers = [];
         battlesLost = [];
         if (tourmembers.length === 1) {
-            sys.sendHtmlAll("<br/><center><table width=50% bgcolor=gray><tr style='background-color:" + gradient + "'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><font style='font-size:25px;'>C</font>ongratulations, <i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(tourplayers[tourmembers[0]]) + "!</i></font><hr width=300/><br><b>You won the tournament! You win " + prize + "!</b><br/><br/></td></tr></table></center><br/>", 0);
+            tourbox("<font style='font-size:20px; font-weight:bold;'><font style='font-size:25px;'>C</font>ongratulations, <i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(tourplayers[tourmembers[0]]) + "!</i></font><hr width=300/><br><b>You won the tournament! You win " + prize + "!</b>");
             tourmode = 0;
             isFinals = false;
             return;
@@ -389,10 +397,10 @@
         var str;
         var finals = tourmembers.length === 2;
         if (!finals) {
-            str = "<br/><center><table width=50% bgcolor=gray><tr style='background-color:" + gradient + "'><td align=center><br/><font style='font-size:20px; font-weight:bold;'>Round <i>" + roundnumber + "</i> of <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament!</font><hr width=300/><i>Current Matchups</i><br/><b>";
+            str = "<font style='font-size:20px; font-weight:bold;'>Round <i>" + roundnumber + "</i> of <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament!</font><hr width=300/><i>Current Matchups</i><br/><b>";
         } else {
             isFinals = true;
-            str = "<br/><center><table width=50% bgcolor=gray><tr style='background-color:" + gradient + "'><td align=center><br/><font style='font-size:20px; font-weight:bold;'><font style='font-size:25px;'>F</font>inals of <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament!</font><hr width=300/><i>Matchup</i><br/><b>";
+            str = "<font style='font-size:20px; font-weight:bold;'><font style='font-size:25px;'>F</font>inals of <i style='color:red; font-weight:bold;'>" + tourtier + "</i> tournament!</font><hr width=300/><i>Matchup</i><br/><b>";
         }
         var players = sys.playerIds(),
             i = 0,
@@ -414,7 +422,6 @@
         if (tourmembers.length > 0) {
             str += "</b><br/><i>" + Utils.escapeHtml(tourplayers[tourmembers[0]]) + " is randomly selected to go next round!<br/>";
         }
-        str += "<br/></td></tr></table></center><br/>";
 
         for (j = 0, len = players.length; j < len; j += 1) {
             player = players[j];
@@ -429,7 +436,7 @@
                 bot.sendMessage(player, "You have been unidled for the tournament.", 0);
             }
 
-            sys.sendHtmlMessage(player, str + (inTour ? "<ping/>" : ""), 0);
+            tourboxSelf(src, str + (inTour ? "<ping/>" : ""), 0);
         }
     }
 
