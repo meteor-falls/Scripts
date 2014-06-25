@@ -1561,7 +1561,7 @@
             bot.sendMessage(src, "The command " + commandData + " is already disabled!", chan);
             return;
         }
-        authLevel = commands[cmdToLower].authLevel;
+        authLevel = commands[cmdToLower].auth;
         if (typeof authLevel !== 'number' || authLevel !== 0) {
             bot.sendMessage(src, "Sorry, you may not disable the " + commandData + " command.", chan);
             return;
