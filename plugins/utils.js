@@ -95,14 +95,14 @@
             'chandelure': ['shadow tag']
         };
 
-        var units = {
-            's': 1,
-            'm': 60,
-            'h': 3600,
-            'd': 86400,
-            'w': 604800,
-            'y': 31536000
+        var timeForUnit = {
+            w: 604800,
+            d: 86400,
+            h: 3600,
+            m: 60,
+            s: 1
         };
+
         var evNames = "HP ATK DEF SPATK SPDEF SPD".split(" ");
         var annNameRegex = /<!name ([a-z]+)>/;
 
@@ -313,8 +313,7 @@
         };
 
         util.cut = function (array, entry, join) {
-            join = join || "";
-            return [].concat(array).splice(entry).join(join);
+            return array.slice().splice(entry).join(join || "");
         };
 
         util.announcementName = function () {
@@ -322,20 +321,13 @@
             return matches ? matches[1] : "";
         };
 
-        util.stringToTime = function (str, time) {
-            if (typeof str !== 'string') {
-                return 0;
+        util.messageFor = function (src, type, defaultMsg, opts) {
+            var msg = global[type][util.toCorrectCase(src).toLowerCase()];
+            if (msg) {
+                return Emotes.interpolate(src, msg.message, opts, Emotes.always, false, false);
             }
 
-            str = str.toLowerCase();
-            time = +time;
-
-            var unit1 = units[str[0]];
-            if (unit1 !== undefined) {
-                return unit1 * time;
-            }
-
-            return units.m * time;
+            return defaultMsg;
         };
 
         util.getAuth = function (src) {
@@ -360,6 +352,60 @@
                 auth = mauth;
             }
             return auth;
+        };
+
+        util.isMaintainer = function (src) {
+            return Config.maintainers.indexOf(util.toCorrectCase(src)) > -1;
+        };
+
+        util.mayTarget = function (src, tar) {
+            var srcauth = util.getAuth(src),
+                tarauth = util.getAuth(tar);
+
+            if (util.isMaintainer(src)) {
+                return true;
+            } else if (util.isMaintainer(tar)) {
+                return false;
+            }
+
+            return srcauth > tarauth;
+        };
+
+        // Format: 10m -10s (590), 10.5m (630), &c.
+        // Parses a string with the above format and returns a time in seconds for that string.
+        util.stringToTime = function stringToTime(str, defaultUnit) {
+            var parts = str.trim(),
+                time = 0,
+                unit, num,
+                part, len, i;
+
+            if (!parts || parts.toLowerCase() === "forever") {
+                return 0;
+            }
+
+            defaultUnit = defaultUnit || "m";
+            parts = parts.split(" ");
+            for (i = 0, len = parts.length; i < len; i += 1) {
+                part = parts[i];
+
+                // parseFloat removes any trailing garbage (which is what we want to access primarily, actually)
+                num = parseFloat(part, 10);
+
+                // Anything after the number's length
+                // For now, just use the first character
+                unit = part.substr(num.toString().length)[0];
+
+                num *= (timeForUnit[unit] || timeForUnit[defaultUnit]);
+                if (!isNaN(num)) {
+                    time += num;
+                }
+            }
+
+            return Math.round(time);
+        };
+
+        util.forTime = function (sec) {
+            return sec === 0 ? "forever" : "for " + util.getTimeString(sec);
         };
 
         util.getTimeString = function (sec) {

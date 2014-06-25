@@ -107,7 +107,7 @@
                 }
             }
 
-            tourboxSelf(src, msg, chan);
+            tourboxSelf(src, myStr, chan);
         });
 
         addCommand(0, "unjoin", function (src, commandData, chan) {
@@ -436,7 +436,7 @@
                 bot.sendMessage(player, "You have been unidled for the tournament.", 0);
             }
 
-            tourboxSelf(src, str + (inTour ? "<ping/>" : ""), 0);
+            tourboxSelf(player, str + (inTour ? "<ping/>" : ""), 0);
         }
     }
 

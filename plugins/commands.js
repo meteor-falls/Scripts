@@ -1340,13 +1340,17 @@
         sys.unban(commandData);
     });
 
-    addCommand(1, ["mute", "smute"], function (src, commandData, chan) {
-        var v = commandData.split(':'),
-            reason = Utils.cut(v, 3, ":"),
-            mutetime = v[1],
-            timeunit = v[2],
-            tarip = sys.dbIp(v[0]),
-            tar = sys.id(v[0]);
+    addCommand(1, "mute", function (src, commandData, chan) {
+        var args = commandData.split(':'),
+            name = Utils.toCorrectCase(args[0]),
+            srcname = sys.name(src),
+            tarip = sys.dbIp(name),
+            tar = sys.id(name),
+            time = Utils.stringToTime(args[1], "m"),
+            timestr = Utils.forTime(time),
+            reason = Utils.cut(args, 2, ":"),
+            changed = false,
+            mute, mutemsg;
 
         if (!tarip) {
             bot.sendMessage(src, "Target doesn't exist!", chan);
@@ -1355,68 +1359,47 @@
 
         Utils.mod.pruneMutes();
 
-        if (Mutes[tarip]) {
-            bot.sendMessage(src, 'This person is already muted.', chan);
-            return;
-        }
-
-        if (Utils.getAuth(v[0]) >= this.myAuth) {
-            bot.sendMessage(src, "You don't have sufficient auth to mute " + v[0] + ".", chan);
-            return;
-        }
-
-        if (!reason) {
-            bot.sendMessage(src, "A reason must be specified.", chan);
+        if (!Utils.mayTarget(src, name)) {
+            bot.sendMessage(src, "You don't have sufficient auth to mute " + name + ".", chan);
             return;
         }
 
         reason = Utils.escapeHtml(reason);
 
-        var time = Utils.stringToTime(timeunit, Number(mutetime)),
-            trueTime = time + sys.time(),
-            timeString = "for " + Utils.getTimeString(time);
+        mute = {
+            by: srcname,
+            reason: reason,
+            time: sys.time() + time,
+            mutedname: name
+        };
+
+        if (Mutes[tarip]) {
+            mute = Mutes[tarip];
+            mute.time = sys.time() + time;
+            mute.mutedname = name;
+            changed = true;
+        }
 
         if (tar) {
             SESSION.users(tar).muted = true;
         }
 
-        if (!mutetime || mutetime === "forever") {
-            trueTime = 0;
-            time = 0;
-            timeString = "forever";
-        }
-
-        var muteHash = {
-            "by": this.command === "smute" ? "Anonymous" : sys.name(src),
-            "reason": reason,
-            "time": trueTime,
-            "mutedname": v[0]
-        };
-
-        Mutes[tarip] = muteHash;
+        Mutes[tarip] = mute;
         Reg.save("Mutes", Mutes);
 
-        var msg = Utils.beautifyName(sys.name(src)) + " muted " + Utils.beautifyName(v[0]) + " " + timeString + "!";
-        var mutemsg = Mutemsgs[sys.name(src).toLowerCase()];
-        if (mutemsg) {
-            msg = Emotes.interpolate(src, mutemsg.message, {
-                "{Target}": v[0],
-                "{Color}": Utils.nameColor(src),
-                "{TColor}": Utils.nameColor(sys.id(v[0])),
-                "{Duration}": timeString
-            }, Emotes.always, false, false);
+        mutemsg = changed ? Bot.mute.markup(Utils.beautifyName(src) + " changed " + Utils.beautifyName(name) + "'s mute duration to " + timestr + " from now!") : Utils.messageFor(src, "Mutemsg", Bot.mute.markup(Utils.beautifyName(src) + " muted " + Utils.beautifyName(name) + " " + timestr + "!"), {
+            "{Target}": name,
+            "{Color}": Utils.nameColor(src),
+            "{TColor}": Utils.nameColor(tar),
+            "{Duration}": timestr
+        });
+
+        sys.sendHtmlAll(mutemsg, 0);
+        if (reason && !changed) {
+            Bot.reason.sendAll(Emotes.format(reason), 0);
         }
 
-        if (this.command !== "smute") {
-            sys.sendHtmlAll((mutemsg ? msg : Bot.mute.markup(msg)), 0);
-            if (reason) {
-                Bot.reason.sendAll(Emotes.format(reason), 0);
-            }
-        } else {
-            bot.sendMessage(src, "You silently muted " + Utils.beautifyName(v[0]) + " " + timeString + ".", chan);
-        }
-
-        Utils.watch.notify(Utils.nameIp(src) + " muted " + Utils.nameIp(v[0]) + ".");
+        Utils.watch.notify(Utils.nameIp(src) + " muted " + Utils.nameIp(name) + ".");
     });
 
     addCommand(1, "m", function (src, commandData, chan) {
@@ -1428,7 +1411,7 @@
         commands.mute.callback.call(this, src, name + ":5:minutes:" + reason, chan);
     });
 
-    addCommand(1, ["unmute", "sunmute"], function (src, commandData, chan) {
+    addCommand(1, "unmute", function (src, commandData, chan) {
         var ip = sys.dbIp(commandData),
             tar = this.target;
 
@@ -1436,25 +1419,21 @@
             bot.sendMessage(src, "Target doesn't exist!", chan);
             return;
         }
+
         Utils.mod.pruneMutes();
         if (!Mutes[ip]) {
             bot.sendMessage(src, 'This person is not muted.', chan);
             return;
         }
 
-        delete Mutes[ip];
-        Reg.save("Mutes", Mutes);
-
-        if (tar !== undefined) {
+        if (tar) {
             SESSION.users(tar).muted = false;
         }
 
-        if (this.command !== "sunmute") {
-            Bot.unmute.sendAll(Utils.beautifyName(src) + " unmuted " + Utils.beautifyName(commandData) + "!", 0);
-        } else {
-            bot.sendMessage(src, "You silently unmuted " + Utils.beautifyName(commandData) + ".", chan);
-        }
+        delete Mutes[ip];
+        Reg.save("Mutes", Mutes);
 
+        Bot.unmute.sendAll(Utils.beautifyName(src) + " unmuted " + Utils.beautifyName(commandData) + "!", 0);
         Utils.watch.notify(Utils.nameIp(src) + " unmuted " + Utils.nameIp(commandData) + ".");
     });
 
