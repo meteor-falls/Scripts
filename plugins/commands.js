@@ -1387,7 +1387,7 @@
         Mutes[tarip] = mute;
         Reg.save("Mutes", Mutes);
 
-        mutemsg = changed ? Bot.mute.markup(Utils.beautifyName(src) + " changed " + Utils.beautifyName(name) + "'s mute duration to " + timestr + " from now!") : Utils.messageFor(src, "Mutemsg", Bot.mute.markup(Utils.beautifyName(src) + " muted " + Utils.beautifyName(name) + " " + timestr + "!"), {
+        mutemsg = changed ? Bot.mute.markup(Utils.beautifyName(src) + " changed " + Utils.beautifyName(name) + "'s mute duration to " + timestr + " from now!") : Utils.messageFor(src, "Mutemsgs", Bot.mute.markup(Utils.beautifyName(src) + " muted " + Utils.beautifyName(name) + " " + timestr + "!"), {
             "{Target}": name,
             "{Color}": Utils.nameColor(src),
             "{TColor}": Utils.nameColor(tar),
