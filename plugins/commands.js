@@ -1408,7 +1408,7 @@
             name = parts[0],
             reason = Utils.cut(parts, 1, ':') || 'No reason.';
 
-        commands.mute.callback.call(this, src, name + ":5:minutes:" + reason, chan);
+        commands.mute.callback.call(this, src, name + ":5m:" + reason, chan);
     });
 
     addCommand(1, "unmute", function (src, commandData, chan) {
