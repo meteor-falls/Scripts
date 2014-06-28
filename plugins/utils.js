@@ -401,7 +401,12 @@
                 }
             }
 
-            return Math.round(time);
+            time = Math.round(time);
+            if (time < 1) {
+                return 0;
+            }
+
+            return time;
         };
 
         util.forTime = function (sec) {
