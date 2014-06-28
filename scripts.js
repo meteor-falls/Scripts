@@ -149,6 +149,7 @@ function poUser(id) {
 
     // This is an array so we can track multiple emotes in their last message.
     this.lastEmote = [];
+    this.lastMessage = {message: "", time: 0};
 }
 
 function poChannel(chanId) {

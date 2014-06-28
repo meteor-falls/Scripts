@@ -656,21 +656,24 @@
                 name = sys.name(src),
                 ignoreFlood = Ranks.plusplus.hasMember(src),
                 auth = Utils.getAuth(src),
-                limit;
+                floodAdd = 1,
+                limit = (chan === testchan ? 18 : 7);
 
             if (ignoreFlood || auth > 0) {
                 return;
             }
 
-            poUser.floodCount += 1;
+            if (poUser.lastMessage.message === message && poUser.lastMessage.time + 60 >= time) {
+                floodAdd = 3;
+            }
+
+            poUser.floodCount += floodAdd;
 
             sys.setTimer(function () {
                 if (poUser) {
                     poUser.floodCount -= 1;
                 }
-            }, 8 * 1000, false);
-
-            limit = (chan === testchan ? 18 : 7);
+            }, 9 * 1000, false);
 
             if (poUser.floodCount > limit && !poUser.muted) {
                 Utils.watch.notify(Utils.nameIp(src) + " was kicked and muted for flooding in " + Utils.clink(sys.channel(chan)) + ".");
@@ -699,12 +702,14 @@
                         by: Bot.caps.name,
                         mutedname: name,
                         reason: "Caps",
-                        time: time + 300
+                        time: time + (5 * 60)
                     };
                 }
             } else if (poUser.caps > 0) {
                 poUser.caps -= 1;
             }
+
+            poUser.lastMessage = {message: message, time: time};
         },
 
         beforeChallengeIssued: function (src, dest) {
