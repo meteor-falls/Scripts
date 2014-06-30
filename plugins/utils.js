@@ -312,6 +312,19 @@
             return false;
         };
 
+        util.isBadTI = function (ti) {
+            // This check is not perfect because it's done with simple regular expressions. Improve it if you want.
+            var goodstops = (ti.match(/stop:(\.|\d)+( |#|[a-z])/gi) || []).length,
+                allstops = (ti.match(/stop:(\.|\d)/gi) || []).length;
+
+            // If there's a broken stop causing a crash, allstops will be more than goodstops.
+            if (allstops > goodstops) {
+                return true;
+            }
+
+            return false;
+        };
+
         util.cut = function (array, entry, join) {
             return array.slice().splice(entry).join(join || "");
         };
