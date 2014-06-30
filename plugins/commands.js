@@ -1411,7 +1411,7 @@
         commands.mute.callback.call(this, src, name + ":5m:" + reason, chan);
     });
 
-    addCommand(1, "unmute", function (src, commandData, chan) {
+    addCommand(1, ["um", "unmute"], function (src, commandData, chan) {
         var ip = sys.dbIp(commandData),
             tar = this.target;
 
