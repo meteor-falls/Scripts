@@ -5,16 +5,16 @@
         reg.version = currentVersion;
     }
 
-    function RegClass() {
-        var file = "Reg.json";
+    function RegClass(file) {
+        this.file = file || "Reg.json";
         this.data = {};
         this.changed = false;
         this.version = -1;
 
-        if (sys.fileExists(file)) {
-            this.data = JSON.parse(sys.getFileContent(file));
+        if (sys.fileExists(this.file)) {
+            this.data = JSON.parse(sys.getFileContent(this.file));
         } else {
-            sys.writeToFile(file, "{}");
+            sys.writeToFile(this.file, "{}");
         }
 
         this.version = this.data.version || currentVersion;
@@ -55,7 +55,7 @@
         }
 
         this.changed = false;
-        sys.writeToFile(file, JSON.stringify(this.data));
+        sys.writeToFile(this.file, JSON.stringify(this.data));
     };
 
     reg.clearAll = function () {
