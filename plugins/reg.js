@@ -28,7 +28,7 @@
         this.saveData();
     };
 
-    this.init = function (key, value) {
+    reg.init = function (key, value) {
         if (this.data[key] === undefined) {
             this.save(key, value);
         }
