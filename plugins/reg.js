@@ -77,7 +77,7 @@
     exports.Reg = RegClass;
     exports.updateReg = updateReg;
     module.reload = function () {
-        Reg = new (module.exports.Reg)();
+        global.Reg = new exports.Reg();
         return true;
     };
 }());
