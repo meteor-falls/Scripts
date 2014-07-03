@@ -665,8 +665,8 @@
                 return;
             }
 
-            if (poUser.lastMessage.message === message && poUser.lastMessage.time + 60 >= time) {
-                floodAdd = 3;
+            if (poUser.lastMessage.message === message && poUser.lastMessage.time + 20 >= time) {
+                floodAdd = 2.5;
             }
 
             poUser.floodCount += floodAdd;
@@ -675,7 +675,7 @@
                 if (poUser) {
                     poUser.floodCount -= 1;
                 }
-            }, 9 * 1000, false);
+            }, 8.5 * 1000, false);
 
             if (poUser.floodCount > limit && !poUser.muted) {
                 Utils.watch.notify(Utils.nameIp(src) + " was kicked and muted for flooding in " + Utils.clink(sys.channel(chan)) + ".");
