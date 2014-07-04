@@ -894,7 +894,6 @@
     });
 
     addCommand(1, ["wall", "cwall"], function (src, commandData, chan) {
-        var wallchan = (this.command === "cwall" ? chan : undefined);
         if (!commandData) {
             bot.sendMessage(src, "Please post a message.", chan);
             return;
@@ -906,9 +905,17 @@
             wallmessage = Emotes.format(wallmessage, Emotes.ratelimit, src);
         }
 
-        sys.sendHtmlAll("<br>" + Bot.border + "<br>", wallchan);
-        sys.sendHtmlAll("<font color=" + Utils.nameColor(src) + "><timestamp/>+<b><i>" + Utils.escapeHtml(sys.name(src)) + ":</i></b></font> " + wallmessage, wallchan);
-        sys.sendHtmlAll("<br>" + Bot.border + "<br>", wallchan);
+        function html(msg) {
+            if (this.command === "cwall") {
+                sys.sendHtmlAll(msg, chan);
+            } else {
+                sys.sendHtmlAll(msg);
+            }
+        }
+
+        html("<br>" + Bot.border + "<br>");
+        html("<font color=" + Utils.nameColor(src) + "><timestamp/>+<b><i>" + Utils.escapeHtml(sys.name(src)) + ":</i></b></font> " + wallmessage);
+        html("<br>" + Bot.border + "<br>");
     });
 
     addCommand(1, ["html", "sendhtmlall"], function (src, commandData, chan) {
