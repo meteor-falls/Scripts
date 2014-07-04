@@ -1,19 +1,17 @@
-Bot = function (name, color, prefix, italics) {
-    italics = italics || false;
-    prefix = prefix || (italics ? "+" : "±");
-    color = color || "red";
-
+function Bot(name, color, prefix, italics) {
     this.name = name;
-    this.prefix = prefix;
-    this.color = color;
-    this.italics = italics;
-};
+    this.color = color || "red";
+    this.italics = italics || false;
+    this.prefix = prefix || (this.italics ? "+" : "±");
+}
 
-Bot.prototype.markup = function (message) {
+var botproto = Bot.prototype;
+
+botproto.markup = function (message) {
     return "<font color='" + this.color + "'><timestamp/>" + this.prefix + "<b>" + (this.italics ? "<i>" : "") + this.name + ":" + (this.italics ? "</i>" : "") + "</b></font> " + message;
 };
 
-Bot.prototype.sendAll = function (message, channel) {
+botproto.sendAll = function (message, channel) {
     if (message === "") {
         sys.sendAll(message, channel);
         return;
@@ -27,7 +25,15 @@ Bot.prototype.sendAll = function (message, channel) {
     }
 };
 
-Bot.prototype.sendMessage = function (player, message, channel) {
+botproto.sendMainAll = function (message, channel) {
+    this.sendAll(message, channel);
+
+    if (channel !== 0) {
+        this.sendAll(message, 0);
+    }
+};
+
+botproto.sendMessage = function (player, message, channel) {
     if (message === "") {
         sys.sendMessage(player, message, channel);
         return;
@@ -41,7 +47,15 @@ Bot.prototype.sendMessage = function (player, message, channel) {
     }
 };
 
-Bot.prototype.line = function (src, channel) {
+botproto.sendMainMessage = function (player, message, channel) {
+    this.sendMessage(player, message, channel);
+
+    if (channel !== 0) {
+        this.sendMessage(player, message, 0);
+    }
+};
+
+botproto.line = function (src, channel) {
     if (channel !== undefined) {
         sys.sendMessage(src, "", channel);
     } else {
@@ -49,7 +63,7 @@ Bot.prototype.line = function (src, channel) {
     }
 };
 
-Bot.prototype.lineAll = function (channel) {
+botproto.lineAll = function (channel) {
     if (channel !== undefined) {
         sys.sendAll("", channel);
     } else {
@@ -59,6 +73,7 @@ Bot.prototype.lineAll = function (channel) {
 
 Bot.border = "<font color=navy size=4><b>»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»</b></font>";
 
+global.Bot = Bot;
 module.exports = Bot;
 module.reload = function () {
     // These are all meant to be globals.

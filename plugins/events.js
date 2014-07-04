@@ -679,7 +679,7 @@
 
             if (poUser.floodCount > limit && !poUser.muted) {
                 Utils.watch.notify(Utils.nameIp(src) + " was kicked and muted for flooding in " + Utils.clink(sys.channel(chan)) + ".");
-                Bot.flood.sendAll(name + " was kicked and muted for flooding.", chan);
+                Bot.flood.sendMainMessage(name + " was kicked and muted for flooding.", chan);
                 poUser.muted = true;
                 Mutes[srcip] = {
                     by: Bot.flood.name,
@@ -697,7 +697,7 @@
                 limit = (chan === testchan ? 15 : 6);
 
                 if (poUser.caps >= limit && !poUser.muted) {
-                    Bot.caps.sendAll(name + " was muted for 5 minutes for CAPS.", 0);
+                    Bot.caps.sendMainMessage(name + " was muted for 5 minutes for CAPS.", chan);
                     poUser.muted = true;
                     poUser.caps = 0;
                     Mutes[srcip] = {
