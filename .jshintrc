@@ -63,6 +63,7 @@
         "pewpewpew": true,
         "nightclub": true,
         "warnings": true,
+        "uncockblocks": true,
         "teamSpammers": true,
         "reconnectTrolls": true,
         "uniqueVisitors": true,

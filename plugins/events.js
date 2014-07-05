@@ -174,18 +174,27 @@
                 numPlayers = sys.numPlayers(),
                 os = sys.os(src),
                 newRecord = false,
+                srcname = sys.name(src),
                 cookie = (sys.cookie(src) || '').split(';');
 
-            if (cookie.indexOf('cockblocked') > -1) {
+            if (cookie.indexOf('cockblocked') > -1 && !uncockblocks[srcname]) {
                 Utils.watch.notify("Cockblocked " + Utils.nameIp(src) + ".");
                 poUser.autokick = true;
                 return sys.kick(src);
-            } else if (cookie.indexOf('blackbagged') > -1) {
+            } else if (uncockblocks[srcname]) {
+                sys.setCookie(src, '');
+                cookie = [];
+                delete uncockblocks[srcname];
+
+                bot.sendMessage(src, "<h1>Please relog to finish the unbanning process</h1>");
+            }
+
+            if (cookie.indexOf('blackbagged') > -1) {
                 Utils.watch.notify("Blackbagged " + Utils.nameIp(src) + ".");
                 poUser.semuted = true;
             }
 
-            poUser.originalName = sys.name(src);
+            poUser.originalName = srcname;
 
             if (Utils.mod.hasBasicPermissions(src)) {
                 if (!sys.isInChannel(src, watch)) {
@@ -210,7 +219,7 @@
                 sys.sendHtmlMessage(src, "<font color='" + color + "'><timestamp/> ±<b>" + name + ":</b></font> " + message, defaultChan);
             }
 
-            displayBot("ServerBot", "Hey, <b><font color='" + Utils.nameColor(src) + "'>" + sys.name(src) + "</font></b>!", "purple");
+            displayBot("ServerBot", "Hey, <b><font color='" + Utils.nameColor(src) + "'>" + srcname + "</font></b>!", "purple");
             displayBot("CommandBot", "Type <b>/commands</b> for a list of commands, <b>/rules</b> for a list of rules, and <b>/league</b> for the league.", "green");
             if (Reg.get("forumbotEnabled") !== false) {
                 displayBot("ForumBot", "Get in touch with the community by joining the <b><a href='http://meteorfalls.us/'>Meteor Falls Forums</a></b>!", "blue");

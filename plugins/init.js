@@ -54,6 +54,7 @@ exports.init = function () {
         pewpewpew: false,
         nightclub: false,
         warnings: {},
+        uncockblocks: {},
         teamSpammers: {},
         reconnectTrolls: {},
         uniqueVisitors: {
