@@ -666,7 +666,7 @@
             }
 
             if (poUser.lastMessage.message === message && poUser.lastMessage.time + 20 >= time) {
-                floodAdd = 2.5;
+                floodAdd = ["/", "!"].indexOf(message[0]) !== -1 ? 1.4 : 2.5;
             }
 
             poUser.floodCount += floodAdd;
