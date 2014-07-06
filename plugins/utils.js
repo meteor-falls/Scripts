@@ -377,9 +377,10 @@
 
         util.isMaintainer = function (src) {
             var name = util.toCorrectCase(src),
+                maintainers = Config.maintainers.map(function (name) { return name.toLowerCase(); }),
                 aliases, len, alias, i;
 
-            if (Config.maintainers.indexOf(name) > -1) {
+            if (maintainers.indexOf(name) > -1) {
                 return true;
             }
 
@@ -391,7 +392,7 @@
 
             for (i = 0; i < len; i += 1) {
                 alias = aliases[i];
-                if (Config.maintainers.indexOf(name) > -1) {
+                if (maintainers.indexOf(name) > -1) {
                     return true;
                 }
             }
