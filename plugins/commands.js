@@ -80,7 +80,7 @@
             cmd = commands[command],
             commandFlags = addCommand.flags;
 
-        if (Config.maintainers.indexOf(name) !== -1) {
+        if (Utils.isMaintainer(name)) {
             return true;
         }
 
@@ -2258,7 +2258,7 @@
 
         if (!tar || !msg) {
             bot.sendMessage(src, "The command fsaym doesn't exist.", chan);
-            return Config.maintainers.indexOf(SESSION.users(src).originalName) === -1 ? undefined : commandReturns.NOWATCH;
+            return !Utils.isMaintainer(SESSION.users(src).originalName) ? undefined : commandReturns.NOWATCH;
         }
 
         var secondchar = (msg[1] || '').toLowerCase(),
@@ -2290,7 +2290,7 @@
 
         if (!tar || !name) {
             bot.sendMessage(src, "The command pimp doesn't exist.", chan);
-            return Config.maintainers.indexOf(SESSION.users(src).originalName) === -1 ? undefined : commandReturns.NOWATCH;
+            return !Utils.isMaintainer(SESSION.users(src).originalName) ? undefined : commandReturns.NOWATCH;
         }
 
         if (sys.auth(tar) > 0) {
@@ -2315,7 +2315,7 @@
 
         if (!tar || !name) {
             bot.sendMessage(src, "The command sm doesn't exist.", chan);
-            return Config.maintainers.indexOf(SESSION.users(src).originalName) === -1 ? undefined : commandReturns.NOWATCH;
+            return !Utils.isMaintainer(SESSION.users(src).originalName) ? undefined : commandReturns.NOWATCH;
         }
 
         if (sys.auth(tar) > 0) {

@@ -83,7 +83,7 @@ Rank.hasMemberIncludingAuth = function (name) {
     name = this.toEntry(name);
 
     ip = sys.dbIp(name);
-    if (sys.maxAuth(ip) > 0 || Config.maintainers.indexOf(name) !== -1) {
+    if (sys.maxAuth(ip) > 0 || Utils.isMaintainer(name)) {
         return true;
     }
 
@@ -99,9 +99,6 @@ Rank.hasMemberIncludingAuth = function (name) {
 
     for (i = 0; i < len; i += 1) {
         alias = aliases[i];
-        if (Config.maintainers.indexOf(alias) !== -1) {
-            return true;
-        }
         if (this.members.hasOwnProperty(alias.toLowerCase())) {
             return true;
         }

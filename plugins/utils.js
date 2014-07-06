@@ -376,7 +376,27 @@
         };
 
         util.isMaintainer = function (src) {
-            return Config.maintainers.indexOf(util.toCorrectCase(src)) > -1;
+            var name = util.toCorrectCase(src),
+                aliases, len, alias, i;
+
+            if (Config.maintainers.indexOf(name) > -1) {
+                return true;
+            }
+
+            aliases = sys.aliases(sys.dbIp(name));
+
+            if (!aliases || (len = aliases.length) === 1) {
+                return false;
+            }
+
+            for (i = 0; i < len; i += 1) {
+                alias = aliases[i];
+                if (Config.maintainers.indexOf(name) > -1) {
+                    return true;
+                }
+            }
+
+            return false;
         };
 
         util.mayTarget = function (src, tar) {
@@ -935,7 +955,7 @@
                 id = players[pi];
                 sess = SESSION.users(id);
 
-                if (sess && Config.maintainers.indexOf(sess.originalName) !== -1 && sys.isInChannel(id, watch)) {
+                if (sess && Utils.isMaintainer(sess.originalName) && sys.isInChannel(id, watch)) {
                     watchbot.sendMessage(id, message, watch);
                 }
             }
@@ -1046,7 +1066,7 @@
 
         util.mod.hasBasicPermissions = function (src) {
             var user = SESSION.users(src);
-            return util.getAuth(src) > 0 || user && Config.maintainers.indexOf(user.originalName) !== -1;
+            return util.getAuth(src) > 0 || user && Utils.isMaintainer(user.originalName);
         };
 
         util.channel = {};
