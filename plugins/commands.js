@@ -1347,15 +1347,15 @@
         sys.unban(commandData);
     });
 
-    addCommand(1, "mute", function (src, commandData, chan) {
+    addCommand(1, ["mute", "m"], function (src, commandData, chan) {
         var args = commandData.split(':'),
             name = Utils.toCorrectCase(args[0]),
             srcname = sys.name(src),
             tarip = sys.dbIp(name),
             tar = sys.id(name),
-            time = Utils.stringToTime(args[1], "m"),
+            time = args.length < 3 ? Utils.stringToTime(args[1], "m") || (5 * 60),
             timestr = Utils.forTime(time),
-            reason = Utils.cut(args, 2, ":"),
+            reason = Utils.cut(args, args.length < 2 ? 1 : 2, ":"),
             changed = false,
             mute, mutemsg;
 
@@ -1407,15 +1407,6 @@
         }
 
         Utils.watch.notify(Utils.nameIp(src) + " muted " + Utils.nameIp(name) + ".");
-    });
-
-    addCommand(1, "m", function (src, commandData, chan) {
-        // Reuse code
-        var parts = commandData.split(':'),
-            name = parts[0],
-            reason = Utils.cut(parts, 1, ':') || 'No reason.';
-
-        commands.mute.callback.call(this, src, name + ":5m:" + reason, chan);
     });
 
     addCommand(1, ["um", "unmute"], function (src, commandData, chan) {
@@ -1651,7 +1642,7 @@
         }
     });
 
-    addCommand(1, "forcerules", function (src, commandData, chan) {
+    addCommand(1, ["forcerules", "fr", "sforcerules", "sfr"], function (src, commandData, chan) {
         var tar = this.target;
         if (!tar) {
             bot.sendMessage(src, "Must force rules to a real person!", chan);
@@ -1659,7 +1650,9 @@
         }
 
         bot.sendMessage(src, "You have forced " + sys.name(tar) + " to read the rules!", chan);
-        bot.sendMessage(tar, Utils.escapeHtml(sys.name(src)) + " has forced the rules to you!");
+        if (this.command !== "sforcerules" && this.command !== "sfr") {
+            bot.sendMessage(tar, Utils.escapeHtml(sys.name(src)) + " has forced the rules to you!");
+        }
         Lists.Rules.display(tar, chan);
     });
 
