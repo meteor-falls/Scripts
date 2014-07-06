@@ -1186,7 +1186,7 @@
         util.color = {};
 
         // jshint ignore:start
-        util.color.randomColor = function (options) {
+        util.color.randomColor = function randomColor(options) {
 
           options = options || {};
 
