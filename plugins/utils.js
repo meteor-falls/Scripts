@@ -376,7 +376,7 @@
         };
 
         util.isMaintainer = function (src) {
-            var name = util.toCorrectCase(src),
+            var name = util.toCorrectCase(src).toLowerCase(),
                 maintainers = Config.maintainers.map(function (name) { return name.toLowerCase(); }),
                 aliases, len, alias, i;
 
