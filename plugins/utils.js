@@ -1524,7 +1524,7 @@
         // jshint ignore:end
 
         util.color.randomDark = function () {
-            return util.color.randomColor({luminosity: 'dark', count: 27});
+            return util.color.randomColor({luminosity: 'dark'});
         };
 
         return util;
