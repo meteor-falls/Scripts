@@ -1353,7 +1353,7 @@
             srcname = sys.name(src),
             tarip = sys.dbIp(name),
             tar = sys.id(name),
-            time = args.length < 3 ? Utils.stringToTime(args[1], "m") || (5 * 60),
+            time = args.length > 2 ? Utils.stringToTime(args[1], "m") : (5 * 60),
             timestr = Utils.forTime(time),
             reason = Utils.cut(args, args.length < 2 ? 1 : 2, ":"),
             changed = false,

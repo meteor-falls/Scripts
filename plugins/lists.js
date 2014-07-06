@@ -259,7 +259,7 @@
             ["Roleplaying is a no-no, especially the me command. You can do that somewhere else."],
             ["No sexual or harmful content whatsoever. This includes porn sites, viruses, sexual ASCII art, &c."],
             ["Asking for authority is not allowed. This includes ranks. If you have good reasoning, we might consider you."],
-            ["Do not advertise your server, your facebook page, or any other stupid things. Advertising will give your server a bad reputation."],
+            ["Do not advertise your server, your Facebook page, or any other stupid things. Advertising will give your server a bad reputation."],
             ["If you're talking to someone directly, it's best to send them a private message instead of doing so in the main chat, if you know it won't benefit or entertain anyone else. If your conversation is deemed annoying you will be told to take it to PM/channel."],
             ["Ignorance of the rules is not a reason not to follow them. Acting like you've done nothing wrong when you clearly have won't help your case. If you've been muted/banned and you behave, it might be undone prematurely."],
             ["Although PMs are generally free of rules (we cannot see them nor do we care), if you do mean things and the person reports you, we might take action."],
