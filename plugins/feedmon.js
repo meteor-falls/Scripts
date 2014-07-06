@@ -6,7 +6,7 @@
 
         addListCommand(0, "feedmoncommands", "Feedmon");
 
-        addCommand(0, "catch", function (src, command, commandData, tar, chan) {
+        addCommand(0, "catch", function (src, commandData, chan) {
             var name = sys.name(src).toLowerCase();
             var feedmon = Feedmon.ensurePlayer(name);
             var time = sys.time();
@@ -38,7 +38,7 @@
             bot.sendMessage(src, 'Type /feed to feed this pokemon.', chan);
         });
 
-        addCommand(0, "feed", function (src, command, commandData, tar, chan) {
+        addCommand(0, "feed", function (src, commandData, chan) {
             var name = sys.name(src).toLowerCase(),
                 player = Feedmon.getPlayer(name),
                 time = sys.time(),
@@ -87,7 +87,7 @@
             Feedmon.save();
         });
 
-        addCommand(0, "nickname", function (src, command, commandData, tar, chan) {
+        addCommand(0, "nickname", function (src, commandData, chan) {
             var name = sys.name(src).toLowerCase(),
                 player = Feedmon.getPlayer(name),
                 feedmon;
@@ -118,7 +118,7 @@
             bot.sendMessage(src, feedmon.name + " is now named " + feedmon.nickname + "!", chan);
         });
 
-        addCommand(0, "level", function (src, command, commandData, tar, chan) {
+        addCommand(0, "level", function (src, commandData, chan) {
             var name = sys.name(src).toLowerCase(),
                 player = Feedmon.getPlayer(name),
                 table = Feedmon.exp,
@@ -156,7 +156,7 @@
             bot.sendMessage(src, "Next level (" + (nextlvl) + ") requires " + table[feedmon.level] + " EXP. Your " + feedname + " has " + feedmon.exp + " EXP, an additional " + (table[feedmon.level] - feedmon.exp) + " is required for level " + nextlvl + ".", chan);
         });
 
-        addCommand(0, "battle", function (src, command, commandData, tar, chan) {
+        addCommand(0, "battle", function (src, commandData, chan) {
             var name = sys.name(src).toLowerCase(),
                 player = Feedmon.getPlayer(name),
                 feedmon,
@@ -193,7 +193,7 @@
             });
         });
 
-        addCommand(0, "move", function (src, command, commandData, tar, chan) {
+        addCommand(0, "move", function (src, commandData, chan) {
             var name = sys.name(src).toLowerCase(),
                 player = Feedmon.getPlayer(name),
                 move = parseInt(commandData, 10),
@@ -278,7 +278,7 @@
             });
         });
 
-        addCommand(0, "heal", function (src, command, commandData, tar, chan) {
+        addCommand(0, "heal", function (src, commandData, chan) {
             var name = sys.name(src).toLowerCase(),
                 player = Feedmon.getPlayer(name),
                 feedmon,
