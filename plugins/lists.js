@@ -253,7 +253,7 @@
 
         /** RULES **/
         var Rules = new CommandList("Rules", "Please follow the rules or risk punishment: <small>(revision 4)</small>", "ol").add([
-            ["Do not spam or flood the chat (3 lines in a row is generally flood). CAPS spam isn't not allowed either, neither is posting the exact same message (you may be punished even if you post this twice in a row, in a short timespan). Do not spam emotes or any rtd effects. Any commands that do not send messages to other people are generally exempt, however commands like ping are not. You are not immume to this rule even if you have flood ignore."],
+            ["Do not spam or flood the chat (3 lines in a row is considered flood). CAPS spam isn't not allowed either, neither is posting the exact same message in quick succession. Do not spam emotes or any rtd effects. Any commands that do not send messages to other people are generally exempt, however commands like ping are not. You are not immume to this rule even if you have flood ignore."],
             ["Listen to the auth. If an auth tells you to stop misbehaving, you must listen or your punishment is their choice (as long as it's reasonable). Shouting 'abuse' when you've clearly broken the rules will bring you in more trouble."],
             ["Keep disrespectful statements to a minimum. Attentionwhoring drama, irritating trolling, or provoking behavior will be punished accordingly. We might choose to ban you for a short period of time if it gets out of hand."],
             ["Roleplaying is a no-no, especially the me command. You can do that somewhere else."],
@@ -263,7 +263,7 @@
             ["If you're talking to someone directly, it's best to send them a private message instead of doing so in the main chat, if you know it won't benefit or entertain anyone else. If your conversation is deemed annoying you will be told to take it to PM/channel."],
             ["Ignorance of the rules is not a reason not to follow them. Acting like you've done nothing wrong when you clearly have won't help your case. If you've been muted/banned and you behave, it might be undone prematurely."],
             ["Although PMs are generally free of rules (we cannot see them nor do we care), if you do mean things and the person reports you, we might take action."],
-            ["The main channel is English only. You can talk any other language in another channel, though"],
+            ["The main channel is English only. You can talk any other language in another channel, though."],
             ["Ban evasion will just grant you yet another ban. Rangebans are no different."]
         ]);
 
