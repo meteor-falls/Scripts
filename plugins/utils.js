@@ -392,12 +392,22 @@
 
             for (i = 0; i < len; i += 1) {
                 alias = aliases[i];
-                if (maintainers.indexOf(name) > -1) {
+                if (maintainers.indexOf(alias) > -1) {
                     return true;
                 }
             }
 
             return false;
+        };
+
+        util.matchAuth = function (src, auth) {
+            var srcauth = util.getAuth(src);
+
+            if (util.isMaintainer(src)) {
+                return true;
+            }
+
+            return srcauth >= 3 || srcauth >= auth;
         };
 
         util.mayTarget = function (src, tar) {
@@ -410,7 +420,7 @@
                 return false;
             }
 
-            return srcauth > tarauth;
+            return srcauth >= 3 || srcauth > tarauth;
         };
 
         // Format: 10m -10s (590), 10.5m (630), &c.

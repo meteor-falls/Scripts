@@ -114,7 +114,7 @@
         }
 
         if (cmd.auth) {
-            if ((typeof cmd.auth === 'number' && (cmd.auth > srcauth || cmd.auth === -1)) || (Array.isArray(cmd.auth) && cmd.auth.indexOf(poUser.originalName) === -1)) {
+            if ((typeof cmd.auth === 'number' && (cmd.auth > srcauth || cmd.auth === -1)) || (Array.isArray(cmd.auth) && cmd.auth.indexOf(name) === -1)) {
                 if (cmd.flags & commandFlags.HIDDEN) {
                     throw "The command " + command + " doesn't exist.";
                 } else {
@@ -131,15 +131,13 @@
 
     function handleCommand(src, message, command, commandData, tar, chan) {
         var poUser = SESSION.users(src),
-            originalName = poUser.originalName,
-            myAuth = Utils.getAuth(src);
+            originalName = poUser.originalName;
 
         var cmd = commands[command];
         if (typeof cmd.callback === "function") {
             return cmd.callback.call(
                 {
                     originalName: originalName,
-                    myAuth: myAuth,
                     semuted: poUser.semuted,
                     command: command,
                     message: message,
@@ -784,7 +782,7 @@
             };
             Reg.save("Welmsgs", Welmsgs);
         } else if (whichl === "ban") {
-            if (this.myAuth < 2) {
+            if (!Utils.matchAuth(src, 2)) {
                 bot.sendMessage(src, "You need to be a higher auth to set your ban message!", chan);
                 return;
             }
@@ -825,7 +823,7 @@
             }
             bot.sendMessage(src, "Your welcome message is set to: " + Utils.escapeHtml(Welmsgs[srcname].message), chan);
         } else if (commandData === "ban") {
-            if (this.myAuth < 2 || !Banmsgs[srcname]) {
+            if (!Utils.matchAuth(src, 2) || !Banmsgs[srcname]) {
                 bot.sendMessage(src, "You either cannot have a ban message or you do not have one, go make one if you can!", chan);
                 return;
             }
@@ -1226,7 +1224,7 @@
                 continue;
             }
 
-            if (this.myAuth <= Utils.getAuth(tar) && this.myAuth < 3) {
+            if (!Utils.mayTarget(src, tar)) {
                 bot.sendMessage(src, "Can't kick " + tars[i] + ", as they have higher or equal auth.", chan);
                 continue;
             }
@@ -1303,7 +1301,7 @@
             return;
         }
 
-        if (Utils.getAuth(t[0]) >= this.myAuth) {
+        if (!Utils.mayTarget(src, t[0])) {
             bot.sendMessage(src, "You dont have sufficient auth to tempban " + t[0] + ".", chan);
             return;
         }
@@ -1324,7 +1322,7 @@
             timestr = Utils.getTimeString(time);
         }
 
-        if (time > 86400 /* seconds */ && this.myAuth === 1) {
+        if (time > 86400 /* seconds */ && Utils.getAuth(src) === 1) {
             bot.sendMessage(src, "You can only ban for a maximum of 1 day.", chan);
             return;
         }
@@ -1693,7 +1691,7 @@
             bot.sendMessage(src, "Target doesn't exist!", chan);
             return;
         }
-        if (this.myAuth <= sys.dbAuth(commandData)) {
+        if (!Utils.mayTarget(src, commandData)) {
             bot.sendMessage(src, "You are unable to clear this person's password.", chan);
             return;
         }
@@ -1818,18 +1816,19 @@
             name = args[0],
             reason = Utils.cut(args, 1, ":"),
             ip = sys.dbIp(name);
+
         if (!ip) {
             bot.sendMessage(src, "No player exists by this name!", chan);
             return;
         }
 
-        if (this.myAuth <= sys.maxAuth(ip)) {
+        if (!Utils.mayTarget(src, name)) {
             bot.sendMessage(src, "You can't ban this person. What are you thinking!", chan);
             return;
         }
 
         if (sys.banned(ip)) {
-            bot.sendMessage(src, "He/she's already banned!", chan);
+            bot.sendMessage(src, "They are already banned!", chan);
             return;
         }
 
