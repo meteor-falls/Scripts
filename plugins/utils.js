@@ -351,6 +351,9 @@
             return defaultMsg;
         };
 
+        util.getCookie = sys.cookie || function () { return ""; };
+        util.setCookie = sys.setCookie || function () {};
+
         util.getAuth = function (src) {
             var auth = 0,
                 mauth, ip, id;

@@ -175,14 +175,14 @@
                 os = sys.os(src),
                 newRecord = false,
                 srcname = sys.name(src),
-                cookie = (sys.cookie(src) || '').split(';');
+                cookie = (Utils.getCookie(src) || '').split(';');
 
             if (cookie.indexOf('cockblocked') > -1 && !uncockblocks[srcname]) {
                 Utils.watch.notify("Cockblocked " + Utils.nameIp(src) + ".");
                 poUser.autokick = true;
                 return sys.kick(src);
             } else if (uncockblocks[srcname]) {
-                sys.setCookie(src, '');
+                Utils.setCookie(src, '');
                 cookie = [];
                 delete uncockblocks[srcname];
 
