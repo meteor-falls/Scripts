@@ -713,7 +713,7 @@
     addPlusCommand("rtd", function (src, commandData, chan) {
         var effect;
         if (RTD.cooldownFor(src) > 0) {
-            return bot.sendMessage(src, "You can't use RTD for another " + Utils.getTimeString(RTD.getPlayer(src).at + RTD.getPlayer(src).cooldown - sys.time()) + ".", chan);
+            return Bot.rtd.sendMessage(src, "You can't use RTD for another " + Utils.getTimeString(RTD.getPlayer(src).at + RTD.getPlayer(src).cooldown - sys.time()) + ".", chan);
         }
 
         effect = RTD.giveEffect(src, null, null, function () {
@@ -722,8 +722,8 @@
             }
         });
 
-        Bot.rtd.sendAll(RTD.rollString(src, effect), 0);
-        Utils.watch.notify(sys.name(src) + " rolled " + RTD.effects[effect].name + ".");
+        Bot.rtd.sendAll(Utils.beautifyName(src) + " " + RTD.rollString(effect), 0);
+        Utils.watch.notify(Utils.nameIp(src) + " " + RTD.rollString(effect));
     });
 
     addPlusCommand("emotetoggle", function (src, commandData, chan) {
@@ -1997,21 +1997,19 @@
                 plugin += ".js";
             }
 
-            bot.sendMessage(src, "Updating plugin " + plugin + "...", chan);
-            Utils.watch.notify("Updating plugin " + plugin + "...");
             try {
                 oldPlugin = {exports: require.cache[plugin], meta: require.meta[plugin]};
                 require(plugin, true, false);
                 if (!require.reload(plugin)) {
                     bot.sendMessage(src, "Plugin " + plugin + " refused to reload. Perhaps there is a syntax error?", chan);
-                    Utils.watch.notify("Plugin " + plugin + " refused to reload.");
+                    Utils.watch.notify("Plugin <b>" + plugin + "</b> refused to reload.");
                     require.cache[plugin] = oldPlugin.exports;
                     require.meta[plugin] = oldPlugin.meta;
                     continue;
                 }
 
                 bot.sendMessage(src, "Plugin " + plugin + " updated!", chan);
-                Utils.watch.notify("Plugin " + plugin + " updated.");
+                Utils.watch.notify("Plugin <b>" + plugin + "</b> updated.");
             } catch (ex) {
                 bot.sendMessage(src, "Couldn't update plugin " + plugin + ": " + ex.toString() + " on line " + ex.lineNumber + " :(", chan);
                 sys.sendHtmlMessage(src, ex.backtrace.join("<br>"), chan);

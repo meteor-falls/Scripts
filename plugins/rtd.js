@@ -57,9 +57,9 @@ module.exports.load = function () {
         return ['#2de727', '#0a281f', '#e41a28'][type];
     };
 
-    RTD.rollString = function (id, effect) {
+    RTD.rollString = function (effect) {
         var obj = effects[effect];
-        return Utils.beautifyName(id) + " rolled and won <b style='color:" + RTD.getTypeColor(obj.type) + "'>" + obj.name + "</b> for <b>" + obj.duration + "</b> seconds.";
+        return "rolled and won <b style='color:" + RTD.getTypeColor(obj.type) + "'>" + obj.name + "</b> for <b>" + obj.duration + "</b> seconds.";
     };
 
     RTD.randomEffect = function () {
