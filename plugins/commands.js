@@ -1353,7 +1353,7 @@
             tar = sys.id(name),
             time = args.length > 2 ? Utils.stringToTime(args[1], "m") : (5 * 60),
             timestr = Utils.forTime(time),
-            reason = Utils.cut(args, args.length < 2 ? 1 : 2, ":"),
+            reason = Utils.cut(args, args.length < 3 ? 1 : 2, ":"),
             changed = false,
             mute, mutemsg;
 
