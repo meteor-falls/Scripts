@@ -302,6 +302,7 @@
             ["public", "To make the server public."],
             ["regfix", "Re-connects the server to the registry."],
             ["poll", "To start a poll. You must specify at least 2 options.", ["subject", "option1*option2*option..."]],
+            ["forcepoll", "Shows the poll (subject, options) to everyone in the main channel."],
             ["closepoll", "To close the current poll."],
             ["onos", "Gives you the list of players on the given [os] (windows, mac, linux, android, webclient).", ["os"]]
         ]).finish();

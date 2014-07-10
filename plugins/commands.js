@@ -1036,7 +1036,25 @@
 
         var html = [];
         for (i = 0, len = options.length; i < len; i += 1) {
-            html.push("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>" + (i + 1) + "</b>. " + options[i]);
+            html.push("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>" + (i + 1) + "</b>. " + options[i]);
+        }
+        sys.sendHtmlAll(html.join("<br>"), 0);
+
+        sys.sendAll("", 0);
+        bot.sendAll("Vote with /vote [option number]!", 0);
+        sys.sendHtmlAll("<br>" + Bot.border, 0);
+    });
+
+    addCommand(1, "forcepoll", function (src, commandData, chan) {
+        sys.sendHtmlAll(Bot.border + "<br>", 0);
+        bot.sendAll(Poll.by + " started a poll!<ping/>", 0);
+        bot.sendAll(Poll.subject, 0);
+        bot.sendAll("Options:", 0);
+
+        var html = [],
+            options = Poll.options;
+        for (i = 0, len = options.length; i < len; i += 1) {
+            html.push("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>" + (i + 1) + "</b>. " + options[i]);
         }
         sys.sendHtmlAll(html.join("<br>"), 0);
 
