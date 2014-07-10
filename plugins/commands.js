@@ -719,6 +719,11 @@
         effect = RTD.giveEffect(src, null, null, function () {
             if (sys.name(src)) {
                 Bot.rtd.sendAll(Utils.beautifyName(src) + "'s effect wore off.", 0);
+                sys.setTimer(function () {
+                    if (sys.name(src)) {
+                        Bot.rtd.sendMessage(src, "You may use RTD again.", 0);
+                    }
+                }, 1000 * RTD.getPlayer(src).cooldown, false);
             }
         });
 
