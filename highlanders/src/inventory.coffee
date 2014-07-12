@@ -12,9 +12,9 @@ hlr.inv.giveItem = (id, item) ->
     player.inventory[item.id] = item
 
 hlr.inv.fixupLoadout = (clas, loadout) ->
-    {Primary, Secondary, Melee, Cosmetic, Misc, Taunt, NoItem} = hlr.Item
+    {Primary, Secondary, Melee, NoItem} = hlr.Item
 
-    slots = [Primary, Secondary, Melee, Cosmetic, Misc, Taunt]
+    slots = [Primary, Secondary, Melee]
     for slot in slots
         unless hlr.inv.hasItem(loadout[slot])
             loadout[slot] = hlr.class(clas).loadout[slot] ? NoItem

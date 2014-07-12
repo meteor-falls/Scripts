@@ -10,13 +10,6 @@ class hlr.Item
     @Primary: 0
     @Secondary: 1
     @Melee: 2
-    @Cosmetic: 3
-    @Misc: 4
-    @Taunt: 5
-
-    # Quality:
-    @Unique: 0
-    @Genuine: 1
 
     # Other things
     @NoItem: -1
@@ -32,17 +25,7 @@ hlr.itemSlotName = (slot) ->
         when item.Primary then "Primary"
         when item.Secondary then "Secondary"
         when item.Melee then "Melee"
-        when item.Cosmetic then "Cosmetic"
-        when item.Misc then "Misc"
-        when item.Taunt then "Taunt"
         else hlr.error("hlr.itemSlotName: unknown item slot #{slot}")
-
-hlr.itemQualityName = (quality) ->
-    item = hlr.Item
-    return switch quality
-        when item.Unique then "Unique"
-        when item.Genuine then "Genuine"
-        else hlr.error("hlr.itemQualityName: unknown item quality #{quality}")
 
 hlr.item = (id) -> hlr.items[id]
 hlr.registerItem = (item) -> hlr.items[item.id] = item
