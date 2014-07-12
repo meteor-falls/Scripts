@@ -40,7 +40,7 @@ botproto.sendMessage = function (player, message, channel) {
     }
 
     var markup = this.markup(message);
-    if (channel === undefined) {
+    if (channel === undefined || !sys.isInChannel(player, channel)) {
         sys.sendHtmlMessage(player, markup);
     } else {
         sys.sendHtmlMessage(player, markup, channel);
@@ -48,9 +48,11 @@ botproto.sendMessage = function (player, message, channel) {
 };
 
 botproto.sendMainMessage = function (player, message, channel) {
-    this.sendMessage(player, message, channel);
+    if (sys.isInChannel(player, channel)) {
+        this.sendMessage(player, message, channel);
+    }
 
-    if (channel !== 0) {
+    if (channel !== 0 && sys.isInChannel(player, 0)) {
         this.sendMessage(player, message, 0);
     }
 };

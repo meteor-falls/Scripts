@@ -717,11 +717,11 @@
         }
 
         effect = RTD.giveEffect(src, null, null, function () {
-            if (sys.name(src)) {
+            if (sys.loggedIn(src)) {
                 Bot.rtd.sendAll(Utils.beautifyName(src) + "'s effect wore off.", 0);
                 sys.setTimer(function () {
-                    if (sys.name(src)) {
-                        Bot.rtd.sendMessage(src, "You may use RTD again.", 0);
+                    if (sys.loggedIn(src)) {
+                        Bot.rtd.sendMainMessage(src, "You may use RTD again.", chan);
                     }
                 }, 1000 * RTD.getPlayer(src).cooldown, false);
             }
