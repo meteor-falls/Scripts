@@ -272,7 +272,7 @@
 
             for (i = 0, len = list.length; i < len; i += 1) {
                 if (list[i].toLowerCase() === tier) {
-                    return true;
+                    return list[i];
                 }
             }
 

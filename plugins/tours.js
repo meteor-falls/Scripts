@@ -210,11 +210,13 @@
                 return;
             }
 
-            if (!Utils.isTier(commandpart[0])) {
-                bot.sendMessage(src, "Sorry, the server does not recognise the " + commandpart[0] + " tier.", chan);
+            tourtier = commandpart[0];
+            if (!(tourtier = Utils.isTier(tourtier))) {
+                bot.sendMessage(src, "Sorry, the server does not recognise the " + tourtier + " tier.", chan);
+                tourtier = "";
                 return;
             }
-            tourtier = commandpart[0];
+
             tourmode = 1;
             tourmembers = [];
             tourips = [];
@@ -224,9 +226,7 @@
             battlesLost = [];
             isFinals = false;
 
-            if (typeof prize === "undefined") {
-                prize = "No prize";
-            }
+            prize = prize || "No prize.";
 
             tourbox("<font style='font-size:20px; font-weight:bold;'>Tournament Started by <i style='color:red; font-weight:bold;'>" + Utils.escapeHtml(sys.name(src)) + "!</i></font><hr width=300/><table cellspacing=2 cellpadding=2><tr><td><b>Tier: <font style='color:red; font-weight:bold;'>" + tourtier + "</i></td></tr><tr><td><b>Players: <font style='color:red; font-weight:bold;'>" + tournumber + "</i></td></tr><tr><td><b>Prize: <font style='color:red; font-weight:bold;'>" + Utils.escapeHtml(prize) + "</i></td></tr></table><hr width=300/><center style='margin-right: 7px;'><b>Type <font color=red>/join</font> to join!");
         });
