@@ -15,3 +15,5 @@ hlr.clone = (obj) ->
         newInstance[key] = clone(obj[key])
 
     return newInstance
+
+hlr.currencyFormat = (a) -> "£#{a}"

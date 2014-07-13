@@ -5,3 +5,5 @@ hlr.sendPlayerHtml = (src, message, chan=hlr.chan) -> sys.sendHtmlMessage(src, m
 
 hlr.sendErrorTo = (src, message, chan) -> hlr.sendPlayerHtml(src, "<timestamp/><i>#{message}</i>", chan)
 hlr.sendTo = (src, message, chan) -> hlr.sendPlayer(src, message, chan)
+
+hlr.commandList = (title, help, listtype) -> new require('lists.js').CommandList(title, help, listtype)
