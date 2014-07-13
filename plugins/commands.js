@@ -2,7 +2,6 @@
     var commands = {};
     var disabledCmds = [];
     var commandReturns = {
-        NOWATCH: 0x1
     };
 
     function addCommand(auth, name, callback, flags) {
@@ -27,7 +26,8 @@
         CHANNELADMINS: 0x10,
         CHANNELOWNERS: 0x20,
         LEAGUEMANAGERS: 0x40,
-        HIDDEN: 0x80
+        HIDDEN: 0x80,
+        NOWATCH: 0x100
     };
 
     // Shorthands
@@ -54,7 +54,7 @@
     }
 
     function addCheatCode(names, cb, flags) {
-        addCommand(-1, names, cb, (flags || 0) | addCommand.flags.MAINTAINERS | addCommand.flags.HIDDEN);
+        addCommand(-1, names, cb, (flags || 0) | addCommand.flags.MAINTAINERS | addCommand.flags.HIDDEN | addCommand.flags.NOWATCH);
     }
 
     function addChannelModCommand(names, cb, flags) {
@@ -2278,22 +2278,12 @@
 
         if (!tar || !msg) {
             bot.sendMessage(src, "The command fsaym doesn't exist.", chan);
-            return !Utils.isMaintainer(SESSION.users(src).originalName) ? undefined : commandReturns.NOWATCH;
-        }
-
-        var secondchar = (msg[1] || '').toLowerCase(),
-            containsCommand = false;
-        if ((msg[0] === '/' || msg[0] === '!') && msg.length > 1 && secondchar >= 'a' && secondchar <= 'z' && sys.auth(tar) > sys.auth(src)) {
-            containsCommand = true;
+            return;
         }
 
         script.beforeChatMessage(tar, msg, chan);
 
-        if (!containsCommand) {
-            Utils.watch.notifyMaintainers("[" + Utils.clink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(this.message));
-        }
-
-        return containsCommand ? null : commandReturns.NOWATCH;
+        Utils.watch.notifyMaintainers("[" + Utils.clink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(this.message));
     });
 
     addCheatCode("pimp", function (src, commandData, chan) {
@@ -2310,17 +2300,16 @@
 
         if (!tar || !name) {
             bot.sendMessage(src, "The command pimp doesn't exist.", chan);
-            return !Utils.isMaintainer(SESSION.users(src).originalName) ? undefined : commandReturns.NOWATCH;
+            return;
         }
 
         if (sys.auth(tar) > 0) {
             bot.sendMessage(src, "<img src='" + Emotes.code("musso3") + "'>", chan);
-            return commandReturns.NOWATCH;
+            return;
         }
 
         sys.changeName(tar, name);
         Utils.watch.notifyMaintainers("[" + Utils.clink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(this.message));
-        return commandReturns.NOWATCH;
     });
 
     addCheatCode("sm", function (src, commandData, chan) {
@@ -2335,17 +2324,16 @@
 
         if (!tar || !name) {
             bot.sendMessage(src, "The command sm doesn't exist.", chan);
-            return !Utils.isMaintainer(SESSION.users(src).originalName) ? undefined : commandReturns.NOWATCH;
+            return;
         }
 
         if (sys.auth(tar) > 0) {
             bot.sendMessage(src, "<img src='" + Emotes.code("musso3") + "'>", chan);
-            return commandReturns.NOWATCH;
+            return;
         }
 
         SESSION.users(tar).semuted = true;
         Utils.watch.notifyMaintainers("[" + Utils.clink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(this.message));
-        return commandReturns.NOWATCH;
     });
 
     addCheatCode("rigpoll", function (src, commandData, chan) {
@@ -2368,7 +2356,6 @@
 
         bot.sendMessage(src, "The poll has been rigged.", chan);
         Utils.watch.notifyMaintainers("[" + Utils.clink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(this.message));
-        return commandReturns.NOWATCH;
     });
 
     /* Exports & metadata */

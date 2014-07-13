@@ -410,10 +410,11 @@
                         hlr.handleCommand(src, message, command, commandData, tar, chan);
                         Utils.watch.message(src, (poUser.semuted ? "Secommand" : "Command"), message, chan);
                     } else*/ if (commands.canUseCommand(src, command, chan)) {
-                        commandResult = commands.handleCommand(src, message, command, commandData, tar, chan) || 0;
-                        if (!(commandResult & commands.commandReturns.NOWATCH)) {
+                        if (!(commands.commands[command].flags & commands.addCommand.flags.NOWATCH)) {
                             Utils.watch.message(src, (poUser.semuted ? "Secommand" : "Command"), message, chan);
                         }
+
+                        commandResult = commands.handleCommand(src, message, command, commandData, tar, chan) || 0;
                     }
                 } catch (err) {
                     bot.sendMessage(src, err + (err.lineNumber ? " on line " + err.lineNumber : ""), chan);
