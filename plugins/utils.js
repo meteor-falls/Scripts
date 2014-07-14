@@ -732,30 +732,34 @@
             }
         };
 
-
+        // hash is an array or object
         util.randomSample = function (hash) {
-            var cum = 0;
-            var val = Math.random();
-            var psum = 0.0;
-            var x;
-            var count = 0;
-            for (x in hash) {
-                psum += hash[x].chance;
+            var val = Math.random(),
+                psum = 0,
+                cum = 0,
+                count = 0,
+                j = 0,
+                chance, i;
+
+            for (i in hash) {
+                chance = hash[i];
+                psum += typeof chance === "number" ? chance : chance.chance;
                 count += 1;
             }
-            if (psum === 0.0) {
-                var j = 0;
-                for (x in hash) {
+
+            if (psum === 0) {
+                for (i in hash) {
                     cum = (j += 1) / count;
                     if (cum >= val) {
-                        return x;
+                        return i;
                     }
                 }
             } else {
-                for (x in hash) {
-                    cum += hash[x].chance / psum;
+                for (i in hash) {
+                    chance = hash[i];
+                    cum += (typeof chance === "number" ? chance : chance.chance) / psum;
                     if (cum >= val) {
-                        return x;
+                        return i;
                     }
                 }
             }
