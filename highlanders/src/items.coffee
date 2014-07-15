@@ -14,6 +14,9 @@ hlr.Item =
     Gun: 0x0
     Fish: 0x1
 
+hlr.quicksellPrice = (price) -> Math.ceil(price / 2)
+hlr.currencyFormat = (a) -> "£#{a}"
+
 #### GUNS ####
 hlr.item.gun 'pistol', name: "Pistol"
 

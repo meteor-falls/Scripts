@@ -56,15 +56,17 @@ hlr.addCommands = ->
             hlr.sendErrorTo @src, "You can't fish here!"
             return
 
-        if !sess.fishing and sess.fishingCooldown > sys.time()
+        sess.fishing ?= {}
+
+        if !sess.fishing.fishing and sess.fishing.cooldown > sys.time()
             hlr.sendErrorTo @src, "Slow down, cowboy."
             return
 
         direction = @commandData.toLowerCase().trim()
-        if sess.fishing and !direction
+        if sess.fishing.fishing and !direction
             hlr.sendErrorTo @src, "You're already fishing!"
             return
-        else if !sess.fishing and direction
+        else if !sess.fishing.fishing and direction
             hlr.sendErrorTo @src, "To what fish?"
             return
 
@@ -72,16 +74,16 @@ hlr.addCommands = ->
             hlr.sendErrorTo @src, "You can only go throw your fishing rod to the left, center, or right.", chan
             return
 
-        setCooldown = -> sess.fishingCooldown = sys.time() + 5
-        if sess.fishing
-            if direction is sess.fishDirection
-                hlr.sendTo @src, "You caught the #{hlr.item(sess.fish).name}!"
-                id = hlr.player.giveItem(@src, sess.fish)[0]
+        setCooldown = -> sess.fishing.cooldown = sys.time() + 5
+        if sess.fishing.fishing
+            if direction is sess.fishing.direction
+                hlr.sendTo @src, "You caught the #{hlr.item(sess.fishing.fish).name}!"
+                id = hlr.player.giveItem(@src, sess.fishing.fish)[0]
                 hlr.player.sendQuicksellInfo(@src, id)
             else
-                hlr.sendTo @src, "The #{hlr.item(sess.fish).name} went #{sess.fishDirection}, not #{direction}! Better luck next time..."
+                hlr.sendTo @src, "The #{hlr.item(sess.fishing.fish).name} went #{sess.fishing.direction}, not #{direction}! Better luck next time..."
 
-            sess.fishing = no
+            sess.fishing.fishing = no
             setCooldown()
         else
             if Math.random() > lobj.fishFailChance
@@ -89,11 +91,27 @@ hlr.addCommands = ->
                 setCooldown()
                 return
 
-            sess.fishing = yes
-            sess.fish = Utils.randomSample(lobj.fish)
-            sess.fishDirection = Utils.randomSample({left: 1/3, center: 1/3, right: 1/3})
-            hlr.sendTo @src, "You found #{hlr.an(hlr.item(sess.fish).name)}! Catch it quickly! Throw your rod in one of these directions:"
+            sess.fishing.fishing = yes
+            sess.fishing.fish = Utils.randomSample(lobj.fish)
+            sess.fishing.direction = Utils.randomSample({left: 1/3, center: 1/3, right: 1/3})
+            hlr.sendTo @src, "You found #{hlr.an(hlr.item(sess.fishing.fish).name)}! Catch it quickly! Throw your rod in one of these directions:"
             hlr.sendTo @src, "<a href='po:send//fish left'>[Left]</a> <a href='po:send//fish center'>[Center]</a> <a href='po:send//fish right'>[Right]</a>"
     , registered
 
-    # todo: quicksell command
+    # Unlisted commands
+    addCommand 'quicksell', ->
+        player = hlr.player.player(@src)
+        itemid = parseInt(@commandData, 10)
+
+        # Ignore (missclick or something)
+        if !(itemid of player.inventory)
+            return
+
+        item = player.inventory[itemid]
+        price = hlr.quicksellPrice(item)
+
+        item = hlr.player.takeItem(@src, itemid, hlr.SILENT)
+        # More appropriate message
+        hlr.sendTo @src, "You sold your #{hlr.item(item).name} for #{hlr.currencyFormat(price)}!"
+        hlr.player.giveMoney(@src, price)
+    , registered

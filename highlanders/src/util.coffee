@@ -16,8 +16,6 @@ hlr.clone = (obj) ->
 
     return newInstance
 
-hlr.currencyFormat = (a) -> "£#{a}"
-
 hlr.an = (str) ->
     if str[0] in ['a', 'e', 'u', 'i', 'o']
         return "an #{str}"

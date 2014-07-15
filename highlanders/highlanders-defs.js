@@ -8,7 +8,11 @@ var hlr = {
     },
 
     channame: "Highlanders",
-    chan: -1
+    chan: -1,
+
+    // Constants
+    VERBOSE: false,
+    SILENT: true
 };
 
 hlr.chan = sys.createChannel(hlr.channame) || sys.channelId(hlr.channame);

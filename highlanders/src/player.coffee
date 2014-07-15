@@ -7,7 +7,7 @@ hlr.player.session = (id) -> hlr.player.sessions[id] or= {}
 hlr.player.registered = (id) -> hlr.namelOf(id) of hlr.players
 hlr.player.register = (id) ->
     if hlr.player.registered(id)
-        hlr.error("hlr.player.register called on a registered player")
+        hlr.error("hlr.player.register: called for registered player")
 
     hlr.players[hlr.nameOf(id)] =
         name: id
@@ -17,7 +17,7 @@ hlr.player.register = (id) ->
     hlr.player.markDirty()
 
 #### PLAYER - ITEMS
-hlr.player.giveItem = (id, item, qty=1, silent=no) ->
+hlr.player.giveItem = (id, item, qty=1, notify=hlr.VERBOSE) ->
     player = hlr.player.player(id)
 
     amount = qty
@@ -30,35 +30,50 @@ hlr.player.giveItem = (id, item, qty=1, silent=no) ->
 
     hlr.player.markDirty()
 
-    if !silent and sys.loggedIn(id)
+    if notify is hlr.VERBOSE and sys.loggedIn(id)
         hlr.sendTo id, "You have obtained #{qty} #{hlr.item(item).name}!"
     return ids
+
+hlr.player.takeItem = (id, itemid, notify=hlr.VERBOSE) ->
+    player = hlr.player.player(id)
+
+    if !(itemid of player.inventory)
+        hlr.error("hlr.player.takeItem: player doesn't have the given itemid")
+
+    item = player.inventory[itemid]
+
+    delete player.inventory[itemid]
+    hlr.player.markDirty()
+
+    if notify is hlr.VERBOSE and sys.loggedIn(id)
+        hlr.sendTo id, "You lost your #{hlr.item(item).name}!"
+    return item
 
 hlr.player.sendQuicksellInfo = (id, itemid) ->
     player = hlr.player.player(id)
 
     if !(itemid of player.inventory)
-        hlr.error("hlr.player.sendQuicksellInfo called with non-existent item id")
+        hlr.error("hlr.player.sendQuicksellInfo: non-existent itemid")
 
     item = hlr.item(player.inventory[itemid]))
-    hlr.sendTo id, "<a href='po:send//quicksell #{itemid}'><b>Quicksell #{item.name} for #{Math.ceil(item.sell / 2)}</b></a>."
+    hlr.sendTo id, "<a href='po:send//quicksell #{itemid}'><b>Quicksell #{item.name} for #{hlr.currencyFormat(hlr.quicksellPrice(item.sell))}</b></a>."
 
 #### PLAYER - MONEY
-hlr.player.giveMoney = (id, money, silent=no) ->
+hlr.player.giveMoney = (id, money, notify=hlr.VERBOSE) ->
     player = hlr.player.player(id)
     player.balance += money
     hlr.player.markDirty()
 
-    if !silent and sys.loggedIn(id)
+    if notify is hlr.VERBOSE and sys.loggedIn(id)
         hlr.sendTo id, "You have obtained #{hlr.currencyFormat(money)}!"
 
 #### PLAYER - LOCATION
-hlr.player.goto = (id, loc, silent=no) ->
+hlr.player.goto = (id, loc, notify=hlr.VERBOSE) ->
     player = hlr.player.player(id)
     player.location = loc
     hlr.player.markDirty()
 
-    if !silent and sys.loggedIn(id)
+    if notify is hlr.VERBOSE and sys.loggedIn(id)
         hlr.player.sendLocationInfo(id, loc)
 
 hlr.player.sendLocationInfo = (id, loc=hlr.player.player(id).location) ->
