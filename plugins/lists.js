@@ -313,7 +313,7 @@
             ["tellemotes", "To explain to [player] what emotes are.", ["player"]],
             ["tellandroid", "To explain to [player] how to use the android application.", ["player"]],
             ["[s]kick", "To kick [player] from the server. You can kick multiple players with by separating their names with '*'. [reason] is optional.", ["player*player2", "reason"]],
-            ["[s]disconnect", "To disconnect [player] from the server. This will not kick their alts, and will allow them to come back online using the reconnect feature. You can kick multiple players with by separating their names with '*'. [reason] is optional.", ["player*player2", "reason"],
+            ["[s]disconnect", "To disconnect [player] from the server. This will not kick their alts, and will allow them to come back online using the reconnect feature. You can kick multiple players with by separating their names with '*'. [reason] is optional.", ["player*player2", "reason"]],
             ["mute", "To mute someone, [time] and [reason] are optional. Time is split by spaces with a short time unit after the number. (example: 10m -10s (590 seconds), or 10.5m (630 seconds)) If no time is specified, the mute lasts forever. You can skip time by doing: /mute [player]:forever:[reason].", ["player", "time", "reason"]],
             ["unmute", "To unmute [person].", ["person"]],
             ["tempban", "To tempban [person] for [time]. [timeunit] and [reason] are optional. Units are the same from /mute. Default time is 30 minutes. Time should be in minutes (with no seconds specified), otherwise it might become 30 minutes.", ["person", "time", "timeunit", "reason"]],
