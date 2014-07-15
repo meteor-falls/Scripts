@@ -1226,7 +1226,7 @@
         muteall = !muteall;
     });
 
-    addCommand(1, ["kick", "k", "skick"], function (src, commandData, chan) {
+    addCommand(1, ["kick", "k", "skick", "disconnect", "dc", "sdisconnect"], function (src, commandData, chan) {
         if (!commandData) {
             bot.sendMessage(src, "You can't kick nothing!", chan);
             return;
@@ -1237,7 +1237,13 @@
             reason = t[1] || false,
             toKick = [],
             len = tars.length,
-            tar, i;
+            verb = ["kick", "kicked"],
+            theirmessage, tarNames, msg,
+            tar, id, i;
+
+        if (this.command === "disconnect" || this.command === "dc") {
+            verb = ["disconnect", "disconnected"];
+        }
 
         for (i = 0; i < len; i += 1) {
             tar = sys.id(tars[i]);
@@ -1248,7 +1254,7 @@
             }
 
             if (!Utils.mayTarget(src, tar)) {
-                bot.sendMessage(src, "Can't kick " + tars[i] + ", as they have higher or equal auth.", chan);
+                bot.sendMessage(src, "Can't " + verb[0] + " " + tars[i] + ", as they have higher or equal auth.", chan);
                 continue;
             }
 
@@ -1257,14 +1263,14 @@
 
         if (!toKick.length) {
             if (tars.length !== 1) {
-                bot.sendMessage(src, "No one to kick.", chan);
+                bot.sendMessage(src, "No one to " + verb[0] + ".", chan);
             }
             return;
         }
 
-        var theirmessage = Kickmsgs[Utils.realName(src).toLowerCase()];
-        var tarNames = Utils.fancyJoin(Utils.beautifyNames(toKick));
-        var msg = Bot.kick.markup(tarNames + " " + (toKick.length === 1 ? "was" : "were") + " kicked by " + Utils.beautifyName(src) + "!");
+        theirmessage = Kickmsgs[Utils.realName(src).toLowerCase()];
+        tarNames = Utils.fancyJoin(Utils.beautifyNames(toKick));
+        msg = Bot.kick.markup(tarNames + " " + (toKick.length === 1 ? "was" : "were") + " " + verb[1] + " by " + Utils.beautifyName(src) + "!");
 
         if (theirmessage) {
             msg = Emotes.interpolate(src, theirmessage.message, {
@@ -1274,19 +1280,25 @@
             }, Emotes.always, false, false);
         }
 
-        if (this.command !== "skick") {
+        if (this.command !== "skick" && this.command !== "sdisconnect") {
             sys.sendHtmlAll(msg, 0);
             if (reason) {
                 Bot.reason.sendAll(Emotes.format(reason), 0);
             }
         } else {
-            bot.sendMessage(src, "You silently kicked " + tarNames + ".", chan);
+            bot.sendMessage(src, "You silently " + verb[1] + " " + tarNames + ".", chan);
         }
 
-        Utils.watch.notify(Utils.nameIp(src) + " kicked " + tarNames + ".");
+        Utils.watch.notify(Utils.nameIp(src) + " " + verb[1] + " " + tarNames + ".");
 
         for (i = 0, len = toKick.length; i < len; i += 1) {
-            Utils.mod.kick(sys.id(toKick[i]));
+            id = sys.id(toKick[i]);
+
+            if (verb[0] === "disconnect") {
+                sys.disconnect(id);
+            } else {
+                Utils.mod.kick(id);
+            }
         }
     });
 
