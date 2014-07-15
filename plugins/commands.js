@@ -1241,7 +1241,7 @@
             theirmessage, tarNames, msg,
             tar, id, i;
 
-        if (this.command === "disconnect" || this.command === "dc") {
+        if (this.command === "disconnect" || this.command === "dc" || this.command === "sdisconnect") {
             verb = ["disconnect", "disconnected"];
         }
 
