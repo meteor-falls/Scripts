@@ -465,7 +465,7 @@ hlr.sendMsg = function(message) {
   return Bot.hlr.sendAll(message, hlr.chan);
 };
 
-hlr.sendPlayer = function(src, messagen) {
+hlr.sendPlayer = function(src, message) {
   return Bot.hlr.sendMessage(src, message, hlr.chan);
 };
 
