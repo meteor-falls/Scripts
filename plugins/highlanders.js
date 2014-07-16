@@ -382,7 +382,7 @@ hlr.persistence = {
 hlr.JsonStore = (function() {
   function JsonStore(file, saverate) {
     this.file = file;
-    this.saverate = saverate != null ? saverate : 60;
+    this.saverate = saverate != null ? saverate : 30;
     hlr.persistence.stores.push(this);
     this.hash = {};
     this.dirty = false;
