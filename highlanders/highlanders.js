@@ -206,20 +206,21 @@ hlr.addCommands = function() {
     }, 3 * 1000, false);
   }, registered);
   addCommand('quicksell', function() {
-    var item, itemid, player, price;
+    var iobj, item, itemid, player, price;
     player = hlr.player.player(this.src);
     itemid = parseInt(this.commandData, 10);
     if (!(itemid in player.inventory)) {
       return;
     }
     item = player.inventory[itemid];
+    iobj = hlr.item(item);
     price = hlr.quicksellPrice(item);
     if (!price) {
       hlr.sendErrorTo(this.src, "Your " + iobj.name + " cannot be sold.");
       return;
     }
     item = hlr.player.takeItem(this.src, itemid, hlr.SILENT);
-    hlr.sendTo(this.src, "You sold your " + (hlr.item(item).name) + " for " + (hlr.currencyFormat(price)) + "!");
+    hlr.sendTo(this.src, "You sold your " + iobj.name + " for " + (hlr.currencyFormat(price)) + "!");
     return hlr.player.giveMoney(this.src, price);
   }, registered);
   return addCommand('iteminfo', function() {

@@ -161,6 +161,7 @@ hlr.addCommands = ->
             return
 
         item = player.inventory[itemid]
+        iobj = hlr.item(item)
         price = hlr.quicksellPrice(item)
 
         unless price
@@ -169,7 +170,7 @@ hlr.addCommands = ->
 
         item = hlr.player.takeItem(@src, itemid, hlr.SILENT)
         # More appropriate message
-        hlr.sendTo @src, "You sold your #{hlr.item(item).name} for #{hlr.currencyFormat(price)}!"
+        hlr.sendTo @src, "You sold your #{iobj.name} for #{hlr.currencyFormat(price)}!"
         hlr.player.giveMoney(@src, price)
     , registered
 
