@@ -316,6 +316,8 @@ hlr.quicksellPrice = function(price) {
   }
   if (typeof price === 'object') {
     price = price.sell;
+  } else if (typeof price === 'string') {
+    price = hlr.item(price).sell;
   }
   if (price) {
     return Math.ceil(price / 2);
@@ -393,19 +395,22 @@ hlr.JsonStore = (function() {
   }
 
   JsonStore.prototype.markDirty = function() {
-    return this.dirty = true;
+    this.dirty = true;
+    return this;
   };
 
   JsonStore.prototype.load = function() {
     if (sys.fileExists(this.file)) {
-      return this.hash = JSON.parse(sys.getFileContent(this.file));
+      this.hash = JSON.parse(sys.getFileContent(this.file));
     }
+    return this;
   };
 
   JsonStore.prototype.saveAll = function() {
     if (this.dirty) {
-      return sys.writeToFile(this.file, JSON.stringify(this.hash));
+      sys.writeToFile(this.file, JSON.stringify(this.hash));
     }
+    return this;
   };
 
   JsonStore.prototype.initDefaults = function() {};

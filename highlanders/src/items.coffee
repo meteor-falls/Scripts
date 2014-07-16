@@ -17,6 +17,8 @@ hlr.Item =
 hlr.quicksellPrice = (price=0) ->
     if typeof price is 'object'
         price = price.sell
+    else if typeof price is 'string'
+        price = hlr.item(price).sell
 
     if price
         return Math.ceil(price / 2)
