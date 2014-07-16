@@ -147,7 +147,8 @@
             ["channelcommands", "To view the commands related to <b>channels</b>."],
             ["pluscommands", "To view the commands for <b>" + Ranks.plus.name + " members</b>."],
             ["pluspluscommands", "To view the commands for <b>" + Ranks.plusplus.name + " members</b>."],
-            /*["leaguemanagercommands", "To view the commands for <b>league managers</b>."],*/
+            ["leaguemanagercommands", "To view the commands for <b>league managers</b>."],
+            ["hlrcommands", "To view the commands for <b>highlanders</b> (use them in the <a href='po:join/Highlanders'>#Highlanders</a> channel)"],
             ["modcommands", "To view the commands for <b>moderators</b>."],
             ["admincommands", "To view the commands for <b>administrators</b>."],
             ["ownercommands", "To view the commands for <b>owners</b>."],

@@ -1,6 +1,9 @@
 hlr.commands = {}
 hlr.canUseCommand = (src, command, chan) ->
-    if chan isnt hlr.chan and command isnt 'hlrcommands'
+    if command is 'hlrcommands'
+        return yes
+
+    if chan isnt hlr.chan
         return no
 
     unless hlr.commands.hasOwnProperty(command)

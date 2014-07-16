@@ -36,7 +36,10 @@ var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; 
 hlr.commands = {};
 
 hlr.canUseCommand = function(src, command, chan) {
-  if (chan !== hlr.chan && command !== 'hlrcommands') {
+  if (command === 'hlrcommands') {
+    return true;
+  }
+  if (chan !== hlr.chan) {
     return false;
   }
   if (!hlr.commands.hasOwnProperty(command)) {
