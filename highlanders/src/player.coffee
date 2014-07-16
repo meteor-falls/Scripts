@@ -8,7 +8,7 @@ hlr.player.registered = (id) -> hlr.namelOf(id) of hlr.players
 hlr.player.register = (id) ->
     hlr.assert(!hlr.player.registered(id), "can't register already registered players")
 
-    hlr.players[hlr.nameOf(id)] =
+    hlr.players[hlr.namelOf(id)] =
         name: id
         balance: 0
         inventory: {}

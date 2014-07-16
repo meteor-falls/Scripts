@@ -540,7 +540,7 @@ hlr.player.registered = function(id) {
 
 hlr.player.register = function(id) {
   hlr.assert(!hlr.player.registered(id), "can't register already registered players");
-  hlr.players[hlr.nameOf(id)] = {
+  hlr.players[hlr.namelOf(id)] = {
     name: id,
     balance: 0,
     inventory: {}
@@ -703,8 +703,9 @@ hlr.player.initStorage = function() {
 };
 
 hlr.nameOf = function(id) {
+  var _ref, _ref1;
   if (typeof id === 'number') {
-    return SESSION.users(id).originalName;
+    return (_ref = (_ref1 = SESSION.users(id)) != null ? _ref1.originalName : void 0) != null ? _ref : sys.name(id);
   } else {
     return id;
   }
