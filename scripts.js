@@ -47,6 +47,7 @@ Config = {
         }
 
         var __fileContent,
+            __fname = dir + name + ".js",
             module, exports, __resp;
 
         if (webcall) {
@@ -54,14 +55,14 @@ Config = {
             if (!__resp || __resp.substr(0, 9) === "<!DOCTYPE") {
                 throw new Error("Failed to load plugin " + name + " from " + Config.repourl + "plugins/" + name);
             }
-            sys.writeToFile(dir + name, __resp);
+            sys.writeToFile(__fname, __resp);
         }
 
-        if (!sys.fileExists(dir + name)) {
-            throw {name: "NoFileError", toString: function () { return "Couldn't find file " + (dir + name) + "."; }};
+        if (!sys.fileExists(__fname)) {
+            throw {name: "NoFileError", toString: function () { return "Couldn't find file " + (__fname) + "."; }};
         }
 
-        __fileContent = sys.getFileContent(dir + name + ".js");
+        __fileContent = sys.getFileContent(__fname);
 
         module = {
             exports: {},
@@ -72,7 +73,7 @@ Config = {
         exports = module.exports;
 
         try {
-            sys.eval("(function () { " + __fileContent + " }());", dir + name);
+            sys.eval("(function () { " + __fileContent + " }());", __fname);
         } catch (e) {
             sys.sendAll("Error loading module " + name + ": " + e + " on line " + e.lineNumber);
             print(e.backtracetext);
