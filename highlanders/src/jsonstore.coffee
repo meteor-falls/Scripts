@@ -14,6 +14,5 @@ class hlr.JsonStore
     saveAll: ->
         if @dirty
             sys.writeToFile(@file, JSON.stringify(@hash))
-            Utils.watch.notify("hlr #{@file} saved")
         return this
     initDefaults: ->

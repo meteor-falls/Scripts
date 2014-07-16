@@ -139,6 +139,6 @@ hlr.player.sendLocationInfo = (id, loc) ->
     hlr.lineTo id
 
 hlr.player.initStorage = ->
-    players = new hlr.JsonStore("hlr-players.json")
+    players = new hlr.JsonStore("hlr-players.json", 30)
     hlr.player.jsonstore = players
     hlr.players = players.hash

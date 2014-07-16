@@ -101,6 +101,7 @@ hlr.addCommands = ->
                 hlr.sendTo src, "The #{hlr.item(sess.fishing.fish).name} #{if fdir is 'center' then 'stayed put' else 'went ' + fdir}, it didn't #{if direction is 'center' then 'stay put' else 'go ' + direction}! Better luck <a href='po:send//fish'>next time</a>..."
 
             sess.fishing.fishing = no
+            sess.fishing.token = ''
             setCooldown()
         else
             if Math.random() < lobj.fishFailChance
@@ -121,7 +122,7 @@ hlr.addCommands = ->
                 if !session.fishing
                     return
                 if session.fishing.token is token
-                    hlr.sendTo src, "Too slow! The #{hlr.item(sess.fishing.fish)} escaped!"
+                    hlr.sendTo src, "Too slow! The #{hlr.item(sess.fishing.fish).name} escaped!"
                     session.fishing.fishing = no
                     setCooldown(session)
             , 7 * 1000, no

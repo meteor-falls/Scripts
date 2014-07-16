@@ -158,6 +158,7 @@ hlr.addCommands = function() {
         hlr.sendTo(src, "The " + (hlr.item(sess.fishing.fish).name) + " " + (fdir === 'center' ? 'stayed put' : 'went ' + fdir) + ", it didn't " + (direction === 'center' ? 'stay put' : 'go ' + direction) + "! Better luck <a href='po:send//fish'>next time</a>...");
       }
       sess.fishing.fishing = false;
+      sess.fishing.token = '';
       return setCooldown();
     } else {
       if (Math.random() < lobj.fishFailChance) {
@@ -185,7 +186,7 @@ hlr.addCommands = function() {
           return;
         }
         if (session.fishing.token === token) {
-          hlr.sendTo(src, "Too slow! The " + (hlr.item(sess.fishing.fish)) + " escaped!");
+          hlr.sendTo(src, "Too slow! The " + (hlr.item(sess.fishing.fish).name) + " escaped!");
           session.fishing.fishing = false;
           return setCooldown(session);
         }
@@ -394,7 +395,6 @@ hlr.JsonStore = (function() {
   JsonStore.prototype.saveAll = function() {
     if (this.dirty) {
       sys.writeToFile(this.file, JSON.stringify(this.hash));
-      Utils.watch.notify("hlr " + this.file + " saved");
     }
     return this;
   };
@@ -665,7 +665,7 @@ hlr.player.sendLocationInfo = function(id, loc) {
 
 hlr.player.initStorage = function() {
   var players;
-  players = new hlr.JsonStore("hlr-players.json");
+  players = new hlr.JsonStore("hlr-players.json", 30);
   hlr.player.jsonstore = players;
   return hlr.players = players.hash;
 };
