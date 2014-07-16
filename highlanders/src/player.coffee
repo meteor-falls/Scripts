@@ -16,6 +16,13 @@ hlr.player.register = (id) ->
 
     hlr.player.markDirty()
 
+hlr.player.unregister = (id) ->
+    if !hlr.player.registered(id)
+        hlr.error("hlr.player.unregister: called for a non-registered player")
+
+    delete hlr.players[hlr.namelOf(id)]
+    hlr.player.markDirty()
+
 #### PLAYER - ITEMS
 hlr.player.giveItem = (id, item, qty=1, notify=hlr.VERBOSE) ->
     player = hlr.player.player(id)

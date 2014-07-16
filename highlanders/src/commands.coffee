@@ -4,6 +4,7 @@ hlr.addCommands = ->
     addCommand 'hlrcommands', ->
         hlr.commandList("Highlanders Commands").add([
             ["register", "Registers a Highlanders account for this name. The account is bound to your name, not your IP."]
+            ["unregister", "Deletes your Highlanders account. This command will be removed in the future."]
             ["location", "Shows your current location. Aliases: l, loc"]
             ["go", "Go to that location. Aliases: g, goto", ["location"]]
             ["fish", "Fish in locations that allow it. Also used to choose your rod toss direction.", ["direction"]]
@@ -12,18 +13,29 @@ hlr.addCommands = ->
     addCommand 'register', ->
         if hlr.player.registered(@src)
             hlr.sendErrorTo @src, "Your account is already registered."
-        else
-            if !sys.dbRegistered(sys.name(@src))
-                hlr.sendErrorTo @src, "Your PO username must be registered before you make a Highlanders account."
-                return
+            return
 
-            hlr.player.register(@src)
-            hlr.sendTo @src, "Account registered!"
+        if !sys.dbRegistered(sys.name(@src))
+            hlr.sendErrorTo @src, "Your PO username must be registered before you make a Highlanders account."
+            return
 
-            # Registration drops
-            hlr.player.giveMoney(@src, 100)
+        hlr.player.register(@src)
+        hlr.sendTo @src, "Account registered!"
 
-            hlr.player.goto(@src, 'market')
+        # Registration drops
+        hlr.player.giveMoney(@src, 100)
+
+        hlr.player.goto(@src, 'market')
+
+    # todo: confirmation
+    addCommand 'unregister', ->
+        if !hlr.player.registered(@src)
+            hlr.sendErrorTo @src, "You don't have an account registered."
+            return
+
+        hlr.player.unregister(@src)
+        hlr.sendTo @src, "Account unregistered!"
+
 
     addCommand 'inventory', ->
         hlr.player.showInventory(@src)

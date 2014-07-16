@@ -1,10 +1,8 @@
-hlr.sendMsg = (message, chan=hlr.chan) -> sys.sendAll(message, chan)
-hlr.sendHtml = (message, chan=hlr.chan) -> sys.sendHtmlAll(message, chan)
-hlr.sendPlayer = (src, message, chan=hlr.chan) -> sys.sendMessage(src, message, chan)
-hlr.sendPlayerHtml = (src, message, chan=hlr.chan) -> sys.sendHtmlMessage(src, message, chan)
+hlr.sendMsg = (message) -> Bot.hlr.sendAll(message, hlr.chan)
+hlr.sendPlayer = (src, messagen) -> Bot.hlr.sendMessage(src, message, hlr.chan)
 
-hlr.sendErrorTo = (src, message, chan=hlr.chan) -> hlr.sendPlayerHtml(src, "<timestamp/><i>#{message}</i>", chan)
-hlr.sendTo = (src, message, chan=hlr.chan) -> hlr.sendPlayer(src, message, chan)
+hlr.sendErrorTo = (src, message) -> sys.sendHtmlMessage(src, "<timestamp/><i>#{message}</i>", hlr.chan)
+hlr.sendTo = hlr.sendPlayer
 
 hlr.commandList = (title, help, listtype) ->
     lists = require('lists')

@@ -97,5 +97,6 @@ module.reload = function () {
     Bot.guard = new Bot("Guard", "#a80000");
 
     Bot.rtd = new Bot("RTD", "#1c4eaa");
+    Bot.hlr = new Bot("Highlander", "#4f2a2a");
     return true;
 };

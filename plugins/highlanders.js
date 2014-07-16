@@ -98,21 +98,29 @@ hlr.addCommands = function() {
   var addCommand, maintainer, registered;
   addCommand = hlr.addCommand, maintainer = hlr.authMaintainer, registered = hlr.authRegistered;
   addCommand('hlrcommands', function() {
-    return hlr.commandList("Highlanders Commands").add([["register", "Registers a Highlanders account for this name. The account is bound to your name, not your IP."], ["location", "Shows your current location. Aliases: l, loc"], ["go", "Go to that location. Aliases: g, goto", ["location"]], ["fish", "Fish in locations that allow it. Also used to choose your rod toss direction.", ["direction"]]]).finish().display(this.src, this.chan);
+    return hlr.commandList("Highlanders Commands").add([["register", "Registers a Highlanders account for this name. The account is bound to your name, not your IP."], ["unregister", "Deletes your Highlanders account. This command will be removed in the future."], ["location", "Shows your current location. Aliases: l, loc"], ["go", "Go to that location. Aliases: g, goto", ["location"]], ["fish", "Fish in locations that allow it. Also used to choose your rod toss direction.", ["direction"]]]).finish().display(this.src, this.chan);
   });
   addCommand('register', function() {
     if (hlr.player.registered(this.src)) {
-      return hlr.sendErrorTo(this.src, "Your account is already registered.");
-    } else {
-      if (!sys.dbRegistered(sys.name(this.src))) {
-        hlr.sendErrorTo(this.src, "Your PO username must be registered before you make a Highlanders account.");
-        return;
-      }
-      hlr.player.register(this.src);
-      hlr.sendTo(this.src, "Account registered!");
-      hlr.player.giveMoney(this.src, 100);
-      return hlr.player.goto(this.src, 'market');
+      hlr.sendErrorTo(this.src, "Your account is already registered.");
+      return;
     }
+    if (!sys.dbRegistered(sys.name(this.src))) {
+      hlr.sendErrorTo(this.src, "Your PO username must be registered before you make a Highlanders account.");
+      return;
+    }
+    hlr.player.register(this.src);
+    hlr.sendTo(this.src, "Account registered!");
+    hlr.player.giveMoney(this.src, 100);
+    return hlr.player.goto(this.src, 'market');
+  });
+  addCommand('unregister', function() {
+    if (!hlr.player.registered(this.src)) {
+      hlr.sendErrorTo(this.src, "You don't have an account registered.");
+      return;
+    }
+    hlr.player.unregister(this.src);
+    return hlr.sendTo(this.src, "Account unregistered!");
   });
   addCommand('inventory', function() {
     return hlr.player.showInventory(this.src);
@@ -453,47 +461,19 @@ hlr.locationTypeName = function(type) {
   return ["Marketplace", "Fishing", "Gun Dueling"][type];
 };
 
-hlr.sendMsg = function(message, chan) {
-  if (chan == null) {
-    chan = hlr.chan;
-  }
-  return sys.sendAll(message, chan);
+hlr.sendMsg = function(message) {
+  return Bot.hlr.sendAll(message, hlr.chan);
 };
 
-hlr.sendHtml = function(message, chan) {
-  if (chan == null) {
-    chan = hlr.chan;
-  }
-  return sys.sendHtmlAll(message, chan);
+hlr.sendPlayer = function(src, messagen) {
+  return Bot.hlr.sendMessage(src, message, hlr.chan);
 };
 
-hlr.sendPlayer = function(src, message, chan) {
-  if (chan == null) {
-    chan = hlr.chan;
-  }
-  return sys.sendMessage(src, message, chan);
+hlr.sendErrorTo = function(src, message) {
+  return sys.sendHtmlMessage(src, "<timestamp/><i>" + message + "</i>", hlr.chan);
 };
 
-hlr.sendPlayerHtml = function(src, message, chan) {
-  if (chan == null) {
-    chan = hlr.chan;
-  }
-  return sys.sendHtmlMessage(src, message, chan);
-};
-
-hlr.sendErrorTo = function(src, message, chan) {
-  if (chan == null) {
-    chan = hlr.chan;
-  }
-  return hlr.sendPlayerHtml(src, "<timestamp/><i>" + message + "</i>", chan);
-};
-
-hlr.sendTo = function(src, message, chan) {
-  if (chan == null) {
-    chan = hlr.chan;
-  }
-  return hlr.sendPlayer(src, message, chan);
-};
+hlr.sendTo = hlr.sendPlayer;
 
 hlr.commandList = function(title, help, listtype) {
   var lists;
@@ -531,6 +511,14 @@ hlr.player.register = function(id) {
     balance: 0,
     inventory: {}
   };
+  return hlr.player.markDirty();
+};
+
+hlr.player.unregister = function(id) {
+  if (!hlr.player.registered(id)) {
+    hlr.error("hlr.player.unregister: called for a non-registered player");
+  }
+  delete hlr.players[hlr.namelOf(id)];
   return hlr.player.markDirty();
 };
 
