@@ -36,7 +36,6 @@ hlr.addCommands = ->
         hlr.player.unregister(@src)
         hlr.sendTo @src, "Account unregistered!"
 
-
     addCommand 'inventory', ->
         hlr.player.showInventory(@src)
     , registered

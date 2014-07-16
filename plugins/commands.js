@@ -2030,6 +2030,10 @@
             plugin = plugins[i];
             try {
                 oldPlugin = {exports: require.cache[plugin], meta: require.meta[plugin]};
+                if (require.meta[plugin].onHotfix) {
+                    require.meta[plugin].onHotfix();
+                }
+
                 require(plugin, true, false);
                 if (!require.reload(plugin)) {
                     bot.sendMessage(src, "Plugin " + plugin + " refused to reload. Perhaps there is a syntax error?", chan);
