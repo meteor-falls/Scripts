@@ -6,8 +6,9 @@ hlr.addCommands = ->
             ["register", "Registers a Highlanders account for this name. The account is bound to your name, not your IP."]
             ["unregister", "Deletes your Highlanders account. This command will be removed in the future."]
             ["location", "Shows your current location. Aliases: l, loc"]
+            ["inventory", "Shows your inventory and your balance. Aliases: inv, i"]
             ["go", "Go to that location. Aliases: g, goto", ["location"]]
-            ["fish", "Fish in locations that allow it. Also used to choose your rod toss direction.", ["direction"]]
+            ["fish", "Fish in locations that allow it. Also used to choose your rod toss direction. Aliases: fi", ["direction"]]
         ]).finish().display(@src, @chan)
 
     addCommand 'register', ->
@@ -36,11 +37,11 @@ hlr.addCommands = ->
         hlr.player.unregister(@src)
         hlr.sendTo @src, "Account unregistered!"
 
-    addCommand 'inventory', ->
+    addCommand ['inventory', 'inv', 'i'], ->
         hlr.player.showInventory(@src)
     , registered
 
-    addCommand 'location', ->
+    addCommand ['location', 'loc', 'l'], ->
         hlr.player.sendLocationInfo(@src)
     , registered
 
@@ -61,7 +62,7 @@ hlr.addCommands = ->
         hlr.player.goto(@src, loc)
     , registered
 
-    addCommand 'fish', ->
+    addCommand ['fish', 'fi'], ->
         src = @src
         player = hlr.player.player(src)
         sess = hlr.player.session(src)

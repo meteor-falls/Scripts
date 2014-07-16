@@ -66,7 +66,7 @@ hlr.addCommands = function() {
   var addCommand, maintainer, registered;
   addCommand = hlr.addCommand, maintainer = hlr.authMaintainer, registered = hlr.authRegistered;
   addCommand('hlrcommands', function() {
-    return hlr.commandList("Highlanders Commands").add([["register", "Registers a Highlanders account for this name. The account is bound to your name, not your IP."], ["unregister", "Deletes your Highlanders account. This command will be removed in the future."], ["location", "Shows your current location. Aliases: l, loc"], ["go", "Go to that location. Aliases: g, goto", ["location"]], ["fish", "Fish in locations that allow it. Also used to choose your rod toss direction.", ["direction"]]]).finish().display(this.src, this.chan);
+    return hlr.commandList("Highlanders Commands").add([["register", "Registers a Highlanders account for this name. The account is bound to your name, not your IP."], ["unregister", "Deletes your Highlanders account. This command will be removed in the future."], ["location", "Shows your current location. Aliases: l, loc"], ["inventory", "Shows your inventory and your balance. Aliases: inv, i"], ["go", "Go to that location. Aliases: g, goto", ["location"]], ["fish", "Fish in locations that allow it. Also used to choose your rod toss direction. Aliases: fi", ["direction"]]]).finish().display(this.src, this.chan);
   });
   addCommand('register', function() {
     if (hlr.player.registered(this.src)) {
@@ -90,10 +90,10 @@ hlr.addCommands = function() {
     hlr.player.unregister(this.src);
     return hlr.sendTo(this.src, "Account unregistered!");
   });
-  addCommand('inventory', function() {
+  addCommand(['inventory', 'inv', 'i'], function() {
     return hlr.player.showInventory(this.src);
   }, registered);
-  addCommand('location', function() {
+  addCommand(['location', 'loc', 'l'], function() {
     return hlr.player.sendLocationInfo(this.src);
   }, registered);
   addCommand(['go', 'g', 'goto'], function() {
@@ -112,7 +112,7 @@ hlr.addCommands = function() {
     }
     return hlr.player.goto(this.src, loc);
   }, registered);
-  addCommand('fish', function() {
+  addCommand(['fish', 'fi'], function() {
     var direction, fdir, id, lobj, player, sess, setCooldown, src, token;
     src = this.src;
     player = hlr.player.player(src);
