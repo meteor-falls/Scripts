@@ -58,7 +58,7 @@ hlr.addCommands = ->
             hlr.sendErrorTo @src, "You can't go there, sorry."
             return
 
-        hlr.player.goto(@src, @ploc)
+        hlr.player.goto(@src, loc)
     , registered
 
     # todo: timer
@@ -85,8 +85,8 @@ hlr.addCommands = ->
             hlr.sendErrorTo @src, "To what fish?"
             return
 
-        if !(direction in ['left', 'center', 'right'])
-            hlr.sendErrorTo @src, "You can only go throw your fishing rod to the left, center, or right.", chan
+        if sess.fishing.fishing and !(direction in ['left', 'center', 'right'])
+            hlr.sendErrorTo @src, "You can only go throw your fishing rod to the left, center, or right."
             return
 
         setCooldown = -> sess.fishing.cooldown = sys.time() + 5

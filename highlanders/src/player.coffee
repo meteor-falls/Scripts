@@ -112,26 +112,26 @@ hlr.player.goto = (id, loc, notify=hlr.VERBOSE) ->
     if notify is hlr.VERBOSE and sys.loggedIn(id)
         hlr.player.sendLocationInfo(id, loc)
 
-hlr.player.sendLocationInfo = (id, loc=hlr.player.player(id).location) ->
+hlr.player.sendLocationInfo = (id, loc) ->
+    if !loc?
+        loc = hlr.player.player(id).location
+
     lobj = hlr.location(loc)
 
     hlr.sendTo id, "You are now in <a href='po:send//location'><b>#{lobj.name}</b> (#{hlr.locationTypeName(lobj.type)})</a>!"
     if lobj.welcome
         hlr.sendTo id, lobj.welcome
 
-    locs = []
-    for place in lobj.to
-        locs.push("<a href='po:send//go #{place}><b>#{hlr.location(place).name}</b></a>")
-
+    locs = ("<a href='po:send//go #{place}'><b>#{hlr.location(place).name}</b></a>" for place in lobj.to)
     hlr.sendTo id, "From here, you can go to #{Utils.fancyJoin(locs)}."
-
-    hlr.lineTo id
 
     switch lobj.type
         when hlr.Location.SellArea
             hlr.sendTo id, "You can <a href='po:send//inventory'>sell items from your inventory</a> here."
         when hlr.Location.FishArea
             hlr.sendTo id, "You can <a href='po:send//fish'>fish</a> here."
+
+    hlr.lineTo id
 
 hlr.player.initStorage = ->
     players = new hlr.JsonStore("hlr-players.json")

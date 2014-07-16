@@ -110,7 +110,7 @@ hlr.addCommands = function() {
       hlr.sendErrorTo(this.src, "You can't go there, sorry.");
       return;
     }
-    return hlr.player.goto(this.src, this.ploc);
+    return hlr.player.goto(this.src, loc);
   }, registered);
   addCommand('fish', function() {
     var direction, id, lobj, player, sess, setCooldown;
@@ -136,8 +136,8 @@ hlr.addCommands = function() {
       hlr.sendErrorTo(this.src, "To what fish?");
       return;
     }
-    if (!(direction === 'left' || direction === 'center' || direction === 'right')) {
-      hlr.sendErrorTo(this.src, "You can only go throw your fishing rod to the left, center, or right.", chan);
+    if (sess.fishing.fishing && !(direction === 'left' || direction === 'center' || direction === 'right')) {
+      hlr.sendErrorTo(this.src, "You can only go throw your fishing rod to the left, center, or right.");
       return;
     }
     setCooldown = function() {
@@ -601,7 +601,7 @@ hlr.player.goto = function(id, loc, notify) {
 };
 
 hlr.player.sendLocationInfo = function(id, loc) {
-  var lobj, locs, place, _i, _len, _ref;
+  var lobj, locs, place;
   if (loc == null) {
     loc = hlr.player.player(id).location;
   }
@@ -610,20 +610,25 @@ hlr.player.sendLocationInfo = function(id, loc) {
   if (lobj.welcome) {
     hlr.sendTo(id, lobj.welcome);
   }
-  locs = [];
-  _ref = lobj.to;
-  for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-    place = _ref[_i];
-    locs.push("<a href='po:send//go " + place + "><b>" + (hlr.location(place).name) + "</b></a>");
-  }
+  locs = (function() {
+    var _i, _len, _ref, _results;
+    _ref = lobj.to;
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      place = _ref[_i];
+      _results.push("<a href='po:send//go " + place + "'><b>" + (hlr.location(place).name) + "</b></a>");
+    }
+    return _results;
+  })();
   hlr.sendTo(id, "From here, you can go to " + (Utils.fancyJoin(locs)) + ".");
-  hlr.lineTo(id);
   switch (lobj.type) {
     case hlr.Location.SellArea:
-      return hlr.sendTo(id, "You can <a href='po:send//inventory'>sell items from your inventory</a> here.");
+      hlr.sendTo(id, "You can <a href='po:send//inventory'>sell items from your inventory</a> here.");
+      break;
     case hlr.Location.FishArea:
-      return hlr.sendTo(id, "You can <a href='po:send//fish'>fish</a> here.");
+      hlr.sendTo(id, "You can <a href='po:send//fish'>fish</a> here.");
   }
+  return hlr.lineTo(id);
 };
 
 hlr.player.initStorage = function() {

@@ -1,4 +1,2 @@
 node_modules/
-
-# Used as build step, clogs up git history
 highlanders/highlanders.js
