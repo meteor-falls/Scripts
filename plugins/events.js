@@ -417,10 +417,15 @@
                         commandResult = commands.handleCommand(src, message, command, commandData, tar, chan) || 0;
                     }
                 } catch (err) {
-                    bot.sendMessage(src, "An error occured.", chan);
-                    print(err.backtracetext);
+                    if (typeof err === "string") {
+                        bot.sendMessage(src, err, chan);
+                    } else {
+                        bot.sendMessage(src, "An error occured.", chan);
+                        print(err.backtracetext);
+                        Utils.watch.notify("Error: " + err + (err.lineNumber ? " on line " + err.lineNumber : "") + " (backtrace available on server window)");
+                    }
+
                     Utils.watch.message(src, (poUser.semuted ? "Secommand" : "Command"), message, chan);
-                    Utils.watch.notify("Error: " + err + (err.lineNumber ? " on line " + err.lineNumber : "") + " (backtrace available on server window)");
                 }
 
                 script.afterChatMessage(src, message, chan);
