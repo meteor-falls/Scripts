@@ -3,7 +3,7 @@ hlr.item = (e, obj) -> if obj then hlr.items[e] = obj else hlr.items[e]
 
 hlr.item.gun = (e, obj) ->
     if obj
-        obj.type = hlr.Item.Fish
+        obj.type = hlr.Item.Gun
     hlr.item(e, obj)
 hlr.item.fish = (e, obj) ->
     if obj

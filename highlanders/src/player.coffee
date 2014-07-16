@@ -55,8 +55,37 @@ hlr.player.sendQuicksellInfo = (id, itemid) ->
     if !(itemid of player.inventory)
         hlr.error("hlr.player.sendQuicksellInfo: non-existent itemid")
 
-    item = hlr.item(player.inventory[itemid]))
+    item = hlr.item(player.inventory[itemid])
     hlr.sendTo id, "<a href='po:send//quicksell #{itemid}'><b>Quicksell #{item.name} for #{hlr.currencyFormat(hlr.quicksellPrice(item.sell))}</b></a>."
+
+hlr.player.showInventory = (id) ->
+    player = hlr.player.player(id)
+    inv = player.inventory
+    icount = Object.keys(inv).length
+
+    hlr.sendTo id, "Your inventory:"
+
+    html = "<table cellpadding='1' cellspacing='3'>"
+    page = 0
+    count = 0
+
+    # Per page, 50 items (10 columns, 5 rows)
+    for uniqid, itemid of inv
+        if count % 50 is 0
+            page += 1
+            if count isnt 0
+                html += "</tr>"
+            html += "<tr><th colspan=10><font color=red>Page #{page}</font></th></tr><tr><th>Item</th><th>Item</th><th>Item</th><th>Item</th><th>Item</th><th>Item</th><th>Item</th><th>Item</th><th>Item</th></tr><tr>"
+        else if count % 10 is 0
+            html += "</tr><tr>"
+
+        html += "<td><a href='po:send//iteminfo #{uniqid}'>#{hlr.item(itemid).name}</a></td>"
+        count += 1
+
+    html += "</tr></table>"
+    hlr.sendTo id, html
+
+    hlr.sendTo id, "To see more information about an item, as well as be able to sell it, click on its name."
 
 #### PLAYER - MONEY
 hlr.player.giveMoney = (id, money, notify=hlr.VERBOSE) ->

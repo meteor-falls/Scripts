@@ -25,6 +25,10 @@ hlr.addCommands = ->
 
             hlr.player.goto(@src, 'market')
 
+    addCommand 'inventory', ->
+        hlr.player.showInventory(@src)
+    , registered
+
     addCommand 'location', ->
         hlr.player.sendLocationInfo(@src)
     , registered
