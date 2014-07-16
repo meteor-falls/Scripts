@@ -72,6 +72,12 @@ Config = {
 
         exports = module.exports;
 
+        if (name in require.cache) {
+            if (require.meta[name].onUnload) {
+                require.meta[name].onUnload();
+            }
+        }
+
         try {
             sys.eval("(function () { " + __fileContent + " }());", __fname);
         } catch (e) {
