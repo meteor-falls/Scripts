@@ -96,12 +96,12 @@ hlr.addCommands = ->
                 id = hlr.player.giveItem(@src, sess.fishing.fish)[0]
                 hlr.player.sendQuicksellInfo(@src, id)
             else
-                hlr.sendTo @src, "The #{hlr.item(sess.fishing.fish).name} went #{sess.fishing.direction}, not #{direction}! Better luck next time..."
+                hlr.sendTo @src, "The #{hlr.item(sess.fishing.fish).name} went #{sess.fishing.direction}, not #{direction}! Better luck <a href='po:send//fish'>next time</a>..."
 
             sess.fishing.fishing = no
             setCooldown()
         else
-            if Math.random() > lobj.fishFailChance
+            if Math.random() < lobj.fishFailChance
                 hlr.sendTo @src, "You didn't find anything."
                 setCooldown()
                 return
@@ -129,7 +129,7 @@ hlr.addCommands = ->
 
         item = player.inventory[itemid]
         iobj = hlr.item(item)
-        price = iobj.price
+        price = iobj.sell
 
         unless price
             hlr.sendErrorTo @src, "Your #{iobj.name} cannot be sold."

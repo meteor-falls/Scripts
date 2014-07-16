@@ -181,12 +181,12 @@ hlr.addCommands = function() {
         id = hlr.player.giveItem(this.src, sess.fishing.fish)[0];
         hlr.player.sendQuicksellInfo(this.src, id);
       } else {
-        hlr.sendTo(this.src, "The " + (hlr.item(sess.fishing.fish).name) + " went " + sess.fishing.direction + ", not " + direction + "! Better luck next time...");
+        hlr.sendTo(this.src, "The " + (hlr.item(sess.fishing.fish).name) + " went " + sess.fishing.direction + ", not " + direction + "! Better luck <a href='po:send//fish'>next time</a>...");
       }
       sess.fishing.fishing = false;
       return setCooldown();
     } else {
-      if (Math.random() > lobj.fishFailChance) {
+      if (Math.random() < lobj.fishFailChance) {
         hlr.sendTo(this.src, "You didn't find anything.");
         setCooldown();
         return;
@@ -216,7 +216,7 @@ hlr.addCommands = function() {
     }
     item = player.inventory[itemid];
     iobj = hlr.item(item);
-    price = iobj.price;
+    price = iobj.sell;
     if (!price) {
       hlr.sendErrorTo(this.src, "Your " + iobj.name + " cannot be sold.");
       return;
@@ -311,6 +311,9 @@ hlr.Item = {
 hlr.quicksellPrice = function(price) {
   if (price == null) {
     price = 0;
+  }
+  if (typeof price === 'object') {
+    price = price.sell;
   }
   if (price) {
     return Math.ceil(price / 2);
@@ -583,6 +586,7 @@ hlr.player.showInventory = function(id) {
     hlr.sendTo(id, "Your inventory is empty.");
     return;
   }
+  hlr.lineTo(id);
   hlr.sendTo(id, "Your inventory:");
   html = "<table cellpadding='1' cellspacing='3'>";
   page = 0;
@@ -603,7 +607,8 @@ hlr.player.showInventory = function(id) {
   }
   html += "</tr></table>";
   hlr.sendTo(id, html);
-  return hlr.sendTo(id, "To see more information about an item, as well as be able to sell it, click on its name.");
+  hlr.sendTo(id, "To see more information about an item, as well as be able to sell it, click on its name.");
+  return hlr.lineTo(id);
 };
 
 hlr.player.giveMoney = function(id, money, notify) {
@@ -638,6 +643,7 @@ hlr.player.sendLocationInfo = function(id, loc) {
     loc = hlr.player.player(id).location;
   }
   lobj = hlr.location(loc);
+  hlr.lineTo(id);
   hlr.sendTo(id, "You are now in <a href='po:send//location'><b>" + lobj.name + "</b> (" + (hlr.locationTypeName(lobj.type)) + ")</a>!");
   if (lobj.welcome) {
     hlr.sendTo(id, lobj.welcome);

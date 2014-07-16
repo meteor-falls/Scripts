@@ -679,14 +679,17 @@
                 ignoreFlood = Ranks.plusplus.hasMember(src),
                 auth = Utils.getAuth(src),
                 floodAdd = 1,
+                isCommand = ["/", "!"].indexOf(message[0]) !== -1,
                 limit = (chan === testchan ? 18 : 7);
 
             if (ignoreFlood || auth > 0) {
                 return;
             }
 
-            if (poUser.lastMessage.message === message && poUser.lastMessage.time + 20 >= time) {
-                floodAdd = ["/", "!"].indexOf(message[0]) !== -1 ? 1.4 : 2.5;
+            if (poUser.lastMessage.message === message && poUser.lastMessage.time + 20 >= time && !isCommand) {
+                floodAdd = 2;
+            } else if (isCommand) {
+                floodAdd = 0.5;
             }
 
             poUser.floodCount += floodAdd;
@@ -695,7 +698,7 @@
                 if (poUser) {
                     poUser.floodCount -= 1;
                 }
-            }, 8.5 * 1000, false);
+            }, 7 * 1000, false);
 
             if (poUser.floodCount > limit && !poUser.muted) {
                 Utils.watch.notify(Utils.nameIp(src) + " was kicked and muted for flooding in " + Utils.clink(sys.channel(chan)) + ".");

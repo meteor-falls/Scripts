@@ -14,7 +14,14 @@ hlr.Item =
     Gun: 0x0
     Fish: 0x1
 
-hlr.quicksellPrice = (price=0) -> if price then Math.ceil(price / 2) else 0
+hlr.quicksellPrice = (price=0) ->
+    if typeof price is 'object'
+        price = price.sell
+
+    if price
+        return Math.ceil(price / 2)
+    else return 0
+
 hlr.currencyFormat = (a) -> "£#{a}"
 
 #### GUNS ####

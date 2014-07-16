@@ -70,6 +70,7 @@ hlr.player.showInventory = (id) ->
         hlr.sendTo id, "Your inventory is empty."
         return
 
+    hlr.lineTo id
     hlr.sendTo id, "Your inventory:"
 
     html = "<table cellpadding='1' cellspacing='3'>"
@@ -93,6 +94,7 @@ hlr.player.showInventory = (id) ->
     hlr.sendTo id, html
 
     hlr.sendTo id, "To see more information about an item, as well as be able to sell it, click on its name."
+    hlr.lineTo id
 
 #### PLAYER - MONEY
 hlr.player.giveMoney = (id, money, notify=hlr.VERBOSE) ->
@@ -117,6 +119,8 @@ hlr.player.sendLocationInfo = (id, loc) ->
         loc = hlr.player.player(id).location
 
     lobj = hlr.location(loc)
+
+    hlr.lineTo id
 
     hlr.sendTo id, "You are now in <a href='po:send//location'><b>#{lobj.name}</b> (#{hlr.locationTypeName(lobj.type)})</a>!"
     if lobj.welcome
