@@ -145,7 +145,7 @@ hlr.addCommands = function() {
     return hlr.player.goto(this.src, loc);
   }, registered);
   addCommand('fish', function() {
-    var direction, id, lobj, player, sess, setCooldown;
+    var direction, fdir, id, lobj, player, sess, setCooldown;
     player = hlr.player.player(this.src);
     sess = hlr.player.session(this.src);
     lobj = hlr.location(player.location);
@@ -173,7 +173,7 @@ hlr.addCommands = function() {
       return;
     }
     setCooldown = function() {
-      return sess.fishing.cooldown = sys.time() + 5;
+      return sess.fishing.cooldown = sys.time() + 3;
     };
     if (sess.fishing.fishing) {
       if (direction === sess.fishing.direction) {
@@ -181,7 +181,8 @@ hlr.addCommands = function() {
         id = hlr.player.giveItem(this.src, sess.fishing.fish)[0];
         hlr.player.sendQuicksellInfo(this.src, id);
       } else {
-        hlr.sendTo(this.src, "The " + (hlr.item(sess.fishing.fish).name) + " went " + sess.fishing.direction + ", not " + direction + "! Better luck <a href='po:send//fish'>next time</a>...");
+        fdir = sess.fishing.direction;
+        hlr.sendTo(this.src, "The " + (hlr.item(sess.fishing.fish).name) + " " + (fdir === 'center' ? 'stayed put' : 'went ' + fdir) + ", " + (direction === 'center' ? 'it didn\'t stay put' : 'not ' + direction) + "! Better luck <a href='po:send//fish'>next time</a>...");
       }
       sess.fishing.fishing = false;
       return setCooldown();

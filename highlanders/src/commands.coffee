@@ -89,14 +89,15 @@ hlr.addCommands = ->
             hlr.sendErrorTo @src, "You can only go throw your fishing rod to the left, center, or right."
             return
 
-        setCooldown = -> sess.fishing.cooldown = sys.time() + 5
+        setCooldown = -> sess.fishing.cooldown = sys.time() + 3
         if sess.fishing.fishing
             if direction is sess.fishing.direction
                 hlr.sendTo @src, "You caught the #{hlr.item(sess.fishing.fish).name}!"
                 id = hlr.player.giveItem(@src, sess.fishing.fish)[0]
                 hlr.player.sendQuicksellInfo(@src, id)
             else
-                hlr.sendTo @src, "The #{hlr.item(sess.fishing.fish).name} went #{sess.fishing.direction}, not #{direction}! Better luck <a href='po:send//fish'>next time</a>..."
+                fdir = sess.fishing.direction
+                hlr.sendTo @src, "The #{hlr.item(sess.fishing.fish).name} #{if fdir is 'center' then 'stayed put' else 'went ' + fdir}, #{if direction is 'center' then 'it didn\'t stay put' else 'not ' + direction}! Better luck <a href='po:send//fish'>next time</a>..."
 
             sess.fishing.fishing = no
             setCooldown()
