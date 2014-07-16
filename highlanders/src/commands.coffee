@@ -61,7 +61,6 @@ hlr.addCommands = ->
         hlr.player.goto(@src, loc)
     , registered
 
-    # todo: timer
     addCommand 'fish', ->
         player = hlr.player.player(@src)
         sess = hlr.player.session(@src)
@@ -89,7 +88,8 @@ hlr.addCommands = ->
             hlr.sendErrorTo @src, "You can only go throw your fishing rod to the left, center, or right."
             return
 
-        setCooldown = -> sess.fishing.cooldown = sys.time() + 3
+        token = Math.random().toString() + Math.random().toString()
+        setCooldown = (ses=sess) -> ses.fishing.cooldown = sys.time() + 2
         if sess.fishing.fishing
             if direction is sess.fishing.direction
                 hlr.sendTo @src, "You caught the #{hlr.item(sess.fishing.fish).name}!"
@@ -97,7 +97,7 @@ hlr.addCommands = ->
                 hlr.player.sendQuicksellInfo(@src, id)
             else
                 fdir = sess.fishing.direction
-                hlr.sendTo @src, "The #{hlr.item(sess.fishing.fish).name} #{if fdir is 'center' then 'stayed put' else 'went ' + fdir}, #{if direction is 'center' then 'it didn\'t stay put' else 'not ' + direction}! Better luck <a href='po:send//fish'>next time</a>..."
+                hlr.sendTo @src, "The #{hlr.item(sess.fishing.fish).name} #{if fdir is 'center' then 'stayed put' else 'went ' + fdir}, it didn't #{if direction is 'center' then 'stay put' else 'go ' + direction}! Better luck <a href='po:send//fish'>next time</a>..."
 
             sess.fishing.fishing = no
             setCooldown()
@@ -108,10 +108,22 @@ hlr.addCommands = ->
                 return
 
             sess.fishing.fishing = yes
+            sess.fishing.token = token
             sess.fishing.fish = Utils.randomSample(lobj.fish)
             sess.fishing.direction = Utils.randomSample({left: 1/3, center: 1/3, right: 1/3})
             hlr.sendTo @src, "You found #{hlr.an(hlr.item(sess.fishing.fish).name)}! Catch it quickly! Throw your rod in one of these directions:"
             hlr.sendTo @src, "<a href='po:send//fish left'>[Left]</a> <a href='po:send//fish center'>[Center]</a> <a href='po:send//fish right'>[Right]</a>"
+            sys.setTimer ->
+                if !sys.loggedIn(@src)
+                    return
+                session = hlr.player.session(@src)
+                if !session.fishing
+                    return
+                if session.fishing.token is token
+                    hlr.sendTo @src, "Too slow! The #{hlr.item(sess.fishing.fish)} escaped!"
+                    session.fishing.fishing = no
+                    setCooldown(session)
+            , 7 * 1000, no
     , registered
 
     # Unlisted commands

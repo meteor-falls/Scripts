@@ -66,6 +66,7 @@ hlr.player.showInventory = (id) ->
     inv = player.inventory
     icount = Object.keys(inv).length
 
+    hlr.sendTo id, "You have #{hlr.currencyFormat(player.balance)}"
     if icount is 0
         hlr.sendTo id, "Your inventory is empty."
         return

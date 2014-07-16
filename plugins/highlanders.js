@@ -145,7 +145,7 @@ hlr.addCommands = function() {
     return hlr.player.goto(this.src, loc);
   }, registered);
   addCommand('fish', function() {
-    var direction, fdir, id, lobj, player, sess, setCooldown;
+    var direction, fdir, id, lobj, player, sess, setCooldown, token;
     player = hlr.player.player(this.src);
     sess = hlr.player.session(this.src);
     lobj = hlr.location(player.location);
@@ -172,8 +172,12 @@ hlr.addCommands = function() {
       hlr.sendErrorTo(this.src, "You can only go throw your fishing rod to the left, center, or right.");
       return;
     }
-    setCooldown = function() {
-      return sess.fishing.cooldown = sys.time() + 3;
+    token = Math.random().toString() + Math.random().toString();
+    setCooldown = function(ses) {
+      if (ses == null) {
+        ses = sess;
+      }
+      return ses.fishing.cooldown = sys.time() + 2;
     };
     if (sess.fishing.fishing) {
       if (direction === sess.fishing.direction) {
@@ -182,7 +186,7 @@ hlr.addCommands = function() {
         hlr.player.sendQuicksellInfo(this.src, id);
       } else {
         fdir = sess.fishing.direction;
-        hlr.sendTo(this.src, "The " + (hlr.item(sess.fishing.fish).name) + " " + (fdir === 'center' ? 'stayed put' : 'went ' + fdir) + ", " + (direction === 'center' ? 'it didn\'t stay put' : 'not ' + direction) + "! Better luck <a href='po:send//fish'>next time</a>...");
+        hlr.sendTo(this.src, "The " + (hlr.item(sess.fishing.fish).name) + " " + (fdir === 'center' ? 'stayed put' : 'went ' + fdir) + ", it didn't " + (direction === 'center' ? 'stay put' : 'go ' + direction) + "! Better luck <a href='po:send//fish'>next time</a>...");
       }
       sess.fishing.fishing = false;
       return setCooldown();
@@ -193,6 +197,7 @@ hlr.addCommands = function() {
         return;
       }
       sess.fishing.fishing = true;
+      sess.fishing.token = token;
       sess.fishing.fish = Utils.randomSample(lobj.fish);
       sess.fishing.direction = Utils.randomSample({
         left: 1 / 3,
@@ -200,7 +205,22 @@ hlr.addCommands = function() {
         right: 1 / 3
       });
       hlr.sendTo(this.src, "You found " + (hlr.an(hlr.item(sess.fishing.fish).name)) + "! Catch it quickly! Throw your rod in one of these directions:");
-      return hlr.sendTo(this.src, "<a href='po:send//fish left'>[Left]</a> <a href='po:send//fish center'>[Center]</a> <a href='po:send//fish right'>[Right]</a>");
+      hlr.sendTo(this.src, "<a href='po:send//fish left'>[Left]</a> <a href='po:send//fish center'>[Center]</a> <a href='po:send//fish right'>[Right]</a>");
+      return sys.setTimer(function() {
+        var session;
+        if (!sys.loggedIn(this.src)) {
+          return;
+        }
+        session = hlr.player.session(this.src);
+        if (!session.fishing) {
+          return;
+        }
+        if (session.fishing.token === token) {
+          hlr.sendTo(this.src, "Too slow! The " + (hlr.item(sess.fishing.fish)) + " escaped!");
+          session.fishing.fishing = false;
+          return setCooldown(session);
+        }
+      }, 7 * 1000, false);
     }
   }, registered);
   addCommand('sell', function() {
@@ -589,6 +609,7 @@ hlr.player.showInventory = function(id) {
   player = hlr.player.player(id);
   inv = player.inventory;
   icount = Object.keys(inv).length;
+  hlr.sendTo(id, "You have " + (hlr.currencyFormat(player.balance)));
   if (icount === 0) {
     hlr.sendTo(id, "Your inventory is empty.");
     return;
