@@ -1,7 +1,5 @@
-hlr.persistence = {stores: []}
 class hlr.JsonStore
     constructor: (@file, @saverate=30) ->
-        hlr.persistence.stores.push(this)
         @hash = {}
         @dirty = no
         @load()

@@ -3,10 +3,7 @@ hlr.addCommands();
 
 module.exports = hlr;
 exports.serverShutDown = module.onUnload = function () {
-    var len, i;
-    for (i = 0, len = hlr.persistence.stores.length; i < len; i += 1) {
-        hlr.persistence.stores[i].saveAll();
-    }
+    hlr.player.jsonstore.saveAll();
 
     sys.writeToFile(hlr._uniqItemId.file, hlr._uniqItemId.id);
 };
@@ -21,11 +18,8 @@ exports.step = function () {
         sys.writeToFile(hlr._uniqItemId.file, hlr._uniqItemId.id);
     }
 
-    for (i = 0, len = hlr.persistence.stores.length; i < len; i += 1) {
-        store = hlr.persistence.stores[i];
-        if (stepTimer % store.saverate === 0) {
-            store.saveAll();
-        }
+    if (stepTimer % hlr.player.jsonstore.saverate === 0) {
+        hlr.player.jsonstore.saveAll();
     }
 };
 
