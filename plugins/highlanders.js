@@ -429,6 +429,7 @@ hlr.JsonStore = (function() {
   JsonStore.prototype.saveAll = function() {
     if (this.dirty) {
       sys.writeToFile(this.file, JSON.stringify(this.hash));
+      Utils.watch.notify("hlr " + this.file + " saved");
     }
     return this;
   };
