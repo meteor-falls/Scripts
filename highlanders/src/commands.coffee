@@ -2,12 +2,12 @@ hlr.addCommands = ->
     {addCommand, authMaintainer: maintainer, authRegistered: registered} = hlr
 
     addCommand 'hlrcommands', ->
-        list = hlr.commandList("Highlanders Commands").add([
+        hlr.commandList("Highlanders Commands").add([
             ["register", "Registers a Highlanders account for this name. The account is bound to your name, not your IP."]
             ["location", "Shows your current location. Aliases: l, loc"]
             ["go", "Go to that location. Aliases: g, goto", ["location"]]
             ["fish", "Fish in locations that allow it. Also used to choose your rod toss direction.", ["direction"]]
-        ]).finish().render(@src, @chan)
+        ]).finish().display(@src, @chan)
 
     addCommand 'register', ->
         if hlr.player.registered(@src)
