@@ -51,9 +51,9 @@ Config = {
             module, exports, __resp;
 
         if (webcall) {
-            __resp = sys.synchronousWebCall(Config.repourl + "plugins/" + name);
+            __resp = sys.synchronousWebCall(Config.repourl + "plugins/" + name + ".js");
             if (!__resp || __resp.substr(0, 9) === "<!DOCTYPE") {
-                throw new Error("Failed to load plugin " + name + " from " + Config.repourl + "plugins/" + name);
+                throw new Error("Failed to load plugin " + name + " from " + Config.repourl + "plugins/" + name + ".js");
             }
             sys.writeToFile(__fname, __resp);
         }
