@@ -714,10 +714,6 @@ hlr.an = function(str) {
 };
 hlr.player.initStorage();
 
-hlr.addClasses();
-hlr.addItems();
-hlr.addCommands();
-
 module.exports = hlr;
 exports.serverShutDown = function () {
     var len, i;
