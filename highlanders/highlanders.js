@@ -369,15 +369,10 @@ hlr.item.fish('swordfish', {
   sell: 10
 });
 
-hlr.persistence = {
-  stores: []
-};
-
 hlr.JsonStore = (function() {
   function JsonStore(file, saverate) {
     this.file = file;
     this.saverate = saverate != null ? saverate : 30;
-    hlr.persistence.stores.push(this);
     this.hash = {};
     this.dirty = false;
     this.load();
