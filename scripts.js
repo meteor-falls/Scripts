@@ -61,7 +61,7 @@ Config = {
             throw {name: "NoFileError", toString: function () { return "Couldn't find file " + (dir + name) + "."; }};
         }
 
-        __fileContent = sys.getFileContent(dir + name);
+        __fileContent = sys.getFileContent(dir + name + ".js");
 
         module = {
             exports: {},
@@ -119,7 +119,7 @@ Config = {
     var plugin, data, resp, i;
 
     for (i = 0; i < Config.plugins.length; i += 1) {
-        plugin = Config.plugins[i] + ".js";
+        plugin = Config.plugins[i];
         require(plugin, Config.load_from_web);
     }
 
@@ -170,7 +170,7 @@ function poChannel(chanId) {
 }
 
 try {
-    ChannelManager = require('channeldata.js').manager;
+    ChannelManager = require('channeldata').manager;
 } catch (ex) {
     ChannelManager = {};
     sys.sendAll("Couldn't load ChannelManager: " + ex);
@@ -191,21 +191,21 @@ poScript = ({
         require.callPlugins("serverShutDown");
     },
     init: function init() {
-        require.reload('utils.js');
+        require.reload('utils');
 
-        require.reload('reg.js');
-        require.reload('ranks.js');
-        require.reload('bot.js');
+        require.reload('reg');
+        require.reload('ranks');
+        require.reload('bot');
 
-        require.reload('rtd.js');
+        require.reload('rtd');
 
-        require.reload('feedmon.js');
-        require.reload('tours.js');
+        require.reload('feedmon');
+        require.reload('tours');
 
-        require.reload('init.js');
+        require.reload('init');
 
-        require.reload('emotes.js');
-        require.reload('lists.js');
+        require.reload('emotes');
+        require.reload('lists');
 
         sys.resetProfiling();
     },

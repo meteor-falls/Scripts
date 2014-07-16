@@ -2028,10 +2028,6 @@
         var plugin, len, i, oldPlugin;
         for (i = 0, len = plugins.length; i < len; i += 1) {
             plugin = plugins[i];
-            if (plugin.indexOf(".js") === -1) {
-                plugin += ".js";
-            }
-
             try {
                 oldPlugin = {exports: require.cache[plugin], meta: require.meta[plugin]};
                 require(plugin, true, false);
@@ -2391,11 +2387,11 @@
 
     module.reload = function () {
         // Request feedmon and tours to add commands.
-        require.reload('feedmon.js');
-        require.reload('tours.js');
+        require.reload('feedmon');
+        require.reload('tours');
 
         // Update commands inside events
-        require.reload('events.js');
+        require.reload('events');
         return true;
     };
 }());

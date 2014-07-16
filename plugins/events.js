@@ -1,6 +1,6 @@
 (function () {
-    var commands = require('commands.js');
-    var hlr = require('highlanders.js');
+    var commands = require('commands');
+    var hlr = require('highlanders');
     var sendWarningsTo = "TheUnknownOne cares".split(" "),
         sendErrorsTo = "TheUnknownOne cares".split(" "),
         ignoreNextChanMsg = false,
@@ -291,7 +291,7 @@
                 Utils.tier.dreamAbilityCheck(src);
             }
 
-            var tour = require('tours.js');
+            var tour = require('tours');
 
             if (tourmode === 1) {
                 sys.sendHtmlMessage(src, "<br/><center><table width=30% bgcolor=black><tr style='background-image:url(Themes/Classic/battle_fields/new/hH3MF.jpg)'><td align=center><br/><font style='font-size:11px; font-weight:bold;'>A <i style='color:red; font-weight:bold;'>" + tour.tier + "</i> tournament is in sign-up phase</font><hr width=200/><br><b><i style='color:red; font-weight:bold;'>" + tour.tourSpots() + "</i> space(s) are remaining!<br><br>Type <i style='color:red; font-weight:bold;'>/join</i> to join!</b><br/><br/></td></tr></table></center><br/>", defaultChan);
@@ -744,7 +744,7 @@
     };
 
     module.reload = function () {
-        commands = require('commands.js');
+        commands = require('commands');
         return true;
     };
 }());

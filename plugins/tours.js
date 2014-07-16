@@ -21,7 +21,7 @@
     }
 
     function addCommands() {
-        var commands = require('commands.js');
+        var commands = require('commands');
         var addListCommand = commands.addListCommand,
             addCommand     = commands.addCommand,
             addPlusPlusCommand = commands.addPlusPlusCommand;

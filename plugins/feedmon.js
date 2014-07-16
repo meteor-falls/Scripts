@@ -1,6 +1,6 @@
 (function () {
     function addCommands() {
-        var commandsModule = require('commands.js');
+        var commandsModule = require('commands');
         var addListCommand = commandsModule.addListCommand,
             addCommand     = commandsModule.addCommand;
 

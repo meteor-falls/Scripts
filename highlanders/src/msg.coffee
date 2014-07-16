@@ -7,5 +7,5 @@ hlr.sendErrorTo = (src, message, chan=hlr.chan) -> hlr.sendPlayerHtml(src, "<tim
 hlr.sendTo = (src, message, chan=hlr.chan) -> hlr.sendPlayer(src, message, chan)
 
 hlr.commandList = (title, help, listtype) ->
-    lists = require('lists.js')
+    lists = require('lists')
     return new lists.CommandList(title, help, listtype)

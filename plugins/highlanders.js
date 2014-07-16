@@ -495,7 +495,7 @@ hlr.sendTo = function(src, message, chan) {
 
 hlr.commandList = function(title, help, listtype) {
   var lists;
-  lists = require('lists.js');
+  lists = require('lists');
   return new lists.CommandList(title, help, listtype);
 };
 
