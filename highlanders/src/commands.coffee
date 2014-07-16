@@ -159,9 +159,10 @@ hlr.addCommands = ->
         hlr.sendTo src, "Selling your #{iobj.name} (3)..."
         sys.setTimer ->
             hlr.player.takeItem(src, itemid, hlr.SILENT)
+            hlr.player.giveMoney(src, price, hlr.SILENT)
+
             # More appropriate message
             hlr.sendTo src, "You sold your #{iobj.name} for #{hlr.currencyFormat(price)}!"
-            hlr.player.giveMoney(src, price)
 
             sess.sell.selling = no
         , 3 * 1000, no
@@ -183,10 +184,11 @@ hlr.addCommands = ->
             hlr.sendErrorTo @src, "Your #{iobj.name} cannot be sold."
             return
 
-        item = hlr.player.takeItem(@src, itemid, hlr.SILENT)
+        hlr.player.takeItem(@src, itemid, hlr.SILENT)
+        hlr.player.giveMoney(@src, price, hlr.SILENT)
+
         # More appropriate message
         hlr.sendTo @src, "You sold your #{iobj.name} for #{hlr.currencyFormat(price)}!"
-        hlr.player.giveMoney(@src, price)
     , registered
 
     addCommand 'iteminfo', ->

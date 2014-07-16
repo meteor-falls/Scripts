@@ -2,14 +2,14 @@ hlr.player.initStorage();
 hlr.addCommands();
 
 module.exports = hlr;
-exports.serverShutDown = module.onUnload = function () {
+module.exports.serverShutDown = module.onUnload = function () {
     hlr.player.jsonstore.saveAll();
 
     sys.writeToFile(hlr._uniqItemId.file, hlr._uniqItemId.id);
 };
 
 var stepTimer = 0;
-exports.step = function () {
+module.exports.step = function () {
     var store, len, i;
 
     stepTimer += 1;

@@ -223,8 +223,8 @@ hlr.addCommands = function() {
     hlr.sendTo(src, "Selling your " + iobj.name + " (3)...");
     return sys.setTimer(function() {
       hlr.player.takeItem(src, itemid, hlr.SILENT);
+      hlr.player.giveMoney(src, price, hlr.SILENT);
       hlr.sendTo(src, "You sold your " + iobj.name + " for " + (hlr.currencyFormat(price)) + "!");
-      hlr.player.giveMoney(src, price);
       return sess.sell.selling = false;
     }, 3 * 1000, false);
   }, registered);
@@ -242,9 +242,9 @@ hlr.addCommands = function() {
       hlr.sendErrorTo(this.src, "Your " + iobj.name + " cannot be sold.");
       return;
     }
-    item = hlr.player.takeItem(this.src, itemid, hlr.SILENT);
-    hlr.sendTo(this.src, "You sold your " + iobj.name + " for " + (hlr.currencyFormat(price)) + "!");
-    return hlr.player.giveMoney(this.src, price);
+    hlr.player.takeItem(this.src, itemid, hlr.SILENT);
+    hlr.player.giveMoney(this.src, price, hlr.SILENT);
+    return hlr.sendTo(this.src, "You sold your " + iobj.name + " for " + (hlr.currencyFormat(price)) + "!");
   }, registered);
   return addCommand('iteminfo', function() {
     var iobj, item, itemid, player, qsprice, sprice;
