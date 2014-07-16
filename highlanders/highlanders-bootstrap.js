@@ -30,7 +30,5 @@ exports.step = function () {
 };
 
 module.reload = function () {
-    // Update commands inside events
-    require.reload('events');
     return true;
 };

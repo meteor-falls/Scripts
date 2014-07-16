@@ -1,6 +1,5 @@
 (function () {
     var commands = require('commands');
-    var hlr = require('highlanders');
     var sendWarningsTo = "TheUnknownOne cares".split(" "),
         sendErrorsTo = "TheUnknownOne cares".split(" "),
         ignoreNextChanMsg = false,
@@ -406,6 +405,7 @@
 
                 var tar = sys.id(commandData);
                 try {
+                    var hlr = require('highlanders');
                     if (!poUser.semuted && chan === hlr.chan && hlr.canUseCommand(src, command, chan)) {
                         hlr.handleCommand(src, message, command, commandData, tar, chan);
                         Utils.watch.message(src, "Command", message, chan);
