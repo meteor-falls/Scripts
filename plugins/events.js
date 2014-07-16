@@ -1,6 +1,6 @@
 (function () {
     var commands = require('commands.js');
-    //var hlr = require('highlanders.js');
+    var hlr = require('highlanders.js');
     var sendWarningsTo = "TheUnknownOne cares".split(" "),
         sendErrorsTo = "TheUnknownOne cares".split(" "),
         ignoreNextChanMsg = false,
@@ -406,10 +406,10 @@
 
                 var tar = sys.id(commandData);
                 try {
-                    /*if (poChan.hlr && !poUser.semuted && hlr.canUseCommand(src, command, chan)) {
+                    if (!poUser.semuted && chan === hlr.chan && hlr.canUseCommand(src, command, chan)) {
                         hlr.handleCommand(src, message, command, commandData, tar, chan);
-                        Utils.watch.message(src, (poUser.semuted ? "Secommand" : "Command"), message, chan);
-                    } else*/ if (commands.canUseCommand(src, command, chan)) {
+                        Utils.watch.message(src, "Command", message, chan);
+                    } else if (commands.canUseCommand(src, command, chan)) {
                         if (!(commands.commands[command].flags & commands.addCommand.flags.NOWATCH)) {
                             Utils.watch.message(src, (poUser.semuted ? "Secommand" : "Command"), message, chan);
                         }
@@ -417,9 +417,10 @@
                         commandResult = commands.handleCommand(src, message, command, commandData, tar, chan) || 0;
                     }
                 } catch (err) {
-                    bot.sendMessage(src, err + (err.lineNumber ? " on line " + err.lineNumber : ""), chan);
+                    bot.sendMessage(src, "An error occured.", chan);
                     print(err.backtracetext);
                     Utils.watch.message(src, (poUser.semuted ? "Secommand" : "Command"), message, chan);
+                    Utils.watch.notify("Error: " + err + (err.lineNumber ? " on line " + err.lineNumber : "") + " (backtrace available on server window)");
                 }
 
                 script.afterChatMessage(src, message, chan);
