@@ -11,18 +11,15 @@ hlr.canUseCommand = function(src, command, chan) {
     return false;
   }
   command = hlr.commands[command];
-  if (hlr.isMaintainer(src)) {
-    return true;
-  }
-  if (command.auth === 'maintainer') {
-    return false;
-  }
   if (command.auth === 'registered') {
     if (hlr.player.registered(src)) {
       return true;
     } else {
       throw "In order to use this command, you must first <a href='po:send//register'>Create a Highlanders account</a>, or change to an existing account.";
     }
+  }
+  if (command.auth === 'maintainer') {
+    return hlr.isMaintainer(src);
   }
   return true;
 };

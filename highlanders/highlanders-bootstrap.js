@@ -1,4 +1,5 @@
 hlr.player.initStorage();
+hlr.addCommands();
 
 module.exports = hlr;
 exports.serverShutDown = function () {

@@ -7,11 +7,6 @@ hlr.canUseCommand = (src, command, chan) ->
         return no
 
     command = hlr.commands[command]
-    if hlr.isMaintainer(src)
-        return yes
-
-    if command.auth is 'maintainer'
-        return no
 
     if command.auth is 'registered'
         if hlr.player.registered(src)
@@ -19,6 +14,8 @@ hlr.canUseCommand = (src, command, chan) ->
         else
             throw "In order to use this command, you must first <a href='po:send//register'>Create a Highlanders account</a>, or change to an existing account."
 
+    if command.auth is 'maintainer'
+        return hlr.isMaintainer(src)
     return yes
 
 hlr.handleCommand = (src, message, command, commandData, tar, chan) ->
