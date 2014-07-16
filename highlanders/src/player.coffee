@@ -6,8 +6,7 @@ hlr.player.player = (id) -> hlr.players[hlr.namelOf(id)]
 hlr.player.session = (id) -> hlr.player.sessions[id] or= {}
 hlr.player.registered = (id) -> hlr.namelOf(id) of hlr.players
 hlr.player.register = (id) ->
-    if hlr.player.registered(id)
-        hlr.error("hlr.player.register: called for registered player")
+    hlr.assert(!hlr.player.registered(id), "can't register already registered players")
 
     hlr.players[hlr.nameOf(id)] =
         name: id
@@ -17,8 +16,7 @@ hlr.player.register = (id) ->
     hlr.player.markDirty()
 
 hlr.player.unregister = (id) ->
-    if !hlr.player.registered(id)
-        hlr.error("hlr.player.unregister: called for a non-registered player")
+    hlr.assert(hlr.player.registered(id), "can't unregister non-registered players")
 
     delete hlr.players[hlr.namelOf(id)]
     hlr.player.markDirty()
@@ -44,8 +42,7 @@ hlr.player.giveItem = (id, item, qty=1, notify=hlr.VERBOSE) ->
 hlr.player.takeItem = (id, itemid, notify=hlr.VERBOSE) ->
     player = hlr.player.player(id)
 
-    if !(itemid of player.inventory)
-        hlr.error("hlr.player.takeItem: player doesn't have the given itemid")
+    hlr.assert(itemid of player.inventory, "player doesn't have itemid in inventory")
 
     item = player.inventory[itemid]
 
@@ -59,8 +56,7 @@ hlr.player.takeItem = (id, itemid, notify=hlr.VERBOSE) ->
 hlr.player.sendQuicksellInfo = (id, itemid) ->
     player = hlr.player.player(id)
 
-    if !(itemid of player.inventory)
-        hlr.error("hlr.player.sendQuicksellInfo: non-existent itemid")
+    hlr.assert(itemid of player.inventory, "player doesn't have itemid in inventory")
 
     item = hlr.item(player.inventory[itemid])
     hlr.sendTo id, "<a href='po:send//quicksell #{itemid}'><b>Quicksell #{item.name} for #{hlr.currencyFormat(hlr.quicksellPrice(item.sell))}</b></a>."
@@ -69,6 +65,10 @@ hlr.player.showInventory = (id) ->
     player = hlr.player.player(id)
     inv = player.inventory
     icount = Object.keys(inv).length
+
+    if icount is 0
+        hlr.sendTo id, "Your inventory is empty."
+        return
 
     hlr.sendTo id, "Your inventory:"
 
@@ -122,7 +122,7 @@ hlr.player.sendLocationInfo = (id, loc=hlr.player.player(id).location) ->
     locs = ("<a href='po:send//go #{place}><b>#{hlr.location(place).name}</b> (#{place})</a>" for place in lobj.to)
     hlr.sendTo id, "From here, you can go to #{Utils.fancyJoin(locs)}."
 
-    hlr.sendTo id, ""
+    hlr.sendLine id
 
     switch lobj.type
         when hlr.Location.SellArea

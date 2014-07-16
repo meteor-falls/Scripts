@@ -469,6 +469,14 @@ hlr.sendPlayer = function(src, message) {
   return Bot.hlr.sendMessage(src, message, hlr.chan);
 };
 
+hlr.lineTo = function(src) {
+  return Bot.hlr.line(src, hlr.chan);
+};
+
+hlr.lineAll = function(src) {
+  return Bot.hlr.lineAll(hlr.chan);
+};
+
 hlr.sendErrorTo = function(src, message) {
   return sys.sendHtmlMessage(src, "<timestamp/><i>" + message + "</i>", hlr.chan);
 };
@@ -503,9 +511,7 @@ hlr.player.registered = function(id) {
 };
 
 hlr.player.register = function(id) {
-  if (hlr.player.registered(id)) {
-    hlr.error("hlr.player.register: called for registered player");
-  }
+  hlr.assert(!hlr.player.registered(id), "can't register already registered players");
   hlr.players[hlr.nameOf(id)] = {
     name: id,
     balance: 0,
@@ -515,9 +521,7 @@ hlr.player.register = function(id) {
 };
 
 hlr.player.unregister = function(id) {
-  if (!hlr.player.registered(id)) {
-    hlr.error("hlr.player.unregister: called for a non-registered player");
-  }
+  hlr.assert(hlr.player.registered(id), "can't unregister non-registered players");
   delete hlr.players[hlr.namelOf(id)];
   return hlr.player.markDirty();
 };
@@ -552,9 +556,7 @@ hlr.player.takeItem = function(id, itemid, notify) {
     notify = hlr.VERBOSE;
   }
   player = hlr.player.player(id);
-  if (!(itemid in player.inventory)) {
-    hlr.error("hlr.player.takeItem: player doesn't have the given itemid");
-  }
+  hlr.assert(itemid in player.inventory, "player doesn't have itemid in inventory");
   item = player.inventory[itemid];
   delete player.inventory[itemid];
   hlr.player.markDirty();
@@ -567,9 +569,7 @@ hlr.player.takeItem = function(id, itemid, notify) {
 hlr.player.sendQuicksellInfo = function(id, itemid) {
   var item, player;
   player = hlr.player.player(id);
-  if (!(itemid in player.inventory)) {
-    hlr.error("hlr.player.sendQuicksellInfo: non-existent itemid");
-  }
+  hlr.assert(itemid in player.inventory, "player doesn't have itemid in inventory");
   item = hlr.item(player.inventory[itemid]);
   return hlr.sendTo(id, "<a href='po:send//quicksell " + itemid + "'><b>Quicksell " + item.name + " for " + (hlr.currencyFormat(hlr.quicksellPrice(item.sell))) + "</b></a>.");
 };
@@ -579,6 +579,10 @@ hlr.player.showInventory = function(id) {
   player = hlr.player.player(id);
   inv = player.inventory;
   icount = Object.keys(inv).length;
+  if (icount === 0) {
+    hlr.sendTo(id, "Your inventory is empty.");
+    return;
+  }
   hlr.sendTo(id, "Your inventory:");
   html = "<table cellpadding='1' cellspacing='3'>";
   page = 0;
@@ -649,7 +653,7 @@ hlr.player.sendLocationInfo = function(id, loc) {
     return _results;
   })();
   hlr.sendTo(id, "From here, you can go to " + (Utils.fancyJoin(locs)) + ".");
-  hlr.sendTo(id, "");
+  hlr.sendLine(id);
   switch (lobj.type) {
     case hlr.Location.SellArea:
       return hlr.sendTo(id, "You can <a href='po:send//inventory'>sell items from your inventory</a> here.");
@@ -681,16 +685,10 @@ hlr.error = function(str) {
   throw new Error(str);
 };
 
-hlr.clone = function(obj) {
-  var key, newInstance;
-  if ((obj == null) || typeof obj !== 'object') {
-    return obj;
+hlr.assert = function(condition, str) {
+  if (!condition) {
+    return hlr.error(str);
   }
-  newInstance = new obj.constructor();
-  for (key in obj) {
-    newInstance[key] = clone(obj[key]);
-  }
-  return newInstance;
 };
 
 hlr.an = function(str) {

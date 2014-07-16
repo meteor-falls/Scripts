@@ -13,7 +13,7 @@ botproto.markup = function (message) {
 
 botproto.sendAll = function (message, channel) {
     if (message === "") {
-        sys.sendAll(message, channel);
+        sys.sendAll("", channel);
         return;
     }
 
@@ -35,7 +35,7 @@ botproto.sendMainAll = function (message, channel) {
 
 botproto.sendMessage = function (player, message, channel) {
     if (message === "") {
-        sys.sendMessage(player, message, channel);
+        sys.sendMessage(player, "", channel);
         return;
     }
 
