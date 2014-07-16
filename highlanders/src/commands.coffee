@@ -178,7 +178,7 @@ hlr.addCommands = ->
 
         hlr.sendTo @src, "<b title='Item id #{itemid}'>#{iobj.name}</b>: #{if iobj.description then iobj.description else ''}"
         if sprice
-            else if hlr.location(player.location).type isnt hlr.Location.SellArea
+            if hlr.location(player.location).type isnt hlr.Location.SellArea
                 hlr.sendTo @src, "You cannot sell items in #{hlr.location(player.location)} at full price, instead, go to a marketplace."
             else
                 hlr.sendTo @src, "<a href='po:send//sell #{itemid}'>Sell #{iobj.name} for #{hlr.currencyFormat(sprice)}</a>."

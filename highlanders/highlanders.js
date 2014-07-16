@@ -163,7 +163,42 @@ hlr.addCommands = function() {
       return hlr.sendTo(this.src, "<a href='po:send//fish left'>[Left]</a> <a href='po:send//fish center'>[Center]</a> <a href='po:send//fish right'>[Right]</a>");
     }
   }, registered);
-  return addCommand('quicksell', function() {
+  addCommand('sell', function() {
+    var iobj, item, itemid, player, price, sess;
+    player = hlr.player.player(this.src);
+    sess = hlr.player.session(this.src);
+    itemid = parseInt(this.commandData, 10);
+    if (!(itemid in player.inventory)) {
+      return;
+    }
+    if (hlr.location(player.location).type !== hlr.Location.SellArea) {
+      hlr.sendErrorTo(this.src, "You cannot sell items in " + (hlr.location(player.location).name) + " for full price, instead, go to a marketplace.");
+      return;
+    }
+    item = player.inventory[itemid];
+    iobj = hlr.item(item);
+    price = iobj.price;
+    if (!price) {
+      hlr.sendErrorTo(this.src, "Your " + iobj.name + " cannot be sold.");
+      return;
+    }
+    if (sess.sell == null) {
+      sess.sell = {};
+    }
+    if (sess.sell.selling) {
+      hlr.sendErrorTo(this.src, "You haven't sold your item yet!");
+      return;
+    }
+    sess.sell.selling = true;
+    hlr.sendTo(this.src, "Selling your " + iobj.name + " (3)...");
+    return sys.setTimer(function() {
+      hlr.player.takeItem(this.src, itemid, hlr.SILENT);
+      hlr.sendTo(this.src, "You sold your " + iobj.name + " for " + (hlr.currencyFormat(price)) + "!");
+      hlr.player.giveMoney(this.src, price);
+      return sess.sell.selling = false;
+    }, 3 * 1000, false);
+  }, registered);
+  addCommand('quicksell', function() {
     var item, itemid, player, price;
     player = hlr.player.player(this.src);
     itemid = parseInt(this.commandData, 10);
@@ -172,9 +207,36 @@ hlr.addCommands = function() {
     }
     item = player.inventory[itemid];
     price = hlr.quicksellPrice(item);
+    if (!price) {
+      hlr.sendErrorTo(this.src, "Your " + iobj.name + " cannot be sold.");
+      return;
+    }
     item = hlr.player.takeItem(this.src, itemid, hlr.SILENT);
     hlr.sendTo(this.src, "You sold your " + (hlr.item(item).name) + " for " + (hlr.currencyFormat(price)) + "!");
     return hlr.player.giveMoney(this.src, price);
+  }, registered);
+  return addCommand('iteminfo', function() {
+    var iobj, item, itemid, player, qsprice, sprice;
+    player = hlr.player.player(this.src);
+    itemid = parseInt(this.commandData, 10);
+    if (!(itemid in player.inventory)) {
+      return;
+    }
+    item = player.inventory[itemid];
+    iobj = hlr.item(item);
+    sprice = iobj.sell;
+    qsprice = hlr.quicksellPrice(item);
+    hlr.sendTo(this.src, "<b title='Item id " + itemid + "'>" + iobj.name + "</b>: " + (iobj.description ? iobj.description : ''));
+    if (sprice) {
+      if (hlr.location(player.location).type !== hlr.Location.SellArea) {
+        hlr.sendTo(this.src, "You cannot sell items in " + (hlr.location(player.location)) + " at full price, instead, go to a marketplace.");
+      } else {
+        hlr.sendTo(this.src, "<a href='po:send//sell " + itemid + "'>Sell " + iobj.name + " for " + (hlr.currencyFormat(sprice)) + "</a>.");
+      }
+      return hlr.sendTo(this.src, "<a href='po:send//quicksell " + itemid + "'>Quicksell " + iobj.name + " for " + (hlr.currencyFormat(qsprice)) + "</a>.");
+    } else {
+      return hlr.sendTo(this.src, "This item cannot be sold.");
+    }
   }, registered);
 };
 
@@ -208,7 +270,14 @@ hlr.Item = {
 };
 
 hlr.quicksellPrice = function(price) {
-  return Math.ceil(price / 2);
+  if (price == null) {
+    price = 0;
+  }
+  if (price) {
+    return Math.ceil(price / 2);
+  } else {
+    return 0;
+  }
 };
 
 hlr.currencyFormat = function(a) {
