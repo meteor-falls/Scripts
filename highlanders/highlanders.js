@@ -601,7 +601,7 @@ hlr.player.goto = function(id, loc, notify) {
 };
 
 hlr.player.sendLocationInfo = function(id, loc) {
-  var lobj, locs, place;
+  var lobj, locs, place, _i, _len, _ref;
   if (loc == null) {
     loc = hlr.player.player(id).location;
   }
@@ -610,18 +610,14 @@ hlr.player.sendLocationInfo = function(id, loc) {
   if (lobj.welcome) {
     hlr.sendTo(id, lobj.welcome);
   }
-  locs = (function() {
-    var _i, _len, _ref, _results;
-    _ref = lobj.to;
-    _results = [];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      place = _ref[_i];
-      _results.push("<a href='po:send//go " + place + "><b>" + (hlr.location(place).name) + "</b> (" + place + ")</a>");
-    }
-    return _results;
-  })();
+  locs = [];
+  _ref = lobj.to;
+  for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+    place = _ref[_i];
+    locs.push("<a href='po:send//go " + place + "><b>" + (hlr.location(place).name) + "</b></a>");
+  }
   hlr.sendTo(id, "From here, you can go to " + (Utils.fancyJoin(locs)) + ".");
-  hlr.sendLine(id);
+  hlr.lineTo(id);
   switch (lobj.type) {
     case hlr.Location.SellArea:
       return hlr.sendTo(id, "You can <a href='po:send//inventory'>sell items from your inventory</a> here.");
