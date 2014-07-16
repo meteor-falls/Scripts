@@ -103,6 +103,44 @@ hlr.addCommands = ->
     , registered
 
     # Unlisted commands
+    addCommand 'sell', ->
+        player = hlr.player.player(@src)
+        sess = hlr.player.session(@src)
+        itemid = parseInt(@commandData, 10)
+
+        # Ignore (missclick or something)
+        if !(itemid of player.inventory)
+            return
+
+        if hlr.location(player.location).type isnt hlr.Location.SellArea
+            hlr.sendErrorTo @src, "You cannot sell items in #{hlr.location(player.location).name} for full price, instead, go to a marketplace."
+            return
+
+        item = player.inventory[itemid]
+        iobj = hlr.item(item)
+        price = iobj.price
+
+        unless price
+            hlr.sendErrorTo @src, "Your #{iobj.name} cannot be sold."
+            return
+
+        sess.sell ?= {}
+        if sess.sell.selling
+            hlr.sendErrorTo @src, "You haven't sold your item yet!"
+            return
+
+        sess.sell.selling = yes
+        hlr.sendTo @src, "Selling your #{iobj.name} (3)..."
+        sys.setTimer ->
+            hlr.player.takeItem(@src, itemid, hlr.SILENT)
+            # More appropriate message
+            hlr.sendTo @src, "You sold your #{iobj.name} for #{hlr.currencyFormat(price)}!"
+            hlr.player.giveMoney(@src, price)
+
+            sess.sell.selling = no
+        , 3 * 1000, no
+    , registered
+
     addCommand 'quicksell', ->
         player = hlr.player.player(@src)
         itemid = parseInt(@commandData, 10)
@@ -114,8 +152,37 @@ hlr.addCommands = ->
         item = player.inventory[itemid]
         price = hlr.quicksellPrice(item)
 
+        unless price
+            hlr.sendErrorTo @src, "Your #{iobj.name} cannot be sold."
+            return
+
         item = hlr.player.takeItem(@src, itemid, hlr.SILENT)
         # More appropriate message
         hlr.sendTo @src, "You sold your #{hlr.item(item).name} for #{hlr.currencyFormat(price)}!"
         hlr.player.giveMoney(@src, price)
+    , registered
+
+    addCommand 'iteminfo', ->
+        player = hlr.player.player(@src)
+        itemid = parseInt(@commandData, 10)
+
+        # Ignore (missclick or something)
+        if !(itemid of player.inventory)
+            return
+
+        item = player.inventory[itemid]
+        iobj = hlr.item(item)
+
+        sprice = iobj.sell
+        qsprice = hlr.quicksellPrice(item)
+
+        hlr.sendTo @src, "<b title='Item id #{itemid}'>#{iobj.name}</b>: #{if iobj.description then iobj.description else ''}"
+        if sprice
+            else if hlr.location(player.location).type isnt hlr.Location.SellArea
+                hlr.sendTo @src, "You cannot sell items in #{hlr.location(player.location)} at full price, instead, go to a marketplace."
+            else
+                hlr.sendTo @src, "<a href='po:send//sell #{itemid}'>Sell #{iobj.name} for #{hlr.currencyFormat(sprice)}</a>."
+            hlr.sendTo @src, "<a href='po:send//quicksell #{itemid}'>Quicksell #{iobj.name} for #{hlr.currencyFormat(qsprice)}</a>."
+        else
+            hlr.sendTo @src, "This item cannot be sold."
     , registered
