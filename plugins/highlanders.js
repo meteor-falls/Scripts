@@ -95,8 +95,7 @@ hlr.addCommands = function() {
   var addCommand, maintainer, registered;
   addCommand = hlr.addCommand, maintainer = hlr.authMaintainer, registered = hlr.authRegistered;
   addCommand('hlrcommands', function() {
-    var list;
-    return list = hlr.commandList("Highlanders Commands").add([["register", "Registers a Highlanders account for this name. The account is bound to your name, not your IP."], ["location", "Shows your current location. Aliases: l, loc"], ["go", "Go to that location. Aliases: g, goto", ["location"]], ["fish", "Fish in locations that allow it. Also used to choose your rod toss direction.", ["direction"]]]).finish().render(this.src, this.chan);
+    return hlr.commandList("Highlanders Commands").add([["register", "Registers a Highlanders account for this name. The account is bound to your name, not your IP."], ["location", "Shows your current location. Aliases: l, loc"], ["go", "Go to that location. Aliases: g, goto", ["location"]], ["fish", "Fish in locations that allow it. Also used to choose your rod toss direction.", ["direction"]]]).finish().display(this.src, this.chan);
   });
   addCommand('register', function() {
     if (hlr.player.registered(this.src)) {
@@ -744,6 +743,6 @@ exports.step = function () {
 
 module.reload = function () {
     // Update commands inside events
-    require.reload('events.js');
+    require.reload('events');
     return true;
 };
