@@ -462,7 +462,9 @@ hlr.sendTo = function(src, message, chan) {
 };
 
 hlr.commandList = function(title, help, listtype) {
-  return new require('lists.js').CommandList(title, help, listtype);
+  var lists;
+  lists = require('lists.js');
+  return new lists.CommandList(title, help, listtype);
 };
 
 hlr.player = {};
