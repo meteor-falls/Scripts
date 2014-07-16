@@ -353,7 +353,7 @@ hlr.JsonStore = (function() {
   };
 
   JsonStore.prototype.load = function() {
-    if (sys.fileExist(this.file)) {
+    if (sys.fileExists(this.file)) {
       return this.hash = JSON.parse(sys.getFileContent(this.file));
     }
   };

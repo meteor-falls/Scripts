@@ -8,7 +8,7 @@ class hlr.JsonStore
         @initDefaults()
     markDirty: -> @dirty = yes
     load: ->
-        if sys.fileExist(@file)
+        if sys.fileExists(@file)
             @hash = JSON.parse(sys.getFileContent(@file))
     saveAll: ->
         if @dirty
