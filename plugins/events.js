@@ -162,7 +162,7 @@
                     }
                 }
                 if (reconnectTrolls.hasOwnProperty(ip)) {
-                    Utils.watch.notify("Blocked auto-reconnect from IP " + srcip + " (" + sys.name(src) + ".");
+                    Utils.watch.notify("Blocked auto-reconnect from IP " + srcip + " (" + sys.name(src) + ").");
                     return sys.stopEvent();
                 }
                 if (sys.protocolVersion) {
@@ -306,7 +306,7 @@
             }
 
             Utils.fixupTI(src);
-            Utils.watch.notify(Utils.nameIp(src) + " logged in (" + os + ").");
+            Utils.watch.notify(Utils.nameIp(src) + " logged in (" + os + " " + (sys.protocolVersion ? sys.protocolVersion(src) : "?.?") + ".");
         },
 
         beforeChangeTier: function (src, team, oldtier, newtier) {
