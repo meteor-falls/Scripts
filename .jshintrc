@@ -46,6 +46,7 @@
         "watch": true,
         "staffchannel": true,
         "testchan": true,
+        "androidchannel": true,
         "pluschannel": true,
 
         "tourmode": true,

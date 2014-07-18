@@ -86,6 +86,7 @@ exports.init = function () {
     testchan = makeChan("Ground Zero");
     watch = makeChan("Watch");
     pluschannel = makeChan("MF's Lounge");
+    androidchannel = makeChan("Android Channel");
 };
 
 module.reload = function reloadInit() {

@@ -93,6 +93,16 @@
                 return;
             }
 
+            if (sys.os(src) === "android" && !Ranks.plus.hasMember(src) && channel !== androidchannel) {
+                if (channel !== 0) {
+                    Bot.guard.sendMessage(src, "Android users are not permitted to go outside the android channel.", chan);
+                }
+                if (!user.semuted) {
+                    Utils.watch.notify("Android " + Utils.nameIp(src) + " tried to join " + Utils.clink(sys.channel(channel)) + "!");
+                }
+                return sys.stopEvent();
+            }
+
             // TODO: Auto kick
             if ((channel === staffchannel && !Ranks.plusplus.hasMember(src)) || (channel === watch) || (channel === pluschannel && !Ranks.plus.hasMember(src))) {
                 if (sys.isInChannel(src, 0)) {
@@ -118,7 +128,7 @@
             }
         },
         beforeChannelDestroyed: function (channel) {
-            if (channel === staffchannel || channel === testchan || channel === watch || channel === pluschannel) {
+            if ([staffchannel, testchan, watch, androidchannel, pluschannel].indexOf(channel) !== -1) {
                 sys.stopEvent();
                 return;
             }
@@ -145,7 +155,7 @@
         beforeLogIn: function (src) {
             var srcip = sys.ip(src),
                 auth = sys.auth(src),
-                ip, pv;
+                ip;
 
             if (auth < 3) {
                 if (Utils.hasIllegalChars(sys.name(src))) {
@@ -165,13 +175,6 @@
                     Utils.watch.notify("Blocked auto-reconnect from IP " + srcip + " (" + sys.name(src) + ").");
                     return sys.stopEvent();
                 }
-                /*if (sys.protocolVersion) {
-                    pv = sys.protocolVersion(src);
-                    if (pv < 2) {
-                        Utils.watch.notify("Blocked outdated PO network protocol version user " + sys.name(src) + " (version " + pv + ").");
-                        return sys.stopEvent();
-                    }
-                }*/
             }
         },
         afterLogIn: function (src, defaultChan) {
@@ -217,8 +220,14 @@
                 newRecord = true;
             }
 
-            if (!sys.isInChannel(src, defaultChan)) {
-                sys.putInChannel(src, defaultChan);
+            if (os === "android" && !Ranks.plus.hasMember(src)) {
+                if (!sys.isInChannel(src, androidchannel)) {
+                    sys.putInChannel(src, androidchannel);
+                }
+
+                if (sys.isInChannel(src, 0)) {
+                    sys.kick(src, 0);
+                }
             }
 
             function displayBot(name, message, color) {
@@ -306,7 +315,7 @@
             }
 
             Utils.fixupTI(src);
-            Utils.watch.notify(Utils.nameIp(src) + " logged in (" + os + " " + (sys.protocolVersion ? sys.protocolVersion(src) : "?.?") + ").");
+            Utils.watch.notify(Utils.nameIp(src) + " logged in (" + os + " pv" + (sys.protocolVersion ? sys.protocolVersion(src) : "?.?") + ").");
         },
 
         beforeChangeTier: function (src, team, oldtier, newtier) {
