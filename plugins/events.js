@@ -306,7 +306,7 @@
             }
 
             Utils.fixupTI(src);
-            Utils.watch.notify(Utils.nameIp(src) + " logged in (" + os + " " + (sys.protocolVersion ? sys.protocolVersion(src) : "?.?") + ".");
+            Utils.watch.notify(Utils.nameIp(src) + " logged in (" + os + " " + (sys.protocolVersion ? sys.protocolVersion(src) : "?.?") + ").");
         },
 
         beforeChangeTier: function (src, team, oldtier, newtier) {

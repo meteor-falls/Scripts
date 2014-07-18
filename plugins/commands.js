@@ -1050,14 +1050,16 @@
         sys.sendHtmlAll("<br>" + Bot.border, 0);
     });
 
-    addCommand(1, "forcepoll", function (src, commandData, chan) {
+    addCommand(1, "forcepoll", function () {
         sys.sendHtmlAll(Bot.border + "<br>", 0);
-        bot.sendAll(Poll.by + " started a poll!<ping/>", 0);
+        bot.sendAll("Poll:<ping/>", 0);
         bot.sendAll(Poll.subject, 0);
         bot.sendAll("Options:", 0);
 
         var html = [],
-            options = Poll.options;
+            options = Poll.options,
+            len, i;
+
         for (i = 0, len = options.length; i < len; i += 1) {
             html.push("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>" + (i + 1) + "</b>. " + options[i]);
         }
@@ -1413,8 +1415,12 @@
             mutedname: name
         };
 
+        // Change mute time
         if (Mutes[tarip]) {
             mute = Mutes[tarip];
+            if (args.length === 2) {
+                time = Utils.stringToTime(args[1], "m");
+            }
             mute.time = sys.time() + time;
             mute.mutedname = name;
             changed = true;
