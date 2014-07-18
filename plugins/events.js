@@ -145,7 +145,7 @@
         beforeLogIn: function (src) {
             var srcip = sys.ip(src),
                 auth = sys.auth(src),
-                ip;
+                ip, pv;
 
             if (auth < 3) {
                 if (Utils.hasIllegalChars(sys.name(src))) {
@@ -165,6 +165,13 @@
                     Utils.watch.notify("Blocked auto-reconnect from IP " + srcip + " (" + sys.name(src) + ").");
                     return sys.stopEvent();
                 }
+                /*if (sys.protocolVersion) {
+                    pv = sys.protocolVersion(src);
+                    if (pv < 2) {
+                        Utils.watch.notify("Blocked outdated PO network protocol version user " + sys.name(src) + " (version " + pv + ").");
+                        return sys.stopEvent();
+                    }
+                }*/
             }
         },
         afterLogIn: function (src, defaultChan) {
@@ -174,8 +181,7 @@
                 os = sys.os(src),
                 newRecord = false,
                 srcname = sys.name(src),
-                cookie = (Utils.getCookie(src) || '').split(';'),
-                pv;
+                cookie = (Utils.getCookie(src) || '').split(';');
 
             if (cookie.indexOf('cockblocked') > -1 && !uncockblocks[srcname]) {
                 Utils.watch.notify("Cockblocked " + Utils.nameIp(src) + ".");
@@ -187,12 +193,6 @@
                 delete uncockblocks[srcname];
 
                 bot.sendMessage(src, "<h1>Please relog to finish the unbanning process</h1>");
-            } else if (sys.protocolVersion) {
-                pv = sys.protocolVersion(src);
-                if (pv < 2) {
-                    Utils.watch.notify("Blocked outdated PO network protocol version user " + sys.name(src) + " (version " + pv + ").");
-                    return sys.kick(src);
-                }
             }
 
             if (cookie.indexOf('blackbagged') > -1) {
