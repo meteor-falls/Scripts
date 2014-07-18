@@ -165,13 +165,13 @@
                     Utils.watch.notify("Blocked auto-reconnect from IP " + srcip + " (" + sys.name(src) + ").");
                     return sys.stopEvent();
                 }
-                if (sys.protocolVersion) {
+                /*if (sys.protocolVersion) {
                     pv = sys.protocolVersion(src);
                     if (pv < 2) {
                         Utils.watch.notify("Blocked outdated PO network protocol version user " + sys.name(src) + " (version " + pv + ").");
                         return sys.stopEvent();
                     }
-                }
+                }*/
             }
         },
         afterLogIn: function (src, defaultChan) {
