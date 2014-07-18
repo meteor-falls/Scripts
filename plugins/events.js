@@ -145,25 +145,32 @@
         beforeLogIn: function (src) {
             var srcip = sys.ip(src),
                 auth = sys.auth(src),
-                ip;
+                ip, pv;
 
-            if (auth < 1) {
-                for (ip in Rangebans) {
-                    if (ip === srcip.substr(0, ip.length)) {
-                        Utils.watch.notify("Rangebanned IP [" + srcip + "] tried to log in.");
-                        return sys.stopEvent();
-                    }
-                }
-                if (reconnectTrolls.hasOwnProperty(ip)) {
-                    Utils.watch.notify("Blocked auto-reconnect from IP " + srcip + ".");
+            if (auth < 3) {
+                if (Utils.hasIllegalChars(sys.name(src))) {
+                    Utils.watch.notify("Blocked login for bad characters from IP " + srcip + ".");
                     return sys.stopEvent();
                 }
             }
 
-            if (auth < 3) {
-                if (Utils.hasIllegalChars(sys.name(src))) {
-                    Utils.watch.notifyl("Blocked login for bad characters from IP " + srcip + ".");
+            if (auth < 1) {
+                for (ip in Rangebans) {
+                    if (ip === srcip.substr(0, ip.length)) {
+                        Utils.watch.notify("Rangebanned IP [" + srcip + "] tried to log in as " + sys.name(src) + ".");
+                        return sys.stopEvent();
+                    }
+                }
+                if (reconnectTrolls.hasOwnProperty(ip)) {
+                    Utils.watch.notify("Blocked auto-reconnect from IP " + srcip + " (" + sys.name(src) + ".");
                     return sys.stopEvent();
+                }
+                if (sys.protocolVersion) {
+                    pv = sys.protocolVersion(src);
+                    if (pv < 2) {
+                        Utils.watch.notify("Blocked outdated PO network protocol version user " + sys.name(src) + " (version " + pv + ").");
+                        return sys.stopEvent();
+                    }
                 }
             }
         },
