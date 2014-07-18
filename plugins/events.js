@@ -94,11 +94,11 @@
             }
 
             if (sys.os(src) === "android" && !Ranks.plus.hasMember(src) && channel !== androidchannel) {
-                if (channel !== 0) {
+                if (sys.isInChannel(src, androidchannel)) {
                     Bot.guard.sendMessage(src, "Android users are not permitted to go outside the android channel.", chan);
-                }
-                if (!user.semuted) {
-                    Utils.watch.notify("Android " + Utils.nameIp(src) + " tried to join " + Utils.clink(sys.channel(channel)) + "!");
+                    if (!user.semuted) {
+                        Utils.watch.notify("Android " + Utils.nameIp(src) + " tried to join " + Utils.clink(sys.channel(channel)) + "!");
+                    }
                 }
                 return sys.stopEvent();
             }
@@ -223,6 +223,7 @@
             if (os === "android" && !Ranks.plus.hasMember(src)) {
                 if (!sys.isInChannel(src, androidchannel)) {
                     sys.putInChannel(src, androidchannel);
+                    defaultChan = androidchannel;
                 }
 
                 if (sys.isInChannel(src, 0)) {
