@@ -17,6 +17,10 @@
     }
 
     function tourboxSelf(src, msg, chan) {
+        if (!sys.loggedIn(src) || !sys.isInChannel(src, chan)) {
+            return;
+        }
+
         sys.sendHtmlMessage(src, "<br/><center><table width=50% bgcolor=gray><tr style='background-color:" + gradient + "'><td align=center><br/>" + msg + "<br/></td></tr></table></center><br/>", chan);
     }
 
