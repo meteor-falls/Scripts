@@ -223,11 +223,19 @@
             if (os === "android" && !Ranks.plus.hasMember(src)) {
                 if (!sys.isInChannel(src, androidchannel)) {
                     sys.putInChannel(src, androidchannel);
-                    defaultChan = androidchannel;
                 }
 
                 if (sys.isInChannel(src, 0)) {
                     sys.kick(src, 0);
+                }
+                defaultChan = androidchannel;
+            } else {
+                if (typeof defaultChan === 'string') {
+                    defaultChan = sys.channelId(defaultChan) || 0;
+                }
+
+                if (!sys.isInChannel(src, defaultChan)) {
+                    sys.putInChannel(src, defaultChan);
                 }
             }
 
