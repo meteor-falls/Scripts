@@ -85,16 +85,17 @@
             }
         },
         beforeChannelJoin: function (src, channel) {
-            var user = SESSION.users(src),
-                basicPermissions = Utils.mod.hasBasicPermissions(src);
+            var user = SESSION.users(src);
 
             // Allow always
-            if (SESSION.channels(channel) && (Utils.channel.isChannelMember(src, channel) || Utils.channel.hasChannelAuth(src, channel)) || basicPermissions) {
+            if (SESSION.channels(channel) && (Utils.channel.isChannelMember(src, channel) || Utils.channel.hasChannelAuth(src, channel))) {
+                return;
+            } else if (Utils.mod.hasBasicPermissions(src)) {
                 return;
             }
 
             // TODO: Auto kick
-            if ((channel === staffchannel && !Ranks.plusplus.hasMember(src)) || (channel === watch) || (channel === pluschannel && !Ranks.plus.hasMember(src))) {
+            if ((channel === staffchannel && !Ranks.plusplus.hasMember(src)) || channel === watch || (channel === pluschannel && !Ranks.plus.hasMember(src))) {
                 if (sys.isInChannel(src, 0)) {
                     Bot.guard.sendMessage(src, "HEY! GET AWAY FROM THERE!", 0);
                 }
