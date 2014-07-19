@@ -93,16 +93,6 @@
                 return;
             }
 
-            if (sys.os(src) === "android" && !Ranks.plus.hasMember(src) && channel !== androidchannel) {
-                if (sys.isInChannel(src, androidchannel)) {
-                    Bot.guard.sendMessage(src, "Android users are not permitted to go outside the android channel.", chan);
-                    if (!user.semuted) {
-                        Utils.watch.notify("Android " + Utils.nameIp(src) + " tried to join " + Utils.clink(sys.channel(channel)) + "!");
-                    }
-                }
-                return sys.stopEvent();
-            }
-
             // TODO: Auto kick
             if ((channel === staffchannel && !Ranks.plusplus.hasMember(src)) || (channel === watch) || (channel === pluschannel && !Ranks.plus.hasMember(src))) {
                 if (sys.isInChannel(src, 0)) {
@@ -111,6 +101,16 @@
                 // TODO: Remove this when autokick is implemented
                 if (!user.semuted) {
                     Utils.watch.notify(Utils.nameIp(src) + " tried to join " + Utils.clink(sys.channel(channel)) + "!");
+                }
+                return sys.stopEvent();
+            }
+
+            if (sys.os(src) === "android" && !Ranks.plus.hasMember(src) && channel !== androidchannel) {
+                if (sys.isInChannel(src, androidchannel)) {
+                    Bot.guard.sendMessage(src, "Android users are not permitted to go outside the android channel.", chan);
+                    if (!user.semuted) {
+                        Utils.watch.notify("Android " + Utils.nameIp(src) + " tried to join " + Utils.clink(sys.channel(channel)) + "!");
+                    }
                 }
                 return sys.stopEvent();
             }
