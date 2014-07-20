@@ -47,7 +47,7 @@ Config = {
 
         var __fileContent,
             __fname = dir + name + ".js",
-            module, exports, __resp;
+            module, __resp;
 
         if (webcall) {
             __resp = sys.synchronousWebCall(Config.repourl + "plugins/" + name + ".js");
@@ -69,8 +69,6 @@ Config = {
             name: name
         };
 
-        exports = module.exports;
-
         if (name in require.cache) {
             if (require.meta[name].onUnload) {
                 require.meta[name].onUnload();
@@ -78,7 +76,7 @@ Config = {
         }
 
         try {
-            sys.eval("(function () { " + __fileContent + " }());", __fname);
+            sys.eval("(function (module, exports) { " + __fileContent + " }(module, module.exports));", __fname);
         } catch (e) {
             sys.sendAll("Error loading module " + name + ": " + e + " on line " + e.lineNumber);
             print(e.backtracetext);
