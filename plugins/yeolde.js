@@ -143,6 +143,7 @@ function yeolde(message) {
 module.exports = {
     yeolde: yeolde,
     addWords: addWords,
+    word: word,
     words: words
 };
 
