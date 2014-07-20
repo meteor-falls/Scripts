@@ -129,7 +129,9 @@
             }
         },
         beforeChannelDestroyed: function (channel) {
-            if ([staffchannel, testchan, watch, androidchannel, pluschannel].indexOf(channel) !== -1) {
+            var hlr = require('highlanders');
+
+            if ([staffchannel, testchan, watch, androidchannel, pluschannel, hlr.chan].indexOf(channel) !== -1) {
                 sys.stopEvent();
                 return;
             }
