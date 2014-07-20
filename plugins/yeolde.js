@@ -10,7 +10,7 @@ var insults = /idiot|fool|bastard/gi;
 
 var insultnoun = ["mongrel", "codpiece", "jackanape", "ape", "coxcomb", "harlot", "hussy", "strumpet", "cur", "clot", "fool", "barnacle", "harpy", "wench", "churl", "pleb", "taffer", "scoundrel", "scalliwag", "mooncalf", "rapscallion", "doxy", "bawd", "tosspot", "cupshot", "recreant", "fustalarion", "scullion", "rampallion", "knave", "barbermonger", "boil", "plague-sore", "carbuncle", "whoreson", "clotpole", "lout", "gudgeon", "puttock", "skainsmate", "varlet", "bladder"];
 
-var insultadj = ["artless", "droning", "fawning", "warped", "paunchy", "puny", "spongy", "ruttish", "vain", "lumpish", "craven", "witless", "pustulent", "infested", "ill-bred", "blind", "scurvy", "puny", "fetid", "vile", "gibbering", "mewling", "rank", "fawning", "moonish", "brutish", "malapert", "curst", "lack-linen", "bottle-ailed", "lyingest", "embossed", "cheating", "crook-pated", "base-court", "hasty-witted", "two-faced", "pox-marked", "toad-brained", "errant", "idle-headed", "quailing", "flap-mouthed", "puking", "fly-bitten", "surly", "tottering", "villainous", "rump-fed", "bootless", "churlish", "tickle-brained", "froward"]
+var insultadj = ["artless", "droning", "fawning", "warped", "paunchy", "puny", "spongy", "ruttish", "vain", "lumpish", "craven", "witless", "pustulent", "infested", "ill-bred", "blind", "scurvy", "puny", "fetid", "vile", "gibbering", "mewling", "rank", "fawning", "moonish", "brutish", "malapert", "curst", "lack-linen", "bottle-ailed", "lyingest", "embossed", "cheating", "crook-pated", "base-court", "hasty-witted", "two-faced", "pox-marked", "toad-brained", "errant", "idle-headed", "quailing", "flap-mouthed", "puking", "fly-bitten", "surly", "tottering", "villainous", "rump-fed", "bootless", "churlish", "tickle-brained", "froward"];
 
 var startmsgs = ["Forsooth,", "I say,", "I sayeth,", "Forsooth, I say,", "Forsooth, say I,", "Forsooth, sayeth I,", "Hark!", "Harketh!", "By <god>,", "By the Will of <god adjective> <god>,", "By the <body part adjective> <body part> of the <god adjective> <god>,", "By <god adjective> <god>'s <body part adjective> <body part>,", "Avast,", "Zounds,", "Perchance,", "Pray tell,", "Prithee,", "What hey,", "What ho,", "Pray,", "Surely", "Pray pardon,", "Alas,", "In short,", "My Lord,", "My Lady,", "By my faith,", "If it pleases you,", "I pray you,", "In truth,", "By my trowth,", "In sooth,", "By my word,", "S'wounds,", "Z'wounds,", "<god>'s wounds,", "<god>'s <body part>,", "Heigh-ho,", "Ah,", "Quoth I,", "Listen,", "Listen thee,", "Hear me,", "Now hear me,", "I warrant", "Come,", "Kind sire,", "Sire,", "There is much in what you say, and yet,"];
 var endmsgs = ["Anon!", "Hum.", "Good sir!", "Good sire!", "Milady!", "My Liege!", "Guvnor!"];
@@ -106,7 +106,7 @@ function addWords() {
 }
 
 function yeolde(message) {
-    var startmsg = arrRandom(startmsg),
+    var startmsg = arrRandom(startmsgs),
         word, len, i;
 
     startmsg = startmsg
