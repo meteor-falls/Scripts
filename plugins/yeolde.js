@@ -1,12 +1,12 @@
 var words = [];
 
-var exclam = /!/g;
+var exclam = /\b!\b/g;
 var exclamrepl = [", verily!", ", verily I say!", ", verily I sayeth!", ", I say!", ", I sayeth!", "! Huzzah!", "! Hear Hear!", "! What-ho!", "! Ho!", "! Fie!", ", indeed!"];
 
-var questi = /\?/g;
+var questi = /\b\?\b/g;
 var questirepl = [", I say?", ", I wonder?", ", wonder I?", ", what say thee?", ", what sayeth thee?", ", what say thou?", ", what sayeth thou?", ", I ponder?", ", I pondereth?", ", pray tell?", ", ho?", ", do tell?"];
 
-var insults = /idiot|fool|bastard/gi;
+var insults = /\bidiot\b|\bfool\b|\bbastard\b/gi;
 
 var insultnoun = ["mongrel", "codpiece", "jackanape", "ape", "coxcomb", "harlot", "hussy", "strumpet", "cur", "clot", "fool", "barnacle", "harpy", "wench", "churl", "pleb", "taffer", "scoundrel", "scalliwag", "mooncalf", "rapscallion", "doxy", "bawd", "tosspot", "cupshot", "recreant", "fustalarion", "scullion", "rampallion", "knave", "barbermonger", "boil", "plague-sore", "carbuncle", "whoreson", "clotpole", "lout", "gudgeon", "puttock", "skainsmate", "varlet", "bladder"];
 
@@ -38,7 +38,7 @@ function word(original, replacement) {
     }
 
     for (i = 0, len = original.length; i < len; i += 1) {
-        words.push({regex: new RegExp(original[i], "gi"), replacements: replacement});
+        words.push({regex: new RegExp("\b" + original[i] + "\b", "gi"), replacements: replacement});
     }
 }
 
