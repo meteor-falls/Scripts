@@ -41,6 +41,8 @@
         for (i = 0, len = original.length; i < len; i += 1) {
             words.push({regex: new RegExp("\\b" + original[i] + "\\b", "gi"), replacements: replacement});
         }
+
+        return i;
     }
 
     // http://wiki.teamfortress.com/wiki/Medieval_Mode#Chat_parser
