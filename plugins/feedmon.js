@@ -33,7 +33,7 @@
             var pokemon = Feedmon.generatePokemon(name),
                 pokeName = Feedmon.getPokemonName(name);
 
-            bot.sendAll(sys.name(src) + " caught " + Utils.an("<b>" + pokeName + "</b>") + "!", 0);
+            broadcast(sys.name(src) + " caught " + Utils.an("<b>" + pokeName + "</b>") + "!", 0);
             bot.sendMessage(src, "It has the following moves: " + Utils.fancyJoin(pokemon.moves.map(Utils.boldKeys)) + "!", chan);
             bot.sendMessage(src, "Its nature is: <b>" + pokemon.nature + "</b>!", chan);
             bot.sendMessage(src, 'Type <a href="po:send//feed">/feed</a> to feed this pokemon.', chan);
