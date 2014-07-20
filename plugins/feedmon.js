@@ -10,7 +10,7 @@
             var name = sys.name(src).toLowerCase();
             var feedmon = Feedmon.ensurePlayer(name);
             var time = sys.time();
-            var broadcast = this.semuted ? Utils.sendHtmlSemuted : sys.sendHtmlAll;
+            var broadcast = this.semuted ? bot.sendAllSemuted : bot.sendAll;
 
             if (Feedmon.isBattling(name)) {
                 bot.sendMessage(src, "You're busy battling right now!", chan);

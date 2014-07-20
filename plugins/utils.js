@@ -723,11 +723,15 @@
 
             for (i = 0, len = ids.length; i < len; i += 1) {
                 id = ids[i];
-                if (sys.isInChannel(id, chan)) {
-                    sess = SESSION.users(id);
-                    if (sess && sess.semuted) {
-                        sys.sendHtmlMessage(id, html, chan);
-                    }
+                sess = SESSION.users(id);
+                if (!sess.semuted) {
+                    continue;
+                }
+
+                if (typeof chan !== 'number') {
+                    sys.sendHtmlMessage(id, html);
+                } else if (sys.isInChannel(id, chan)) {
+                    sys.sendHtmlMessage(id, html, chan);
                 }
             }
         };

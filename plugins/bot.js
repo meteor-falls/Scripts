@@ -25,6 +25,20 @@ botproto.sendAll = function (message, channel) {
     }
 };
 
+botproto.sendAllSemuted = function (message, channel) {
+    if (message === "") {
+        Utils.sendHtmlSemuted("", channel);
+        return;
+    }
+
+    var markup = this.markup(message);
+    if (channel === undefined) {
+        Utils.sendHtmlSemuted(markup);
+    } else {
+        Utils.sendHtmlSemuted(markup, channel);
+    }
+};
+
 botproto.sendMainAll = function (message, channel) {
     this.sendAll(message, channel);
 
