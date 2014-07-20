@@ -51,6 +51,7 @@ exports.init = function () {
         comicmode: false,
         scramblemode: false,
         colormode: false,
+        yeoldemode: false,
         pewpewpew: false,
         nightclub: false,
         warnings: {},

@@ -486,7 +486,7 @@
             sentMessage = sentMessage.replace(/<_</g, "&lt;_&lt;").replace(/>_</g, "&gt;_&lt;");
 
             if (!emotes) {
-                if (capsmode || RTD.hasEffect(src, 'rage')) {
+                if (capsmode || RTD.hasEffect(player, 'rage')) {
                     sentMessage = sentMessage.toUpperCase();
                 }
 
@@ -496,6 +496,10 @@
 
                 if (colormode) {
                     sentMessage = "<b>" + Utils.nightclub.rainbowify(sentMessage, 200) + "</b>";
+                }
+
+                if (yeoldemode || RTD.hasEffect(player, 'ye_olde')) {
+                    sentMessage = require('yeolde').yeolde(sentMessage);
                 }
             }
 

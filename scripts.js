@@ -21,8 +21,7 @@ Config = {
 
     // Do not touch unless you are adding a new plugin.
     // Plugins to load on script load.
-    // mathjs is loaded dynamically.
-    plugins: ['bot', 'reg', 'ranks', 'utils', 'rtd', 'channeldata', 'emotes', 'lists', 'init', 'feedmon', 'tours', 'commands', 'highlanders', 'events'],
+    plugins: ['bot', 'reg', 'ranks', 'utils', 'rtd', 'yeolde', 'channeldata', 'emotes', 'lists', 'init', 'feedmon', 'tours', 'commands', 'highlanders', 'events'],
     data: ['emoji'],
 
     // Whether or not to load plugins from repourl. If set to false, they will load locally.
@@ -204,6 +203,7 @@ poScript = ({
         require.reload('ranks');
         require.reload('bot');
 
+        require.reload('yeolde');
         require.reload('rtd');
 
         require.reload('feedmon');

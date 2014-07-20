@@ -1554,7 +1554,7 @@
         }
     });
 
-    addCommand(1, ["capsmode", "scramblemode", "colormode", "marxmode", "georgemode", "comicmode", "pewpewpew"], function (src, commandData, chan) {
+    addCommand(1, ["capsmode", "scramblemode", "colormode", "marxmode", "georgemode", "comicmode", "yeoldemode", "pewpewpew"], function (src, commandData, chan) {
         var command = this.command,
             word = (global[command] = !(global[command])) ? "on" : "off",
             name = command.indexOf("mode") > -1 ? command.split("mode")[0] : command;

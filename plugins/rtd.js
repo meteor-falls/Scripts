@@ -47,6 +47,7 @@ module.exports.load = function () {
         // Chat text
         big_text: new Effect('Big Text', Rare, Medium, Positive),
         pew: new Effect('Pew!', VeryRare, Long, Positive),
+        ye_olde: new Effect('Ye Olde', Rare, Long, Neutral),
         rage: new Effect('RAGE', Uncommon, MediumLong, Negative),
         small_text: new Effect('Small Text', Common, Long, Negative),
         screech: new Effect('Screech', Uncommon, MediumLong, Negative)

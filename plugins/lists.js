@@ -334,6 +334,7 @@
             ["colormode", "To turn color mode on or off."],
             ["marxmode", "To turn Marx mode on or off."],
             ["comicmode", "To turn comic mode on or off."],
+            ["yeoldemode", "To turn ye olde mode on or off."],
             ["pewpewpew", "To turn pewpewpew mode on or off."],
             ["nightclub", "To turn nightclub on or off."],
             ["roulette", "To start or end a roulette (/spin) game. Types can include: pokemons, items, emotes, avatars. By default, all 4 are enabled. It is separated with a comma followed by a space (, ).", ["type1, type2"]]
