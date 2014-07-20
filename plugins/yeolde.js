@@ -141,7 +141,9 @@ function yeolde(message) {
 }
 
 module.exports = {
-    yeolde: yeolde
+    yeolde: yeolde,
+    addWords: addWords,
+    words: words
 };
 
 module.reload = function () {
