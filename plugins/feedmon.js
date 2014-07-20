@@ -10,6 +10,7 @@
             var name = sys.name(src).toLowerCase();
             var feedmon = Feedmon.ensurePlayer(name);
             var time = sys.time();
+            var broadcast = this.semuted ? Utils.sendHtmlSemuted : sys.sendHtmlAll;
 
             if (Feedmon.isBattling(name)) {
                 bot.sendMessage(src, "You're busy battling right now!", chan);
@@ -32,7 +33,7 @@
             var pokemon = Feedmon.generatePokemon(name),
                 pokeName = Feedmon.getPokemonName(name);
 
-            bot.sendAll(sys.name(src) + " caught a(n) <b>" + pokeName + "</b>!", 0);
+            broadcast(sys.name(src) + " caught a(n) <b>" + pokeName + "</b>!", 0);
             bot.sendMessage(src, "It has the following moves: " + Utils.fancyJoin(pokemon.moves.map(Utils.boldKeys)) + "!", chan);
             bot.sendMessage(src, "Its nature is: <b>" + pokemon.nature + "</b>!", chan);
             bot.sendMessage(src, 'Type /feed to feed this pokemon.', chan);
