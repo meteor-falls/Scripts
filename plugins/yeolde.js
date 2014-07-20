@@ -108,7 +108,7 @@ function addWords() {
 function yeolde(message) {
     var startmsg = arrRandom(startmsgs),
         endmsg = arrRandom(endmsgs),
-        word, len, i;
+        wrd, len, i;
 
     startmsg = startmsg
         .replace("<god>", arrRandom(gods))
@@ -129,8 +129,8 @@ function yeolde(message) {
     });
 
     for (i = 0, len = words.length; i < len; i += 1) {
-        word = words[i];
-        message = message.replace(word.regex, arrRandom(word.replacements));
+        wrd = words[i];
+        message = message.replace(wrd.regex, arrRandom(wrd.replacements));
     }
 
     if (["!", "?", ";", ",", "."].indexOf(message[message.length - 1]) === -1) {
