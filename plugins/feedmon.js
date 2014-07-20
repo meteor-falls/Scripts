@@ -36,7 +36,7 @@
             broadcast(sys.name(src) + " caught a(n) <b>" + pokeName + "</b>!", 0);
             bot.sendMessage(src, "It has the following moves: " + Utils.fancyJoin(pokemon.moves.map(Utils.boldKeys)) + "!", chan);
             bot.sendMessage(src, "Its nature is: <b>" + pokemon.nature + "</b>!", chan);
-            bot.sendMessage(src, 'Type /feed to feed this pokemon.', chan);
+            bot.sendMessage(src, 'Type <a href="po:send//feed">/feed</a> to feed this pokemon.', chan);
         });
 
         addCommand(0, "feed", function (src, commandData, chan) {
@@ -51,14 +51,14 @@
             }
 
             if (!player) {
-                bot.sendMessage(src, "First catch a Feedmon!", chan);
+                bot.sendMessage(src, "First <a href='po:send//catch'>catch a Feedmon</a>!", chan);
                 return;
             }
 
             feedmon = Feedmon.getPokemon(name);
 
             if (!feedmon) {
-                bot.sendMessage(src, "First catch a Feedmon!", chan);
+                bot.sendMessage(src, "First <a href='po:send//catch'>catch a Feedmon</a>!", chan);
                 return;
             }
 
@@ -79,7 +79,7 @@
 
             feedexp = Feedmon.giveExp(name);
 
-            bot.sendMessage(src, "Your " + feedname + " gained " + feedexp.gain + " EXP" + (feedexp.happinessGain ? " and " + feedexp.happinessGain + " happiness" : "") + "!", chan);
+            bot.sendMessage(src, "Your " + feedname + " gained " + feedexp.gain + " EXP" + (feedexp.happinessGain ? " and " + feedexp.happinessGain + " happiness" : "") + "! <a href='po:send//feed'>[Feed]</a>", chan);
 
             if (feedexp.levelGain) {
                 bot.sendMessage(src, feedname + " leveled up " + feedexp.levelGain + " time(s)! It's now level " + feedmon.level + "!", chan);
@@ -99,14 +99,14 @@
             }
 
             if (!player) {
-                bot.sendMessage(src, "First catch a Feedmon!", chan);
+                bot.sendMessage(src, "First <a href='po:send//catch'>catch a Feedmon</a>!", chan);
                 return;
             }
 
             feedmon = Feedmon.getPokemon(name);
 
             if (!feedmon) {
-                bot.sendMessage(src, "First catch a Feedmon!", chan);
+                bot.sendMessage(src, "First <a href='po:send//catch'>catch a Feedmon</a>!", chan);
                 return;
             }
 
@@ -169,14 +169,14 @@
             }
 
             if (!player) {
-                bot.sendMessage(src, "First catch a Feedmon!", chan);
+                bot.sendMessage(src, "First <a href='po:send//catch'>catch a Feedmon</a>!", chan);
                 return;
             }
 
             feedmon = Feedmon.getPokemon(name);
 
             if (!feedmon) {
-                bot.sendMessage(src, "First catch a Feedmon!", chan);
+                bot.sendMessage(src, "First <a href='po:send//catch'>catch a Feedmon</a>!", chan);
                 return;
             }
 
@@ -218,7 +218,7 @@
             feedmon = Feedmon.getPokemon(name);
 
             if (!feedmon) {
-                bot.sendMessage(src, "First catch a Feedmon!", chan);
+                bot.sendMessage(src, "First <a href='po:send//catch'>catch a Feedmon</a>!", chan);
                 return;
             }
 
@@ -581,9 +581,10 @@
 
             sendMessage("Start of turn #" + (battle.turn + 1) + " vs. <b>" + battle.opponent.pokemon + "</b> <img src='icon:" + sys.pokeNum(battle.opponent.pokemon) + "'>");
             sendMessage(feedmon.moves.map(function (name, index) {
-                return "<b>" + name + "</b> (" + (index + 1) + ")";
+                var num = index + 1;
+                return "<a href='po:send//move " + num + "'><b>" + name + "</b> (" + num + ")</a>";
             }).join(" | "));
-            sendMessage("To use a move, type /move [num] (/move 1)");
+            sendMessage("To use a move, type /move [num] (/move 1) or click on one of the moves.");
             sendMessage("");
         }
 
