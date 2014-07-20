@@ -107,6 +107,7 @@ function addWords() {
 
 function yeolde(message) {
     var startmsg = arrRandom(startmsgs),
+        endmsg = arrRandom(endmsgs),
         word, len, i;
 
     startmsg = startmsg
@@ -132,7 +133,11 @@ function yeolde(message) {
         message = message.replace(word.regex, arrRandom(word.replacements));
     }
 
-    return startmsg + message + arrRandom(endmsgs);
+    if (["!", "?", ";", ",", "."].indexOf(message[message.length - 1]) === -1) {
+        message += ".";
+    }
+
+    return startmsg + " " + message + " " + endmsg;
 }
 
 module.exports = {
