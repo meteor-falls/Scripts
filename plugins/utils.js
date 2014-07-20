@@ -151,6 +151,11 @@
             return array;
         };
 
+
+        util.an = function an(str) {
+            return ['a', 'e', 'u', 'i', 'o'].indexOf(util.stripHtml(str)[0]) !== -1 ? "an " + str : "a " + str;
+        };
+
         util.nightclub = {};
 
         util.nightclub.hsv2rgb = function (h, s, v) {

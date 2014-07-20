@@ -33,7 +33,7 @@
             var pokemon = Feedmon.generatePokemon(name),
                 pokeName = Feedmon.getPokemonName(name);
 
-            broadcast(sys.name(src) + " caught a(n) <b>" + pokeName + "</b>!", 0);
+            broadcast(sys.name(src) + " caught " + Utils.an("<b>" + pokeName + "</b>") + "!", 0);
             bot.sendMessage(src, "It has the following moves: " + Utils.fancyJoin(pokemon.moves.map(Utils.boldKeys)) + "!", chan);
             bot.sendMessage(src, "Its nature is: <b>" + pokemon.nature + "</b>!", chan);
             bot.sendMessage(src, 'Type <a href="po:send//feed">/feed</a> to feed this pokemon.', chan);
@@ -82,7 +82,7 @@
             bot.sendMessage(src, "Your " + feedname + " gained " + feedexp.gain + " EXP" + (feedexp.happinessGain ? " and " + feedexp.happinessGain + " happiness" : "") + "! <a href='po:send//feed'>[Feed]</a>", chan);
 
             if (feedexp.levelGain) {
-                bot.sendMessage(src, feedname + " leveled up " + feedexp.levelGain + " time(s)! It's now level " + feedmon.level + "!", chan);
+                bot.sendMessage(src, feedname + " leveled up " + feedexp.levelGain + " time" + (feedexp.levelGain === 1 ? "" : "s") + "! It's now level " + feedmon.level + "!", chan);
             }
 
             Feedmon.save();

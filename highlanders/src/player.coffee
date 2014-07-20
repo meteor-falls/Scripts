@@ -128,7 +128,7 @@ hlr.player.sendLocationInfo = (id, loc) ->
         hlr.sendTo id, lobj.welcome
 
     locs = ("<a href='po:send//go #{place}'><b>#{hlr.location(place).name}</b></a>" for place in lobj.to)
-    hlr.sendTo id, "From here, you can go to #{Utils.fancyJoin(locs)}."
+    hlr.sendTo id, "From here, you can go to #{hlr.fancyJoin(locs)}."
 
     switch lobj.type
         when hlr.Location.SellArea

@@ -684,7 +684,7 @@ hlr.player.sendLocationInfo = function(id, loc) {
     }
     return _results;
   })();
-  hlr.sendTo(id, "From here, you can go to " + (Utils.fancyJoin(locs)) + ".");
+  hlr.sendTo(id, "From here, you can go to " + (hlr.fancyJoin(locs)) + ".");
   switch (lobj.type) {
     case hlr.Location.SellArea:
       hlr.sendTo(id, "You can <a href='po:send//inventory'>sell items from your inventory</a> here.");
@@ -725,14 +725,9 @@ hlr.assert = function(condition, str) {
   }
 };
 
-hlr.an = function(str) {
-  var _ref;
-  if ((_ref = str[0]) === 'a' || _ref === 'e' || _ref === 'u' || _ref === 'i' || _ref === 'o') {
-    return "an " + str;
-  } else {
-    return "a " + str;
-  }
-};
+hlr.an = Utils.an;
+
+hlr.fancyJoin = Utils.fancyJoin;
 hlr.player.initStorage();
 hlr.addCommands();
 
