@@ -39,7 +39,7 @@
         }
 
         for (i = 0, len = original.length; i < len; i += 1) {
-            words.push({regex: new RegExp("\\b" + original[i] + "\\b", "gi"), replacements: replacement});
+            words.push({regex: new RegExp(original[i], "gi"), replacements: replacement});
         }
     }
 
