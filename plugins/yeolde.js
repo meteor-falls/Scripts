@@ -3,7 +3,7 @@ var words = [];
 var exclam = /!/g;
 var exclamrepl = [", verily!", ", verily I say!", ", verily I sayeth!", ", I say!", ", I sayeth!", "! Huzzah!", "! Hear Hear!", "! What-ho!", "! Ho!", "! Fie!", ", indeed!"];
 
-var questi = /?/g;
+var questi = /\?/g;
 var questirepl = [", I say?", ", I wonder?", ", wonder I?", ", what say thee?", ", what sayeth thee?", ", what say thou?", ", what sayeth thou?", ", I ponder?", ", I pondereth?", ", pray tell?", ", ho?", ", do tell?"];
 
 var insults = /idiot|fool|bastard/gi;
