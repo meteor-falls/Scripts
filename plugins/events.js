@@ -435,8 +435,8 @@
                 try {
                     var hlr = require('highlanders');
                     if (!poUser.semuted && chan === hlr.chan && hlr.canUseCommand(src, command, chan)) {
-                        hlr.handleCommand(src, message, command, commandData, tar, chan);
                         Utils.watch.message(src, "Command", message, chan);
+                        hlr.handleCommand(src, message, command, commandData, tar, chan);
                     } else if (commands.canUseCommand(src, command, chan)) {
                         if (!(commands.commands[command].flags & commands.addCommand.flags.NOWATCH)) {
                             Utils.watch.message(src, (poUser.semuted ? "Secommand" : "Command"), message, chan);
@@ -449,11 +449,8 @@
                         bot.sendMessage(src, err, chan);
                     } else {
                         bot.sendMessage(src, "An error occured.", chan);
-                        print(err.backtracetext);
-                        Utils.watch.notify("Error: " + err + (err.lineNumber ? " on line " + err.lineNumber : "") + " (backtrace available on server window)");
+                        Utils.watch.notify("Error: " + err + (err.lineNumber ? " on line " + err.lineNumber : "") + err.backtracetext);
                     }
-
-                    Utils.watch.message(src, (poUser.semuted ? "Secommand" : "Command"), message, chan);
                 }
 
                 script.afterChatMessage(src, message, chan);
