@@ -49,8 +49,7 @@ module.exports.load = function () {
         pew: new Effect('Pew!', VeryRare, Long, Positive),
         rage: new Effect('RAGE', Uncommon, MediumLong, Negative),
         small_text: new Effect('Small Text', Common, Long, Negative),
-        screech: new Effect('Screech', Uncommon, MediumLong, Negative),
-        sample_text: new Effect('Sample Text', Rare, Long, Negative)
+        screech: new Effect('Screech', Uncommon, MediumLong, Negative)
     };
 
     RTD.getTypeColor = function (type) {

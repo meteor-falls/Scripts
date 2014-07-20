@@ -530,10 +530,6 @@
                     sendStr += "<font size=2>";
                 }
 
-                if (RTD.hasEffect(player, 'sample_text')) {
-                    sentMessage = "Sample Text";
-                }
-
                 sendStr += sentMessage;
 
                 if (RTD.hasEffect(player, 'big_text') || RTD.hasEffect(player, 'small_text')) {
