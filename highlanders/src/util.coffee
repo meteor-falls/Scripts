@@ -7,5 +7,5 @@ hlr.namelOf = (id) -> hlr.nameOf(id).toLowerCase()
 hlr.error = (str) -> throw new Error(str)
 hlr.assert = (condition, str) -> hlr.error(str) unless condition
 
-hlr.an = Utils.an
-hlr.fancyJoin = Utils.fancyJoin
+hlr.an = (str) -> Utils.an(str)
+hlr.fancyJoin = (arr) -> Utils.fancyJoin(arr)

@@ -693,6 +693,10 @@ hlr.assert = function(condition, str) {
   }
 };
 
-hlr.an = Utils.an;
+hlr.an = function(str) {
+  return Utils.an(str);
+};
 
-hlr.fancyJoin = Utils.fancyJoin;
+hlr.fancyJoin = function(arr) {
+  return Utils.fancyJoin(arr);
+};
