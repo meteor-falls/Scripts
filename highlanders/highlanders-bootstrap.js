@@ -10,8 +10,6 @@ module.exports.serverShutDown = module.onUnload = function () {
 
 var stepTimer = 0;
 module.exports.step = function () {
-    var store, len, i;
-
     stepTimer += 1;
 
     if (hlr._uniqItemId.dirty) {

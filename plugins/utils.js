@@ -256,6 +256,36 @@
             sys.sendHtmlAll("<font color='#0c5959'><timestamp/>±<b>GoodbyeBot:</b></font> <b><font color=" + color + ">" + name + "</font></b> left <b>" + Reg.get('servername') + "</b>!", 0);
         };
 
+        util.versionString = function versionString(src) {
+            var version = [],
+                vn = "",
+                tildev = "",
+                release, major, minor;
+
+            if (sys.version) {
+                vn = sys.version(src);
+                if (vn === 1) {
+                    tildev = "wc";
+                } else {
+                    release = Math.floor(vn / 1000);
+                    major = Math.floor((vn % 1000) / 100);
+                    minor = vn % 100;
+                    tildev = "~" + [release, major, minor].join(".");
+                }
+            }
+
+            if (tildev) {
+                version.push(tildev);
+            }
+
+            if (vn) {
+                version.push("vn " + vn);
+            }
+
+            version.push("pv" + sys.protocolVersion(src));
+            return version.join(" ");
+        };
+
         util.channelNames = function (lowercase) {
             var cids = sys.channelIds(), len, i;
             var names = [], cname;
