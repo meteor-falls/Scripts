@@ -478,21 +478,23 @@
                 sentMessage = Emotes.format(sentMessage, Emotes.ratelimit, src);
             }
 
-            sentMessage = Utils.format(player, sentMessage);
-            sentMessage = sentMessage.replace(/<_</g, "&lt;_&lt;").replace(/>_</g, "&gt;_&lt;");
+            sentMessage = Utils.format(player, sentMessage)
+                .replace(/<_</g, "&lt;_&lt;").replace(/>_</g, "&gt;_&lt;");
+
+            // NOTE: The order for these is important.
+            if (isScrambleMode) {
+                sentMessage = Utils.fisheryates(sentMessage.split("")).join("");
+            }
 
             if (isCapsMode) {
                 sentMessage = sentMessage.toUpperCase();
-            }
-
-            if (isScrambleMode) {
-                sentMessage = Utils.fisheryates(sentMessage.split("")).join("");
             }
 
             if (isColormode) {
                 sentMessage = "<b>" + Utils.nightclub.rainbowify(sentMessage, 200) + "</b>";
             }
 
+            // If colormode goes before yeolde, only the player's message is colored. Looks cool.
             if (isYeoldeMode) {
                 sentMessage = require('yeolde').yeolde(sentMessage);
             }
