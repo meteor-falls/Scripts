@@ -13,6 +13,9 @@ hlr.canUseCommand = function(src, command, chan) {
   if (!hlr.commands.hasOwnProperty(command)) {
     return false;
   }
+  if (!hlr.player.checkCompatible(src)) {
+    return false;
+  }
   command = hlr.commands[command];
   if (command.auth === 'registered') {
     if (hlr.player.registered(src)) {
@@ -520,6 +523,19 @@ hlr.player.unregister = function(id) {
   hlr.assert(hlr.player.registered(id), "can't unregister non-registered players");
   delete hlr.players[hlr.namelOf(id)];
   return hlr.player.markDirty();
+};
+
+hlr.player.checkCompatible = function(id) {
+  if (sys.os(id) === 'android') {
+    hlr.sendErrorTo(id, "Highlanders does not support Android. Please use a PC/Mac, or use the web client.");
+    return false;
+  } else if (sys.version != null) {
+    if (sys.version(id) < 2401 && sys.os(id) !== 'webclient') {
+      hlr.sendErrorTo(id, "Highlanders requires PO version 2.4.1 or better. Please upgrade, or use the web client.");
+      return false;
+    }
+  }
+  return true;
 };
 
 hlr.player.giveItem = function(id, item, qty, notify) {

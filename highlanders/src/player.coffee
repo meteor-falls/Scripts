@@ -21,6 +21,16 @@ hlr.player.unregister = (id) ->
     delete hlr.players[hlr.namelOf(id)]
     hlr.player.markDirty()
 
+hlr.player.checkCompatible = (id) ->
+    if sys.os(id) is 'android'
+        hlr.sendErrorTo id, "Highlanders does not support Android. Please use a PC/Mac, or use the web client."
+        return no
+    else if sys.version?
+        if sys.version(id) < 2401 and sys.os(id) isnt 'webclient'
+            hlr.sendErrorTo id, "Highlanders requires PO version 2.4.1 or better. Please upgrade, or use the web client."
+            return no
+    return yes
+
 #### PLAYER - ITEMS
 hlr.player.giveItem = (id, item, qty=1, notify=hlr.VERBOSE) ->
     player = hlr.player.player(id)

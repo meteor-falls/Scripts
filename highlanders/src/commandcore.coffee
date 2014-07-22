@@ -9,6 +9,9 @@ hlr.canUseCommand = (src, command, chan) ->
     unless hlr.commands.hasOwnProperty(command)
         return no
 
+    if !hlr.player.checkCompatible(src)
+        return no
+
     command = hlr.commands[command]
 
     if command.auth is 'registered'
