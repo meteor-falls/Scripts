@@ -279,7 +279,7 @@
             }
 
             if (vn) {
-                version.push("vn " + vn);
+                version.push("vn" + vn);
             }
 
             version.push("pv" + sys.protocolVersion(src));
