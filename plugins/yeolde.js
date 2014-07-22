@@ -1,5 +1,5 @@
 (function () {
-    var words = [];
+    var wordReplacements = [];
 
     var exclam = /!/g;
     var exclamrepl = [", verily!", ", verily I say!", ", verily I sayeth!", ", I say!", ", I sayeth!", "! Huzzah!", "! Hear Hear!", "! What-ho!", "! Ho!", "! Fie!", ", indeed!"];
@@ -39,7 +39,7 @@
         }
 
         for (i = 0, len = original.length; i < len; i += 1) {
-            words.push({regex: new RegExp("\\b" + original[i] + "\\b", "gi"), replacements: replacement});
+            wordReplacements.push({regex: new RegExp("\\b" + original[i] + "\\b", "gi"), replacements: replacement});
         }
 
         return i;
@@ -47,7 +47,7 @@
 
     // http://wiki.teamfortress.com/wiki/Medieval_Mode#Chat_parser
     function addWords() {
-        words = [];
+        wordReplacements = [];
 
         // 1
         word(["it is", "it's"], "tis");
@@ -131,8 +131,8 @@
             return adj1 + ", " + arrRandom(adjs) + ", " + noun;
         });
 
-        for (i = 0, len = words.length; i < len; i += 1) {
-            wrd = words[i];
+        for (i = 0, len = wordReplacements.length; i < len; i += 1) {
+            wrd = wordReplacements[i];
             message = message.replace(wrd.regex, arrRandom(wrd.replacements));
         }
 
@@ -147,7 +147,7 @@
         yeolde: yeolde,
         addWords: addWords,
         word: word,
-        words: words
+        wordReplacements: wordReplacements
     };
 
     module.reload = function () {
