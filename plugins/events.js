@@ -469,35 +469,32 @@
             }
 
             var sentMessage = ((myAuth === 3 && htmlchat) ? message : Utils.escapeHtml(message, true).replace(/&lt;_&lt;/g, "<_<").replace(/&gt;_&gt;/g, ">_>")); // no amp
-            var emotes = false;
+            var isCapsMode = capsmode || RTD.hasEffect(player, 'rage'),
+                isScrambleMode = scramblemode || RTD.hasEffect(player, 'screech'),
+                isColormode = colormode,
+                isYeoldeMode = yeoldemode || RTD.hasEffect(player, 'ye_olde');
 
-            if (Emotes.enabledFor(player) && !pewpewpew && !nightclub) {
-                var emoteMessage = Emotes.format(sentMessage, Emotes.ratelimit, src);
-                if (sentMessage !== emoteMessage) {
-                    emotes = true;
-                    sentMessage = emoteMessage;
-                }
+            if (Emotes.enabledFor(player) && !pewpewpew && !nightclub && !isCapsMode && !isScrambleMode && !isColormode && !isYeoldeMode) {
+                sentMessage = Emotes.format(sentMessage, Emotes.ratelimit, src);
             }
 
             sentMessage = Utils.format(player, sentMessage);
             sentMessage = sentMessage.replace(/<_</g, "&lt;_&lt;").replace(/>_</g, "&gt;_&lt;");
 
-            if (!emotes) {
-                if (capsmode || RTD.hasEffect(player, 'rage')) {
-                    sentMessage = sentMessage.toUpperCase();
-                }
+            if (isCapsMode) {
+                sentMessage = sentMessage.toUpperCase();
+            }
 
-                if (scramblemode || RTD.hasEffect(player, 'screech')) {
-                    sentMessage = Utils.fisheryates(sentMessage.split("")).join("");
-                }
+            if (isScrambleMode) {
+                sentMessage = Utils.fisheryates(sentMessage.split("")).join("");
+            }
 
-                if (colormode) {
-                    sentMessage = "<b>" + Utils.nightclub.rainbowify(sentMessage, 200) + "</b>";
-                }
+            if (isColormode) {
+                sentMessage = "<b>" + Utils.nightclub.rainbowify(sentMessage, 200) + "</b>";
+            }
 
-                if (yeoldemode || RTD.hasEffect(player, 'ye_olde')) {
-                    sentMessage = require('yeolde').yeolde(sentMessage);
-                }
+            if (isYeoldeMode) {
+                sentMessage = require('yeolde').yeolde(sentMessage);
             }
 
             if (nightclub) {
