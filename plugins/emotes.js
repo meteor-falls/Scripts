@@ -7,7 +7,6 @@ global.Emotes = {
 (function () {
     var emoteRegex = {};
     var nonAlpha = /\W/;
-    var marxState = 0;
     var marxmotes = ["marx1", "lenin1", "stalin1"];
 
     var emojiRegex = /:([a-z0-9\+\-_]+):/g;
@@ -118,16 +117,7 @@ global.Emotes = {
                 }
 
                 if (marxmode && marxmotes.indexOf(emote) === -1) {
-                    marxState += 1;
-                    if (marxState === 1) {
-                        emote = "marx1";
-                    } else if (marxState === 2) {
-                        emote = "stalin1";
-                        code = Emotes.code("stalin1");
-                    } else {
-                        emote = "lenin1";
-                        marxState = 0;
-                    }
+                    emote = Utils.arrRandom(marxmotes);
                     code = Emotes.code(emote);
                 } else if (georgemode) {
                     emote = "george1";
