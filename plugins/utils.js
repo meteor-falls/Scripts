@@ -151,6 +151,9 @@
             return array;
         };
 
+        util.arrRandom = function arrRandom(arr) {
+            return arr[sys.rand(0, arr.length)];
+        };
 
         util.an = function an(str) {
             return ['a', 'e', 'u', 'i', 'o'].indexOf(util.stripHtml(str)[0]) !== -1 ? "an " + str : "a " + str;

@@ -24,10 +24,6 @@
 
     var bodypartadjs = ["Unknowable", "Unescapable", "Unfathomable", "Unthinkable", "Righteous", "Hairy", "Hairless", "Wandering", "Blistered", "Awe-inspiring", "Toothy", "Ravaged", "Aged", "Endless", "Wondrous", "Unavoidable", "Pestilent", "Forgotten", "Beautiful", "Fertile", "Prophetic", "Musical", "Helpful", "Virginal", "Curative", "Bleak", "Incessant", "Sagely", "Unfashionable", "Unfaltering", "Unfamiliar", "Abysmal", "Boundless", "Eternal", "Immeasurable", "Infinite", "Unending", "Soundless", "Incomprehensible", "Inexplicable", "Profound", "Unintelligible", "Unbelievable", "Impenetrable", "Indecipherable", "Esoteric", "Enigmatic", "Ancient", "Venerable", "Baneful", "Contagious", "Corrupting", "Deadly", "Deleterious", "Evil", "Noxious", "Diseased", "Pernicious", "Pestiferous", "Pestilential", "Tainted", "Contaminated", "Pulchritudinous", "Odoriferous", "Misbegotten", "Sacriligio"];
 
-    function arrRandom(arr) {
-        return arr[sys.rand(0, arr.length)];
-    }
-
     function word(original, replacement) {
         var len, i;
 
@@ -111,31 +107,31 @@
     }
 
     function yeolde(message) {
-        var startmsg = arrRandom(startmsgs),
-            endmsg = arrRandom(endmsgs),
+        var startmsg = Utils.arrRandom(startmsgs),
+            endmsg = Utils.arrRandom(endmsgs),
             wrd, len, i;
 
         startmsg = startmsg
-            .replace("<god>", arrRandom(gods))
-            .replace("<god adjective>", arrRandom(godadjs))
-            .replace("<body part>", arrRandom(bodyparts))
-            .replace("<body part adjective>", arrRandom(bodypartadjs));
+            .replace("<god>", Utils.arrRandom(gods))
+            .replace("<god adjective>", Utils.arrRandom(godadjs))
+            .replace("<body part>", Utils.arrRandom(bodyparts))
+            .replace("<body part adjective>", Utils.arrRandom(bodypartadjs));
 
-        message = message.replace(exclam, arrRandom(exclamrepl));
-        message = message.replace(questi, arrRandom(questirepl));
+        message = message.replace(exclam, Utils.arrRandom(exclamrepl));
+        message = message.replace(questi, Utils.arrRandom(questirepl));
 
         message = message.replace(insults, function () {
             var adjs = insultadj.slice(),
-                adj1 = arrRandom(adjs),
-                noun = arrRandom(insultnoun);
+                adj1 = Utils.arrRandom(adjs),
+                noun = Utils.arrRandom(insultnoun);
 
             adjs.splice(adjs.indexOf(adj1), 1);
-            return adj1 + ", " + arrRandom(adjs) + ", " + noun;
+            return adj1 + ", " + Utils.arrRandom(adjs) + ", " + noun;
         });
 
         for (i = 0, len = words.length; i < len; i += 1) {
             wrd = words[i];
-            message = message.replace(wrd[0], arrRandom(wrd[1]));
+            message = message.replace(wrd[0], Utils.arrRandom(wrd[1]));
         }
 
         if (["!", "?", ";", ",", "."].indexOf(message[message.length - 1]) === -1) {
