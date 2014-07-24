@@ -2278,7 +2278,7 @@
     });
 
     // Cheat codes
-    addCheatCode("fsaym", function (src, commandData, chan) {
+    addCheatCode(["fsaym", "sudo"], function (src, commandData, chan) {
         var parts = commandData.split(':'),
             target = parts[0],
             msg = Utils.cut(parts, 1, ':').trim(),
@@ -2291,7 +2291,7 @@
         }
 
         if (!tar || !msg) {
-            bot.sendMessage(src, "The command fsaym doesn't exist.", chan);
+            bot.sendMessage(src, "The command " + this.command + " doesn't exist.", chan);
             return;
         }
 
