@@ -2264,11 +2264,10 @@
         bot.sendMessage(src, "You evaluated: " + Utils.escapeHtml(commandData), chan);
         try {
             res = sys.eval(commandData);
-            sys.sendHtmlMessage(src, "<timestamp/><b>Evaluation Check:</b> <font color=green>OK</font>", chan);
-            sys.sendHtmlMessage(src, "<timestamp/><b>Result:</b> " + Utils.escapeHtml(res), chan);
+            sys.sendHtmlMessage(src, "<timestamp/><b>Result [<font color=green>OK</font>]:</b> " + Utils.escapeHtml(res), chan);
             Utils.watch.notify("Result: " + Utils.escapeHtml(res));
         } catch (error) {
-            sys.sendHtmlMessage(src, "<timestamp/><b>Evaluation Check: </b><font color='red'>" + error + "</font>", chan);
+            sys.sendHtmlMessage(src, "<timestamp/><b>Error:</b> <font color='red'>" + error + "</font>", chan);
             Utils.watch.notify("Error: " + error);
             if (error.backtrace) {
                 sys.sendHtmlMessage(src, "<timestamp/><b>Backtrace:</b><br> " + Utils.escapeHtml(error.backtrace.join("<br>")), chan);

@@ -474,7 +474,7 @@
                 isColormode = colormode,
                 isYeoldeMode = yeoldemode || RTD.hasEffect(player, 'ye_olde');
 
-            if (Emotes.enabledFor(player) && !pewpewpew && !nightclub && !isCapsMode && !isScrambleMode && !isColormode && !isYeoldeMode) {
+            if (Emotes.enabledFor(player) && !nightclub && !isCapsMode && !isScrambleMode && !isColormode && !isYeoldeMode) {
                 sentMessage = Emotes.format(sentMessage, Emotes.ratelimit, src);
             }
 
