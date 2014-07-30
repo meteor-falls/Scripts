@@ -469,12 +469,14 @@
             }
 
             var sentMessage = ((myAuth === 3 && htmlchat) ? message : Utils.escapeHtml(message, true).replace(/&lt;_&lt;/g, "<_<").replace(/&gt;_&gt;/g, ">_>")); // no amp
-            var isCapsMode = capsmode || RTD.hasEffect(player, 'rage'),
+            var emotesEnabled = Emotes.enabledFor(player),
+                isCapsMode = capsmode || RTD.hasEffect(player, 'rage'),
                 isScrambleMode = scramblemode || RTD.hasEffect(player, 'screech'),
                 isColormode = colormode,
-                isYeoldeMode = yeoldemode || RTD.hasEffect(player, 'ye_olde');
+                isYeoldeMode = yeoldemode || RTD.hasEffect(player, 'ye_olde'),
+                pilpblock = message.indexOf("pilp") != -1;
 
-            if (Emotes.enabledFor(player) && !nightclub && !isCapsMode && !isScrambleMode && !isColormode && !isYeoldeMode) {
+            if (emotesEnabled && !nightclub && !isCapsMode && !isScrambleMode && !isColormode && !isYeoldeMode && !pilpblock) {
                 sentMessage = Emotes.format(sentMessage, Emotes.ratelimit, src);
             }
 
@@ -482,6 +484,13 @@
                 .replace(/<_</g, "&lt;_&lt;").replace(/>_</g, "&gt;_&lt;");
 
             // NOTE: The order for these is important.
+            if (pilpblock) {
+                sentMessage = sentMessage.split("").reverse().join("");
+                if (emotesEnabled) {
+                    sentMessage += " " + Emotes.format(":hankey:", false, src) + " ";
+                }
+            }
+
             if (isScrambleMode) {
                 sentMessage = Utils.fisheryates(sentMessage.split("")).join("");
             }
