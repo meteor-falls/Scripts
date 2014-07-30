@@ -33,9 +33,9 @@
                 pokeName = Feedmon.getPokemonName(name);
 
             if (this.semuted) {
-                bot.sendAllSemuted(sys.name(src) + " caught " + Utils.an("<b>" + pokeName + "</b>") + "!", 0);
+                bot.sendAllSemuted(sys.name(src) + " caught " + Utils.an("<b>" + pokeName + "</b>") + "!", chan);
             } else {
-                bot.sendAll(sys.name(src) + " caught " + Utils.an("<b>" + pokeName + "</b>") + "!", 0);
+                bot.sendAll(sys.name(src) + " caught " + Utils.an("<b>" + pokeName + "</b>") + "!", chan);
             }
 
             bot.sendMessage(src, "It has the following moves: " + Utils.fancyJoin(pokemon.moves.map(Utils.boldKeys)) + "!", chan);
