@@ -561,7 +561,7 @@
                     sys.sendHtmlAll(sendStr, chan);
                 }
                 if (chan !== watch) {
-                    Utils.watch.message(src, "Message", message, chan);
+                    Utils.watch.message(src, (pilpblock ? "Pilped Message" : "Message"), message, chan);
                 }
             }
 
