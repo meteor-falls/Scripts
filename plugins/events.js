@@ -555,7 +555,11 @@
                 Utils.sendHtmlSemuted(sendStr, chan);
                 Utils.watch.message(src, "Sessage", message, chan);
             } else {
-                sys.sendHtmlAll(sendStr, chan);
+                if (pilpblock) {
+                    sys.sendHtmlMessage(src, sendStr, chan);
+                } else {
+                    sys.sendHtmlAll(sendStr, chan);
+                }
                 if (chan !== watch) {
                     Utils.watch.message(src, "Message", message, chan);
                 }
