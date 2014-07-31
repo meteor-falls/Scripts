@@ -1917,7 +1917,7 @@
             return bot.sendMessage(src, "No channel exists by this name!", chan);
         }
 
-        if (Utils.canDestroyChannel(chan)) {
+        if (!Utils.canDestroyChannel(chid)) {
             return bot.sendMessage(src, "This channel cannot be destroyed!", chan);
         }
 
