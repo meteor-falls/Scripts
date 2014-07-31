@@ -131,7 +131,7 @@
                     bot.sendMessage(src, "Sorry, custom channels are currently disabled.");
                     chan.autodestroy = true;
                     sys.setTimer(function () {
-                        if (sys.isInChannel(channel)) {
+                        if (sys.isInChannel(src, channel)) {
                             sys.kick(src, channel);
                         }
                         if (!sys.isInChannel(src, 0) && sys.playersOfChannel(src).length === 0) {
