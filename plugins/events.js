@@ -117,7 +117,7 @@
             }
         },
         beforeChannelCreated: function (channel, cname, src) {
-            if (!Config.channelsEnabled && src && !Utils.isMaintainer(src)) {
+            if (!Config.channelsEnabled && src) {
                 Utils.watch.notify(Utils.nameIp(src) + " tried to create channel " + Utils.clink(cname) + ".");
                 bot.sendMessage(src, "Sorry, custom channels are currently disabled.");
                 return sys.stopEvent();
