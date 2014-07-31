@@ -85,10 +85,15 @@
             }
         },
         beforeChannelJoin: function (src, channel) {
-            var user = SESSION.users(src);
+            var user = SESSION.users(src),
+                chan = SESSION.channels(channel);
+
+            if (chan.autodestroy) {
+                return sys.stopEvent();
+            }
 
             // Allow always
-            if (SESSION.channels(channel) && (Utils.channel.isChannelMember(src, channel) || Utils.channel.hasChannelAuth(src, channel))) {
+            if (chan && (Utils.channel.isChannelMember(src, channel) || Utils.channel.hasChannelAuth(src, channel))) {
                 return;
             } else if (Utils.mod.hasBasicPermissions(src)) {
                 return;
@@ -124,12 +129,15 @@
                 if (!Config.channelsEnabled) {
                     Utils.watch.notify(Utils.nameIp(src) + " tried to create channel " + Utils.clink(cname) + ".");
                     bot.sendMessage(src, "Sorry, custom channels are currently disabled.");
-                    sys.setTimer(function () {
-                        sys.kick(src, channel);
+                    chan.autodestroy = true;
+                    /*sys.setTimer(function () {
+                        if (sys.isInChannel(channel)) {
+                            sys.kick(src, channel);
+                        }
                         if (!sys.isInChannel(src, 0) && sys.playersOfChannel(src).length === 0) {
                             sys.putInChannel(src, 0);
                         }
-                    }, 3, false);
+                    }, 3, false);*/
                     return;
                 }
 
@@ -141,11 +149,17 @@
             }
         },
         beforeChannelDestroyed: function (channel) {
+            var chan = SESSION.channels(channel);
+
             if (!Utils.canDestroyChannel(channel)) {
                 return sys.stopEvent();
             }
 
-            ChannelManager.absorb(SESSION.channels(channel)).save();
+            if (chan.autodestroy) {
+                return;
+            }
+
+            ChannelManager.absorb(chan).save();
             Utils.watch.notify("Channel " + Utils.clink(channel) + " was destroyed.");
         },
         afterChannelJoin: function (src, chan) {
