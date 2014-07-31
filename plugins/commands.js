@@ -1911,6 +1911,24 @@
         sys.sendHtmlAll("<font color=blue><timestamp/><b>" + Utils.escapeHtml(commandData) + " was unbanned by " + Utils.escapeHtml(sys.name(src)) + "!", 0);
     });
 
+    addCommand(2, "destroychan", function (src, commandData, chan) {
+        var chid = sys.channelId(commandData);
+        if (!sys.existChannel(commandData)) {
+            return bot.sendMessage(src, "No channel exists by this name!", chan);
+        }
+
+        if (Utils.canDestroyChannel(chan)) {
+            return bot.sendMessage(src, "This channel cannot be destroyed!", chan);
+        }
+
+        sys.playersOfChannel(chid).forEach(function(player) {
+            sys.kick(player, chid);
+            if (sys.channelsOfPlayer(player).length < 1 && !sys.isInChannel(player, 0)) {
+                sys.putInChannel(player, 0);
+            }
+        });
+    });
+
     /** OWNER COMMANDS */
     addListCommand(3, "ownercommands", "Owner");
 
@@ -1923,7 +1941,12 @@
 
     addCommand(3, "toggleemotes", function (src, commandData, chan) {
         Config.emotesEnabled = !Config.emotesEnabled;
-        bot.sendAll("Emotes were " + (Config.emotesEnabled ? "enabled!" : "disabled."), chan);
+        bot.sendAll("Emotes have been " + (Config.emotesEnabled ? "enabled!" : "disabled."), chan);
+    });
+
+    addCommand(3, "togglechannels", function (src, commandData, chan) {
+        Config.channelsEnabled = !Config.channelsEnabled;
+        bot.sendAll("Custom channels have been " + (Config.emotesEnabled ? "enabled!" : "disabled."), chan);
     });
 
     addCommand(3, "bots", function (src, commandData, chan) {

@@ -30,6 +30,8 @@ Config = {
     stripHtmlFromChannelMessages: true,
     // If emotes are enabled.
     emotesEnabled: true,
+    // If custom channels are enabled
+    channelsEnabled: true,
     // Character limit in messages.
     characterLimit: 600
 };

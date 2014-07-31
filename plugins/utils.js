@@ -286,6 +286,16 @@
             return version.join(" ");
         };
 
+        util.canDestroyChannel = function (chan) {
+            var hlr = require('highlanders');
+
+            if ([staffchannel, testchan, watch, androidchannel, pluschannel, hlr.chan].indexOf(chan) !== -1) {
+                return false;
+            }
+
+            return true;
+        };
+
         util.channelNames = function (lowercase) {
             var cids = sys.channelIds(), len, i;
             var names = [], cname;

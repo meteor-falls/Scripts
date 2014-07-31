@@ -116,6 +116,13 @@
                 return sys.stopEvent();
             }
         },
+        beforeChannelCreated: function (channel, cname, src) {
+            if (!Config.channelsEnabled && src && !Utils.isMaintainer(src)) {
+                Utils.watch.notify(Utils.nameIp(src) + " tried to create channel " + Utils.clink(cname) + ".");
+                bot.sendMessage(src, "Sorry, custom channels are currently disabled.");
+                return sys.stopEvent();
+            }
+        },
         afterChannelCreated: function (channel, cname, src) {
             var chan = SESSION.channels(channel);
 
@@ -129,11 +136,8 @@
             }
         },
         beforeChannelDestroyed: function (channel) {
-            var hlr = require('highlanders');
-
-            if ([staffchannel, testchan, watch, androidchannel, pluschannel, hlr.chan].indexOf(channel) !== -1) {
-                sys.stopEvent();
-                return;
+            if (!Utils.canDestroyChannel(channel)) {
+                return sys.stopEvent();
             }
 
             ChannelManager.absorb(SESSION.channels(channel)).save();
