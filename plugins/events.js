@@ -166,6 +166,10 @@
             var poChan = SESSION.channels(chan),
                 topic = poChan.topic;
 
+            if (poChan.autodestroy) {
+                return;
+            }
+
             if (topic) {
                 Bot.topic.sendMessage(src, topic, chan);
 
