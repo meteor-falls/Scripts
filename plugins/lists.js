@@ -253,10 +253,10 @@
         ]).finish();
 
         /** RULES **/
-        var Rules = new CommandList("Rules", "Please follow the rules or risk punishment: <small>(revision 5)</small>", "ol").add([
+        var Rules = new CommandList("Rules", "Please follow the rules or risk punishment: <small>(revision 6)</small>", "ol").add([
             ["Do not spam or flood the chat (3 lines in a row is considered flood). CAPS spam isn't not allowed either, neither is posting the exact same message in quick succession. Do not spam emotes or any rtd effects. Any commands that do not send messages to other people are generally exempt, however commands like ping are not. You are not immume to this rule even if you have flood ignore."],
             ["Listen to the auth. If an auth tells you to stop misbehaving, you must listen or your punishment is their choice (as long as it's reasonable). Shouting 'abuse' when you've clearly broken the rules will bring you in more trouble."],
-            ["Keep disrespectful statements to a minimum. Attentionwhoring drama, irritating trolling, or provoking behavior will be punished accordingly. We might choose to ban you for a short period of time if it gets out of hand."],
+            ["Keep disrespectful statements to a minimum. Attention whoring, drama, irritating trolling, or provoking behavior will be punished accordingly. We might choose to ban you for a short period of time if it gets out of hand."],
             ["Roleplaying is a no-no, especially the me command. You can do that somewhere else."],
             ["No sexual or harmful content whatsoever. This includes porn sites, viruses, sexual ASCII art, &c."],
             ["Asking for authority is not allowed. This includes ranks. If you have good reasoning, we might consider you."],
@@ -266,7 +266,8 @@
             ["Although PMs are generally free of rules (we cannot see them nor do we care), if you do mean things and the person reports you, we might take action."],
             ["The main channel is English only. You can talk any other language in another channel, though."],
             ["Impersonating someone isn't cool and won't be appreciated."],
-            ["Ban evasion will just grant you yet another ban. Rangebans are no different."]
+            ["Ban evasion will just grant you yet another ban. Rangebans, mutes, and other punishments are no different."],
+            ["Trying to circumvent the above rules will not be tolerated and just punishments will be enforced. The rules apply to all the channels. Ground Zero has an exception in that spam is more or less okay there."]
         ]);
 
         Rules.template += "</ol>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Follow all the rules above and you will have no problem having a good time at " + Reg.get("servername") + "!<br>";
