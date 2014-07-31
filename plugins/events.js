@@ -391,7 +391,7 @@
         },
         beforeChatMessage: function (src, message, chan) {
             var poUser = SESSION.users(src),
-                //poChan = SESSION.channels(chan),
+                poChan = SESSION.channels(chan),
                 isMuted = poUser.muted,
                 myAuth = Utils.getAuth(src);
 
@@ -426,7 +426,7 @@
                 }
             }
 
-            if (myAuth < 1 && muteall || myAuth < 2 && supersilence) {
+            if ((myAuth < 1 && muteall) || (myAuth < 2 && supersilence) || (myAuth < 1 && poChan.silence)) {
                 sys.stopEvent();
                 bot.sendMessage(src, "Shut up! Silence is on!", chan);
                 Utils.watch.message(src, "Silence Message", message, chan);
