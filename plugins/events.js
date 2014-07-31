@@ -116,19 +116,21 @@
                 return sys.stopEvent();
             }
         },
-        beforeChannelCreated: function (channel, cname, src) {
-            Utils.watch.notify("Channel creation " + cname);
-            if (!Config.channelsEnabled && src) {
-                Utils.watch.notify(Utils.nameIp(src) + " tried to create channel " + Utils.clink(cname) + ".");
-                bot.sendMessage(src, "Sorry, custom channels are currently disabled.");
-                return sys.stopEvent();
-            }
-        },
         afterChannelCreated: function (channel, cname, src) {
             var chan = SESSION.channels(channel);
 
             ChannelManager.populate(chan);
             if (src) {
+                if (!Config.channelsEnabled) {
+                    Utils.watch.notify(Utils.nameIp(src) + " tried to create channel " + Utils.clink(cname) + ".");
+                    bot.sendMessage(src, "Sorry, custom channels are currently disabled.");
+                    sys.kick(src, channel);
+                    if (!sys.isInChannel(src, 0) && sys.playersOfChannel(src).length === 0) {
+                        sys.putInChannel(src, 0);
+                    }
+                    return;
+                }
+
                 Utils.watch.notify(Utils.nameIp(src) + " created channel " + Utils.clink(cname) + ".");
                 if (!chan.creator) {
                     chan.creator = sys.name(src);
