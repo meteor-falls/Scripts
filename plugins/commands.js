@@ -1946,7 +1946,7 @@
 
     addCommand(3, "togglechannels", function (src, commandData, chan) {
         Config.channelsEnabled = !Config.channelsEnabled;
-        bot.sendAll("Custom channels have been " + (Config.emotesEnabled ? "enabled!" : "disabled."), chan);
+        bot.sendAll("Custom channels have been " + (Config.channelsEnabled ? "enabled!" : "disabled."), chan);
     });
 
     addCommand(3, "bots", function (src, commandData, chan) {
