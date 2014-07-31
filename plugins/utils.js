@@ -771,8 +771,12 @@
 
             for (i = 0, len = ids.length; i < len; i += 1) {
                 id = ids[i];
+                if (!sys.loggedIn(id)) {
+                    continue;
+                }
+
                 sess = SESSION.users(id);
-                if (!sess.semuted) {
+                if (!sess || !sess.semuted) {
                     continue;
                 }
 

@@ -134,7 +134,7 @@
                         if (sys.isInChannel(src, channel)) {
                             sys.kick(src, channel);
                         }
-                        if (!sys.isInChannel(src, 0) && sys.playersOfChannel(src).length === 0) {
+                        if (!sys.isInChannel(src, 0) && sys.channelsOfPlayer(src).length === 0) {
                             sys.putInChannel(src, 0);
                         }
                     }, 3, false);
