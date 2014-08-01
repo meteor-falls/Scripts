@@ -259,7 +259,7 @@
     });
 
     addCommand(0, "league", function (src, commandData, chan) {
-        var league = new CommandList("<font color=red>League</font>"),
+        var league = new CommandList("League", ""),
             pairs = [],
             i;
 
@@ -268,6 +268,8 @@
         for (i in League.Frontiers) {
             pairs.push([i + ": " + (League.Frontiers[i] || "Open")]);
         }
+
+        league.add(pairs);
 
         league.finish().display(src, chan);
         sys.sendHtmlMessage(src, '<i><b><font color=blue>Type /leaguerules to see the rules of the league!</font>', chan);

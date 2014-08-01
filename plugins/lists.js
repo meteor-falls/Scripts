@@ -10,7 +10,7 @@
     }
 
     function CommandList(title, help, listtype) {
-        help = (help || help === "") ? help : "Type one of the following into the channel's chat to use it:";
+        help = help && help !== "" ? help : "Type one of the following into the channel's chat to use it:";
         listtype = listtype || "ul";
 
         this.title = title;
