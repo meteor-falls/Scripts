@@ -261,10 +261,11 @@
     addCommand(0, "league", function (src, commandData, chan) {
         var league = new CommandList("League", "", "ul"),
             pairs = [],
-            i;
+            frontier, i;
 
         for (i in League.Frontiers) {
-            pairs.push([i + ": " + (League.Frontiers[i] || "Open")]);
+            frontier = League.Frontiers[i];
+            pairs.push([i + ": " + (frontier ? Utils.beautifyName(frontier) : "</b>~Open~<b>")]);
         }
 
         league.add(pairs);
