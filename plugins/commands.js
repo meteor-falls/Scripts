@@ -259,7 +259,7 @@
     });
 
     addCommand(0, "league", function (src, commandData, chan) {
-        var league = new CommandList("League", ""),
+        var league = new CommandList("League", "", "ul"),
             pairs = [],
             i;
 

@@ -18,8 +18,10 @@
         this.template = Bot.border + "<br><h2>" + title + "</h2>";
 
         if (help !== "") {
-            this.template += "<i>" + help + "</i><" + listtype + ">";
+            this.template += "<i>" + help + "</i>";
         }
+
+        this.template += "<" + listtype + ">";
     }
 
     CommandList.prototype.add = function (cmd, desc, args) {
