@@ -501,7 +501,7 @@
                 isScrambleMode = scramblemode || RTD.hasEffect(player, 'screech'),
                 isColormode = colormode,
                 isYeoldeMode = yeoldemode || RTD.hasEffect(player, 'ye_olde'),
-                pilpblock = /p[i!1l\|\s]{1,}p/gi.test(message);
+                pilpblock = /p[i!1l\|\s]{2}p/gi.test(message);
 
             if (emotesEnabled && !nightclub && !isCapsMode && !isScrambleMode && !isColormode && !isYeoldeMode && !pilpblock) {
                 sentMessage = Emotes.format(sentMessage, Emotes.ratelimit, src);
