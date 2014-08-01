@@ -259,30 +259,15 @@
     });
 
     addCommand(0, "league", function (src, commandData, chan) {
-        var league = new CommandList("<font color=red>League</font>");
-        league.template += "<h2><font color=green>~~Gyms~~</font></h2><ol>";
+        var league = new CommandList("<font color=red>League</font>"),
+            pairs = [],
+            i;
 
-        league.add([
-            [League.Gym1 || "Open"],
-            [League.Gym2 || "Open"],
-            [League.Gym3 || "Open"],
-            [League.Gym4 || "Open"],
-            [League.Gym5 || "Open"],
-            [League.Gym6 || "Open"],
-            [League.Gym7 || "Open"],
-            [League.Gym8 || "Open"]
-       ]);
+        league.template += "<h2><font color=green>~~Frontier Brains~~</font></h2><ol>";
 
-        league.template += "</ol><br><h2><font color=blue>**Elite 4**</font></h2><ol>";
-
-        league.add([
-            [League.Elite1 || "Open"],
-            [League.Elite2 || "Open"],
-            [League.Elite3 || "Open"],
-            [League.Elite4 || "Open"]
-        ]);
-
-        league.template += "</ol><br><h2><font color=red>±±The Champion±±</font></h2><ul><b>" + (League.Champ || "Open") + "</b></ul>";
+        for (i in League.Frontiers) {
+            pairs.push([i + ": " + (League.Frontiers[i] || "Open")]);
+        }
 
         league.finish().display(src, chan);
         sys.sendHtmlMessage(src, '<i><b><font color=blue>Type /leaguerules to see the rules of the league!</font>', chan);
@@ -557,39 +542,18 @@
         bot.sendMessage(src, "There are " + sys.numPlayers() + " players online.", chan);
     });
 
-    addLeagueManagerCommand("gl", function (src, commandData, chan) {
+    addLeagueManagerCommand("frontier", function (src, commandData, chan) {
         var parts = commandData.split(":"),
-            player = parts[0],
-            spot = Math.round(+parts[1]);
+            spot = parts[0],
+            player = parts[1];
 
-        if (isNaN(spot) || spot < 1 || spot > 8) {
-            bot.sendMessage(src, "Valid range for gym leaders is 1-8.", chan);
+        if (!League.Frontier.hasOwnProperty(spot)) {
+            bot.sendMessage(src, "Specify a spot.", chan);
             return;
         }
 
-        bot.sendAll(player ? player + " has been made gym leader " + spot + "!" : "The gym leader " + spot + " spot has been voided.", 0);
-        League["Gym" + spot] = player || "";
-        Reg.save("League", League);
-    });
-
-    addLeagueManagerCommand("el", function (src, commandData, chan) {
-        var parts = commandData.split(":"),
-            player = parts[0],
-            spot = Math.round(+parts[1]);
-
-        if (isNaN(spot) || spot < 1 || spot > 4) {
-            bot.sendMessage(src, "Valid range for the elite is 1-4.", chan);
-            return;
-        }
-
-        bot.sendAll(player ? player + " has been made elite " + spot + "!" : "The elite " + spot + " spot has been voided.", 0);
-        League["Elite" + spot] = player || "";
-        Reg.save("League", League);
-    });
-
-    addLeagueManagerCommand("champ", function (src, commandData) {
-        bot.sendAll(commandData ? commandData + " has been made the champion!" : "The champion spot has been voided", 0);
-        League.Champ = commandData || "";
+        bot.sendAll(player ? player + " has been made " + spot + " Frontier Brain!" : "The  " + spot + " Frontier Brain spot has been voided.", 0);
+        League.Frontier[spot] = player || "";
         Reg.save("League", League);
     });
 

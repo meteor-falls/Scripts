@@ -164,7 +164,7 @@
             ["auth", "To view the authlist."],
             ["pluslist", "To view the users who have " + Ranks.plus.name + "."],
             ["pluspluslist", "To view the users who have " + Ranks.plusplus.name + "."],
-            ["league", "To view the list of gym leaders, elites, and the champion."],
+            ["league", "To view the list of Frontier Brains."],
             ["leaguerules", "To view the rules for the League."],
             ["sendto", "To send a message to a certain person. To ping, just type /sendto [person].", ["person", "message"]],
             ["bbcode", "To view a list of bbcodes."],
@@ -175,9 +175,7 @@
 
         /** LEAGUE MANAGER **/
         Lists.LeagueManager = new CommandList("League Manager Commands").add([
-            ["gl", "To make someone the [spot] gym leader. [spot] can be 1-8. Removes gym leader [spot] if [player] is empty.", ["player", "spot"]],
-            ["el", "To make someone the [spot] elite. [spot] can be 1-4. Removes elite [spot] if [player] is empty.", ["player", "spot"]],
-            ["champ", "To make someone the champion. Removes the champion if [player] is empty.", ["player"]]
+            ["frontier", "To make [player] the [spot] Frontier Brain. For a list of spots, see /league. If there is no [player], the spot is voided.", ["spot", "player"]]
         ]).finish();
 
         /** FUN **/
@@ -277,14 +275,13 @@
 
         /** LEAGUE RULES **/
         Lists.LeagueRules = new CommandList("League Rules", "Please follow the rules below or you will be unable to challenge the league:", "ol").add([
-            ["You must follow any rules made by the gym leader/elite 4. If the rule is crazy, talk to an auth. If the gym leader/elite 4 doesn't have rules, read rule 8."],
+            ["You must follow any rules for the Frontier Brain (see the forum). The Frontier Brain will link you their rules when you challenge them. If the rule is crazy, talk to an auth."],
             ["No lying. If you lie about defeating a league member, you will have to start the league over again."],
             ["Be a good sport. If you lose, say GG or nothing, just don't be mean!"],
             ["Respect one another. This rule goes for both league members and challengers. Friendly trash talk is fine, don't make it personal."],
-            ["If you lose a gym battle, you can rematch that gym at a time specified by the gym leader."],
-            ["If you lose to an elite 4 or the champion, you must start back over at the first elite."],
-            ["If you defeat the gyms, elites, and the champion, you will be in the Hall of Fame!"],
-            ["If the league member does not have set rules, follow these guidelines:</ol><ul><b><li>5th Gen OU Tier</li><b><li>Singles battle</li><b><li>Best 2 out of 3 decides winner</li></ul></li>"]
+            ["If you lose a battle, you can rechallenge the Frontier Brain the next day."],
+            ["After you gain all the Silver Medals, you will be eligable for the Gold Medals. You must have all the Silver Medals before challenging a Frontier Brain for their Gold Medal."]
+            ["If you defeat the Frontier Brains and gain their medals, Silver and Gold alike, you will be in the Hall of Fame!"]
         ]).finish();
 
         /** MODERATOR COMMANDS **/

@@ -4,9 +4,16 @@ exports.init = function () {
     Reg.init('servername', Config.servername);
     Reg.init('League',
         {
-            Gym1: "", Gym2: "", Gym3: "", Gym4: "", Gym5: "", Gym6: "", Gym7: "", Gym8: "",
-            Elite1: "", Elite2: "", Elite3: "", Elite4: "",
-            Champ: "",
+            Frontiers: {
+                Hackapell: "",
+                Militia: "",
+                Prism: "",
+                Karp: "",
+                Eureka: "",
+                Entropy: "",
+                Cloud9: "",
+                Metronome: ""
+            },
             Managers: []
         }
     );
