@@ -263,8 +263,6 @@
             pairs = [],
             i;
 
-        league.template += "<h2><font color=green>~~Frontier Brains~~</font></h2><ol>";
-
         for (i in League.Frontiers) {
             pairs.push([i + ": " + (League.Frontiers[i] || "Open")]);
         }
