@@ -24,7 +24,8 @@ hlr.addCommands = ->
         hlr.sendTo @src, "Account registered!"
 
         # Registration drops
-        hlr.player.giveMoney(@src, 100)
+        hlr.player.giveMoney(@src, 10)
+        hlr.player.giveItem(@src, 'revolver')
 
         hlr.player.goto(@src, 'market')
 

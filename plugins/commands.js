@@ -554,7 +554,7 @@
         }
 
         bot.sendAll(player ? player + " has been made " + spot + " Frontier Brain!" : "The  " + spot + " Frontier Brain spot has been voided.", 0);
-        League.Frontier[spot] = player || "";
+        League.Frontiers[spot] = player || "";
         Reg.save("League", League);
     });
 

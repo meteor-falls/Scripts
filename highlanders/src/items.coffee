@@ -27,7 +27,7 @@ hlr.quicksellPrice = (price=0) ->
 hlr.currencyFormat = (a) -> "£#{a}"
 
 #### GUNS ####
-hlr.item.gun 'pistol', name: "Pistol"
+hlr.item.gun 'revolver', name: "Revolver"
 
 #### FISH ####
 # Low tier
