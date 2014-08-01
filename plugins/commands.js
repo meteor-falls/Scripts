@@ -548,7 +548,7 @@
             spot = parts[0],
             player = parts[1];
 
-        if (!League.Frontier.hasOwnProperty(spot)) {
+        if (!League.Frontiers.hasOwnProperty(spot)) {
             bot.sendMessage(src, "Specify a spot.", chan);
             return;
         }
