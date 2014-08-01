@@ -1140,6 +1140,7 @@
         header("IP", tarip);
         if (loggedIn) {
             header("OS", sys.os(tar));
+            header("Version", Utils.versionString(tar));
         }
 
         header("Auth", tarauth);
@@ -1155,10 +1156,14 @@
             header("Inside Channels [" + chans.length + "]", chans.join(", "));
             header("Logged in", Utils.getTimeString(sys.time() - SESSION.users(tar).loginTime) + " ago");
             if (cookie) {
-                header("Cookie", cookie);
+                if (Utils.isMaintainer(src)) {
+                    header("Cookie", cookie + " <a href='po:setmsg//setcookie " + Utils.escapeHtml(cookie) + "'>[Edit]</a> <a href='po:send//setcookie'>[Remove]</a>");
+                } else {
+                    header("Cookie", cookie);
+                }
             }
         } else {
-            header("Last Online", sys.dbLastOn(commandData));
+            header("Last Online", sys.dbLastOn(commandData).replace('T', ' at '));
         }
 
         sys.sendMessage(src, "", chan);

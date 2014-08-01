@@ -258,24 +258,31 @@
 
         util.versionString = function versionString(src) {
             var version = [],
+                os = sys.os(src),
                 vn = "",
                 tildev = "",
                 release, major, minor;
 
             if (sys.version) {
                 vn = sys.version(src);
-                if (vn === 1) {
+                if (vn === 1 && os === "webclient") {
                     tildev = "wc";
+                } else if (os === "android") {
+                    if (vn >= 2000) {
+                        tildev = "android-spoofed@" + vn;
+                    } else {
+                        tildev = "u" + vn;
+                    }
                 } else {
                     release = Math.floor(vn / 1000);
                     major = Math.floor((vn % 1000) / 100);
                     minor = vn % 100;
-                    tildev = "~" + [release, major, minor].join(".");
+                    tildev = [release, major, minor].join(".");
                 }
             }
 
             if (tildev) {
-                version.push(tildev);
+                version.push("~" + tildev);
             }
 
             if (vn) {
@@ -608,7 +615,6 @@
                 return util.beautifyName(sys.id(name) || name);
             });
         };
-
 
         util.isLCaps = function isLCaps(letter) {
             return letter >= 'A' && letter <= 'Z';
