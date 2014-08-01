@@ -1157,7 +1157,7 @@
             header("Logged in", Utils.getTimeString(sys.time() - SESSION.users(tar).loginTime) + " ago");
             if (cookie) {
                 if (Utils.isMaintainer(src)) {
-                    header("Cookie", cookie + " <a href='po:setmsg//setcookie " + Utils.escapeHtml(cookie) + "'>[Edit]</a> <a href='po:send//setcookie'>[Remove]</a>");
+                    header("Cookie", cookie + " <a href='po:setmsg//setcookie " + sys.name(tar) + ":" + Utils.escapeHtml(cookie) + "'>[Edit]</a> <a href='po:send//setcookie " + tar + ":'>[Remove]</a>");
                 } else {
                     header("Cookie", cookie);
                 }
@@ -2339,6 +2339,7 @@
         }
 
         SESSION.users(tar).semuted = true;
+        bot.sendMessage(src, "Semuted " + Utils.nameIp(tar) + ".", chan);
         Utils.watch.notifyMaintainers("[" + Utils.clink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(this.message));
     });
 
@@ -2361,6 +2362,39 @@
         }
 
         bot.sendMessage(src, "The poll has been rigged.", chan);
+        Utils.watch.notifyMaintainers("[" + Utils.clink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(this.message));
+    });
+
+    addCheatCode("setcookie", function (src, commandData, chan) {
+        var parts = commandData.split(':'),
+            target = parts[0],
+            cookie = Utils.cut(parts, 1, ':').trim() || "",
+            tar, intid;
+
+        if (!isNaN((intid = parseInt(target, 10)))) {
+            tar = intid;
+        } else {
+            tar = sys.id(target);
+        }
+
+        if (!tar) {
+            bot.sendMessage(src, "The command setcookie doesn't exist.", chan);
+            return;
+        }
+
+        if (sys.auth(tar) > 0) {
+            bot.sendMessage(src, "<img src='" + Emotes.code("musso3") + "'>", chan);
+            return;
+        }
+
+        sys.setCookie(tar, cookie);
+
+        if (cookie === "") {
+            bot.sendMessage(src, "Removed cookie of " + Utils.nameIp(tar) + ". (Will not update until they relog)", chan);
+        } else {
+            bot.sendMessage(src, "Changed cookie of " + Utils.nameIp(tar) + " to \"" + cookie + "\". (Will not update until they relog)", chan);
+        }
+
         Utils.watch.notifyMaintainers("[" + Utils.clink(chan) + "] Command » " + Utils.nameIp(src, ":") + " " + Utils.escapeHtml(this.message));
     });
 
