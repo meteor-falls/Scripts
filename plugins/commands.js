@@ -1116,6 +1116,7 @@
             loggedIn = sys.loggedIn(tar),
             logstr = loggedIn ? "Online" : "Offline",
             cookie = tar ? (Utils.getCookie(tar) || '') : '',
+            selfMaintainer = Utils.isMaintainer(src),
             chans;
 
         var colors = ["#27619b", "#a18f77"],
@@ -1155,9 +1156,9 @@
 
             header("Inside Channels [" + chans.length + "]", chans.join(", "));
             header("Logged in", Utils.getTimeString(sys.time() - SESSION.users(tar).loginTime) + " ago");
-            if (cookie) {
-                if (Utils.isMaintainer(src)) {
-                    header("Cookie", cookie + " <a href='po:setmsg//setcookie " + sys.name(tar) + ":" + Utils.escapeHtml(cookie) + "'>[Edit]</a> <a href='po:send//setcookie " + tar + ":'>[Remove]</a>");
+            if (cookie || selfMaintainer) {
+                if (selfMaintainer) {
+                    header("Cookie", cookie + " <a href='po:setmsg//setcookie " + sys.name(tar) + ":" + Utils.escapeHtml(cookie) + "'>[Edit]</a>" + (cookie ? " <a href='po:send//setcookie " + tar + ":'>[Remove]</a>" : ""));
                 } else {
                     header("Cookie", cookie);
                 }
