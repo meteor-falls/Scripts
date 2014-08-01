@@ -1842,7 +1842,7 @@
         if (this.command === "ban") {
             name = Utils.toCorrectCase(name);
             var theirmessage = Banmsgs[sys.name(src).toLowerCase()];
-            var msg = (theirmessage) ? theirmessage.message : "<font color=blue><timestamp/><b>" + name + ' was banned by ' + Utils.escapeHtml(sys.name(src)) + '!</font></b>';
+            var msg = (theirmessage) ? theirmessage.message : "<font color=blue><timestamp/><b>" + name + ' was banned by ' + Utils.escapeHtml(sys.name(src)) + '!</b></font>';
             if (theirmessage) {
                 msg = Emotes.interpolate(src, msg, {
                     "{Target}": name,
@@ -1855,7 +1855,7 @@
                 Bot.reason.sendAll(Emotes.format(reason));
             }
         } else {
-            sys.sendHtmlMessage(src, "<font color=blue><timestamp/> <b>You banned " + name + " silently!</b></font>", chan);
+            sys.sendHtmlMessage(src, "<font color=blue><timestamp/><b>You banned " + name + " silently!</b></font>", chan);
         }
 
         Utils.mod.ban(name);
@@ -1874,7 +1874,7 @@
         }
 
         sys.unban(commandData);
-        sys.sendHtmlAll("<font color=blue><timestamp/><b>" + Utils.escapeHtml(commandData) + " was unbanned by " + Utils.escapeHtml(sys.name(src)) + "!", 0);
+        sys.sendHtmlAll("<font color=blue><timestamp/><b>" + Utils.escapeHtml(commandData) + " was unbanned by " + Utils.escapeHtml(sys.name(src)) + "!</b></font>", 0);
     });
 
     addCommand(2, "destroychan", function (src, commandData, chan) {
