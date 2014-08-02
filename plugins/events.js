@@ -131,10 +131,11 @@
                     bot.sendMessage(src, "Sorry, custom channels are currently disabled.");
                     chan.autodestroy = true;
                     sys.setTimer(function () {
+                        var chans = sys.channelsOfPlayer(src);
                         if (sys.isInChannel(src, channel)) {
                             sys.kick(src, channel);
                         }
-                        if (!sys.isInChannel(src, 0) && sys.channelsOfPlayer(src).length === 0) {
+                        if (!sys.isInChannel(src, 0) && chans && chans.length === 0) {
                             sys.putInChannel(src, 0);
                         }
                     }, 3, false);
