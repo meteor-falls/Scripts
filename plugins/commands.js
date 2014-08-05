@@ -86,7 +86,7 @@
 
         // Previous if would have returned true if the player is a maintainer.
         if (cmd.flags & commandFlags.MAINTAINERS) {
-            return false;
+            throw "You need to be a higher auth to use this command.";
         }
 
         if ((cmd.flags & commandFlags.CHANNELMODS) && Utils.channel.isChannelMod(src, chan)) {
