@@ -379,7 +379,7 @@
             ["dump", "Dumps information about the given type. Available types are: * (selects everything, default), memory, profile, session, reg, channeldata.", ["type1", "type2"]],
             ["id", "Shows [name]'s id.", ["id"]],
             ["emoteusage", "Shows emote usage statistics."],
-            ["resetemoteusage", "Resets emote usage statistics."]
+            ["resetemoteusage", "Resets emote usage statistics. [mode] can optionally be -0 (doesn't show emotes with 0 usage) or 0! (only emotes with 0 usage)", ["mode"]]
         ]).finish();
 
         return Lists;

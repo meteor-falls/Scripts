@@ -2120,10 +2120,23 @@
             return b[1] - a[1];
         }), emote, len, i;
 
+        emotes = emotes.map(function (emote, pos) {
+            return [emote[0], emote[1], pos];
+        });
+
+        if (commandData === "-0") {
+            emotes = emotes.filter(function (emote) {
+                return emote[1] !== 0;
+            });
+        } else if (commandData === "0!") {
+            emotes = emotes.filter(function (emote) {
+                return emote[1] === 0;
+            });
+        }
+
         bot.sendMessage(src, "Emote Usage statistics (started @ " + EmoteUsage._start + ")", chan);
         for (i = 0, len = emotes.length; i < len; i += 1) {
-            emote = emotes[i];
-            sys.sendHtmlMessage(src, "<b>" + (i + 1) + "</b>. " + emote[0] + ": " + emote[1], chan);
+            sys.sendHtmlMessage(src, "<b>" + emotes[2] + "</b>. " + emote[0] + ": " + emote[1], chan);
         }
     });
 
