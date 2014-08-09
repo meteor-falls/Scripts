@@ -1967,7 +1967,10 @@
         }
         bot.sendAll(sys.name(src) + " changed the auth level of " + name + " to " + level);
         sys.changeDbAuth(name, level);
-        sys.changeAuth(sys.id(name), level);
+
+        if (sys.id(name)) {
+            sys.changeAuth(sys.id(name), level);
+        }
     });
 
     addCommand(3, "htmlchat", function (src, commandData, chan) {
