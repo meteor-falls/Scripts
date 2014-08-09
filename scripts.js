@@ -194,6 +194,7 @@ poScript = ({
         script.init();
     },
     serverShutDown: function serverShutDown() {
+        Reg.saveData();
         require.callPlugins("serverShutDown");
     },
     init: function init() {

@@ -114,6 +114,12 @@ global.Emotes = {
 
                 if (limit && uobj && uobj.lastEmote) {
                     uobj.lastEmote.push(emote);
+                    if (!EmoteUsage.hasOwnProperty(emote)) {
+                        EmoteUsage[emote] = 0;
+                    }
+
+                    EmoteUsage[emote] += 1;
+                    Reg.saveVolatile("EmoteUsage", EmoteUsage);
                 }
 
                 if (marxmode && marxmotes.indexOf(emote) === -1) {

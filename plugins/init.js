@@ -18,6 +18,8 @@ exports.init = function () {
         }
     );
 
+    Reg.init('EmoteUsage', {_start: new Date().toUTCString()});
+
     // Global var name: reg val name
     var regVals = {
         "Mutes": "Mutes",
@@ -28,7 +30,8 @@ exports.init = function () {
         "Welmsgs": "Welmsgs",
         "Emotetoggles": "Emotetoggles",
         "Feedmons": "Feedmon",
-        "League": "League"
+        "League": "League",
+        "EmoteUsage": "EmoteUsage"
     };
 
     for (var i in regVals) {

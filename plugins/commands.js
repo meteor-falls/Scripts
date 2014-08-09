@@ -2113,6 +2113,26 @@
         bot.sendMessage(src, JSON.stringify(value), chan);
     });
 
+    addMaintainerCommand("emoteusage", function (src, commandData, chan) {
+        var emotes = Emotes.names.map(function (emote) {
+            return [emote, EmoteUsage[emote] || 0];
+        }).sort(function (a, b) {
+            return b[1] - a[1];
+        }), emote, len, i;
+
+        bot.sendMessage(src, "Emote Usage statistics (started @ " + EmoteUsage._start + ")", chan);
+        for (i = 0, len = emotes.length; i < len; i += 1) {
+            emote = emotes[i];
+            sys.sendHtmlMessage(src, "<b>" + (i + 1) + "</b>. " + emote[0] + ": " + emote[1], chan);
+        }
+    });
+
+    addMaintainerCommand("resetemoteusage", function (src, commandData, chan) {
+        Reg.init('EmoteUsage', {_start: new Date().toUTCString()});
+        Reg.save("EmoteUsage", EmoteUsage);
+        bot.sendMessage(src, "Emote usage statistics have been reset.", chan);
+    });
+
     addMaintainerCommand("dump", function (src, commandData, chan) {
         var types = (commandData || '*').split(':').map(Utils.lowerKeys),
             wildcard = types.indexOf('*') !== -1;

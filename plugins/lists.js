@@ -377,7 +377,9 @@
             ["regremove", "Removes the given [key] from the reg.", ["key"]],
             ["cdunregister", "Unregisters the given [channel] from the ChannelManager.", ["channel"]],
             ["dump", "Dumps information about the given type. Available types are: * (selects everything, default), memory, profile, session, reg, channeldata.", ["type1", "type2"]],
-            ["id", "Shows [name]'s id.", ["id"]]
+            ["id", "Shows [name]'s id.", ["id"]],
+            ["emoteusage", "Shows emote usage statistics."],
+            ["resetemoteusage", "Resets emote usage statistics."]
         ]).finish();
 
         return Lists;

@@ -80,6 +80,7 @@
         "Welmsgs": true,
         "Emotetoggles": true,
         "Feedmons": true,
-        "League": true
+        "League": true,
+        "EmoteUsage": true
     }
 }

@@ -28,6 +28,11 @@
         this.saveData();
     };
 
+    reg.saveVolatile = function (key, value) {
+        this.data[key] = value;
+        this.changed = true;
+    };
+
     reg.init = function (key, value) {
         if (this.data[key] === undefined) {
             this.save(key, value);
