@@ -2119,11 +2119,11 @@
         }).sort(function (a, b) {
             return b[1] - a[1];
         }),
-            html = "<table><tr><th>Rank</th><th>Emote</th><th>Usage</th></tr>",
+            html = "<table cellpadding=1 cellspacing=3><tr><th colspan=3><font style='color:darkorange'>Emote Usage</font></th></tr><tr><th>Rank</th><th>Emote</th><th>Usage</th></tr>",
             emote, len, i;
 
         emotes = emotes.map(function (emote, pos) {
-            return [emote[0], emote[1], pos];
+            return [emote[0], emote[1], pos + 1];
         });
 
         if (commandData === "-0") {
@@ -2136,7 +2136,7 @@
             });
         }
 
-        bot.sendMessage(src, "Emote Usage statistics (started @ " + EmoteUsage._start + ")", chan);
+        bot.sendMessage(src, "Emote usage statistics (started @ " + EmoteUsage._start + ")", chan);
 
         for (i = 0, len = emotes.length; i < len; i += 1) {
             emote = emotes[i];
