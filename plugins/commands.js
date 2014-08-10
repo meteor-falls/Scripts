@@ -2136,7 +2136,8 @@
 
         bot.sendMessage(src, "Emote Usage statistics (started @ " + EmoteUsage._start + ")", chan);
         for (i = 0, len = emotes.length; i < len; i += 1) {
-            sys.sendHtmlMessage(src, "<b>" + emotes[2] + "</b>. " + emote[0] + ": " + emote[1], chan);
+            emote = emotes[i];
+            sys.sendHtmlMessage(src, "<b>" + emote[2] + "</b>. " + emote[0] + ": " + emote[1], chan);
         }
     });
 
