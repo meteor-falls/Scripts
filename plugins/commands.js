@@ -2140,7 +2140,7 @@
 
         for (i = 0, len = emotes.length; i < len; i += 1) {
             emote = emotes[i];
-            html += "<tr><td>" + emote[2] + "</td><td>" + emote[0] + "</td><td>" + emote[1] + "</td></tr>", chan);
+            html += "<tr><td>" + emote[2] + "</td><td>" + emote[0] + "</td><td>" + emote[1] + "</td></tr>";
         }
 
         html += "</table>";
