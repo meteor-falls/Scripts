@@ -2118,7 +2118,9 @@
             return [emote, EmoteUsage[emote] || 0];
         }).sort(function (a, b) {
             return b[1] - a[1];
-        }), emote, len, i;
+        }),
+            html = "<table><tr><th>Rank</th><th>Emote</th><th>Usage</th></tr>",
+            emote, len, i;
 
         emotes = emotes.map(function (emote, pos) {
             return [emote[0], emote[1], pos];
@@ -2135,10 +2137,14 @@
         }
 
         bot.sendMessage(src, "Emote Usage statistics (started @ " + EmoteUsage._start + ")", chan);
+
         for (i = 0, len = emotes.length; i < len; i += 1) {
             emote = emotes[i];
-            sys.sendHtmlMessage(src, "<b>" + emote[2] + "</b>. " + emote[0] + ": " + emote[1], chan);
+            html += "<tr><td>" + emote[2] + "</td><td>" + emote[0] + "</td><td>" + emote[1] + "</td></tr>", chan);
         }
+
+        html += "</table>";
+        sys.sendHtmlMessage(src, html, chan);
     });
 
     addMaintainerCommand("resetemoteusage", function (src, commandData, chan) {
