@@ -8,6 +8,10 @@ function Bot(name, color, prefix, italics) {
 var botproto = Bot.prototype;
 
 botproto.markup = function (message) {
+    if (nightclub) {
+        message = "<font color=white>" + message + "</font>";
+    }
+
     return "<font color='" + this.color + "'><timestamp/>" + this.prefix + "<b>" + (this.italics ? "<i>" : "") + this.name + ":" + (this.italics ? "</i>" : "") + "</b></font> " + message;
 };
 
