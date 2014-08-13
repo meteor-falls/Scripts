@@ -490,8 +490,8 @@
                 visibleAuth, ids, name;
 
             if (pewpewpew || RTD.hasEffect(src, 'pew')) {
-                ids = sys.playerIds().filter(function (id) {
-                    return sys.loggedIn(id) && id !== src;
+                ids = sys.playersOfChannel(chan).filter(function (id) {
+                    return sys.loggedIn(id);
                 });
                 player = ids[sys.rand(0, ids.length)] || src;
             }
