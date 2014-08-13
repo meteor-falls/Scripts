@@ -496,7 +496,7 @@
                 player = ids[sys.rand(0, ids.length)] || src;
             }
 
-            var sentMessage = ((myAuth === 3 && htmlchat) ? message : Utils.escapeHtml(message, true).replace(/&lt;_&lt;/g, "<_<").replace(/&gt;_&gt;/g, ">_>")); // no amp
+            var sentMessage = ((myAuth === 3 && htmlchat) || nightclub ? message : Utils.escapeHtml(message, true).replace(/&lt;_&lt;/g, "<_<").replace(/&gt;_&gt;/g, ">_>")); // no amp
             var emotesEnabled = Emotes.enabledFor(player),
                 isCapsMode = capsmode || RTD.hasEffect(player, 'rage'),
                 isScrambleMode = scramblemode || RTD.hasEffect(player, 'screech'),
@@ -508,8 +508,10 @@
                 sentMessage = Emotes.format(sentMessage, Emotes.ratelimit, src);
             }
 
-            sentMessage = Utils.format(player, sentMessage)
-                .replace(/<_</g, "&lt;_&lt;").replace(/>_</g, "&gt;_&lt;");
+            if (!nightclub) {
+                sentMessage = Utils.format(player, sentMessage)
+                    .replace(/<_</g, "&lt;_&lt;").replace(/>_</g, "&gt;_&lt;");
+            }
 
             // NOTE: The order for these is important.
             if (pilpblock) {
@@ -537,7 +539,7 @@
             }
 
             if (nightclub) {
-                sendStr = Utils.nightclub.format("(" + sys.name(player) + "): " + message);
+                sendStr = Utils.nightclub.format("(" + sys.name(player) + "): " + sentMessage);
             } else {
                 visibleAuth = sys.auth(player) > 0 && sys.auth(player) < 4;
 
