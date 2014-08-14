@@ -50,6 +50,7 @@
             1: "Lonely</b> Nature (+Atk, -Def)",
             0: "Hardy</b> Nature"
         };
+
         var typeColorNames = {
             0: "#a8a878",
             1: "#c03028",
@@ -67,7 +68,9 @@
             13: "#f85888",
             14: "#98d8d8",
             15: "#7038f8",
-            16: "#705848"
+            16: "#705848",
+            17: "#f088f6",
+            18: "#68a090"
         };
 
         var genderToImportable = {
@@ -825,6 +828,10 @@
                     }
                 }
             }
+        };
+
+        util.moveColor = function (id) {
+            return typeColorNames[sys.moveType(id)];
         };
 
         // Creates an importable [array] for src's team, teamId.

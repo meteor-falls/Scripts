@@ -454,14 +454,14 @@
     addCommand(0, "attack", function (src, commandData, chan) {
         var broadcast = this.semuted ? Utils.sendHtmlSemuted : sys.sendHtmlAll,
             tar = this.target,
-            move = sys.move(sys.rand(1, 559));
+            moveNum = sys.rand(1, 559);
 
         if (!tar) {
             bot.sendMessage(src, "Target doesn't exist!", chan);
             return;
         }
 
-        broadcast("<font color=green><timestamp/><b><i>+AttackBot:</i></b></font> <b style='color:" + Utils.nameColor(src) + "'>" + Utils.escapeHtml(sys.name(src)) + " </b> has used <b style='color:" + Utils.color.randomDark() + "'>" + move + "</b> on <b style='color:" + Utils.nameColor(tar) + "'>" + Utils.escapeHtml(sys.name(tar)) + "!</b>", chan);
+        broadcast("<font color=green><timestamp/><b><i>+AttackBot:</i></b></font> <b style='color:" + Utils.nameColor(src) + "'>" + Utils.escapeHtml(sys.name(src)) + " </b> has used <b style='color:" + Utils.moveColor(moveNum) + "'>" + sys.move(moveNum) + "</b> on <b style='color:" + Utils.nameColor(tar) + "'>" + Utils.escapeHtml(sys.name(tar)) + "!</b>", chan);
     });
 
     addCommand(0, "spin", function (src, commandData, chan) {
