@@ -51,6 +51,14 @@ botproto.sendMainAll = function (message, channel) {
     }
 };
 
+botproto.sendMainAllSemuted = function (message, channel) {
+    this.sendAllSemuted(message, channel);
+
+    if (channel !== 0) {
+        this.sendAllSemuted(message, 0);
+    }
+};
+
 botproto.sendMessage = function (player, message, channel) {
     if (message === "") {
         sys.sendMessage(player, "", channel);

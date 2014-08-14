@@ -676,14 +676,16 @@
 
     /** PLUSPLUS COMMANDS **/
     addPlusCommand("rtd", function (src, commandData, chan) {
-        var effect;
+        var broadcast = this.semuted ? Bot.rtd.sendMainAllSemuted : Bot.rtd.sendMainAll,
+            effect;
+
         if (RTD.cooldownFor(src) > 0) {
             return Bot.rtd.sendMessage(src, "You can't use RTD for another " + Utils.getTimeString(RTD.getPlayer(src).at + RTD.getPlayer(src).cooldown - sys.time()) + ".", chan);
         }
 
         effect = RTD.giveEffect(src, null, null, function () {
             if (sys.loggedIn(src)) {
-                Bot.rtd.sendAll(Utils.beautifyName(src) + "'s effect wore off.", 0);
+                broadcast(Utils.beautifyName(src) + "'s effect wore off.", 0);
                 sys.setTimer(function () {
                     if (sys.loggedIn(src)) {
                         Bot.rtd.sendMainMessage(src, "You may use RTD again.", chan);
@@ -692,7 +694,7 @@
             }
         });
 
-        Bot.rtd.sendAll(Utils.beautifyName(src) + " " + RTD.rollString(effect), 0);
+        broadcast(Utils.beautifyName(src) + " " + RTD.rollString(effect), 0);
         Utils.watch.notify(Utils.nameIp(src) + " " + RTD.rollString(effect));
     });
 
