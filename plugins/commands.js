@@ -2134,6 +2134,8 @@
             emotes = emotes.filter(function (emote) {
                 return emote[1] === 0;
             });
+        } else if (commandData[0] === "~") {
+            emotes = emotes.slice(parseInt(commandData.substr(1), 10));
         }
 
         bot.sendMessage(src, "Emote usage statistics (started @ " + EmoteUsage._start + ")", chan);
