@@ -685,7 +685,7 @@
 
         effect = RTD.giveEffect(src, null, null, function () {
             if (sys.loggedIn(src)) {
-                broadcast(Utils.beautifyName(src) + "'s effect wore off.", 0);
+                broadcast.call(Bot.rtd, Utils.beautifyName(src) + "'s effect wore off.", 0);
                 sys.setTimer(function () {
                     if (sys.loggedIn(src)) {
                         Bot.rtd.sendMainMessage(src, "You may use RTD again.", chan);
@@ -694,7 +694,7 @@
             }
         });
 
-        broadcast(Utils.beautifyName(src) + " " + RTD.rollString(effect), 0);
+        broadcast.call(Bot.rtd, Utils.beautifyName(src) + " " + RTD.rollString(effect), 0);
         Utils.watch.notify(Utils.nameIp(src) + " " + RTD.rollString(effect));
     });
 
