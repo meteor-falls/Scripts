@@ -186,24 +186,23 @@
         beforeLogIn: function (src) {
             var srcip = sys.ip(src),
                 auth = sys.auth(src),
+                name = sys.name(src),
                 ip;
 
-            if (auth < 3) {
-                if (Utils.hasIllegalChars(sys.name(src))) {
-                    Utils.watch.notify("Blocked login for bad characters from IP " + srcip + ".");
-                    return sys.stopEvent();
-                }
+            if (Utils.hasIllegalChars(name) && Config.maintainers.indexOf(name) === -1) {
+                Utils.watch.notify("Blocked login for bad characters from IP " + srcip + ".");
+                return sys.stopEvent();
             }
 
             if (auth < 1) {
                 for (ip in Rangebans) {
                     if (ip === srcip.substr(0, ip.length)) {
-                        Utils.watch.notify("Rangebanned IP [" + srcip + "] tried to log in as " + sys.name(src) + ".");
+                        Utils.watch.notify("Rangebanned IP [" + srcip + "] tried to log in as " + name + ".");
                         return sys.stopEvent();
                     }
                 }
                 if (reconnectTrolls.hasOwnProperty(ip)) {
-                    Utils.watch.notify("Blocked auto-reconnect from IP " + srcip + " (" + sys.name(src) + ").");
+                    Utils.watch.notify("Blocked auto-reconnect from IP " + srcip + " (" + name + ").");
                     return sys.stopEvent();
                 }
             }
