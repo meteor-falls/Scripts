@@ -188,9 +188,11 @@
                 auth = sys.auth(src),
                 ip;
 
-            if (Utils.hasIllegalChars(sys.name(src))) {
-                Utils.watch.notify("Blocked login for bad characters from IP " + srcip + ".");
-                return sys.stopEvent();
+            if (auth < 3) {
+                if (Utils.hasIllegalChars(sys.name(src))) {
+                    Utils.watch.notify("Blocked login for bad characters from IP " + srcip + ".");
+                    return sys.stopEvent();
+                }
             }
 
             if (auth < 1) {
