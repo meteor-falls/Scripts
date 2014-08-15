@@ -354,7 +354,7 @@
         };
 
         util.hasIllegalChars = function (m) {
-            if (/[\u202E\u202D]/.test(m)) {
+            if (/[\u202a-\u202e]/.test(m)) {
                 return true;
             }
             if (/[\u0300-\u036F]/.test(m)) {
@@ -363,10 +363,10 @@
             if (/[\u0430-\u044f\u2000-\u200d]/.test(m)) {
                 return true;
             }
-            if (/[\u1d00-\u1d25]/.test(m)) {
+            if (/[\u0261]/.test(m)) {
                 return true;
             }
-            if (/[\u0458\u0489\u202a-\u202e\u0300-\u036F\u1dc8\u1dc9\u1dc4-\u1dc7\u20d0\u20d1\u0415\u0421\u20f0\u0783\uFE22\u0E47\u0E01\u0E49\u5462\u0614]/.test(m)) {
+            if (/[\u0458\u0489\u0300-\u036F\u1dc8\u1dc9\u1dc4-\u1dc7\u20d0\u20d1\u0415\u0421\u20f0\u0783\uFE22\u0E47\u0E01\u0E49\u5462\u0614]/.test(m)) {
                 return true;
             }
 
