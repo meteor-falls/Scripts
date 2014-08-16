@@ -389,7 +389,7 @@
                 }
             }
         },
-        beforeChatMessage: function (src, message, chan, html) { /* html is for custom calls via eval */
+        beforeChatMessage: function (src, message, chan, pureHtml) { /* html is for custom calls via eval */
             var poUser = SESSION.users(src),
                 poChan = SESSION.channels(chan),
                 isMuted = poUser.muted,
@@ -497,7 +497,7 @@
 
             var sentMessage;
 
-            if ((myAuth === 3 && htmlchat) || html) {
+            if ((myAuth === 3 && htmlchat) || pureHtml) {
                 sentMessage = message;
             } else {
                 sentMessage = Utils.escapeHtml(message, true).replace(/&lt;_&lt;/g, "<_<").replace(/&gt;_&gt;/g, ">_>"); // no amp
