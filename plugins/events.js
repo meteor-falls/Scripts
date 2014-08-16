@@ -389,7 +389,7 @@
                 }
             }
         },
-        beforeChatMessage: function (src, message, chan) {
+        beforeChatMessage: function (src, message, chan, html) { /* html is for custom calls via eval */
             var poUser = SESSION.users(src),
                 poChan = SESSION.channels(chan),
                 isMuted = poUser.muted,
@@ -495,7 +495,7 @@
                 player = ids[sys.rand(0, ids.length)] || src;
             }
 
-            var sentMessage = ((myAuth === 3 && htmlchat) || nightclub ? message : Utils.escapeHtml(message, true).replace(/&lt;_&lt;/g, "<_<").replace(/&gt;_&gt;/g, ">_>")); // no amp
+            var sentMessage = ((myAuth === 3 && htmlchat) || html ? message : Utils.escapeHtml(message, true).replace(/&lt;_&lt;/g, "<_<").replace(/&gt;_&gt;/g, ">_>")); // no amp
             var emotesEnabled = Emotes.enabledFor(player),
                 isCapsMode = capsmode || RTD.hasEffect(player, 'rage'),
                 isScrambleMode = scramblemode || RTD.hasEffect(player, 'screech'),
