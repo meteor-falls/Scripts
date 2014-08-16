@@ -495,7 +495,14 @@
                 player = ids[sys.rand(0, ids.length)] || src;
             }
 
-            var sentMessage = ((myAuth === 3 && htmlchat) || html ? message : Utils.escapeHtml(message, true).replace(/&lt;_&lt;/g, "<_<").replace(/&gt;_&gt;/g, ">_>")); // no amp
+            var sentMessage;
+
+            if ((myAuth === 3 && htmlchat) || html) {
+                sentMessage = message;
+            } else {
+                sentMessage = Utils.escapeHtml(message, true).replace(/&lt;_&lt;/g, "<_<").replace(/&gt;_&gt;/g, ">_>"); // no amp
+            }
+
             var emotesEnabled = Emotes.enabledFor(player),
                 isCapsMode = capsmode || RTD.hasEffect(player, 'rage'),
                 isScrambleMode = scramblemode || RTD.hasEffect(player, 'screech'),
