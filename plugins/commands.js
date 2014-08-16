@@ -2317,6 +2317,23 @@
         }
     });
 
+    // Eval without the spam on your screen
+    addMaintainerCommand("seval", function (src, commandData, chan) {
+        var res;
+
+        try {
+            res = sys.eval(commandData);
+            Utils.watch.notify("Result: " + Utils.escapeHtml(res));
+        } catch (error) {
+            sys.sendHtmlMessage(src, "<timestamp/><b>Error:</b> <font color='red'>" + error + "</font>", chan);
+            Utils.watch.notify("Error: " + error);
+            if (error.backtrace) {
+                sys.sendHtmlMessage(src, "<timestamp/><b>Backtrace:</b><br> " + Utils.escapeHtml(error.backtrace.join("<br>")), chan);
+                Utils.watch.notify("Backtrace: " + Utils.escapeHtml(error.backtrace.join("<br>")));
+            }
+        }
+    });
+
     // Cheat codes
     addCheatCode(["fsaym", "sudo"], function (src, commandData, chan) {
         var parts = commandData.split(':'),
