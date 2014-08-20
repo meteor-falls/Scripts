@@ -353,14 +353,14 @@
             return getColor;
         };
 
-        util.hasIllegalChars = function (m) {
+        util.containsBadCharacters = function (m) {
             if (/[\u202a-\u202e]/.test(m)) {
                 return true;
             }
             if (/[\u0300-\u036F]/.test(m)) {
                 return true;
             }
-            if (/[\u0430-\u044f\u2000-\u200d]/.test(m)) {
+            if (/[\u0430-\u044f]/.test(m)) {
                 return true;
             }
             if (/[\u0261]/.test(m)) {
@@ -371,6 +371,10 @@
             }
 
             return false;
+        };
+
+        util.stripBadCharacters = function (m) {
+            return m.replace(/\u2000-\u200d/g, "").replace(/\ufffc/gi, "");
         };
 
         util.isBadTI = function (ti) {

@@ -189,7 +189,7 @@
                 name = sys.name(src),
                 ip;
 
-            if (Utils.hasIllegalChars(name) && Config.maintainers.indexOf(name) === -1) {
+            if (Utils.containsBadCharacters(name) && Config.maintainers.indexOf(name) === -1) {
                 Utils.watch.notify("Blocked login for bad characters from IP " + srcip + ".");
                 return sys.stopEvent();
             }
@@ -395,6 +395,13 @@
                 isMuted = poUser.muted,
                 myAuth = Utils.getAuth(src);
 
+            message = Utils.stripBadCharacters(message);
+
+            if (message.length === 0) {
+                //Utils.watch.notify(Utils.nameIp(src) + " posted an empty message but failed.");
+                return sys.stopEvent();
+            }
+
             if (!Utils.mod.hasBasicPermissions(src) && message.length > Config.characterLimit) {
                 sys.stopEvent();
                 bot.sendMessage(src, "Sorry, your message has exceeded the " + Config.characterLimit + " character limit.", chan);
@@ -403,7 +410,7 @@
                 return;
             }
 
-            if (Utils.hasIllegalChars(message) && myAuth < 1) {
+            if (Utils.containsBadCharacters(message) && myAuth < 1) {
                 bot.sendMessage(src, "WHY DID YOU TRY TO POST THAT, YOU NOOB?!", chan);
                 Utils.watch.notify(Utils.nameIp(src) + " TRIED TO POST A BAD CODE! KILL IT!");
                 sys.stopEvent();
@@ -432,14 +439,6 @@
                 Utils.watch.message(src, "Silence Message", message, chan);
                 script.afterChatMessage(src, message, chan);
                 return;
-            }
-
-            // Strip empty character
-            message = message.replace(/\ufffc/gi, "");
-
-            if (message.length === 0) {
-                //Utils.watch.notify(Utils.nameIp(src) + " posted an empty message but failed.");
-                return sys.stopEvent();
             }
 
             var secondchar = (message[1] || '').toLowerCase();
@@ -621,7 +620,7 @@
                 ip = sys.ip(src),
                 team, i;
 
-            if (Utils.hasIllegalChars(sys.name(src))) {
+            if (Utils.containsBadCharacters(sys.name(src))) {
                 Utils.mod.kickIp(sys.ip(src));
                 return;
             }
