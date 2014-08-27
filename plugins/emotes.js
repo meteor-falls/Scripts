@@ -7,7 +7,7 @@ global.Emotes = {
 (function () {
     var emoteRegex = {};
     var nonAlpha = /\W/;
-    var marxmotes = ["marx1", "lenin1", "stalin1"];
+    var marxmotes = ["lenin1", "stalin1"];
 
     var emojiRegex = /:([a-z0-9\+\-_]+):/g;
     var emojiFile = sys.getFileContent(Config.datadir + 'emoji.json') || "";
