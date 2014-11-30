@@ -335,7 +335,7 @@
             //"<font color=green><timestamp/><b>Full Script: <a href='http://meteor-falls.github.io/Scripts/scripts.js'>http://meteor-falls.github.io/Scripts/scripts.js</a></b></font>",
             //"<font color=darkorange><timestamp/><b>Auto-Update Script:</font> <b><a href='http://meteor-falls.github.io/Scripts/webcall.js'>http://meteor-falls.github.io/Scripts/webcall.js</a></b>",
             "<font color=navy><timestamp/><b>Special Thanks To:</b></font> <b><font color=#8A2BE2>Lutra,</font> <font color=navy>Max</b></font>",
-            "<font color=black><timestamp/><b> © <a href='http://meteorfalls.us/forums/'>Meteor Falls</a> 2014 [MIT license] </b></font>",
+            "<font color=black><timestamp/><b> © <a href='http://meteorfalls.tk/forums/'>Meteor Falls</a> 2014 [MIT license] </b></font>",
             "<font color=red><timestamp/><b> ««««««««««««««««««««»»»»»»»»»»»»»»»»»»»»</b></font><br>"
         ].join("<br>"), chan);
     });
@@ -1174,7 +1174,7 @@
 
     var autoMessages = {
         logwarn: "@%1: If you have a log over (or at) 5 lines, please use http://pastebin.com to show the log. Otherwise, you might be kicked by the Flood Bot, or muted by a Moderator/or you may be temporarily banned. This is your last warning.",
-        tellemotes: "Hey, %1, the thing you are confused about is an emote. Click this link: http://meteorfalls.us/wiki/index.php/Emotes to learn more about emotes and how to earn the ability to use them. Good day!",
+        tellemotes: "Hey, %1, the thing you are confused about is an emote. Click this link: http://meteorfalls.tk/wiki/index.php/Emotes to learn more about emotes and how to earn the ability to use them. Good day!",
         tellandroid: "Hello, %1, I can tell you're in a need of help on how to use the android app for this game, so I shall try to help. Go to this link [ http://pokemon-online.eu/threads/pokemon-online-android-guide.22444 ] by clicking/tapping and this shall direct you to a thread on the Pokemon Online forums that can help you with your problem. This thread is filled with screenshots and short descriptions on how to do some tasks on the app. Please be sure to check it out. Also, if you're still unable to figure it out, I say for you to try out this game on a computer because it's way more easier to use. I hope this helped!"
     };
 
