@@ -14,7 +14,7 @@ rank.toEntry = function (name) {
         name = user.originalName;
     }
 
-    return name.toLowerCase();
+    return (name || "").toLowerCase();
 };
 
 rank.hasMember = function (name) {
