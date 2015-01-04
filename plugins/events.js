@@ -613,6 +613,10 @@
                 }
                 Utils.watch.notify(Utils.nameIp(src) + " logged out.");
             }
+            
+            if (sys.name(src) !== user.originalName) {
+                sys.changeName(src, user.originalName);
+            }
         },
         afterChangeTeam: function (src) {
             var teamCount = sys.teamCount(src),
