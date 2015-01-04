@@ -459,11 +459,11 @@
 
                 var tar = sys.id(commandData);
                 try {
-                    var hlr = require('highlanders');
+                    /*var hlr = require('highlanders');
                     if (!poUser.semuted && chan === hlr.chan && hlr.canUseCommand(src, command, chan)) {
                         Utils.watch.message(src, "Command", message, chan);
                         hlr.handleCommand(src, message, command, commandData, tar, chan);
-                    } else if (commands.canUseCommand(src, command, chan)) {
+                    } else*/ if (commands.canUseCommand(src, command, chan)) {
                         if (!(commands.commands[command].flags & commands.addCommand.flags.NOWATCH)) {
                             Utils.watch.message(src, (poUser.semuted ? "Secommand" : "Command"), message, chan);
                         }
@@ -607,15 +607,16 @@
             var user = SESSION.users(src),
                 os = sys.os(src);
 
+            if (sys.name(src) !== user.originalName) {
+                sys.changeName(src, user.originalName);
+                Utils.watch.notify("Reverted imped username to " + user.originalName + ".");
+            }
+            
             if (sys.numPlayers() < 30 && !user.autokick && !user.muted) {
                 if (os !== "android") {
                     Utils.logoutMessage(Utils.escapeHtml(sys.name(src)), Utils.nameColor(src));
                 }
                 Utils.watch.notify(Utils.nameIp(src) + " logged out.");
-            }
-            
-            if (sys.name(src) !== user.originalName) {
-                sys.changeName(src, user.originalName);
             }
         },
         afterChangeTeam: function (src) {
