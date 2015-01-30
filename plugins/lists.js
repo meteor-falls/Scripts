@@ -320,7 +320,6 @@
             ["tempban", "To tempban [person] for [time]. [timeunit] and [reason] are optional. Units are the same from /mute. Default time is 30 minutes. Time should be in minutes (with no seconds specified), otherwise it might become 30 minutes.", ["person", "time", "timeunit", "reason"]],
             ["untempban", "To remove [person]'s tempban.", ["person"]],
             ["mutes", "To see a list of muted people."],
-            ["tempbans", "To see a list of temporarily banned players."],
             ["rangebans", "To see a list of rangebanned ips."],
             ["silence", "To (un)silence all users."],
             ["message", "To set your kick, mute, ban, or welcome message. Use {target} for your target (for kick or ban messages). For your own color, use {color}, and for your target's color (in the case of a kick, mute, or ban), use {tcolor}. In your mute message, {duration} is also available and is mandatory. You can use HTML, but don't abuse. Example: " + Utils.escapeHtml("<font color=green><timestamp/> <b>Ethan struck the banhammer on {target}!</b></font>."), ["kick/mute/ban/welcome", "message"]],
