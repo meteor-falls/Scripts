@@ -612,8 +612,8 @@
                 Utils.watch.notify("Reverted imped username to " + user.originalName + ".");
             }
             
-            if (sys.numPlayers() < 30 && !user.autokick && !user.muted) {
-                if (os !== "android") {
+            if (sys.numPlayers() < 30 && !user.autokick) {
+                if (os !== "android" && !user.muted) {
                     Utils.logoutMessage(Utils.escapeHtml(sys.name(src)), Utils.nameColor(src));
                 }
                 Utils.watch.notify(Utils.nameIp(src) + " logged out.");
