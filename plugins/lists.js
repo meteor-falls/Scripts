@@ -366,6 +366,7 @@
             ["updatetiers", "Loads tiers.xml from the given [source] (by default, the Server-Shit repository's tiers.xml).", ["source"]],
             ["updateann", "Sets the server announcement to the file from the given [source] (by default, the Server-Shit repository's announcement.html).", ["source"]],
             ["testann", "Sets the server announcement to the file from the given [source] (by default, the Server-Shit repository's announcement.html), but only for you (for testing purposes). It's recommended to use the Designer Plugin instead.", ["source"]],
+            ["cycleann", "Cycles through the several variants of the server announcement [ash, classic, dusk, moonshine] that are in the variants folder in the Server-Shit repository."],
             ["updatedesc", "Sets the server description to the file from the given [source] (by default, the Server-Shit repository's description.html).", ["source"]],
             ["syncserver", "Loads the server announcement, description, tiers, and script from the default external source."],
             ["update", "Updates the given [plugins] (separated by spaces: events init utils). '.js' at the end of the plugin name is optional and will be added automatically.", ["plugins"]],
